@@ -1,8 +1,13 @@
 class Entity:
-    def __init__(self, name, x=0, y=0):
+    def __init__(self, name, x=0, y=0, energy=10):
         self.name = name
         self.x = x
         self.y = y
+        self.energy = energy
+
+    @property
+    def is_alive(self):
+        return self.energy > 0
 
 class Universe:
     def __init__(self, width=100, height=100):
@@ -35,3 +40,6 @@ class Universe:
 
     def tick(self):
         self.time += 1
+        for entity in self.entities:
+            entity.energy -= 1
+        self.entities = [e for e in self.entities if e.is_alive]

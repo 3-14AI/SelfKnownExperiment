@@ -4,9 +4,10 @@ All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased] - 2026-07-07
 ### Added
+- Implemented basic energy and life cycle for entities. Entities now consume 1 energy per tick and are removed from the universe when their energy reaches 0.
 - Implemented a 2D spatial system in `src/universe/engine.py` (coordinates for Entity, width/height and positioning/movement bounds logic for Universe).
 - Added `get_entities_at(x, y)` to Universe to query entity locations.
-- Expanded unit tests in `tests/test_engine.py` to cover new spatial features.
+- Expanded unit tests in `tests/test_engine.py` to cover new spatial features and life cycle.
 
 ## [Previous] - YYYY-MM-DD
 ### Added
