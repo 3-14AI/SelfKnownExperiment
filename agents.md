@@ -27,3 +27,9 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 6. Submit your work.
 
 Godspeed, Agent. The universe is in your hands.
+
+## Completed
+- Bootstrapped core universe engine (Universe and Entity classes).
+
+## Next Steps
+- Implement a 2D grid/spatial system to allow entities to have positions and move.
