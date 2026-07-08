@@ -4,6 +4,7 @@ All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Added a `Food` class and implemented a food/resource system. Food randomly spawns in the Universe, and entities consume food at their exact location to regain energy.
 - Implemented basic energy and life cycle for entities. Entities now consume 1 energy per tick and are removed from the universe when their energy reaches 0.
 - Implemented an energy system and life cycle for entities (entities have 10 starting energy, consume 1 energy per tick, and die if energy drops to 0 or below).
 - Expanded unit tests in `tests/test_engine.py` to cover energy decay and death.

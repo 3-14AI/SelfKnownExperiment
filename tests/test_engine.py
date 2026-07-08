@@ -1,5 +1,5 @@
 import unittest
-from src.universe.engine import Universe, Entity
+from src.universe.engine import Universe, Entity, Food
 
 class TestUniverse(unittest.TestCase):
     def test_initial_state(self):
@@ -105,6 +105,49 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(entity.energy, 0)
         self.assertFalse(entity.is_alive)
         self.assertNotIn(entity, universe.entities)
+
+    def test_add_food(self):
+        universe = Universe()
+        food = Food(x=10, y=10, energy=5)
+        universe.add_food(food)
+        self.assertIn(food, universe.foods)
+        self.assertEqual(food.x, 10)
+        self.assertEqual(food.y, 10)
+
+    def test_add_food_custom_position(self):
+        universe = Universe()
+        food = Food(energy=5)
+        universe.add_food(food, x=20, y=30)
+        self.assertEqual(food.x, 20)
+        self.assertEqual(food.y, 30)
+
+    def test_get_foods_at(self):
+        universe = Universe()
+        food1 = Food(x=5, y=5)
+        food2 = Food(x=5, y=5)
+        universe.add_food(food1)
+        universe.add_food(food2)
+        foods_at_5_5 = universe.get_foods_at(5, 5)
+        self.assertEqual(len(foods_at_5_5), 2)
+
+    def test_entity_consumes_food(self):
+        # We set food_spawn_rate=0 to not spawn random foods and mess up the test
+        universe = Universe(food_spawn_rate=0)
+        entity = Entity("Adam", x=5, y=5, energy=10)
+        universe.add_entity(entity)
+
+        food = Food(x=5, y=5, energy=5)
+        universe.add_food(food)
+
+        universe.tick()
+
+        # Entity consumes 1 energy per tick, but gains 5 from food
+        # Start: 10
+        # Tick: -1
+        # Eat: +5
+        # Result: 14
+        self.assertEqual(entity.energy, 14)
+        self.assertNotIn(food, universe.foods)
 
 if __name__ == '__main__':
     unittest.main()
