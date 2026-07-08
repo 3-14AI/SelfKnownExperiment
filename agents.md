@@ -36,3 +36,9 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Next Steps
 - Implement a food/resource system allowing entities to consume resources to regain energy.
+- Implement basic food sources that appear randomly and restore entity energy when consumed.
+- Analyzed project changes and agent actions and added the results to `analytics/analysis_report.md`.
+- Implement basic energy/life cycle for entities (e.g. entities consume energy each tick and die when energy reaches 0).
+
+## Next Steps
+- Add food/resources that entities can consume to regain energy.
