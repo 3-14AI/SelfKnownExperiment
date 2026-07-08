@@ -32,6 +32,7 @@ Godspeed, Agent. The universe is in your hands.
 - Bootstrapped core universe engine (Universe and Entity classes).
 - Implement a 2D grid/spatial system to allow entities to have positions and move.
 - Analyzed project changes and agent actions and added the results to `analytics/analysis_report.md`.
+- Implement basic energy/life cycle for entities (e.g. entities consume energy each tick and die when energy reaches 0).
 
 ## Next Steps
-- Implement basic energy/life cycle for entities (e.g. entities consume energy each tick and die when energy reaches 0).
+- Add food/resources that entities can consume to regain energy.
