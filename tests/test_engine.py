@@ -82,5 +82,25 @@ class TestUniverse(unittest.TestCase):
         universe.tick()
         self.assertEqual(universe.time, 1)
 
+    def test_entity_energy_default(self):
+        entity = Entity("Adam")
+        self.assertEqual(entity.energy, 10)
+
+    def test_tick_consumes_energy(self):
+        universe = Universe()
+        entity = Entity("Adam", energy=10)
+        universe.add_entity(entity)
+        universe.tick()
+        self.assertEqual(entity.energy, 9)
+        self.assertEqual(len(universe.entities), 1)
+
+    def test_entity_dies_on_zero_energy(self):
+        universe = Universe()
+        entity = Entity("Adam", energy=1)
+        universe.add_entity(entity)
+        universe.tick()
+        self.assertEqual(entity.energy, 0)
+        self.assertEqual(len(universe.entities), 0)
+
 if __name__ == '__main__':
     unittest.main()
