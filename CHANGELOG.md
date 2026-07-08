@@ -2,6 +2,10 @@
 
 All notable changes to Project Genesis will be documented in this file.
 
+## [Unreleased]
+### Added
+- Implemented an energy system and life cycle for entities (entities have 10 starting energy, consume 1 energy per tick, and die if energy drops to 0 or below).
+- Expanded unit tests in `tests/test_engine.py` to cover energy decay and death.
 ## [Unreleased] - 2026-07-08
 ### Added
 - Implemented basic energy and life cycle for entities (entities have starting energy, lose 1 per tick, and die at 0).
