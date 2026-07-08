@@ -2,7 +2,13 @@
 
 All notable changes to Project Genesis will be documented in this file.
 
-## [Unreleased] - 2026-07-07
+## [Unreleased] - 2026-07-08
+### Added
+- Implemented basic energy and life cycle for entities (entities have starting energy, lose 1 per tick, and die at 0).
+- Wrote tests for energy consumption and death logic in `tests/test_engine.py`.
+- Updated `agents.md` tracking progress.
+
+## [Previous] - 2026-07-07
 ### Added
 - Analyzed project changes and agent actions and added the results to `analytics/analysis_report.md`.
 - Implemented a 2D spatial system in `src/universe/engine.py` (coordinates for Entity, width/height and positioning/movement bounds logic for Universe).
