@@ -5,6 +5,10 @@ class Entity:
         self.y = y
         self.energy = energy
 
+    @property
+    def is_alive(self):
+        return self.energy > 0
+
 class Universe:
     def __init__(self, width=100, height=100):
         self.time = 0
@@ -36,7 +40,6 @@ class Universe:
 
     def tick(self):
         self.time += 1
-        for entity in self.entities[:]:
+        for entity in self.entities:
             entity.energy -= 1
-            if entity.energy <= 0:
-                self.entities.remove(entity)
+        self.entities = [e for e in self.entities if e.is_alive]
