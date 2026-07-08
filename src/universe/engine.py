@@ -36,9 +36,7 @@ class Universe:
 
     def tick(self):
         self.time += 1
-        alive_entities = []
-        for entity in self.entities:
+        for entity in self.entities[:]:
             entity.energy -= 1
-            if entity.energy > 0:
-                alive_entities.append(entity)
-        self.entities = alive_entities
+            if entity.energy <= 0:
+                self.entities.remove(entity)
