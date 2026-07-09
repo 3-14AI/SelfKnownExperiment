@@ -138,7 +138,7 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(at_10_11[0], f3)
 
     def test_entity_eats_food(self):
-        universe = Universe()
+        universe = Universe(food_spawn_rate=0.0) # Disable random food spawn for this test
         entity = Entity("Adam", energy=10, x=5, y=5)
         food = Food(energy=5, x=5, y=5)
         universe.add_entity(entity)
@@ -150,6 +150,25 @@ class TestUniverse(unittest.TestCase):
         # Entity should lose 1 energy from tick, but gain 5 from food (10 - 1 + 5 = 14)
         self.assertEqual(entity.energy, 14)
         self.assertEqual(len(universe.foods), 0)
+
+    def test_entity_seeks_food(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0)
+        food = Food(x=2, y=2)
+        universe.add_entity(entity)
+        universe.add_food(food)
+
+        # Tick 1: entity should move to (1, 1)
+        universe.tick()
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 1)
+        self.assertEqual(len(universe.foods), 1) # Hasn't reached food yet
+
+        # Tick 2: entity should move to (2, 2) and eat food
+        universe.tick()
+        self.assertEqual(entity.x, 2)
+        self.assertEqual(entity.y, 2)
+        self.assertEqual(len(universe.foods), 0) # Food eaten
 
 if __name__ == '__main__':
     unittest.main()

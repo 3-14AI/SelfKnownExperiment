@@ -1,5 +1,11 @@
 # Changelog
 
+## [2026-07-09]
+### Added
+- Entity AI behavior: Entities now actively seek out the nearest food source and move towards it each tick instead of remaining stationary.
+- Support logic `get_nearest_food` added to the `Universe` class.
+- Automated tests covering the food-seeking behavior.
+
 All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased]

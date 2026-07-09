@@ -79,6 +79,20 @@ class Universe:
     def get_foods_at(self, x, y):
         return [f for f in self.foods if f.x == x and f.y == y]
 
+
+    def get_nearest_food(self, x, y):
+        if not self.foods:
+            return None
+
+        nearest = None
+        min_dist = float('inf')
+        for food in self.foods:
+            dist = abs(food.x - x) + abs(food.y - y)
+            if dist < min_dist:
+                min_dist = dist
+                nearest = food
+        return nearest
+
     def tick(self):
         self.time += 1
 
@@ -91,8 +105,30 @@ class Universe:
         for entity in self.entities:
             # Consume 1 energy per tick
             entity.energy -= 1
-            # Check for food at entity location
+
             if entity.is_alive:
+                nearest_food = self.get_nearest_food(entity.x, entity.y)
+                if nearest_food:
+                    # Move towards food
+                    dx = 0
+                    dy = 0
+                    if nearest_food.x > entity.x:
+                        dx = 1
+                    elif nearest_food.x < entity.x:
+                        dx = -1
+
+                    if nearest_food.y > entity.y:
+                        dy = 1
+                    elif nearest_food.y < entity.y:
+                        dy = -1
+
+                    if dx != 0 or dy != 0:
+                        try:
+                            self.move_entity(entity, dx, dy)
+                        except ValueError:
+                            pass # In case movement is out of bounds, shouldn't happen but safe
+
+                # Check for food at entity location
                 foods_here = self.get_foods_at(entity.x, entity.y)
                 if foods_here:
                     food_to_eat = foods_here[0]
