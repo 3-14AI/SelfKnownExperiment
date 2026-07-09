@@ -1,3 +1,11 @@
+import random
+
+class Food:
+    def __init__(self, x=0, y=0, energy=5):
+        self.x = x
+        self.y = y
+        self.energy = energy
+
 class Entity:
     def __init__(self, name, x=0, y=0, energy=10):
         self.name = name
@@ -16,12 +24,24 @@ class Food:
         self.energy = energy
 
 class Universe:
-    def __init__(self, width=100, height=100):
+    def __init__(self, width=100, height=100, food_spawn_rate=0.1):
         self.time = 0
         self.entities = []
         self.foods = []
         self.width = width
         self.height = height
+        self.food_spawn_rate = food_spawn_rate
+
+    def add_food(self, food, x=None, y=None):
+        if x is not None:
+            food.x = x
+        if y is not None:
+            food.y = y
+
+        if not (0 <= food.x < self.width and 0 <= food.y < self.height):
+            raise ValueError(f"Food out of bounds: ({food.x}, {food.y})")
+
+        self.foods.append(food)
 
     def add_entity(self, entity, x=None, y=None):
         if x is not None:
@@ -61,6 +81,13 @@ class Universe:
 
     def tick(self):
         self.time += 1
+
+        # Spawn new food
+        if random.random() < self.food_spawn_rate:
+            x = random.randint(0, self.width - 1)
+            y = random.randint(0, self.height - 1)
+            self.add_food(Food(x=x, y=y))
+
         for entity in self.entities:
             # Consume 1 energy per tick
             entity.energy -= 1

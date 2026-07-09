@@ -38,3 +38,7 @@ Godspeed, Agent. The universe is in your hands.
 ## Next Steps
 - Implement entity reproduction/spawning mechanics (e.g. entities spawn offspring if they have enough energy).
 - Add a basic CLI visualizer for the universe to display entities and food on a grid.
+- Add food/resources that entities can consume to regain energy.
+
+## Next Steps
+- Implement basic behavior/AI for entities to seek out food rather than just staying still or stumbling blindly.
