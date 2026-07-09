@@ -9,10 +9,17 @@ class Entity:
     def is_alive(self):
         return self.energy > 0
 
+class Food:
+    def __init__(self, x=0, y=0, energy=5):
+        self.x = x
+        self.y = y
+        self.energy = energy
+
 class Universe:
     def __init__(self, width=100, height=100):
         self.time = 0
         self.entities = []
+        self.foods = []
         self.width = width
         self.height = height
 
@@ -38,8 +45,31 @@ class Universe:
     def get_entities_at(self, x, y):
         return [e for e in self.entities if e.x == x and e.y == y]
 
+    def add_food(self, food, x=None, y=None):
+        if x is not None:
+            food.x = x
+        if y is not None:
+            food.y = y
+
+        if not (0 <= food.x < self.width and 0 <= food.y < self.height):
+            raise ValueError(f"Food out of bounds: ({food.x}, {food.y})")
+
+        self.foods.append(food)
+
+    def get_foods_at(self, x, y):
+        return [f for f in self.foods if f.x == x and f.y == y]
+
     def tick(self):
         self.time += 1
         for entity in self.entities:
+            # Consume 1 energy per tick
             entity.energy -= 1
+            # Check for food at entity location
+            if entity.is_alive:
+                foods_here = self.get_foods_at(entity.x, entity.y)
+                if foods_here:
+                    food_to_eat = foods_here[0]
+                    entity.energy += food_to_eat.energy
+                    self.foods.remove(food_to_eat)
+
         self.entities = [e for e in self.entities if e.is_alive]

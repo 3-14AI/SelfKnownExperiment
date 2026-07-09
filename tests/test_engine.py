@@ -1,13 +1,26 @@
 import unittest
-from src.universe.engine import Universe, Entity
+from src.universe.engine import Universe, Entity, Food
 
 class TestUniverse(unittest.TestCase):
     def test_initial_state(self):
         universe = Universe()
         self.assertEqual(universe.time, 0)
         self.assertEqual(universe.entities, [])
+        self.assertEqual(universe.foods, [])
         self.assertEqual(universe.width, 100)
         self.assertEqual(universe.height, 100)
+
+    def test_add_food(self):
+        universe = Universe()
+        food = Food(energy=10)
+        universe.add_food(food, x=5, y=5)
+        self.assertEqual(len(universe.foods), 1)
+        self.assertEqual(universe.foods[0], food)
+        self.assertEqual(food.x, 5)
+        self.assertEqual(food.y, 5)
+
+        with self.assertRaises(ValueError):
+            universe.add_food(Food(), x=100, y=10)
 
     def test_add_entity(self):
         universe = Universe()
@@ -105,6 +118,38 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(entity.energy, 0)
         self.assertFalse(entity.is_alive)
         self.assertNotIn(entity, universe.entities)
+
+    def test_get_foods_at(self):
+        universe = Universe()
+        f1 = Food(x=10, y=10)
+        f2 = Food(x=10, y=10)
+        f3 = Food(x=10, y=11)
+        universe.add_food(f1)
+        universe.add_food(f2)
+        universe.add_food(f3)
+
+        at_10_10 = universe.get_foods_at(10, 10)
+        self.assertEqual(len(at_10_10), 2)
+        self.assertIn(f1, at_10_10)
+        self.assertIn(f2, at_10_10)
+
+        at_10_11 = universe.get_foods_at(10, 11)
+        self.assertEqual(len(at_10_11), 1)
+        self.assertEqual(at_10_11[0], f3)
+
+    def test_entity_eats_food(self):
+        universe = Universe()
+        entity = Entity("Adam", energy=10, x=5, y=5)
+        food = Food(energy=5, x=5, y=5)
+        universe.add_entity(entity)
+        universe.add_food(food)
+
+        self.assertEqual(len(universe.foods), 1)
+        universe.tick()
+
+        # Entity should lose 1 energy from tick, but gain 5 from food (10 - 1 + 5 = 14)
+        self.assertEqual(entity.energy, 14)
+        self.assertEqual(len(universe.foods), 0)
 
 if __name__ == '__main__':
     unittest.main()
