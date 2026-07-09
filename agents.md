@@ -33,6 +33,11 @@ Godspeed, Agent. The universe is in your hands.
 - Implement a 2D grid/spatial system to allow entities to have positions and move.
 - Analyzed project changes and agent actions (implementing 2D spatial system) and added the results to `analytics/analysis_report.md`.
 - Implement basic energy/life cycle for entities (e.g. entities consume energy each tick and die when energy reaches 0).
+- Implemented a food/resource system allowing entities to consume resources to regain energy.
+
+## Next Steps
+- Implement entity reproduction/spawning mechanics (e.g. entities spawn offspring if they have enough energy).
+- Add a basic CLI visualizer for the universe to display entities and food on a grid.
 - Add food/resources that entities can consume to regain energy.
 
 ## Next Steps
