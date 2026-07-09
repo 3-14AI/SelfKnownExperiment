@@ -170,5 +170,24 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(entity.y, 2)
         self.assertEqual(len(universe.foods), 0) # Food eaten
 
+
+    def test_entity_reproduction(self):
+        universe = Universe(reproduction_threshold=15, reproduction_cost=10, food_spawn_rate=0.0)
+        entity = Entity("Adam", energy=16, x=5, y=5)
+        universe.add_entity(entity)
+
+        # Tick 1: entity loses 1 energy to tick, reproduces and spends 10 energy (16 - 1 - 10 = 5)
+        universe.tick()
+
+        self.assertEqual(entity.energy, 5)
+        self.assertEqual(len(universe.entities), 2)
+
+        child = universe.entities[1]
+        self.assertEqual(child.name, "Adam_child")
+        self.assertEqual(child.x, 5)
+        self.assertEqual(child.y, 5)
+        self.assertEqual(child.energy, 10) # default energy
+
 if __name__ == '__main__':
+
     unittest.main()

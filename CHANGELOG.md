@@ -10,6 +10,8 @@ All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Implemented entity reproduction/spawning mechanics. Entities can spawn an offspring at their exact location if their energy exceeds a set threshold.
+- Updated unit tests in `tests/test_engine.py` to assert the correctness of reproduction mechanics (correct parent energy decay, child position and naming).
 - Implemented a food/resource system. Added `Food` class and updated `Universe` to store food, allow adding food, and enable entities to consume food during `tick()` to regain energy.
 - Added unit tests in `tests/test_engine.py` to cover food creation, bounds checking, and consumption mechanics.
 - Added a `Food` class and implemented a food/resource system. Food randomly spawns in the Universe, and entities consume food at their exact location to regain energy.

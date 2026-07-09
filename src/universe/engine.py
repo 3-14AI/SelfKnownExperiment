@@ -24,13 +24,15 @@ class Food:
         self.energy = energy
 
 class Universe:
-    def __init__(self, width=100, height=100, food_spawn_rate=0.1):
+    def __init__(self, width=100, height=100, food_spawn_rate=0.1, reproduction_threshold=20, reproduction_cost=10):
         self.time = 0
         self.entities = []
         self.foods = []
         self.width = width
         self.height = height
         self.food_spawn_rate = food_spawn_rate
+        self.reproduction_threshold = reproduction_threshold
+        self.reproduction_cost = reproduction_cost
 
     def add_food(self, food, x=None, y=None):
         if x is not None:
@@ -102,11 +104,19 @@ class Universe:
             y = random.randint(0, self.height - 1)
             self.add_food(Food(x=x, y=y))
 
+        new_entities = []
+
         for entity in self.entities:
             # Consume 1 energy per tick
             entity.energy -= 1
 
             if entity.is_alive:
+                # Reproduction
+                if entity.energy >= self.reproduction_threshold:
+                    entity.energy -= self.reproduction_cost
+                    child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y)
+                    new_entities.append(child)
+
                 nearest_food = self.get_nearest_food(entity.x, entity.y)
                 if nearest_food:
                     # Move towards food
@@ -136,3 +146,5 @@ class Universe:
                     self.foods.remove(food_to_eat)
 
         self.entities = [e for e in self.entities if e.is_alive]
+        for child in new_entities:
+            self.add_entity(child)
