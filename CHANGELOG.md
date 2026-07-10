@@ -2,6 +2,7 @@
 
 ## [Unreleased] - 2026-07-10
 ### Added
+- Created `simulate.py` to run the universe and continuously visualize the simulation in the terminal in real-time.
 - Implemented a basic CLI visualizer (`CLIVisualizer`) in `src/universe/visualizer.py` to display the universe state as a text grid.
 - Added unit tests for the visualizer in `tests/test_visualizer.py`.
 - Updated `agents.md` tracking progress.
