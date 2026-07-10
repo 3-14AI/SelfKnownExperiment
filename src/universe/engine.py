@@ -7,15 +7,17 @@ class Food:
         self.energy = energy
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50):
         self.name = name
         self.x = x
         self.y = y
         self.energy = energy
+        self.age = age
+        self.max_age = max_age
 
     @property
     def is_alive(self):
-        return self.energy > 0
+        return self.energy > 0 and self.age <= self.max_age
 
 class Food:
     def __init__(self, x=0, y=0, energy=5):
@@ -109,6 +111,8 @@ class Universe:
         for entity in self.entities:
             # Consume 1 energy per tick
             entity.energy -= 1
+            # Age by 1 per tick
+            entity.age += 1
 
             if entity.is_alive:
                 # Reproduction

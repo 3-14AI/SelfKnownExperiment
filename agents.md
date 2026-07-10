@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement an aging system for entities (e.g. entities naturally die after reaching a certain maximum age).
 - Implement entity reproduction/spawning mechanics (e.g. entities spawn offspring if they have enough energy).
 - Implemented basic behavior/AI for entities to seek out food rather than just staying still.
 - Bootstrapped core universe engine (Universe and Entity classes).
@@ -38,5 +39,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
 ## Next Steps
-- Implement an aging system for entities (e.g. entities naturally die after reaching a certain maximum age).
 - Add a basic CLI visualizer for the universe to display entities and food on a grid.
