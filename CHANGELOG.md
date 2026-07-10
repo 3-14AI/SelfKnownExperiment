@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased] - 2026-07-10
+### Added
+- Implemented a basic CLI visualizer (`CLIVisualizer`) in `src/universe/visualizer.py` to display the universe state as a text grid.
+- Added unit tests for the visualizer in `tests/test_visualizer.py`.
+- Updated `agents.md` tracking progress.
+
 ## [2026-07-09]
 ### Added
 - Entity AI behavior: Entities now actively seek out the nearest food source and move towards it each tick instead of remaining stationary.
