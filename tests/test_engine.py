@@ -188,6 +188,37 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(child.y, 5)
         self.assertEqual(child.energy, 10) # default energy
 
+    def test_entity_aging(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("OldMan", energy=100, max_age=3)
+        universe.add_entity(entity)
+
+        self.assertEqual(entity.age, 0)
+
+        # Tick 1: age = 1
+        universe.tick()
+        self.assertEqual(entity.age, 1)
+        self.assertTrue(entity.is_alive)
+        self.assertIn(entity, universe.entities)
+
+        # Tick 2: age = 2
+        universe.tick()
+        self.assertEqual(entity.age, 2)
+        self.assertTrue(entity.is_alive)
+        self.assertIn(entity, universe.entities)
+
+        # Tick 3: age = 3 (still alive since age <= max_age)
+        universe.tick()
+        self.assertEqual(entity.age, 3)
+        self.assertTrue(entity.is_alive)
+        self.assertIn(entity, universe.entities)
+
+        # Tick 4: age = 4 (dies since age > max_age)
+        universe.tick()
+        self.assertEqual(entity.age, 4)
+        self.assertFalse(entity.is_alive)
+        self.assertNotIn(entity, universe.entities)
+
 if __name__ == '__main__':
 
     unittest.main()
