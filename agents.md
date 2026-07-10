@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implemented a basic CLI visualizer (`CLIVisualizer`) for the universe to display entities and food on a grid.
 - Analyzed project changes and agent actions (AI behavior, reproduction, aging) and updated the results in `analytics/analysis_report.md`.
 - Implement an aging system for entities (e.g. entities naturally die after reaching a certain maximum age).
 - Implement entity reproduction/spawning mechanics (e.g. entities spawn offspring if they have enough energy).
@@ -40,4 +41,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
 ## Next Steps
-- Add a basic CLI visualizer for the universe to display entities and food on a grid.
+- Implement a simulation loop script (`simulate.py`) to run the universe and visualize it in real-time in the terminal.
