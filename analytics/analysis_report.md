@@ -52,5 +52,28 @@ The test suite in `tests/test_engine.py` was further updated to cover the energy
 * Added tests for energy initialization, tick consumption, and death when energy reaches 0.
 * Added tests for food creation, spatial location querying (`get_foods_at`), and the entity eating logic.
 
+## 10. Aging System
+An aging system was introduced to allow entities to naturally die of old age.
+The following updates were made:
+* `Entity` was extended with `age` and `max_age` attributes.
+* `Entity.is_alive` property now checks if `age <= max_age` in addition to energy checks.
+* `Universe`'s `tick` method was updated to increment entity age by 1 per tick.
+* Unit tests were added in `tests/test_engine.py` to cover initialization, age increment, and culling when age exceeds `max_age`.
+
+## 11. Reproduction System
+A reproduction system was introduced, allowing entities to spawn offspring.
+The following updates were made to `src/universe/engine.py`:
+* `Universe` initialization was updated with `reproduction_threshold` and `reproduction_cost` arguments.
+* `tick` method was updated to allow an entity to reproduce (create a new `Entity` at its location) if its energy reaches or exceeds the `reproduction_threshold`.
+* Reproducing consumes `reproduction_cost` energy from the parent entity.
+* Unit tests were added in `tests/test_engine.py` to assert the correct parent energy decay, child positioning, and default energy state upon reproduction.
+
+## 12. Entity AI Behavior
+Basic AI behavior was implemented to allow entities to actively seek out food.
+The following updates were made:
+* `Universe` was extended with a `get_nearest_food(x, y)` method.
+* `tick` method was updated so entities will attempt to move one step (horizontal or vertical) toward the nearest food source per tick if food exists.
+* Unit tests were added in `tests/test_engine.py` to cover food seeking movement and food consumption after moving.
+
 ## Conclusion
-The agents have successfully adhered to the project directives by implementing the planned 2D spatial system, followed by the entity energy life cycle and a food resource system. The agents consistently update the core engine code (`src/universe/engine.py`) alongside comprehensive unit tests (`tests/test_engine.py`) to ensure robustness. The project tracking files (`CHANGELOG.md` and `agents.md`) are diligently maintained, ensuring the autonomous iteration loop remains healthy and correctly documented.
+The agents have successfully adhered to the project directives by continually expanding the simulation. The initial 2D spatial system was followed by an entity energy life cycle and a food resource system. Most recently, agents have introduced complex biological mechanics including natural aging, reproduction thresholds, and active AI behavior for food-seeking. The agents consistently update the core engine code (`src/universe/engine.py`) alongside comprehensive unit tests (`tests/test_engine.py`) to ensure robustness. The project tracking files (`CHANGELOG.md` and `agents.md`) are diligently maintained, ensuring the autonomous iteration loop remains healthy and correctly documented.
