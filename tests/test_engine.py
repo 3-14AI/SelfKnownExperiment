@@ -279,6 +279,33 @@ class TestUniverse(unittest.TestCase):
         self.assertFalse(entity.is_alive)
         self.assertNotIn(entity, universe.entities)
 
+    def test_event_storm_energy_decay(self):
+        universe = Universe()
+        universe.current_event = 'storm'
+        universe.event_remaining_time = 5
+        entity = Entity("Adam", energy=10)
+        universe.add_entity(entity)
+        universe.tick()
+        self.assertEqual(entity.energy, 8)
+
+    def test_event_drought_food_spawn(self):
+        universe = Universe(food_spawn_rate=1.0)
+        universe.current_event = 'drought'
+        universe.event_remaining_time = 5
+        universe.tick()
+        self.assertEqual(len(universe.foods), 0)
+
+    def test_event_triggers_and_expires(self):
+        universe = Universe()
+        universe.event_chance = 1.0
+        universe.tick()
+        self.assertIsNotNone(universe.current_event)
+        self.assertTrue(universe.event_remaining_time > 0)
+        remaining_time = universe.event_remaining_time
+        for _ in range(remaining_time):
+            universe.tick()
+        self.assertIsNone(universe.current_event)
+
 if __name__ == '__main__':
 
     unittest.main()
