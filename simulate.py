@@ -1,6 +1,6 @@
 import os
 import time
-from src.universe.engine import Universe, Entity, Food
+from src.universe.engine import Universe, Entity, Food, Terrain
 from src.universe.visualizer import CLIVisualizer
 
 def main():
@@ -15,6 +15,10 @@ def main():
     # Add initial food
     for _ in range(10):
         universe.add_food(Food(energy=10), x=universe.width//2, y=universe.height//2) # This might be out of bounds if width/height is small, let's randomize
+
+    # Add a terrain wall across the middle
+    for x in range(10, 31):
+        universe.add_terrain(Terrain(x=x, y=10, terrain_type='wall'))
 
     # Clear the foods added out of bounds or at same place and add them randomly
     universe.foods = []

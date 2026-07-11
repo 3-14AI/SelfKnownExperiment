@@ -25,11 +25,18 @@ class Food:
         self.y = y
         self.energy = energy
 
+class Terrain:
+    def __init__(self, x=0, y=0, terrain_type='wall'):
+        self.x = x
+        self.y = y
+        self.terrain_type = terrain_type
+
 class Universe:
     def __init__(self, width=100, height=100, food_spawn_rate=0.1, reproduction_threshold=20, reproduction_cost=10):
         self.time = 0
         self.entities = []
         self.foods = []
+        self.terrains = []
         self.width = width
         self.height = height
         self.food_spawn_rate = food_spawn_rate
@@ -63,8 +70,48 @@ class Universe:
         new_y = entity.y + dy
         if not (0 <= new_x < self.width and 0 <= new_y < self.height):
             raise ValueError(f"Movement out of bounds: ({new_x}, {new_y})")
+
+        terrains_here = self.get_terrains_at(new_x, new_y)
+        if any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+            raise ValueError(f"Movement blocked by terrain at ({new_x}, {new_y})")
+
         entity.x = new_x
         entity.y = new_y
+
+    def get_terrains_at(self, x, y):
+        return [t for t in self.terrains if t.x == x and t.y == y]
+
+    def add_terrain(self, terrain):
+        if not (0 <= terrain.x < self.width and 0 <= terrain.y < self.height):
+            raise ValueError(f"Terrain out of bounds: ({terrain.x}, {terrain.y})")
+        self.terrains.append(terrain)
+
+    def find_path(self, start_x, start_y, target_x, target_y):
+        from collections import deque
+        queue = deque([(start_x, start_y, [])])
+        visited = {(start_x, start_y)}
+
+        # Directions: up, down, left, right
+        directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+
+        while queue:
+            current_x, current_y, path = queue.popleft()
+
+            if current_x == target_x and current_y == target_y:
+                return path
+
+            for dx, dy in directions:
+                new_x = current_x + dx
+                new_y = current_y + dy
+
+                if (new_x, new_y) not in visited:
+                    if 0 <= new_x < self.width and 0 <= new_y < self.height:
+                        terrains_here = self.get_terrains_at(new_x, new_y)
+                        if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                            visited.add((new_x, new_y))
+                            queue.append((new_x, new_y, path + [(dx, dy)]))
+
+        return None  # No path found
 
     def get_entities_at(self, x, y):
         return [e for e in self.entities if e.x == x and e.y == y]
@@ -123,24 +170,13 @@ class Universe:
 
                 nearest_food = self.get_nearest_food(entity.x, entity.y)
                 if nearest_food:
-                    # Move towards food
-                    dx = 0
-                    dy = 0
-                    if nearest_food.x > entity.x:
-                        dx = 1
-                    elif nearest_food.x < entity.x:
-                        dx = -1
-
-                    if nearest_food.y > entity.y:
-                        dy = 1
-                    elif nearest_food.y < entity.y:
-                        dy = -1
-
-                    if dx != 0 or dy != 0:
+                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y)
+                    if path and len(path) > 0:
+                        dx, dy = path[0]
                         try:
                             self.move_entity(entity, dx, dy)
                         except ValueError:
-                            pass # In case movement is out of bounds, shouldn't happen but safe
+                            pass # Blocked
 
                 # Check for food at entity location
                 foods_here = self.get_foods_at(entity.x, entity.y)
