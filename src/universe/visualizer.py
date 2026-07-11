@@ -29,4 +29,6 @@ class CLIVisualizer:
 
     def print_state(self):
         print(f"Time: {self.universe.time}")
+        if hasattr(self.universe, 'current_event') and self.universe.current_event:
+            print(f"Event: {self.universe.current_event.upper()} ({self.universe.event_remaining_time} ticks left)")
         print(self.render())

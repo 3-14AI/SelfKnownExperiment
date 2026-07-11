@@ -2,6 +2,11 @@
 
 ## [Unreleased] - 2026-07-10
 ### Added
+- Implemented environmental events system in the Universe engine ('storm', 'drought').
+- Storms double entity energy decay, and droughts temporarily halt food spawning.
+- Updated `CLIVisualizer` to display the currently active event and its remaining duration.
+- Added test coverage for events in `tests/test_engine.py`.
+- Updated `agents.md` tracking progress.
 - Added `analytics/current_analysis.md` with an analysis of project evolution and agent actions up to the intelligent BFS pathfinding implementation.
 - Implemented intelligent pathfinding using Breadth-First Search (BFS). Entities now route around impassable terrain (like walls) to reach their nearest food source.
 - Implemented a Terrain system (`Terrain` class) to allow for obstacles like walls (`#`) and water (`~`).

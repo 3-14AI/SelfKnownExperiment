@@ -19,12 +19,6 @@ class Entity:
     def is_alive(self):
         return self.energy > 0 and self.age <= self.max_age
 
-class Food:
-    def __init__(self, x=0, y=0, energy=5):
-        self.x = x
-        self.y = y
-        self.energy = energy
-
 class Terrain:
     def __init__(self, x=0, y=0, terrain_type='wall'):
         self.x = x
@@ -42,6 +36,9 @@ class Universe:
         self.food_spawn_rate = food_spawn_rate
         self.reproduction_threshold = reproduction_threshold
         self.reproduction_cost = reproduction_cost
+        self.current_event = None
+        self.event_remaining_time = 0
+        self.event_chance = 0.05
 
     def add_food(self, food, x=None, y=None):
         if x is not None:
@@ -116,20 +113,8 @@ class Universe:
     def get_entities_at(self, x, y):
         return [e for e in self.entities if e.x == x and e.y == y]
 
-    def add_food(self, food, x=None, y=None):
-        if x is not None:
-            food.x = x
-        if y is not None:
-            food.y = y
-
-        if not (0 <= food.x < self.width and 0 <= food.y < self.height):
-            raise ValueError(f"Food out of bounds: ({food.x}, {food.y})")
-
-        self.foods.append(food)
-
     def get_foods_at(self, x, y):
         return [f for f in self.foods if f.x == x and f.y == y]
-
 
     def get_nearest_food(self, x, y):
         if not self.foods:
@@ -147,8 +132,21 @@ class Universe:
     def tick(self):
         self.time += 1
 
+        # Handle events
+        if self.current_event:
+            self.event_remaining_time -= 1
+            if self.event_remaining_time <= 0:
+                self.current_event = None
+        elif random.random() < self.event_chance:
+            self.current_event = random.choice(['storm', 'drought'])
+            self.event_remaining_time = random.randint(5, 15)
+
         # Spawn new food
-        if random.random() < self.food_spawn_rate:
+        current_food_spawn_rate = self.food_spawn_rate
+        if self.current_event == 'drought':
+            current_food_spawn_rate = 0.0
+
+        if random.random() < current_food_spawn_rate:
             x = random.randint(0, self.width - 1)
             y = random.randint(0, self.height - 1)
             self.add_food(Food(x=x, y=y))
@@ -156,8 +154,11 @@ class Universe:
         new_entities = []
 
         for entity in self.entities:
-            # Consume 1 energy per tick
-            entity.energy -= 1
+            # Consume energy per tick
+            energy_loss = 1
+            if self.current_event == 'storm':
+                energy_loss = 2
+            entity.energy -= energy_loss
             # Age by 1 per tick
             entity.age += 1
 
