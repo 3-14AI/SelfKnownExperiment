@@ -85,3 +85,21 @@ The following updates were made:
 * The visualizer renders a text-based grid where `.` represents empty space, `f` represents food, and `E` represents entities.
 * Provided a `print_state()` method to easily display the current simulation time and grid layout.
 * Unit tests were added in `tests/test_visualizer.py` to ensure proper rendering of various universe states, including overlapping entities and food.
+
+## 14. Terrain System
+A Terrain system was introduced to add spatial complexity and obstacles to the universe.
+The following updates were made:
+* Created a `Terrain` class with `x`, `y` coordinates and a `terrain_type` (e.g., 'wall', 'water').
+* `Universe` was extended to store a list of `terrains` and provide `add_terrain` and `get_terrains_at` methods.
+* `move_entity` logic in `Universe` was updated to raise an error if an entity attempts to move into a cell occupied by impassable terrain.
+* The `CLIVisualizer` was updated to iterate over `terrains` and render `#` for walls and `~` for water prior to rendering food and entities.
+* Unit tests were added in `tests/test_engine.py` and `tests/test_visualizer.py` to ensure bounds, blocking, and visualization function accurately.
+* `simulate.py` was updated to render a 'wall' obstacle across the screen to demonstrate the feature.
+
+## 15. Intelligent Pathfinding
+Entity AI was enhanced with intelligent pathfinding capabilities.
+The following updates were made:
+* Added a `find_path` method to `Universe` utilizing a Breadth-First Search (BFS) algorithm to compute the shortest path to a target coordinate.
+* The BFS correctly identifies and routes around impassable `Terrain` (e.g. walls and water).
+* Updated the `tick` method's food-seeking AI. Entities now invoke `find_path` to navigate toward `nearest_food` instead of using a naive greedy approach that gets stuck on walls.
+* Added a robust unit test (`test_entity_pathfinding_around_obstacle`) in `tests/test_engine.py` simulating an entity routing around a wall to reach a target.

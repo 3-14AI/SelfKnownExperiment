@@ -2,6 +2,10 @@
 
 ## [Unreleased] - 2026-07-10
 ### Added
+- Implemented intelligent pathfinding using Breadth-First Search (BFS). Entities now route around impassable terrain (like walls) to reach their nearest food source.
+- Implemented a Terrain system (`Terrain` class) to allow for obstacles like walls (`#`) and water (`~`).
+- Entities are now blocked by impassable terrain during movement.
+- Updated the visualizer to render the new terrain types.
 - Created `simulate.py` to run the universe and continuously visualize the simulation in the terminal in real-time.
 - Implemented a basic CLI visualizer (`CLIVisualizer`) in `src/universe/visualizer.py` to display the universe state as a text grid.
 - Added unit tests for the visualizer in `tests/test_visualizer.py`.

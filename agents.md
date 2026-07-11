@@ -29,6 +29,8 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement intelligent pathfinding allowing entities to navigate and route around impassable terrain and obstacles when seeking food.
+- Implement different types of terrain or obstacles in the universe (e.g. walls, water) to add complexity to the simulation.
 - Implemented a simulation loop script (`simulate.py`) to run the universe and visualize it in real-time in the terminal.
 - Implemented a basic CLI visualizer (`CLIVisualizer`) for the universe to display entities and food on a grid.
 - Analyzed project changes and agent actions (AI behavior, reproduction, aging) and updated the results in `analytics/analysis_report.md`.
@@ -42,4 +44,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
 ## Next Steps
-- Implement different types of terrain or obstacles in the universe (e.g. walls, water) to add complexity to the simulation.
+- Implement environmental events (e.g. storms or droughts) that affect entity energy decay.

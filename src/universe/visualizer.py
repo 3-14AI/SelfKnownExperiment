@@ -6,6 +6,14 @@ class CLIVisualizer:
         # Create an empty grid
         grid = [['.' for _ in range(self.universe.width)] for _ in range(self.universe.height)]
 
+        # Add terrain
+        for terrain in self.universe.terrains:
+            if 0 <= terrain.x < self.universe.width and 0 <= terrain.y < self.universe.height:
+                if terrain.terrain_type == 'wall':
+                    grid[terrain.y][terrain.x] = '#'
+                elif terrain.terrain_type == 'water':
+                    grid[terrain.y][terrain.x] = '~'
+
         # Add food
         for food in self.universe.foods:
             if 0 <= food.x < self.universe.width and 0 <= food.y < self.universe.height:

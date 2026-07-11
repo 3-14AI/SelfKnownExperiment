@@ -1,8 +1,16 @@
 import unittest
-from src.universe.engine import Universe, Entity, Food
+from src.universe.engine import Universe, Entity, Food, Terrain
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+    def test_render_terrain(self):
+        universe = Universe(width=3, height=3)
+        universe.add_terrain(Terrain(x=0, y=0, terrain_type='wall'))
+        universe.add_terrain(Terrain(x=2, y=2, terrain_type='water'))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "#..\n...\n..~"
+        self.assertEqual(visualizer.render(), expected_output)
+
     def test_render_empty(self):
         universe = Universe(width=3, height=3)
         visualizer = CLIVisualizer(universe)

@@ -1,7 +1,36 @@
 import unittest
-from src.universe.engine import Universe, Entity, Food
+from src.universe.engine import Universe, Entity, Food, Terrain
 
 class TestUniverse(unittest.TestCase):
+    def test_terrain_initialization(self):
+        terrain = Terrain(x=5, y=5, terrain_type='water')
+        self.assertEqual(terrain.x, 5)
+        self.assertEqual(terrain.y, 5)
+        self.assertEqual(terrain.terrain_type, 'water')
+
+    def test_add_terrain(self):
+        universe = Universe()
+        terrain = Terrain(x=5, y=5, terrain_type='wall')
+        universe.add_terrain(terrain)
+        self.assertEqual(len(universe.terrains), 1)
+        self.assertEqual(universe.terrains[0], terrain)
+        self.assertEqual(universe.get_terrains_at(5, 5)[0], terrain)
+
+        with self.assertRaises(ValueError):
+            universe.add_terrain(Terrain(x=100, y=10))
+
+    def test_move_entity_blocked_by_terrain(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Adam", x=5, y=5)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=6, y=5, terrain_type='wall'))
+
+        with self.assertRaises(ValueError):
+            universe.move_entity(entity, 1, 0)
+
+        self.assertEqual(entity.x, 5)
+        self.assertEqual(entity.y, 5)
+
     def test_initial_state(self):
         universe = Universe()
         self.assertEqual(universe.time, 0)
@@ -151,6 +180,37 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(entity.energy, 14)
         self.assertEqual(len(universe.foods), 0)
 
+    def test_entity_pathfinding_around_obstacle(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0)
+        universe.add_entity(entity)
+        universe.add_food(Food(x=2, y=0, energy=5))
+
+        # Add a wall at (1, 0) blocking the direct path
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='wall'))
+
+        # Entity should route around: (0,0) -> (0,1) -> (1,1) -> (2,1) -> (2,0)
+        # Tick 1: move to (0, 1)
+        universe.tick()
+        self.assertEqual(entity.x, 0)
+        self.assertEqual(entity.y, 1)
+
+        # Tick 2: move to (1, 1)
+        universe.tick()
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 1)
+
+        # Tick 3: move to (2, 1)
+        universe.tick()
+        self.assertEqual(entity.x, 2)
+        self.assertEqual(entity.y, 1)
+
+        # Tick 4: move to (2, 0) and eat food
+        universe.tick()
+        self.assertEqual(entity.x, 2)
+        self.assertEqual(entity.y, 0)
+        self.assertEqual(len(universe.foods), 0)
+
     def test_entity_seeks_food(self):
         universe = Universe(food_spawn_rate=0.0)
         entity = Entity("Adam", x=0, y=0)
@@ -158,14 +218,14 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(entity)
         universe.add_food(food)
 
-        # Tick 1: entity should move to (1, 1)
+        # Previously entities could move diagonally (1, 1). BFS only moves orthogonally.
+        # It takes 4 orthogonal moves to reach (2, 2) from (0, 0).
         universe.tick()
-        self.assertEqual(entity.x, 1)
-        self.assertEqual(entity.y, 1)
+        universe.tick()
+        universe.tick()
         self.assertEqual(len(universe.foods), 1) # Hasn't reached food yet
 
-        # Tick 2: entity should move to (2, 2) and eat food
-        universe.tick()
+        universe.tick() # Reaches and eats food
         self.assertEqual(entity.x, 2)
         self.assertEqual(entity.y, 2)
         self.assertEqual(len(universe.foods), 0) # Food eaten
