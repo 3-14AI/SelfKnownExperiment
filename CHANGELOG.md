@@ -2,6 +2,10 @@
 
 ## [Unreleased] - 2026-07-10
 ### Added
+- Implemented entity perception radius feature. Entities now only detect and pathfind towards food that lies within their `perception_radius`.
+- Added constraints to `Universe.get_nearest_food` and `Universe.find_path` to restrict behavior by Manhattan distance.
+- Entities automatically pass on their `perception_radius` trait to their offspring during reproduction.
+- Expanded `tests/test_engine.py` to ensure entities correctly ignore food outside their perception range and fail to route paths that would take them out of bounds.
 - Implemented environmental events system in the Universe engine ('storm', 'drought').
 - Storms double entity energy decay, and droughts temporarily halt food spawning.
 - Updated `CLIVisualizer` to display the currently active event and its remaining duration.

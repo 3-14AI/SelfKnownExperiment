@@ -306,6 +306,53 @@ class TestUniverse(unittest.TestCase):
             universe.tick()
         self.assertIsNone(universe.current_event)
 
+
+    def test_entity_perception_radius_food(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0, perception_radius=3)
+        universe.add_entity(entity)
+        # Food is at distance 4 (out of radius)
+        food_far = Food(x=4, y=0, energy=5)
+        universe.add_food(food_far)
+
+        nearest = universe.get_nearest_food(entity.x, entity.y, radius=entity.perception_radius)
+        self.assertIsNone(nearest)
+
+        # Tick 1: Entity should not move towards food
+        universe.tick()
+        self.assertEqual(entity.x, 0)
+        self.assertEqual(entity.y, 0)
+
+        # Move food closer
+        food_far.x = 3
+        nearest = universe.get_nearest_food(entity.x, entity.y, radius=entity.perception_radius)
+        self.assertEqual(nearest, food_far)
+
+        # Tick 2: Entity should move towards food
+        universe.tick()
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 0)
+
+    def test_entity_perception_radius_pathfinding(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0, perception_radius=3)
+        universe.add_entity(entity)
+
+        # Food is at distance 3, within perception
+        universe.add_food(Food(x=3, y=0, energy=5))
+
+        # But blocked by a wall that forces routing outside of perception radius (distance > 3)
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='wall'))
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='wall'))
+        universe.add_terrain(Terrain(x=1, y=2, terrain_type='wall'))
+
+        # To route around the wall, path needs to go through (0,3) -> (1,3) -> (2,3) -> ... -> (3,0)
+        # (0,3) is distance 3, but (1,3) is distance 4.
+        # So find_path should fail when constrained by radius=3
+
+        path = universe.find_path(entity.x, entity.y, 3, 0, radius=entity.perception_radius)
+        self.assertIsNone(path)
+
 if __name__ == '__main__':
 
     unittest.main()
