@@ -306,6 +306,33 @@ class TestUniverse(unittest.TestCase):
             universe.tick()
         self.assertIsNone(universe.current_event)
 
+
+    def test_entity_perception_radius(self):
+        universe = Universe(food_spawn_rate=0.0)
+        # Entity can only see up to 2 units away
+        entity = Entity("BlindBoy", x=0, y=0, perception_radius=2)
+        universe.add_entity(entity)
+
+        # Food is 3 units away (out of perception radius)
+        food_far = Food(x=3, y=0, energy=5)
+        universe.add_food(food_far)
+
+        universe.tick()
+
+        # Entity should not have moved because food is out of perception radius
+        self.assertEqual(entity.x, 0)
+        self.assertEqual(entity.y, 0)
+
+        # Add food 2 units away (within perception radius)
+        food_close = Food(x=2, y=0, energy=5)
+        universe.add_food(food_close)
+
+        universe.tick()
+
+        # Entity should move towards the food (dx=1, dy=0)
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 0)
+
 if __name__ == '__main__':
 
     unittest.main()

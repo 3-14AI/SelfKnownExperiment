@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-07-12
+- Implemented entity perception radius, so entities only see food within a given radius.
+- Entities will not seek or pathfind towards food outside their perception radius.
+
+
 ## [Unreleased] - 2026-07-10
 ### Added
 - Implemented environmental events system in the Universe engine ('storm', 'drought').
