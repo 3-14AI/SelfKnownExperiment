@@ -103,3 +103,12 @@ The following updates were made:
 * The BFS correctly identifies and routes around impassable `Terrain` (e.g. walls and water).
 * Updated the `tick` method's food-seeking AI. Entities now invoke `find_path` to navigate toward `nearest_food` instead of using a naive greedy approach that gets stuck on walls.
 * Added a robust unit test (`test_entity_pathfinding_around_obstacle`) in `tests/test_engine.py` simulating an entity routing around a wall to reach a target.
+
+## 16. Environmental Events System
+An environmental events system was added to introduce dynamic challenges and random events into the universe.
+The following updates were made:
+* Introduced random events such as 'storm' and 'drought' to the `Universe` engine.
+* Storms double the rate of energy decay for entities, making survival harder.
+* Droughts temporarily halt the spawning of new food resources.
+* Updated `CLIVisualizer` to display the currently active event and its remaining duration.
+* Added comprehensive test coverage in `tests/test_engine.py` to ensure events are triggered properly and have the expected effects on entities and resources.
