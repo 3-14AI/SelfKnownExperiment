@@ -57,3 +57,6 @@ All notable changes to Project Genesis will be documented in this file.
 - Bootstrapped project structure with `src/` and `tests/` directories.
 - Implemented core `Universe` and `Entity` classes in `src/universe/engine.py`.
 - Added basic unit tests for the core engine in `tests/test_engine.py`.
+
+## 2026-07-12
+- Implemented entity perception radius, limiting the distance entities can detect food and effectively pathfind.

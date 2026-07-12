@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement entity perception so they only see food and obstacles within a certain radius.
 - Implement environmental events (e.g. storms or droughts) that affect entity energy decay.
 - Created a new analysis report `analytics/current_analysis.md` summarizing the project evolution and agent actions up to the intelligent BFS pathfinding implementation.
 - Implement intelligent pathfinding allowing entities to navigate and route around impassable terrain and obstacles when seeking food.
@@ -46,4 +47,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
 ## Next Steps
-- Implement entity perception so they only see food and obstacles within a certain radius.
+- Implement a logging system to track the historical events of the universe.

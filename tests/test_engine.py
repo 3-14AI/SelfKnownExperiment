@@ -306,6 +306,49 @@ class TestUniverse(unittest.TestCase):
             universe.tick()
         self.assertIsNone(universe.current_event)
 
+
+    def test_entity_perception_food(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=5, y=5, perception_radius=2)
+        universe.add_entity(entity)
+
+        food_close = Food(x=5, y=6, energy=5)  # distance 1
+        food_far = Food(x=5, y=8, energy=5)    # distance 3
+
+        universe.add_food(food_far)
+        universe.tick()
+
+        # Entity should not see food_far and thus not move towards it.
+        # It's at 5,5 so it doesn't move. (distance 3 > radius 2)
+        self.assertEqual(entity.x, 5)
+        self.assertEqual(entity.y, 5)
+
+        universe.add_food(food_close)
+        universe.tick()
+
+        # Entity should now see food_close and move towards it.
+        self.assertEqual(entity.x, 5)
+        self.assertEqual(entity.y, 6)
+
+    def test_entity_perception_path(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0, perception_radius=2)
+        universe.add_entity(entity)
+
+        # Add food that is within radius
+        universe.add_food(Food(x=0, y=2, energy=5))
+
+        # Add walls around (0,1) blocking direct path.
+        # Path must go (0,0) -> (1,0) -> (1,1) -> (1,2) -> (0,2).
+        # At (1,2), dist from start(0,0) is 3 > radius(2). So pathfinder should fail.
+        universe.add_terrain(Terrain(x=0, y=1, terrain_type='wall'))
+
+        universe.tick()
+
+        # Entity shouldn't move because valid path requires exceeding perception radius
+        self.assertEqual(entity.x, 0)
+        self.assertEqual(entity.y, 0)
+
 if __name__ == '__main__':
 
     unittest.main()
