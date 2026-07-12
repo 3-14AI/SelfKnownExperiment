@@ -306,6 +306,38 @@ class TestUniverse(unittest.TestCase):
             universe.tick()
         self.assertIsNone(universe.current_event)
 
+
+    def test_entity_perception_radius(self):
+        # Entity has perception radius of 2
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=5, y=5, perception_radius=2)
+        universe.add_entity(entity)
+
+        # Food is at distance 3 (outside radius)
+        food = Food(x=8, y=5)
+        universe.add_food(food)
+
+        nearest_food = universe.get_nearest_food(entity.x, entity.y, radius=entity.perception_radius)
+        self.assertIsNone(nearest_food)
+
+        # Move food closer (inside radius)
+        food.x = 7
+        nearest_food_inside = universe.get_nearest_food(entity.x, entity.y, radius=entity.perception_radius)
+        self.assertEqual(nearest_food_inside, food)
+
+    def test_entity_pathfinding_perception_radius(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0, perception_radius=3)
+        universe.add_entity(entity)
+
+        # Target at (5, 0), distance is 5
+        path = universe.find_path(entity.x, entity.y, 5, 0, radius=entity.perception_radius)
+        self.assertIsNone(path) # Should not find path as it goes outside perception radius
+
+        # Target at (3, 0), distance is 3
+        path = universe.find_path(entity.x, entity.y, 3, 0, radius=entity.perception_radius)
+        self.assertIsNotNone(path) # Should find path within radius
+
 if __name__ == '__main__':
 
     unittest.main()

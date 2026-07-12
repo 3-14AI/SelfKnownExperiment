@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased] - 2026-07-12
+### Added
+- Implemented entity perception radius. Entities will now only "see" food and viable paths that fall within their perception radius (default 5).
+- Added `perception_radius` to `Entity` class.
+- Modified `Universe.get_nearest_food` and `Universe.find_path` to accept and utilize a `radius` constraint.
+- Added tests for perception limit bounds in `tests/test_engine.py`.
+
 ## [Unreleased] - 2026-07-10
 ### Added
 - Implemented environmental events system in the Universe engine ('storm', 'drought').
