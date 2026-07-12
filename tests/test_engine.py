@@ -306,6 +306,43 @@ class TestUniverse(unittest.TestCase):
             universe.tick()
         self.assertIsNone(universe.current_event)
 
-if __name__ == '__main__':
 
+    def test_entity_perception_radius_food(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0, perception_radius=2)
+        universe.add_entity(entity)
+        universe.add_food(Food(x=3, y=0, energy=5))
+
+        nearest = universe.get_nearest_food(entity.x, entity.y, max_distance=entity.perception_radius)
+        self.assertIsNone(nearest)
+
+        universe.tick()
+        self.assertEqual(entity.x, 0)
+        self.assertEqual(entity.y, 0)
+
+        universe.add_food(Food(x=2, y=0, energy=5))
+        nearest2 = universe.get_nearest_food(entity.x, entity.y, max_distance=entity.perception_radius)
+        self.assertIsNotNone(nearest2)
+        self.assertEqual(nearest2.x, 2)
+        self.assertEqual(nearest2.y, 0)
+
+        universe.tick()
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 0)
+
+    def test_entity_perception_radius_obstacle(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0, perception_radius=3)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=0, y=1, terrain_type='wall'))
+
+        path1 = universe.find_path(0, 0, 0, 2, max_distance=3)
+        self.assertIsNotNone(path1)
+        self.assertNotEqual(path1[0], (0, 1))
+
+        path2 = universe.find_path(0, 0, 0, 2, max_distance=0)
+        self.assertIsNotNone(path2)
+        self.assertEqual(path2[0], (0, 1))
+
+if __name__ == '__main__':
     unittest.main()
