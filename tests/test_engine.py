@@ -306,6 +306,40 @@ class TestUniverse(unittest.TestCase):
             universe.tick()
         self.assertIsNone(universe.current_event)
 
+
+    def test_entity_perception_radius(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0, perception_radius=2)
+        universe.add_entity(entity)
+        # Food is out of perception radius (distance = 5)
+        food_far = Food(x=0, y=5, energy=5)
+        universe.add_food(food_far)
+
+        nearest = universe.get_nearest_food(entity.x, entity.y, radius=entity.perception_radius)
+        self.assertIsNone(nearest)
+
+        # Food is within perception radius (distance = 2)
+        food_close = Food(x=0, y=2, energy=5)
+        universe.add_food(food_close)
+
+        nearest = universe.get_nearest_food(entity.x, entity.y, radius=entity.perception_radius)
+        self.assertEqual(nearest, food_close)
+
+    def test_entity_wanders_when_no_food(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        entity = Entity("Adam", x=5, y=5, perception_radius=2)
+        universe.add_entity(entity)
+
+        # Ensure no food
+        self.assertEqual(len(universe.foods), 0)
+
+        # Entity should wander
+        universe.tick()
+
+        # It must have moved 1 step orthogonally since it was at 5,5
+        dist = abs(entity.x - 5) + abs(entity.y - 5)
+        self.assertEqual(dist, 1)
+
 if __name__ == '__main__':
 
     unittest.main()

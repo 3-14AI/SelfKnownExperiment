@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- Added `perception_radius` parameter to the `Entity` class (defaulting to 5).
+- Updated `Universe.get_nearest_food` to support distance filtering via the `radius` argument.
+- Entities now only seek food within their `perception_radius`.
+- Added random wandering behavior for entities when no food is perceived within their radius.
+
 ## [Unreleased] - 2026-07-10
 ### Added
 - Implemented environmental events system in the Universe engine ('storm', 'drought').

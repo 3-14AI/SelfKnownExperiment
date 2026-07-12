@@ -7,13 +7,14 @@ class Food:
         self.energy = energy
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=5):
         self.name = name
         self.x = x
         self.y = y
         self.energy = energy
         self.age = age
         self.max_age = max_age
+        self.perception_radius = perception_radius
 
     @property
     def is_alive(self):
@@ -116,7 +117,7 @@ class Universe:
     def get_foods_at(self, x, y):
         return [f for f in self.foods if f.x == x and f.y == y]
 
-    def get_nearest_food(self, x, y):
+    def get_nearest_food(self, x, y, radius=None):
         if not self.foods:
             return None
 
@@ -124,6 +125,8 @@ class Universe:
         min_dist = float('inf')
         for food in self.foods:
             dist = abs(food.x - x) + abs(food.y - y)
+            if radius is not None and dist > radius:
+                continue
             if dist < min_dist:
                 min_dist = dist
                 nearest = food
@@ -169,7 +172,7 @@ class Universe:
                     child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y)
                     new_entities.append(child)
 
-                nearest_food = self.get_nearest_food(entity.x, entity.y)
+                nearest_food = self.get_nearest_food(entity.x, entity.y, radius=entity.perception_radius)
                 if nearest_food:
                     path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y)
                     if path and len(path) > 0:
@@ -178,6 +181,16 @@ class Universe:
                             self.move_entity(entity, dx, dy)
                         except ValueError:
                             pass # Blocked
+                else:
+                    # Wander randomly if no food is perceived
+                    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+                    random.shuffle(directions)
+                    for dx, dy in directions:
+                        try:
+                            self.move_entity(entity, dx, dy)
+                            break
+                        except ValueError:
+                            continue
 
                 # Check for food at entity location
                 foods_here = self.get_foods_at(entity.x, entity.y)
