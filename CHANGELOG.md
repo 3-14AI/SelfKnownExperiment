@@ -2,6 +2,11 @@
 
 ## [Unreleased] - 2026-07-10
 ### Added
+- Implemented `perception_radius` for entities.
+- Entities now only seek food within their perception radius (Manhattan distance).
+- Pathfinding (BFS) assumes unknown terrain (beyond perception radius) is clear, forcing entities to discover obstacles dynamically.
+- Added tests for perception radius logic in `tests/test_engine.py`.
+- Updated `agents.md` tracking progress.
 - Implemented environmental events system in the Universe engine ('storm', 'drought').
 - Storms double entity energy decay, and droughts temporarily halt food spawning.
 - Updated `CLIVisualizer` to display the currently active event and its remaining duration.

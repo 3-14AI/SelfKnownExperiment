@@ -306,6 +306,44 @@ class TestUniverse(unittest.TestCase):
             universe.tick()
         self.assertIsNone(universe.current_event)
 
+
+    def test_perception_radius_food(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0, perception_radius=2)
+        universe.add_entity(entity)
+        food_close = Food(x=2, y=0)
+        food_far = Food(x=4, y=0)
+        universe.add_food(food_close)
+        universe.add_food(food_far)
+
+        nearest = universe.get_nearest_food(entity.x, entity.y, perception_radius=entity.perception_radius)
+        self.assertEqual(nearest, food_close)
+
+        entity.perception_radius = 1
+        nearest_small_radius = universe.get_nearest_food(entity.x, entity.y, perception_radius=entity.perception_radius)
+        self.assertIsNone(nearest_small_radius)
+
+    def test_perception_radius_pathfinding(self):
+        universe = Universe()
+        entity = Entity("Adam", x=0, y=0, perception_radius=1)
+        # Target at (3, 0)
+        # Wall at (2, 0).
+        # Since radius is 1, entity can't see the wall initially, so it plans a straight path.
+        universe.add_terrain(Terrain(x=2, y=0, terrain_type='wall'))
+
+        # When entity is at (0, 0), dist to wall at (2,0) is 2.
+        # This is > perception_radius (1), so it assumes (2,0) is clear.
+        path = universe.find_path(0, 0, 3, 0, perception_radius=entity.perception_radius)
+        self.assertIsNotNone(path)
+
+        # When entity moves to (1, 0), dist to wall at (2,0) is 1.
+        # This is <= perception_radius (1), so it sees the wall.
+        # Pathfinding should now route around it.
+        path_close = universe.find_path(1, 0, 3, 0, perception_radius=entity.perception_radius)
+        self.assertIsNotNone(path_close)
+        # It shouldn't just be straight right [(1, 0), (1, 0)]
+        self.assertNotEqual(path_close[0], (1, 0))
+
 if __name__ == '__main__':
 
     unittest.main()
