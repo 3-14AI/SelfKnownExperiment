@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-12
+
+### Added
+- Entity perception radius: Entities now only perceive and seek food and pathfind around obstacles within a defined `perception_radius` (default: 5).
+
+
 ## [Unreleased] - 2026-07-10
 ### Added
 - Implemented environmental events system in the Universe engine ('storm', 'drought').
