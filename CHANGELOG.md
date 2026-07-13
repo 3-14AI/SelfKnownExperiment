@@ -2,6 +2,14 @@
 - Implement entity perception radius. Entities now only detect food and route around obstacles that are within their perception radius (default 10).
 
 # Changelog
+## [2026-07-13] - Entity Memory
+
+### Added
+- Entity instances now maintain a `memory` set to store known obstacle coordinates.
+- Entities automatically observe and remember obstacles (walls, water) within their perception radius during each tick.
+- The pathfinding algorithm (`find_path`) now uses an entity's memory to avoid routing through remembered obstacles, even if those obstacles are currently outside the entity's perception radius.
+- Added tests in `test_engine.py` to ensure memory is updated correctly and utilized in pathfinding.
+
 
 ## [Unreleased] - 2026-07-10
 ### Added
