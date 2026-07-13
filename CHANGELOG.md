@@ -1,4 +1,8 @@
 ## 2026-07-13
+- Implemented Population Limit logic in the Universe engine. Entities will no longer reproduce if the total number of entities reaches or exceeds the `population_limit` (default 1000).
+- Added `test_population_limit` in `tests/test_engine.py` to verify this behavior.
+
+## 2026-07-13
 - Implemented entity diets (Herbivore/Carnivore). Carnivores hunt and eat herbivores, while herbivores continue to eat static food.
 - Updated visualizer to render carnivores as 'C'.
 

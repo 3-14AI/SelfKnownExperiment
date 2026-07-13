@@ -474,5 +474,23 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(child.name, "Lion_child")
         self.assertEqual(child.diet, "carnivore")
 
+
+    def test_population_limit(self):
+        universe = Universe(reproduction_threshold=15, reproduction_cost=10, food_spawn_rate=0.0, population_limit=2)
+        universe.event_chance = 0.0
+        entity1 = Entity("Adam", energy=16, x=5, y=5)
+        entity2 = Entity("Eve", energy=16, x=6, y=6)
+        universe.add_entity(entity1)
+        universe.add_entity(entity2)
+
+        # The universe already has 2 entities, which is the population limit.
+        # Neither entity should be able to reproduce despite having enough energy.
+        universe.tick()
+
+        self.assertEqual(len(universe.entities), 2)
+        # Energy should only decrease by 1 for the tick, not by 10 for reproduction
+        self.assertEqual(entity1.energy, 15)
+        self.assertEqual(entity2.energy, 15)
+
 if __name__ == '__main__':
     unittest.main()
