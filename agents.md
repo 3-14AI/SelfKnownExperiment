@@ -48,3 +48,4 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Next Steps
 - Implement different entity species with varying attributes like speed, perception radius, or diet.
+- Implement entity memory for remembering seen obstacle locations.

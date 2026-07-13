@@ -1,3 +1,6 @@
+## Today
+- Implement entity perception radius. Entities now only detect food and route around obstacles that are within their perception radius (default 10).
+
 # Changelog
 
 ## 2026-07-12
