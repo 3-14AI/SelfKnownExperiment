@@ -492,5 +492,82 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(entity1.energy, 15)
         self.assertEqual(entity2.energy, 15)
 
+
+    def test_season_cycles(self):
+        universe = Universe(season_length=10)
+        universe.event_chance = 0.0
+
+        self.assertEqual(universe.current_season, 'spring')
+
+        for _ in range(10):
+            universe.tick()
+        self.assertEqual(universe.current_season, 'summer')
+
+        for _ in range(10):
+            universe.tick()
+        self.assertEqual(universe.current_season, 'autumn')
+
+        for _ in range(10):
+            universe.tick()
+        self.assertEqual(universe.current_season, 'winter')
+
+        for _ in range(10):
+            universe.tick()
+        self.assertEqual(universe.current_season, 'spring')
+
+    def test_seasonal_food_spawn_rate(self):
+        import random
+        random.seed(42)
+        universe = Universe(season_length=10, food_spawn_rate=1.0)
+        universe.event_chance = 0.0
+
+        # Spring should have 1.5 * food_spawn_rate (1.5)
+        # So we should expect 1-2 food per tick. Over 10 ticks, at least 15 food
+        for _ in range(10):
+            universe.tick()
+        spring_food = len(universe.foods)
+        self.assertGreaterEqual(spring_food, 10)
+
+        universe.foods = []
+        # Summer should have 1.0 * food_spawn_rate
+        for _ in range(10):
+            universe.tick()
+        summer_food = len(universe.foods)
+        self.assertAlmostEqual(summer_food, 10, delta=3)
+
+        universe.foods = []
+        # Autumn should have 0.8 * food_spawn_rate
+        for _ in range(10):
+            universe.tick()
+        autumn_food = len(universe.foods)
+        self.assertLess(autumn_food, 10)
+
+        universe.foods = []
+        # Winter should have 0.2 * food_spawn_rate
+        for _ in range(10):
+            universe.tick()
+        winter_food = len(universe.foods)
+        self.assertLessEqual(winter_food, 5)
+
+    def test_seasonal_terrain_changes(self):
+        universe = Universe(season_length=10)
+        universe.event_chance = 0.0
+        terrain = Terrain(x=0, y=0, terrain_type='water')
+        universe.add_terrain(terrain)
+
+        # Advance to winter
+        for _ in range(30):
+            universe.tick()
+
+        self.assertEqual(universe.current_season, 'winter')
+        self.assertEqual(universe.terrains[0].terrain_type, 'ice')
+
+        # Advance to spring
+        for _ in range(10):
+            universe.tick()
+
+        self.assertEqual(universe.current_season, 'spring')
+        self.assertEqual(universe.terrains[0].terrain_type, 'water')
+
 if __name__ == '__main__':
     unittest.main()

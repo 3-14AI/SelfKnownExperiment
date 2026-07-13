@@ -13,6 +13,10 @@
 - Implement entity perception radius. Entities now only detect food and route around obstacles that are within their perception radius (default 10).
 
 # Changelog
+## [2026-07-13] - Agent
+### Added
+- Added seasonal mechanics to the engine (Spring, Summer, Autumn, Winter) affecting food spawn rates and terrain (water freezes to ice in winter).
+
 ## [2026-07-13] - Entity Memory
 
 ### Added

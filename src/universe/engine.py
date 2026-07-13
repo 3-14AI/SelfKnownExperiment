@@ -29,7 +29,7 @@ class Terrain:
         self.terrain_type = terrain_type
 
 class Universe:
-    def __init__(self, width=100, height=100, food_spawn_rate=0.1, reproduction_threshold=20, reproduction_cost=10, population_limit=1000):
+    def __init__(self, width=100, height=100, food_spawn_rate=0.1, reproduction_threshold=20, reproduction_cost=10, population_limit=1000, season_length=50):
         self.time = 0
         self.entities = []
         self.foods = []
@@ -43,6 +43,14 @@ class Universe:
         self.current_event = None
         self.event_remaining_time = 0
         self.event_chance = 0.05
+        self.season_length = season_length
+        self.seasons = ['spring', 'summer', 'autumn', 'winter']
+        self._last_season = 'spring'
+
+    @property
+    def current_season(self):
+        season_index = (self.time // self.season_length) % 4
+        return self.seasons[season_index]
 
     def add_food(self, food, x=None, y=None):
         if x is not None:
@@ -166,6 +174,18 @@ class Universe:
     def tick(self):
         self.time += 1
 
+        current_season = self.current_season
+        if current_season != self._last_season:
+            if current_season == 'winter':
+                for t in self.terrains:
+                    if t.terrain_type == 'water':
+                        t.terrain_type = 'ice'
+            elif self._last_season == 'winter' and current_season == 'spring':
+                for t in self.terrains:
+                    if t.terrain_type == 'ice':
+                        t.terrain_type = 'water'
+            self._last_season = current_season
+
         # Handle events
         if self.current_event:
             self.event_remaining_time -= 1
@@ -179,6 +199,16 @@ class Universe:
         current_food_spawn_rate = self.food_spawn_rate
         if self.current_event == 'drought':
             current_food_spawn_rate = 0.0
+
+        if current_food_spawn_rate > 0.0:
+            if current_season == 'spring':
+                current_food_spawn_rate *= 1.5
+            elif current_season == 'summer':
+                current_food_spawn_rate *= 1.0
+            elif current_season == 'autumn':
+                current_food_spawn_rate *= 0.8
+            elif current_season == 'winter':
+                current_food_spawn_rate *= 0.2
 
         if random.random() < current_food_spawn_rate:
             x = random.randint(0, self.width - 1)

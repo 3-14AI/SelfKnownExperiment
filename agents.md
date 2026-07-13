@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement seasonal changes that dynamically affect food spawn rates and terrain.
 - Implemented ecosystem balancing via a population limit that restricts entities from reproducing when a threshold is met.
 - Analyzed project changes and agent actions (Perception, Memory, Diets) and updated the results in `analytics/analysis_report.md`.
 - Implement different entity species or diets (e.g. Herbivore vs Carnivore) to create ecosystem dynamics.
@@ -52,4 +53,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
 ## Next Steps
-- Implement seasonal changes that dynamically affect food spawn rates and terrain.
+- Implement localized weather events like rain (increasing food spawn locally) or fire (destroying entities/food and turning terrain to ash).
