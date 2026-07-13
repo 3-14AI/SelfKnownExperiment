@@ -29,7 +29,7 @@ class Terrain:
         self.terrain_type = terrain_type
 
 class Universe:
-    def __init__(self, width=100, height=100, food_spawn_rate=0.1, reproduction_threshold=20, reproduction_cost=10):
+    def __init__(self, width=100, height=100, food_spawn_rate=0.1, reproduction_threshold=20, reproduction_cost=10, population_limit=1000):
         self.time = 0
         self.entities = []
         self.foods = []
@@ -39,6 +39,7 @@ class Universe:
         self.food_spawn_rate = food_spawn_rate
         self.reproduction_threshold = reproduction_threshold
         self.reproduction_cost = reproduction_cost
+        self.population_limit = population_limit
         self.current_event = None
         self.event_remaining_time = 0
         self.event_chance = 0.05
@@ -197,7 +198,7 @@ class Universe:
 
             if entity.is_alive:
                 # Reproduction
-                if entity.energy >= self.reproduction_threshold:
+                if entity.energy >= self.reproduction_threshold and (len(self.entities) + len(new_entities) < self.population_limit):
                     entity.energy -= self.reproduction_cost
 
                     # Genetics and Mutations
