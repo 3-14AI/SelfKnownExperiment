@@ -1,3 +1,7 @@
+## 2026-07-13
+- Implemented entity diets (Herbivore/Carnivore). Carnivores hunt and eat herbivores, while herbivores continue to eat static food.
+- Updated visualizer to render carnivores as 'C'.
+
 ## Today
 - Implemented Entity Genetics and Mutations. Child entities now inherit `max_age` and `perception_radius` from their parents during reproduction, with a small chance for these traits to mutate.
 - Added tests in `test_engine.py` to ensure genetic inheritance and mutations occur as expected.
