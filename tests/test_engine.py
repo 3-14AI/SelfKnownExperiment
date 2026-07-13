@@ -141,6 +141,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_dies(self):
         universe = Universe()
+        universe.event_chance = 0.0
         entity = Entity("Adam", energy=1)
         universe.add_entity(entity)
         universe.tick()
@@ -168,6 +169,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_eats_food(self):
         universe = Universe(food_spawn_rate=0.0) # Disable random food spawn for this test
+        universe.event_chance = 0.0
         entity = Entity("Adam", energy=10, x=5, y=5)
         food = Food(energy=5, x=5, y=5)
         universe.add_entity(entity)
@@ -233,6 +235,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_reproduction(self):
         universe = Universe(reproduction_threshold=15, reproduction_cost=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
         entity = Entity("Adam", energy=16, x=5, y=5)
         universe.add_entity(entity)
 
@@ -372,6 +375,69 @@ class TestUniverse(unittest.TestCase):
         self.assertIsNotNone(path)
         # Should route around (0,1) memory
         self.assertNotEqual(path[0], (0, 1))
+
+
+    def test_entity_genetics_and_mutation(self):
+        # We'll run reproduction several times with high mutation chance to ensure mutation happens,
+        # or we mock random to control it. Using Universe event_chance=0.0 to prevent event interference.
+        universe = Universe(reproduction_threshold=20, reproduction_cost=10)
+        universe.event_chance = 0.0
+
+        # We use a deterministic way by modifying random locally or monkeypatching,
+        # but to keep it simple, let's just monkeypatch random inside the test
+        import random
+        original_random = random.random
+        original_randint = random.randint
+
+        try:
+            # Force mutation to happen
+            random.random = lambda: 0.05 # Less than 0.1 mutation chance
+            # Force max_age to increase by 5, perception_radius by 2
+            random.randint = lambda a, b: b
+
+            parent = Entity("Parent", x=5, y=5, energy=25, max_age=50, perception_radius=10)
+            universe.add_entity(parent)
+
+            universe.tick()
+
+            self.assertEqual(len(universe.entities), 2)
+            child = [e for e in universe.entities if "child" in e.name][0]
+
+            # Since we forced random.randint to return max value (b),
+            # child_max_age should be 50 + 5 = 55
+            # child_perception_radius should be 10 + 2 = 12
+            self.assertEqual(child.max_age, 55)
+            self.assertEqual(child.perception_radius, 12)
+
+        finally:
+            random.random = original_random
+            random.randint = original_randint
+
+    def test_entity_genetics_no_mutation(self):
+        universe = Universe(reproduction_threshold=20, reproduction_cost=10)
+        universe.event_chance = 0.0
+
+        import random
+        original_random = random.random
+
+        try:
+            # Force mutation to NOT happen
+            random.random = lambda: 0.5 # Greater than 0.1 mutation chance
+
+            parent = Entity("Parent", x=5, y=5, energy=25, max_age=50, perception_radius=10)
+            universe.add_entity(parent)
+
+            universe.tick()
+
+            self.assertEqual(len(universe.entities), 2)
+            child = [e for e in universe.entities if "child" in e.name][0]
+
+            # Since we forced mutation to fail, traits should perfectly inherit
+            self.assertEqual(child.max_age, 50)
+            self.assertEqual(child.perception_radius, 10)
+
+        finally:
+            random.random = original_random
 
 if __name__ == '__main__':
     unittest.main()
