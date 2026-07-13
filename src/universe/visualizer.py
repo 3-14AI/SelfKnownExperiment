@@ -13,6 +13,8 @@ class CLIVisualizer:
                     grid[terrain.y][terrain.x] = '#'
                 elif terrain.terrain_type == 'water':
                     grid[terrain.y][terrain.x] = '~'
+                elif terrain.terrain_type == 'ice':
+                    grid[terrain.y][terrain.x] = '*'
 
         # Add food
         for food in self.universe.foods:
@@ -29,6 +31,8 @@ class CLIVisualizer:
 
     def print_state(self):
         print(f"Time: {self.universe.time}")
+        if hasattr(self.universe, 'current_season'):
+            print(f"Season: {self.universe.current_season.capitalize()}")
         if hasattr(self.universe, 'current_event') and self.universe.current_event:
             print(f"Event: {self.universe.current_event.upper()} ({self.universe.event_remaining_time} ticks left)")
         print(self.render())
