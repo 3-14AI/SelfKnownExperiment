@@ -33,6 +33,9 @@ class CLIVisualizer:
 
     def print_state(self):
         print(f"Time: {self.universe.time}")
+        if hasattr(self.universe, 'is_day'):
+            day_night = "Day" if self.universe.is_day else "Night"
+            print(f"Time of Day: {day_night}")
         if hasattr(self.universe, 'current_season'):
             print(f"Season: {self.universe.current_season.capitalize()}")
         if hasattr(self.universe, 'current_event') and self.universe.current_event:
