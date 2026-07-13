@@ -120,3 +120,25 @@ The following updates were made:
 * Child entities now inherit their parent's `max_age` and `perception_radius` instead of using defaults.
 * Introduced a 10% chance for these traits to mutate, allowing them to slightly increase or decrease.
 * Added tests `test_entity_genetics_and_mutation` and `test_entity_genetics_no_mutation` in `tests/test_engine.py` using monkeypatching to deterministically verify the mutation logic.
+
+
+## 18. Entity Perception Radius
+An entity perception radius was implemented, restricting what an entity can detect based on a radius around them.
+The following updates were made:
+* Modified entities to have a `perception_radius` (default 10).
+* Entities only detect food and obstacles that fall within this perception radius.
+
+## 19. Entity Memory
+Entities were granted the ability to remember obstacles they have encountered.
+The following updates were made:
+* Entities maintain a `memory` set to store coordinates of known obstacles.
+* Entities observe and remember obstacles (walls, water) within their perception radius each tick.
+* Pathfinding algorithms (`find_path`) use the entity's memory to avoid routing through remembered obstacles, even if they are currently outside the entity's perception radius.
+* Added tests in `test_engine.py` to ensure memory is updated and correctly utilized in pathfinding.
+
+## 20. Entity Diets
+Ecosystem dynamics were enhanced by implementing different entity diets: Herbivores and Carnivores.
+The following updates were made:
+* Entities were classified into Herbivores and Carnivores.
+* Carnivores actively hunt and eat herbivores, while herbivores continue to eat static food resources.
+* The visualizer was updated to render carnivores distinctly (e.g., as 'C').
