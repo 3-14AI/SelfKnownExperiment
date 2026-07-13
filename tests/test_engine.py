@@ -569,5 +569,87 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(universe.current_season, 'spring')
         self.assertEqual(universe.terrains[0].terrain_type, 'water')
 
+
+    def test_localized_rain_event(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0 # disable global events
+        universe.localized_event_chance = 0.0
+
+        # Manually add a rain event
+        from universe.engine import LocalizedEvent
+        event = LocalizedEvent('rain', 5, 5, radius=3, duration=10)
+        universe.localized_events.append(event)
+
+        # Rain has a 20% chance to spawn food each tick per event, over 10 ticks.
+        # We simulate this many times to ensure food is spawned within the radius
+        # Rain has a 1.0 chance to spawn food if we mock random
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.1 # guarantee rain food spawn, avoid localized event spawn (chance=0.0)
+            initial_food_count = len(universe.foods)
+            for _ in range(10):
+                universe.tick()
+        finally:
+            random.random = original_random
+
+        # Verify event duration logic (should be removed after 10 ticks)
+        self.assertEqual(len(universe.localized_events), 0)
+
+        # Verify food was spawned
+        self.assertGreater(len(universe.foods), initial_food_count)
+
+        # Verify food is within radius
+        for f in universe.foods:
+            self.assertTrue((f.x - 5)**2 + (f.y - 5)**2 <= 3**2)
+
+    def test_localized_fire_event(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0 # disable global events
+        universe.localized_event_chance = 0.0
+
+        # Setup targets within radius
+        from universe.engine import LocalizedEvent, Entity, Food, Terrain
+
+        e_in = Entity("InRadius", x=5, y=5)
+        e_out = Entity("OutRadius", x=10, y=10, diet="carnivore")
+        f_in = Food(x=6, y=6)
+        f_out = Food(x=11, y=11)
+        t_in = Terrain(x=4, y=4, terrain_type='wall')
+        t_out = Terrain(x=10, y=10, terrain_type='wall')
+
+        universe.add_entity(e_in)
+        universe.add_entity(e_out)
+        universe.add_food(f_in)
+        universe.add_food(f_out)
+        universe.add_terrain(t_in)
+        universe.add_terrain(t_out)
+
+        # Add a fire event
+        event = LocalizedEvent('fire', 5, 5, radius=3, duration=2)
+        universe.localized_events.append(event)
+
+        universe.tick()
+
+        # Check entities
+        self.assertNotIn(e_in, universe.entities)
+        self.assertIn(e_out, universe.entities)
+
+        # Check food
+        self.assertNotIn(f_in, universe.foods)
+        self.assertIn(f_out, universe.foods)
+
+        # Check terrain (converted to ash within radius, unchanged outside)
+        # We also added ash for dead entity and destroyed food
+        ash_terrains = [t for t in universe.terrains if t.terrain_type == 'ash']
+        self.assertGreaterEqual(len(ash_terrains), 3) # t_in converted, e_in converted, f_in converted
+
+        # Original t_out wall should still be wall
+        wall_terrains = [t for t in universe.terrains if t.terrain_type == 'wall']
+        self.assertEqual(len(wall_terrains), 1)
+        self.assertEqual(wall_terrains[0].x, 10)
+        self.assertEqual(wall_terrains[0].y, 10)
+
+
 if __name__ == '__main__':
     unittest.main()

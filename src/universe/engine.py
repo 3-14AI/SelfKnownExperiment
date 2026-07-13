@@ -22,6 +22,15 @@ class Entity:
     def is_alive(self):
         return self.energy > 0 and self.age <= self.max_age
 
+
+class LocalizedEvent:
+    def __init__(self, event_type, x, y, radius, duration):
+        self.event_type = event_type
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.duration = duration
+
 class Terrain:
     def __init__(self, x=0, y=0, terrain_type='wall'):
         self.x = x
@@ -46,6 +55,8 @@ class Universe:
         self.season_length = season_length
         self.seasons = ['spring', 'summer', 'autumn', 'winter']
         self._last_season = 'spring'
+        self.localized_events = []
+        self.localized_event_chance = 0.02
 
     @property
     def current_season(self):
@@ -194,6 +205,52 @@ class Universe:
         elif random.random() < self.event_chance:
             self.current_event = random.choice(['storm', 'drought'])
             self.event_remaining_time = random.randint(5, 15)
+
+        # Handle localized events
+        if random.random() < self.localized_event_chance:
+            event_type = random.choice(['rain', 'fire'])
+            event_x = random.randint(0, self.width - 1)
+            event_y = random.randint(0, self.height - 1)
+            radius = random.randint(3, 8)
+            duration = random.randint(10, 20)
+            self.localized_events.append(LocalizedEvent(event_type, event_x, event_y, radius, duration))
+
+        for event in self.localized_events[:]:
+            event.duration -= 1
+            if event.duration <= 0:
+                self.localized_events.remove(event)
+                continue
+
+            if event.event_type == 'rain':
+                if random.random() < 0.2:  # Chance to spawn food
+                    fx = event.x + random.randint(-event.radius, event.radius)
+                    fy = event.y + random.randint(-event.radius, event.radius)
+                    if 0 <= fx < self.width and 0 <= fy < self.height:
+                        if (fx - event.x)**2 + (fy - event.y)**2 <= event.radius**2:
+                            self.add_food(Food(x=fx, y=fy))
+            elif event.event_type == 'fire':
+                for fx in range(max(0, event.x - event.radius), min(self.width, event.x + event.radius + 1)):
+                    for fy in range(max(0, event.y - event.radius), min(self.height, event.y + event.radius + 1)):
+                        if (fx - event.x)**2 + (fy - event.y)**2 <= event.radius**2:
+                            # Kill entities
+                            entities_here = self.get_entities_at(fx, fy)
+                            for e in entities_here:
+                                e.energy = 0
+                                # Convert dead entity spot to ash terrain
+                                self.add_terrain(Terrain(x=fx, y=fy, terrain_type='ash'))
+
+                            # Destroy food
+                            foods_here = self.get_foods_at(fx, fy)
+                            for fd in foods_here:
+                                self.foods.remove(fd)
+                                # Convert destroyed food spot to ash terrain
+                                self.add_terrain(Terrain(x=fx, y=fy, terrain_type='ash'))
+
+                            # Convert existing non-water terrain to ash
+                            terrains_here = self.get_terrains_at(fx, fy)
+                            for t in terrains_here:
+                                if t.terrain_type not in ['water', 'ice', 'ash']:
+                                    t.terrain_type = 'ash'
 
         # Spawn new food
         current_food_spawn_rate = self.food_spawn_rate
