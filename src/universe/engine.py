@@ -7,7 +7,7 @@ class Food:
         self.energy = energy
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=5):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10):
         self.name = name
         self.x = x
         self.y = y
@@ -84,7 +84,7 @@ class Universe:
             raise ValueError(f"Terrain out of bounds: ({terrain.x}, {terrain.y})")
         self.terrains.append(terrain)
 
-    def find_path(self, start_x, start_y, target_x, target_y, radius=None):
+    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None):
         from collections import deque
         queue = deque([(start_x, start_y, [])])
         visited = {(start_x, start_y)}
@@ -102,15 +102,17 @@ class Universe:
                 new_x = current_x + dx
                 new_y = current_y + dy
 
-                if radius is not None and abs(new_x - start_x) + abs(new_y - start_y) > radius:
-                    continue
-
                 if (new_x, new_y) not in visited:
                     if 0 <= new_x < self.width and 0 <= new_y < self.height:
-                        terrains_here = self.get_terrains_at(new_x, new_y)
-                        if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                        # Ignore obstacles beyond perception radius
+                        if max_distance is not None and (abs(new_x - start_x) + abs(new_y - start_y)) > max_distance:
                             visited.add((new_x, new_y))
                             queue.append((new_x, new_y, path + [(dx, dy)]))
+                        else:
+                            terrains_here = self.get_terrains_at(new_x, new_y)
+                            if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                                visited.add((new_x, new_y))
+                                queue.append((new_x, new_y, path + [(dx, dy)]))
 
         return None  # No path found
 
@@ -120,7 +122,7 @@ class Universe:
     def get_foods_at(self, x, y):
         return [f for f in self.foods if f.x == x and f.y == y]
 
-    def get_nearest_food(self, x, y, radius=None):
+    def get_nearest_food(self, x, y, max_distance=None):
         if not self.foods:
             return None
 
@@ -128,7 +130,7 @@ class Universe:
         min_dist = float('inf')
         for food in self.foods:
             dist = abs(food.x - x) + abs(food.y - y)
-            if radius is not None and dist > radius:
+            if max_distance is not None and dist > max_distance:
                 continue
             if dist < min_dist:
                 min_dist = dist
@@ -175,9 +177,9 @@ class Universe:
                     child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y, perception_radius=entity.perception_radius)
                     new_entities.append(child)
 
-                nearest_food = self.get_nearest_food(entity.x, entity.y, radius=entity.perception_radius)
+                nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=entity.perception_radius)
                 if nearest_food:
-                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, radius=entity.perception_radius)
+                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=entity.perception_radius)
                     if path and len(path) > 0:
                         dx, dy = path[0]
                         try:

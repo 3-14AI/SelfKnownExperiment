@@ -48,3 +48,4 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Next Steps
 - Implement basic entity combat and predation (allowing entities to hunt and consume other entities for energy).
+- Implement entity memory for remembering seen obstacle locations.
