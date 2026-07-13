@@ -112,3 +112,11 @@ The following updates were made:
 * Droughts temporarily halt the spawning of new food resources.
 * Updated `CLIVisualizer` to display the currently active event and its remaining duration.
 * Added comprehensive test coverage in `tests/test_engine.py` to ensure events are triggered properly and have the expected effects on entities and resources.
+
+## 17. Entity Genetics and Mutations
+A genetics and mutation system was added to entity reproduction to allow entities to evolve over generations.
+The following updates were made:
+* Modified the reproduction logic in `src/universe/engine.py`.
+* Child entities now inherit their parent's `max_age` and `perception_radius` instead of using defaults.
+* Introduced a 10% chance for these traits to mutate, allowing them to slightly increase or decrease.
+* Added tests `test_entity_genetics_and_mutation` and `test_entity_genetics_no_mutation` in `tests/test_engine.py` using monkeypatching to deterministically verify the mutation logic.

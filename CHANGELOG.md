@@ -1,4 +1,7 @@
 ## Today
+- Implemented Entity Genetics and Mutations. Child entities now inherit `max_age` and `perception_radius` from their parents during reproduction, with a small chance for these traits to mutate.
+- Added tests in `test_engine.py` to ensure genetic inheritance and mutations occur as expected.
+
 - Implement entity perception radius. Entities now only detect food and route around obstacles that are within their perception radius (default 10).
 
 # Changelog

@@ -178,7 +178,26 @@ class Universe:
                 # Reproduction
                 if entity.energy >= self.reproduction_threshold:
                     entity.energy -= self.reproduction_cost
-                    child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y)
+
+                    # Genetics and Mutations
+                    # Base traits inherited from parent
+                    child_max_age = entity.max_age
+                    child_perception_radius = entity.perception_radius
+
+                    # Mutation chance
+                    mutation_chance = 0.1
+                    if random.random() < mutation_chance:
+                        # Mutate max_age by up to +/- 5
+                        child_max_age += random.randint(-5, 5)
+                        child_max_age = max(10, child_max_age) # Ensure it doesn't go too low
+
+                    if random.random() < mutation_chance:
+                        # Mutate perception_radius by up to +/- 2
+                        child_perception_radius += random.randint(-2, 2)
+                        child_perception_radius = max(1, child_perception_radius) # Minimum perception of 1
+
+                    child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y,
+                                   max_age=child_max_age, perception_radius=child_perception_radius)
                     new_entities.append(child)
 
                 # Update entity memory with visible obstacles
