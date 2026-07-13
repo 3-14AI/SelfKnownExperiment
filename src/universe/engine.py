@@ -15,6 +15,7 @@ class Entity:
         self.age = age
         self.max_age = max_age
         self.perception_radius = perception_radius
+        self.memory = set()
 
     @property
     def is_alive(self):
@@ -84,7 +85,7 @@ class Universe:
             raise ValueError(f"Terrain out of bounds: ({terrain.x}, {terrain.y})")
         self.terrains.append(terrain)
 
-    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None):
+    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None):
         from collections import deque
         queue = deque([(start_x, start_y, [])])
         visited = {(start_x, start_y)}
@@ -104,8 +105,11 @@ class Universe:
 
                 if (new_x, new_y) not in visited:
                     if 0 <= new_x < self.width and 0 <= new_y < self.height:
+                        # Ignore if in memory
+                        if memory is not None and (new_x, new_y) in memory:
+                            visited.add((new_x, new_y))
                         # Ignore obstacles beyond perception radius
-                        if max_distance is not None and (abs(new_x - start_x) + abs(new_y - start_y)) > max_distance:
+                        elif max_distance is not None and (abs(new_x - start_x) + abs(new_y - start_y)) > max_distance:
                             visited.add((new_x, new_y))
                             queue.append((new_x, new_y, path + [(dx, dy)]))
                         else:
@@ -177,9 +181,14 @@ class Universe:
                     child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y)
                     new_entities.append(child)
 
+                # Update entity memory with visible obstacles
+                for t in self.terrains:
+                    if t.terrain_type in ['wall', 'water'] and (abs(t.x - entity.x) + abs(t.y - entity.y)) <= entity.perception_radius:
+                        entity.memory.add((t.x, t.y))
+
                 nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=entity.perception_radius)
                 if nearest_food:
-                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=entity.perception_radius)
+                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=entity.perception_radius, memory=entity.memory)
                     if path and len(path) > 0:
                         dx, dy = path[0]
                         try:

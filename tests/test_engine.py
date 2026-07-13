@@ -344,5 +344,34 @@ class TestUniverse(unittest.TestCase):
         self.assertIsNotNone(path2)
         self.assertEqual(path2[0], (0, 1))
 
+
+    def test_entity_memory_update(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0, perception_radius=2)
+        universe.add_entity(entity)
+        # Wall is within perception radius
+        universe.add_terrain(Terrain(x=2, y=0, terrain_type='wall'))
+        # Water is outside perception radius
+        universe.add_terrain(Terrain(x=0, y=3, terrain_type='water'))
+
+        universe.tick()
+
+        self.assertIn((2, 0), entity.memory)
+        self.assertNotIn((0, 3), entity.memory)
+
+    def test_find_path_with_memory(self):
+        universe = Universe(food_spawn_rate=0.0)
+        entity = Entity("Adam", x=0, y=0, perception_radius=1)
+        universe.add_entity(entity)
+        universe.add_food(Food(x=0, y=2, energy=5))
+
+        # Wall is outside perception radius, but entity remembers it
+        entity.memory.add((0, 1))
+
+        path = universe.find_path(entity.x, entity.y, 0, 2, max_distance=entity.perception_radius, memory=entity.memory)
+        self.assertIsNotNone(path)
+        # Should route around (0,1) memory
+        self.assertNotEqual(path[0], (0, 1))
+
 if __name__ == '__main__':
     unittest.main()
