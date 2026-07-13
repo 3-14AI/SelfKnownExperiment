@@ -7,6 +7,11 @@
 - Updated visualizer to render carnivores as 'C'.
 
 ## Today
+- Implemented localized weather events (`rain` and `fire`).
+- `rain` has a chance to spawn food within its localized radius.
+- `fire` destroys entities and food, and converts existing non-water terrain to `ash`.
+- Updated `CLIVisualizer` to render `ash` terrain and display active localized events.
+
 - Implemented Entity Genetics and Mutations. Child entities now inherit `max_age` and `perception_radius` from their parents during reproduction, with a small chance for these traits to mutate.
 - Added tests in `test_engine.py` to ensure genetic inheritance and mutations occur as expected.
 
