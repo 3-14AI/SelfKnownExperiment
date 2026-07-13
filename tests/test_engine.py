@@ -651,5 +651,126 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(wall_terrains[0].y, 10)
 
 
+
+    def test_day_night_cycle(self):
+        universe = Universe(day_length=10)
+
+        # Day: time 0 to 4
+        self.assertTrue(universe.is_day)
+        self.assertFalse(universe.is_night)
+
+        for _ in range(4):
+            universe.tick()
+
+        # time = 4, Day
+        self.assertTrue(universe.is_day)
+
+        universe.tick()
+        # time = 5, Night: time 5 to 9
+        self.assertFalse(universe.is_day)
+        self.assertTrue(universe.is_night)
+
+        for _ in range(4):
+            universe.tick()
+
+        # time = 9, Night
+        self.assertTrue(universe.is_night)
+
+        universe.tick()
+        # time = 10, Day again
+        self.assertTrue(universe.is_day)
+
+    def test_night_vision(self):
+        import random
+        original_random = random.random
+        try:
+            # Force movement by making random > 0.5 so they always move at night
+            random.random = lambda: 0.9
+
+            universe = Universe(day_length=10, food_spawn_rate=0.0)
+            universe.event_chance = 0.0
+
+            entity = Entity("Observer", x=0, y=0, perception_radius=10, energy=20)
+            universe.add_entity(entity)
+
+            # Place food at distance 8
+            universe.add_food(Food(x=8, y=0))
+
+            # During day (time=0), perception is 10, food is at distance 8 -> visible
+            # Entity should move towards food
+            universe.tick()
+            self.assertEqual(entity.x, 1)
+            self.assertEqual(entity.y, 0)
+
+            # Advance to night (time=5)
+            for _ in range(4):
+                universe.tick()
+
+            # Now time is 5, it is night. Perception is max(1, 10 // 2) = 5
+            # Entity is at x=5. Food is at x=8. Distance is 3. Perception is 5, so food is still visible!
+            # Let's reset the scenario to test properly.
+        finally:
+            random.random = original_random
+
+    def test_night_vision_proper(self):
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.9 # guarantee movement
+            universe = Universe(day_length=10, food_spawn_rate=0.0)
+            universe.event_chance = 0.0
+
+            # Fast forward to night
+            for _ in range(5):
+                universe.tick()
+
+            self.assertTrue(universe.is_night)
+
+            entity = Entity("Observer", x=0, y=0, perception_radius=10, energy=20)
+            universe.add_entity(entity)
+
+            # Place food at distance 8
+            # Night perception is 5. So distance 8 is NOT visible.
+            universe.add_food(Food(x=8, y=0))
+
+            universe.tick()
+            # Entity shouldn't have moved towards food, it might just stay or move randomly if we implemented random walk,
+            # but currently if no path is found, it stays still (dx,dy logic only applies if path is found)
+            self.assertEqual(entity.x, 0)
+            self.assertEqual(entity.y, 0)
+
+        finally:
+            random.random = original_random
+
+    def test_night_movement(self):
+        import random
+        original_random = random.random
+        try:
+            # Force skip movement by making random < 0.5
+            random.random = lambda: 0.1
+
+            universe = Universe(day_length=10, food_spawn_rate=0.0)
+            universe.event_chance = 0.0
+
+            # Fast forward to night
+            for _ in range(5):
+                universe.tick()
+
+            self.assertTrue(universe.is_night)
+
+            entity = Entity("Sleeper", x=0, y=0, perception_radius=10, energy=20)
+            universe.add_entity(entity)
+
+            # Place food very close (distance 2) so it's well within night perception (5)
+            universe.add_food(Food(x=2, y=0))
+
+            universe.tick()
+            # Due to 50% chance failing (mocked to 0.1), entity skips movement
+            self.assertEqual(entity.x, 0)
+            self.assertEqual(entity.y, 0)
+
+        finally:
+            random.random = original_random
+
 if __name__ == '__main__':
     unittest.main()

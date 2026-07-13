@@ -38,7 +38,7 @@ class Terrain:
         self.terrain_type = terrain_type
 
 class Universe:
-    def __init__(self, width=100, height=100, food_spawn_rate=0.1, reproduction_threshold=20, reproduction_cost=10, population_limit=1000, season_length=50):
+    def __init__(self, width=100, height=100, food_spawn_rate=0.1, reproduction_threshold=20, reproduction_cost=10, population_limit=1000, season_length=50, day_length=20):
         self.time = 0
         self.entities = []
         self.foods = []
@@ -53,10 +53,19 @@ class Universe:
         self.event_remaining_time = 0
         self.event_chance = 0.05
         self.season_length = season_length
+        self.day_length = day_length
         self.seasons = ['spring', 'summer', 'autumn', 'winter']
         self._last_season = 'spring'
         self.localized_events = []
         self.localized_event_chance = 0.02
+
+    @property
+    def is_day(self):
+        return (self.time % self.day_length) < (self.day_length // 2)
+
+    @property
+    def is_night(self):
+        return not self.is_day
 
     @property
     def current_season(self):
@@ -309,21 +318,28 @@ class Universe:
                                    max_age=child_max_age, perception_radius=child_perception_radius, diet=entity.diet)
                     new_entities.append(child)
 
+                effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)
+
                 # Update entity memory with visible obstacles
                 for t in self.terrains:
-                    if t.terrain_type in ['wall', 'water'] and (abs(t.x - entity.x) + abs(t.y - entity.y)) <= entity.perception_radius:
+                    if t.terrain_type in ['wall', 'water'] and (abs(t.x - entity.x) + abs(t.y - entity.y)) <= effective_perception:
                         entity.memory.add((t.x, t.y))
 
+                can_move = True
+                if self.is_night and random.random() < 0.5:
+                    can_move = False
+
                 if entity.diet == 'herbivore':
-                    nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=entity.perception_radius)
-                    if nearest_food:
-                        path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=entity.perception_radius, memory=entity.memory)
-                        if path and len(path) > 0:
-                            dx, dy = path[0]
-                            try:
-                                self.move_entity(entity, dx, dy)
-                            except ValueError:
-                                pass # Blocked
+                    if can_move:
+                        nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=effective_perception)
+                        if nearest_food:
+                            path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=effective_perception, memory=entity.memory)
+                            if path and len(path) > 0:
+                                dx, dy = path[0]
+                                try:
+                                    self.move_entity(entity, dx, dy)
+                                except ValueError:
+                                    pass # Blocked
 
                     # Check for food at entity location
                     foods_here = self.get_foods_at(entity.x, entity.y)
@@ -333,15 +349,16 @@ class Universe:
                         self.foods.remove(food_to_eat)
 
                 elif entity.diet == 'carnivore':
-                    nearest_prey = self.get_nearest_prey(entity.x, entity.y, max_distance=entity.perception_radius)
-                    if nearest_prey:
-                        path = self.find_path(entity.x, entity.y, nearest_prey.x, nearest_prey.y, max_distance=entity.perception_radius, memory=entity.memory)
-                        if path and len(path) > 0:
-                            dx, dy = path[0]
-                            try:
-                                self.move_entity(entity, dx, dy)
-                            except ValueError:
-                                pass # Blocked
+                    if can_move:
+                        nearest_prey = self.get_nearest_prey(entity.x, entity.y, max_distance=effective_perception)
+                        if nearest_prey:
+                            path = self.find_path(entity.x, entity.y, nearest_prey.x, nearest_prey.y, max_distance=effective_perception, memory=entity.memory)
+                            if path and len(path) > 0:
+                                dx, dy = path[0]
+                                try:
+                                    self.move_entity(entity, dx, dy)
+                                except ValueError:
+                                    pass # Blocked
 
                     # Check for prey at entity location
                     preys_here = self.get_preys_at(entity.x, entity.y)

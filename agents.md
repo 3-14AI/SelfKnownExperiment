@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement a day/night cycle affecting entity vision and movement.
 - Implement localized weather events like rain (increasing food spawn locally) or fire (destroying entities/food and turning terrain to ash).
 - Implement seasonal changes that dynamically affect food spawn rates and terrain.
 - Implemented ecosystem balancing via a population limit that restricts entities from reproducing when a threshold is met.
@@ -54,4 +55,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
 ## Next Steps
-- Implement a day/night cycle affecting entity vision and movement.
+- Implement temperature zones or biomes that affect different entity types.
