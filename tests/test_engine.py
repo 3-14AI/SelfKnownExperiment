@@ -439,5 +439,40 @@ class TestUniverse(unittest.TestCase):
         finally:
             random.random = original_random
 
+
+    def test_carnivore_eating(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10)
+        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10)
+        universe.add_entity(carnivore)
+        universe.add_entity(herbivore)
+
+        # 2 steps to reach prey at (2,0) from (0,0)
+        universe.tick()
+        universe.tick()
+
+        self.assertEqual(carnivore.x, 2)
+        self.assertEqual(carnivore.y, 0)
+
+        # Herbivore should be dead, removed from entities
+        self.assertNotIn(herbivore, universe.entities)
+
+        # Carnivore lost 2 energy from 2 ticks, gained 10 from prey -> 10 - 2 + 10 = 18
+        self.assertEqual(carnivore.energy, 17)
+
+    def test_carnivore_genetics(self):
+        universe = Universe(reproduction_threshold=15, reproduction_cost=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        carnivore = Entity("Lion", energy=16, x=5, y=5, diet='carnivore')
+        universe.add_entity(carnivore)
+
+        universe.tick()
+
+        self.assertEqual(len(universe.entities), 2)
+        child = universe.entities[1]
+        self.assertEqual(child.name, "Lion_child")
+        self.assertEqual(child.diet, "carnivore")
+
 if __name__ == '__main__':
     unittest.main()

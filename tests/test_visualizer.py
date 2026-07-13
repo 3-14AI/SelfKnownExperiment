@@ -47,5 +47,13 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.E.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+
+    def test_render_carnivore(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestCarnivore", x=1, y=1, diet='carnivore'))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.C.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
 if __name__ == '__main__':
     unittest.main()

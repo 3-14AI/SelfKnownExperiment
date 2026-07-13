@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement different entity species or diets (e.g. Herbivore vs Carnivore) to create ecosystem dynamics.
 - Implement Entity Genetics and Mutations allowing child entities to inherit and slightly mutate traits (max_age, perception_radius).
 - Implement entity memory for remembering seen obstacle locations.
 - Implement entity perception so they only see food and obstacles within a certain radius.
@@ -49,4 +50,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
 ## Next Steps
-- Implement different entity species or diets (e.g. Herbivore vs Carnivore) to create ecosystem dynamics.
+- Implement dynamic ecosystem balancing (e.g., starvation penalties or population limits).
