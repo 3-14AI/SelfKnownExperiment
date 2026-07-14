@@ -65,8 +65,6 @@
 All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased]
-- Introduced entity temperature preferences and tolerances, leading to increased energy loss in unfavorable climates.
-- Enabled inheritance and mutation of temperature traits in offspring entities.
 ### Added
 - Implemented group behavior / flocking for entities. When no food or prey is nearby, entities will naturally move towards the center of mass of nearby entities sharing their diet.
 
