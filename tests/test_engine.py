@@ -773,6 +773,7 @@ class TestUniverse(unittest.TestCase):
         finally:
             random.random = original_random
 
+
     def test_temperature_zone_effect(self):
         from src.universe.engine import TemperatureZone, Entity, Universe
         u = Universe()
