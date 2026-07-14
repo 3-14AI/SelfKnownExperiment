@@ -43,4 +43,7 @@ class CLIVisualizer:
         if hasattr(self.universe, 'localized_events') and self.universe.localized_events:
             event_strs = [f"{e.event_type.capitalize()} at ({e.x},{e.y}) r={e.radius}" for e in self.universe.localized_events]
             print(f"Localized Events: {', '.join(event_strs)}")
+        if hasattr(self.universe, 'temperature_zones') and self.universe.temperature_zones:
+            tz_strs = [f"Zone at ({tz.x},{tz.y}) r={tz.radius} mod={tz.temperature_modifier:+}°C" for tz in self.universe.temperature_zones]
+            print(f"Temperature Zones: {', '.join(tz_strs)}")
         print(self.render())

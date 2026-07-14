@@ -56,4 +56,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
 ## Next Steps
-- Implement social behavior or herds where entities of the same species group together.
+- Implement group behavior or flocking for entities.

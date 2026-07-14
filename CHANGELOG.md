@@ -7,6 +7,14 @@
 - Updated visualizer to render carnivores as 'C'.
 
 ## Today
+
+## 2026-07-14
+- Implemented `TemperatureZone` system allowing localized temperature modifiers.
+- Added temperature mechanics to entities: they now have a `preferred_temperature` and `temperature_tolerance`.
+- Entities suffer an additional energy loss penalty if they are in an environment outside their comfortable temperature bounds.
+- Genetic inheritance expanded: child entities now inherit `preferred_temperature` and `temperature_tolerance` from their parent, with a chance to mutate.
+- Updated `CLIVisualizer` to display active temperature zones.
+
 - Implemented localized weather events (`rain` and `fire`).
 - `rain` has a chance to spawn food within its localized radius.
 - `fire` destroys entities and food, and converts existing non-water terrain to `ash`.
@@ -57,7 +65,6 @@
 All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased]
-- Added temperature zones/biomes across the universe mapped to latitude (y-coordinate).
 - Introduced entity temperature preferences and tolerances, leading to increased energy loss in unfavorable climates.
 - Enabled inheritance and mutation of temperature traits in offspring entities.
 ### Added

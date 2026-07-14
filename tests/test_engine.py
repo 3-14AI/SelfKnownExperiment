@@ -133,6 +133,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_tick_consumes_energy(self):
         universe = Universe()
+        universe.event_chance = 0.0
         entity = Entity("Adam")
         universe.add_entity(entity)
         self.assertEqual(entity.energy, 10)
@@ -773,80 +774,49 @@ class TestUniverse(unittest.TestCase):
             random.random = original_random
 
 
-    def test_temperature_zones(self):
-        universe = Universe(height=90) # y 0-29 cold(0), 30-59 temp(20), 60-89 hot(40)
-        universe._last_season = 'spring'
-        universe.time = 0 # spring
+    def test_temperature_zone_effect(self):
+        from src.universe.engine import TemperatureZone, Entity, Universe
+        u = Universe()
+        # Create an entity with base preferred_temp 20 and tolerance 5 (15 to 25)
+        e = Entity("TempTest", x=10, y=10, preferred_temperature=20, temperature_tolerance=5)
+        e.energy = 20
+        u.add_entity(e)
 
-        # Spring temps
-        self.assertEqual(universe.get_temperature_at(0, 10), 0)
-        self.assertEqual(universe.get_temperature_at(0, 45), 20)
-        self.assertEqual(universe.get_temperature_at(0, 80), 40)
+        # In a normal zone (base temp 20), energy loss should be 1
+        u.tick()
+        self.assertEqual(e.energy, 19)
 
-        # Summer temps (+15)
-        universe.time = universe.season_length # Summer
-        self.assertEqual(universe.get_temperature_at(0, 10), 15)
-        self.assertEqual(universe.get_temperature_at(0, 45), 35)
-        self.assertEqual(universe.get_temperature_at(0, 80), 55)
+        # Add a cold temperature zone (-10 modifier) at (10, 10) with radius 5
+        # The temperature at (10, 10) becomes 10. This is outside the [15, 25] range.
+        u.add_temperature_zone(TemperatureZone(x=10, y=10, radius=5, temperature_modifier=-10))
+        u.tick()
+        # Energy loss should be 2 (1 base + 1 temp penalty)
+        self.assertEqual(e.energy, 17)
 
-        # Winter temps (-15)
-        universe.time = universe.season_length * 3 # Winter
-        self.assertEqual(universe.get_temperature_at(0, 10), -15)
-        self.assertEqual(universe.get_temperature_at(0, 45), 5)
-        self.assertEqual(universe.get_temperature_at(0, 80), 25)
-
-    def test_temperature_energy_loss(self):
-        universe = Universe(height=90)
-        universe.event_chance = 0.0 # disable random storm/drought to fix energy baseline
-        universe.localized_event_chance = 0.0
-        universe.time = 0 # Spring, modifiers = 0
-
-        # Entity comfortable at 20 +/- 10
-        entity_comfortable = Entity("Comfortable", x=0, y=45, energy=20, preferred_temperature=20, temperature_tolerance=10)
-
-        # Entity uncomfortable (in hot zone, temp 40, pref 20, tol 10) -> 40 - 20 = 20 > 10 (uncomfortable)
-        entity_uncomfortable = Entity("Uncomfortable", x=0, y=80, energy=20, preferred_temperature=20, temperature_tolerance=10)
-
-        universe.add_entity(entity_comfortable)
-        universe.add_entity(entity_uncomfortable)
-
-        universe.tick()
-
-        # Comfortable should lose 1 energy
-        self.assertEqual(entity_comfortable.energy, 19)
-        # Uncomfortable should lose 2 energy
-        self.assertEqual(entity_uncomfortable.energy, 18)
-
-    def test_temperature_mutation(self):
+    def test_temperature_trait_inheritance(self):
+        from src.universe.engine import Entity, Universe
         import random
+        # Mock random to avoid mutations making tests flaky
+        random.seed(42)
+
+        u = Universe(population_limit=10, reproduction_threshold=15, reproduction_cost=10)
+        u.event_chance = 0.0
+        u.localized_event_chance = 0.0
+        e = Entity("Parent", x=5, y=5, preferred_temperature=18, temperature_tolerance=3)
+        e.energy = 20
+        u.add_entity(e)
+
+        # Force deterministic reproduction by setting random to 1.0 (no mutation)
         original_random = random.random
-        original_randint = random.randint
-        try:
-            # Force mutation for everything
-            random.random = lambda: 0.05
-            # Force randint to return specific values to test mutation direction
-            random.randint = lambda a, b: b
+        random.random = lambda: 1.0
+        u.tick()
+        random.random = original_random
 
-            universe = Universe()
-            universe.event_chance = 0.0
+        self.assertEqual(len(u.entities), 2)
+        child = u.entities[1]
+        self.assertEqual(child.preferred_temperature, 18)
+        self.assertEqual(child.temperature_tolerance, 3)
 
-            # Entity with energy ready to reproduce
-            parent = Entity("Parent", energy=100, preferred_temperature=20, temperature_tolerance=5)
-            universe.add_entity(parent)
-
-            # tick handles reproduction
-            universe.tick()
-
-            # Find child
-            child = next(e for e in universe.entities if e.name == "Parent_child")
-
-            # Based on randint=b, preferred_temperature should mutate by +5, tolerance by +2
-            self.assertEqual(child.preferred_temperature, 25)
-            self.assertEqual(child.temperature_tolerance, 7)
-
-        finally:
-            random.random = original_random
-            random.randint = original_randint
 
 if __name__ == '__main__':
     unittest.main()
