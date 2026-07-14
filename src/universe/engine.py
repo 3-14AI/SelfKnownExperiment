@@ -254,8 +254,31 @@ class Universe:
             if self.event_remaining_time <= 0:
                 self.current_event = None
         elif random.random() < self.event_chance:
-            self.current_event = random.choice(['storm', 'drought'])
+            self.current_event = random.choice(['storm', 'drought', 'earthquake', 'volcano'])
             self.event_remaining_time = random.randint(5, 15)
+
+            if self.current_event == 'earthquake':
+                for fx in range(self.width):
+                    for fy in range(self.height):
+                        if random.random() < 0.05:
+                            terrains_here = self.get_terrains_at(fx, fy)
+                            wall_terrains = [t for t in terrains_here if t.terrain_type == 'wall']
+                            if wall_terrains:
+                                for t in wall_terrains:
+                                    self.terrains.remove(t)
+                            else:
+                                self.add_terrain(Terrain(x=fx, y=fy, terrain_type='wall'))
+            elif self.current_event == 'volcano':
+                for fx in range(self.width):
+                    for fy in range(self.height):
+                        if random.random() < 0.05:
+                            terrains_here = self.get_terrains_at(fx, fy)
+                            if terrains_here:
+                                for t in terrains_here:
+                                    if t.terrain_type not in ['water', 'ice', 'ash']:
+                                        t.terrain_type = 'ash'
+                            else:
+                                self.add_terrain(Terrain(x=fx, y=fy, terrain_type='ash'))
 
         # Handle localized events
         if random.random() < self.localized_event_chance:
