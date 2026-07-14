@@ -1,6 +1,6 @@
 import os
 import time
-from src.universe.engine import Universe, Entity, Food, Terrain
+from src.universe.engine import Universe, Entity, Food, Terrain, TemperatureZone
 from src.universe.visualizer import CLIVisualizer
 
 def main():
@@ -27,6 +27,10 @@ def main():
         x = random.randint(0, universe.width - 1)
         y = random.randint(0, universe.height - 1)
         universe.add_food(Food(energy=10), x=x, y=y)
+
+    # Add temperature zones
+    universe.add_temperature_zone(TemperatureZone(x=10, y=5, radius=5, temperature_modifier=-10))
+    universe.add_temperature_zone(TemperatureZone(x=30, y=15, radius=5, temperature_modifier=+10))
 
     visualizer = CLIVisualizer(universe)
 

@@ -133,6 +133,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_tick_consumes_energy(self):
         universe = Universe()
+        universe.event_chance = 0.0
         entity = Entity("Adam")
         universe.add_entity(entity)
         self.assertEqual(entity.energy, 10)
@@ -771,6 +772,49 @@ class TestUniverse(unittest.TestCase):
 
         finally:
             random.random = original_random
+
+    def test_temperature_zone_effect(self):
+        from src.universe.engine import TemperatureZone, Entity, Universe
+        u = Universe()
+        # Create an entity with base preferred_temp 20 and tolerance 5 (15 to 25)
+        e = Entity("TempTest", x=10, y=10, preferred_temperature=20, temperature_tolerance=5)
+        e.energy = 20
+        u.add_entity(e)
+
+        # In a normal zone (base temp 20), energy loss should be 1
+        u.tick()
+        self.assertEqual(e.energy, 19)
+
+        # Add a cold temperature zone (-10 modifier) at (10, 10) with radius 5
+        # The temperature at (10, 10) becomes 10. This is outside the [15, 25] range.
+        u.add_temperature_zone(TemperatureZone(x=10, y=10, radius=5, temperature_modifier=-10))
+        u.tick()
+        # Energy loss should be 2 (1 base + 1 temp penalty)
+        self.assertEqual(e.energy, 17)
+
+    def test_temperature_trait_inheritance(self):
+        from src.universe.engine import Entity, Universe
+        import random
+        # Mock random to avoid mutations making tests flaky
+        random.seed(42)
+
+        u = Universe(population_limit=10, reproduction_threshold=15, reproduction_cost=10)
+        u.event_chance = 0.0
+        u.localized_event_chance = 0.0
+        e = Entity("Parent", x=5, y=5, preferred_temperature=18, temperature_tolerance=3)
+        e.energy = 20
+        u.add_entity(e)
+
+        # Force deterministic reproduction by setting random to 1.0 (no mutation)
+        original_random = random.random
+        random.random = lambda: 1.0
+        u.tick()
+        random.random = original_random
+
+        self.assertEqual(len(u.entities), 2)
+        child = u.entities[1]
+        self.assertEqual(child.preferred_temperature, 18)
+        self.assertEqual(child.temperature_tolerance, 3)
 
 if __name__ == '__main__':
     unittest.main()
