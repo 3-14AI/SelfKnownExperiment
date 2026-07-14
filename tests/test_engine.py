@@ -773,6 +773,7 @@ class TestUniverse(unittest.TestCase):
         finally:
             random.random = original_random
 
+
     def test_temperature_zone_effect(self):
         from src.universe.engine import TemperatureZone, Entity, Universe
         u = Universe()
@@ -815,6 +816,7 @@ class TestUniverse(unittest.TestCase):
         child = u.entities[1]
         self.assertEqual(child.preferred_temperature, 18)
         self.assertEqual(child.temperature_tolerance, 3)
+
 
 if __name__ == '__main__':
     unittest.main()

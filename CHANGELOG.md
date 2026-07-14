@@ -65,6 +65,8 @@
 All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased]
+- Introduced entity temperature preferences and tolerances, leading to increased energy loss in unfavorable climates.
+- Enabled inheritance and mutation of temperature traits in offspring entities.
 ### Added
 - Analyzed project changes and agent actions (AI behavior, reproduction, aging) and updated the results in `analytics/analysis_report.md`.
 - Implemented an aging system for entities. Entities now age each tick and will naturally die if their age exceeds their `max_age`.

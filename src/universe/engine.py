@@ -7,7 +7,7 @@ class Food:
         self.energy = energy
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=5):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40):
         self.name = name
         self.x = x
         self.y = y
@@ -19,6 +19,8 @@ class Entity:
         self.temperature_tolerance = temperature_tolerance
         self.memory = set()
         self.diet = diet
+        self.preferred_temperature = preferred_temperature
+        self.temperature_tolerance = temperature_tolerance
 
     @property
     def is_alive(self):
@@ -345,6 +347,7 @@ class Universe:
 
                     if random.random() < mutation_chance:
                         child_preferred_temperature += random.randint(-5, 5)
+                        child_preferred_temperature = max(-20, min(60, child_preferred_temperature))
 
                     if random.random() < mutation_chance:
                         child_temperature_tolerance += random.randint(-2, 2)
