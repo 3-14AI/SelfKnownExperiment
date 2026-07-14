@@ -142,3 +142,46 @@ The following updates were made:
 * Entities were classified into Herbivores and Carnivores.
 * Carnivores actively hunt and eat herbivores, while herbivores continue to eat static food resources.
 * The visualizer was updated to render carnivores distinctly (e.g., as 'C').
+
+## 21. Population Limit
+Ecosystem balancing was introduced via a population limit constraint.
+The following updates were made:
+* `Universe` now accepts a `population_limit` parameter (default 1000).
+* The `tick` method restricts entity reproduction if the total number of entities reaches or exceeds the `population_limit`.
+* Unit tests were added in `tests/test_engine.py` to verify this behavior.
+
+## 22. Seasonal Mechanics
+A seasonal system was implemented to create dynamic, long-term environmental changes.
+The following updates were made:
+* Introduced `Spring`, `Summer`, `Autumn`, and `Winter` seasons to the `Universe` engine.
+* Seasons dynamically affect the `food_spawn_rate` (e.g., higher in spring/summer, lower in winter).
+* Seasons can alter terrain; for example, water tiles freeze into ice during winter, changing traversal properties.
+
+## 23. Localized Weather Events
+The simulation's complexity was enhanced with localized weather phenomena.
+The following updates were made:
+* Implemented `rain` events, which have a chance to increase food spawning within a localized radius.
+* Implemented `fire` events, which destroy entities and food within their radius and permanently convert non-water terrain to `ash`.
+* `CLIVisualizer` was updated to render `ash` terrain and display active localized events.
+
+## 24. Temperature Mechanics
+A granular temperature zone system was added, affecting entity survival.
+The following updates were made:
+* Implemented `TemperatureZone` to apply localized temperature modifiers across the universe.
+* Entities now possess `preferred_temperature` and `temperature_tolerance` attributes.
+* Entities outside their comfortable temperature bounds suffer increased energy loss.
+* The genetics system was expanded so child entities inherit and mutate these temperature traits.
+* `CLIVisualizer` was updated to display active temperature zones.
+
+## 25. Day/Night Cycle
+A temporal day/night cycle was added, impacting entity vision and activity.
+The following updates were made:
+* The universe alternates between day and night phases based on a configurable `day_length`.
+* Entity perception and movement are dynamically influenced; vision range is typically reduced at night.
+
+## 26. Flocking Behavior
+Advanced group AI mechanics were introduced to entities.
+The following updates were made:
+* Entities exhibit flocking behavior when no food or prey is nearby.
+* They naturally move towards the center of mass of adjacent entities that share their specific diet.
+* This adds complex emergent movement patterns and social clustering to the ecosystem.
