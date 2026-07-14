@@ -71,6 +71,7 @@ class Universe:
         self._last_season = 'spring'
         self.localized_events = []
         self.localized_event_chance = 0.02
+        self.scent_trails = {}
 
     @property
     def is_day(self):
@@ -228,6 +229,14 @@ class Universe:
         self.time += 1
 
         current_season = self.current_season
+
+        # Decay scent trails
+        new_scent_trails = {}
+        for pos, intensity in self.scent_trails.items():
+            if intensity > 1:
+                new_scent_trails[pos] = intensity - 1
+        self.scent_trails = new_scent_trails
+
         if current_season != self._last_season:
             if current_season == 'winter':
                 for t in self.terrains:
@@ -423,19 +432,35 @@ class Universe:
                                 except ValueError:
                                     pass # Blocked
                         else:
-                            # Flocking behavior: move towards center of mass of nearby flockmates
-                            flockmates = self.get_nearby_flockmates(entity, effective_perception)
-                            if flockmates:
-                                center_x = sum(e.x for e in flockmates) // len(flockmates)
-                                center_y = sum(e.y for e in flockmates) // len(flockmates)
-                                if center_x != entity.x or center_y != entity.y:
-                                    path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory)
-                                    if path and len(path) > 0:
-                                        dx, dy = path[0]
-                                        try:
-                                            self.move_entity(entity, dx, dy)
-                                        except ValueError:
-                                            pass
+                            # Scent tracking behavior
+                            best_scent = 0
+                            best_pos = None
+                            for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
+                                nx, ny = entity.x + dx, entity.y + dy
+                                if (nx, ny) in self.scent_trails and self.scent_trails[(nx, ny)] > best_scent:
+                                    terrains_here = self.get_terrains_at(nx, ny)
+                                    if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                                        best_scent = self.scent_trails[(nx, ny)]
+                                        best_pos = (dx, dy)
+                            if best_pos:
+                                try:
+                                    self.move_entity(entity, best_pos[0], best_pos[1])
+                                except ValueError:
+                                    pass
+                            else:
+                                # Flocking behavior: move towards center of mass of nearby flockmates
+                                flockmates = self.get_nearby_flockmates(entity, effective_perception)
+                                if flockmates:
+                                    center_x = sum(e.x for e in flockmates) // len(flockmates)
+                                    center_y = sum(e.y for e in flockmates) // len(flockmates)
+                                    if center_x != entity.x or center_y != entity.y:
+                                        path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory)
+                                        if path and len(path) > 0:
+                                            dx, dy = path[0]
+                                            try:
+                                                self.move_entity(entity, dx, dy)
+                                            except ValueError:
+                                                pass
 
 
                     # Check for prey at entity location
@@ -444,6 +469,10 @@ class Universe:
                         prey_to_eat = preys_here[0]
                         entity.energy += prey_to_eat.energy
                         prey_to_eat.energy = 0 # Kill prey
+
+            if entity.is_alive and entity.diet == 'herbivore':
+                self.scent_trails[(entity.x, entity.y)] = 20
+
 
         self.entities = [e for e in self.entities if e.is_alive]
         for child in new_entities:
