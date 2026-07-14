@@ -7,7 +7,7 @@ class Food:
         self.energy = energy
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore'):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40):
         self.name = name
         self.x = x
         self.y = y
@@ -17,6 +17,8 @@ class Entity:
         self.perception_radius = perception_radius
         self.memory = set()
         self.diet = diet
+        self.preferred_temperature = preferred_temperature
+        self.temperature_tolerance = temperature_tolerance
 
     @property
     def is_alive(self):
@@ -191,6 +193,23 @@ class Universe:
                 nearest = e
         return nearest
 
+    def get_temperature_at(self, x, y):
+        if y < self.height / 3:
+            base_temp = 0
+        elif y < 2 * self.height / 3:
+            base_temp = 20
+        else:
+            base_temp = 40
+
+        season = self.current_season
+        modifier = 0
+        if season == 'winter':
+            modifier = -15
+        elif season == 'summer':
+            modifier = 15
+
+        return base_temp + modifier
+
     def tick(self):
         self.time += 1
 
@@ -288,6 +307,10 @@ class Universe:
             energy_loss = 1
             if self.current_event == 'storm':
                 energy_loss = 2
+
+            temp = self.get_temperature_at(entity.x, entity.y)
+            if abs(temp - entity.preferred_temperature) > entity.temperature_tolerance:
+                energy_loss += 1
             entity.energy -= energy_loss
             # Age by 1 per tick
             entity.age += 1
@@ -301,6 +324,8 @@ class Universe:
                     # Base traits inherited from parent
                     child_max_age = entity.max_age
                     child_perception_radius = entity.perception_radius
+                    child_pref_temp = entity.preferred_temperature
+                    child_temp_tol = entity.temperature_tolerance
 
                     # Mutation chance
                     mutation_chance = 0.1
@@ -314,8 +339,19 @@ class Universe:
                         child_perception_radius += random.randint(-2, 2)
                         child_perception_radius = max(1, child_perception_radius) # Minimum perception of 1
 
+                    if random.random() < mutation_chance:
+                        # Mutate preferred_temperature by up to +/- 5
+                        child_pref_temp += random.randint(-5, 5)
+                        child_pref_temp = max(0, min(40, child_pref_temp)) # Keep within 0-40 bounds
+
+                    if random.random() < mutation_chance:
+                        # Mutate temperature_tolerance by up to +/- 2
+                        child_temp_tol += random.randint(-2, 2)
+                        child_temp_tol = max(1, child_temp_tol) # Minimum tolerance of 1
+
                     child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y,
-                                   max_age=child_max_age, perception_radius=child_perception_radius, diet=entity.diet)
+                                   max_age=child_max_age, perception_radius=child_perception_radius, diet=entity.diet,
+                                   preferred_temperature=child_pref_temp, temperature_tolerance=child_temp_tol)
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)

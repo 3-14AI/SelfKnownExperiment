@@ -772,5 +772,81 @@ class TestUniverse(unittest.TestCase):
         finally:
             random.random = original_random
 
+
+    def test_temperature_zones(self):
+        universe = Universe(height=90) # y 0-29 cold(0), 30-59 temp(20), 60-89 hot(40)
+        universe._last_season = 'spring'
+        universe.time = 0 # spring
+
+        # Spring temps
+        self.assertEqual(universe.get_temperature_at(0, 10), 0)
+        self.assertEqual(universe.get_temperature_at(0, 45), 20)
+        self.assertEqual(universe.get_temperature_at(0, 80), 40)
+
+        # Summer temps (+15)
+        universe.time = universe.season_length # Summer
+        self.assertEqual(universe.get_temperature_at(0, 10), 15)
+        self.assertEqual(universe.get_temperature_at(0, 45), 35)
+        self.assertEqual(universe.get_temperature_at(0, 80), 55)
+
+        # Winter temps (-15)
+        universe.time = universe.season_length * 3 # Winter
+        self.assertEqual(universe.get_temperature_at(0, 10), -15)
+        self.assertEqual(universe.get_temperature_at(0, 45), 5)
+        self.assertEqual(universe.get_temperature_at(0, 80), 25)
+
+    def test_temperature_energy_loss(self):
+        universe = Universe(height=90)
+        universe.event_chance = 0.0 # disable random storm/drought to fix energy baseline
+        universe.localized_event_chance = 0.0
+        universe.time = 0 # Spring, modifiers = 0
+
+        # Entity comfortable at 20 +/- 10
+        entity_comfortable = Entity("Comfortable", x=0, y=45, energy=20, preferred_temperature=20, temperature_tolerance=10)
+
+        # Entity uncomfortable (in hot zone, temp 40, pref 20, tol 10) -> 40 - 20 = 20 > 10 (uncomfortable)
+        entity_uncomfortable = Entity("Uncomfortable", x=0, y=80, energy=20, preferred_temperature=20, temperature_tolerance=10)
+
+        universe.add_entity(entity_comfortable)
+        universe.add_entity(entity_uncomfortable)
+
+        universe.tick()
+
+        # Comfortable should lose 1 energy
+        self.assertEqual(entity_comfortable.energy, 19)
+        # Uncomfortable should lose 2 energy
+        self.assertEqual(entity_uncomfortable.energy, 18)
+
+    def test_temperature_mutation(self):
+        import random
+        original_random = random.random
+        original_randint = random.randint
+        try:
+            # Force mutation for everything
+            random.random = lambda: 0.05
+            # Force randint to return specific values to test mutation direction
+            random.randint = lambda a, b: b
+
+            universe = Universe()
+            universe.event_chance = 0.0
+
+            # Entity with energy ready to reproduce
+            parent = Entity("Parent", energy=100, preferred_temperature=20, temperature_tolerance=5)
+            universe.add_entity(parent)
+
+            # tick handles reproduction
+            universe.tick()
+
+            # Find child
+            child = next(e for e in universe.entities if e.name == "Parent_child")
+
+            # Based on randint=b, preferred_temperature should mutate by +5, tolerance by +2
+            self.assertEqual(child.preferred_temperature, 25)
+            self.assertEqual(child.temperature_tolerance, 7)
+
+        finally:
+            random.random = original_random
+            random.randint = original_randint
+
 if __name__ == '__main__':
     unittest.main()
