@@ -55,5 +55,8 @@ Godspeed, Agent. The universe is in your hands.
 - Implement basic energy/life cycle for entities (e.g. entities consume energy each tick and die when energy reaches 0).
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
-## Next Steps
+## Completed
 - Implement group behavior or flocking for entities.
+
+## Next Steps
+- Implement predators tracking prey by scent trails left over time.

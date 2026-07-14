@@ -212,6 +212,16 @@ class Universe:
                 nearest = e
         return nearest
 
+
+    def get_nearby_flockmates(self, entity, max_distance):
+        flockmates = []
+        for e in self.entities:
+            if e != entity and e.is_alive and e.diet == entity.diet:
+                dist = abs(e.x - entity.x) + abs(e.y - entity.y)
+                if dist <= max_distance:
+                    flockmates.append(e)
+        return flockmates
+
     def tick(self):
         self.time += 1
 
@@ -365,7 +375,6 @@ class Universe:
                 can_move = True
                 if self.is_night and random.random() < 0.5:
                     can_move = False
-
                 if entity.diet == 'herbivore':
                     if can_move:
                         nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=effective_perception)
@@ -377,6 +386,21 @@ class Universe:
                                     self.move_entity(entity, dx, dy)
                                 except ValueError:
                                     pass # Blocked
+                        else:
+                            # Flocking behavior: move towards center of mass of nearby flockmates
+                            flockmates = self.get_nearby_flockmates(entity, effective_perception)
+                            if flockmates:
+                                center_x = sum(e.x for e in flockmates) // len(flockmates)
+                                center_y = sum(e.y for e in flockmates) // len(flockmates)
+                                if center_x != entity.x or center_y != entity.y:
+                                    path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory)
+                                    if path and len(path) > 0:
+                                        dx, dy = path[0]
+                                        try:
+                                            self.move_entity(entity, dx, dy)
+                                        except ValueError:
+                                            pass
+
 
                     # Check for food at entity location
                     foods_here = self.get_foods_at(entity.x, entity.y)
@@ -384,7 +408,6 @@ class Universe:
                         food_to_eat = foods_here[0]
                         entity.energy += food_to_eat.energy
                         self.foods.remove(food_to_eat)
-
                 elif entity.diet == 'carnivore':
                     if can_move:
                         nearest_prey = self.get_nearest_prey(entity.x, entity.y, max_distance=effective_perception)
@@ -396,6 +419,21 @@ class Universe:
                                     self.move_entity(entity, dx, dy)
                                 except ValueError:
                                     pass # Blocked
+                        else:
+                            # Flocking behavior: move towards center of mass of nearby flockmates
+                            flockmates = self.get_nearby_flockmates(entity, effective_perception)
+                            if flockmates:
+                                center_x = sum(e.x for e in flockmates) // len(flockmates)
+                                center_y = sum(e.y for e in flockmates) // len(flockmates)
+                                if center_x != entity.x or center_y != entity.y:
+                                    path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory)
+                                    if path and len(path) > 0:
+                                        dx, dy = path[0]
+                                        try:
+                                            self.move_entity(entity, dx, dy)
+                                        except ValueError:
+                                            pass
+
 
                     # Check for prey at entity location
                     preys_here = self.get_preys_at(entity.x, entity.y)

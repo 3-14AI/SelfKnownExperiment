@@ -66,6 +66,10 @@ All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Implemented group behavior / flocking for entities. When no food or prey is nearby, entities will naturally move towards the center of mass of nearby entities sharing their diet.
+
+
+### Added
 - Analyzed project changes and agent actions (AI behavior, reproduction, aging) and updated the results in `analytics/analysis_report.md`.
 - Implemented an aging system for entities. Entities now age each tick and will naturally die if their age exceeds their `max_age`.
 - Added tests for the new aging system in `tests/test_engine.py`.
