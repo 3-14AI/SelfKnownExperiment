@@ -885,5 +885,77 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(carnivore.x, 6)
         self.assertEqual(carnivore.y, 5)
 
+
+    def test_global_earthquake(self):
+        from src.universe.engine import Universe, Terrain
+        import random
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.event_chance = 1.0
+
+        # force earthquake and force 1.0 random for cell modification
+        original_choice = random.choice
+        original_random = random.random
+        try:
+            random.choice = lambda x: 'earthquake'
+            # First call to random.random() is event_chance, which should be < 1.0 (we set event_chance=1.0, so < 1.0 is True if we return 0.0)
+            # The next calls are inside the earthquake loop, which check < 0.05. We want them to pass, so return 0.0
+            random.random = lambda: 0.0
+
+            # Place a wall that will be destroyed
+            u.add_terrain(Terrain(x=5, y=5, terrain_type='wall'))
+
+            u.tick()
+
+            self.assertEqual(u.current_event, 'earthquake')
+
+            # Since chance was 0.0, every tile should have triggered.
+            # (5,5) had a wall, so it should be destroyed (no wall).
+            # Other tiles should have a wall created.
+
+            # Check (5,5) has no wall
+            self.assertFalse(any(t.terrain_type == 'wall' for t in u.get_terrains_at(5, 5)))
+
+            # Check another tile (0,0) has a wall
+            self.assertTrue(any(t.terrain_type == 'wall' for t in u.get_terrains_at(0, 0)))
+        finally:
+            random.choice = original_choice
+            random.random = original_random
+
+    def test_global_volcano(self):
+        from src.universe.engine import Universe, Terrain
+        import random
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.event_chance = 1.0
+
+        original_choice = random.choice
+        original_random = random.random
+        try:
+            random.choice = lambda x: 'volcano'
+            random.random = lambda: 0.0
+
+            # Add existing terrain to test mutation
+            u.add_terrain(Terrain(x=2, y=2, terrain_type='wall'))
+            u.add_terrain(Terrain(x=3, y=3, terrain_type='water'))
+
+            u.tick()
+
+            self.assertEqual(u.current_event, 'volcano')
+
+            # Wall at (2,2) should become ash
+            t_2_2 = u.get_terrains_at(2, 2)
+            self.assertTrue(any(t.terrain_type == 'ash' for t in t_2_2))
+
+            # Water at (3,3) should remain water
+            t_3_3 = u.get_terrains_at(3, 3)
+            self.assertTrue(any(t.terrain_type == 'water' for t in t_3_3))
+
+            # Empty spot (4,4) should get ash
+            t_4_4 = u.get_terrains_at(4, 4)
+            self.assertTrue(any(t.terrain_type == 'ash' for t in t_4_4))
+
+        finally:
+            random.choice = original_choice
+            random.random = original_random
+
 if __name__ == '__main__':
     unittest.main()

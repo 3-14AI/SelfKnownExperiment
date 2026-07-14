@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement natural disasters (volcanoes, earthquakes) that affect terrain globally.
 - Analyzed recent project changes (Population Limit, Seasons, Localized Weather, Temperature Zones, Day/Night Cycle, Flocking) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Implement temperature zones or biomes that affect different entity types.
 - Implement a day/night cycle affecting entity vision and movement.
@@ -61,4 +62,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implement group behavior or flocking for entities.
 
 ## Next Steps
-- Implement natural disasters (volcanoes, earthquakes) that affect terrain globally.
+- Implement a disease or plague system that spreads between entities when they are in close proximity.

@@ -1,3 +1,5 @@
+# CHANGELOG
+- Added global natural disasters: earthquakes (modifying wall terrain) and volcanoes (spawning ash terrain).
 ## 2026-07-13
 - Implemented Population Limit logic in the Universe engine. Entities will no longer reproduce if the total number of entities reaches or exceeds the `population_limit` (default 1000).
 - Added `test_population_limit` in `tests/test_engine.py` to verify this behavior.
