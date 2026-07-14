@@ -7,7 +7,7 @@ class Food:
         self.energy = energy
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0):
         self.name = name
         self.x = x
         self.y = y
@@ -17,6 +17,8 @@ class Entity:
         self.perception_radius = perception_radius
         self.preferred_temperature = preferred_temperature
         self.temperature_tolerance = temperature_tolerance
+        self.is_infected = is_infected
+        self.infection_time = infection_time
         self.memory = set()
         self.diet = diet
         self.preferred_temperature = preferred_temperature
@@ -49,7 +51,7 @@ class TemperatureZone:
         self.temperature_modifier = temperature_modifier
 
 class Universe:
-    def __init__(self, width=100, height=100, food_spawn_rate=0.1, reproduction_threshold=20, reproduction_cost=10, population_limit=1000, season_length=50, day_length=20):
+    def __init__(self, width=100, height=100, food_spawn_rate=0.1, reproduction_threshold=20, reproduction_cost=10, population_limit=1000, season_length=50, day_length=20, disease_chance=0.01):
         self.time = 0
         self.entities = []
         self.foods = []
@@ -72,6 +74,7 @@ class Universe:
         self.localized_events = []
         self.localized_event_chance = 0.02
         self.scent_trails = {}
+        self.disease_chance = disease_chance
 
     @property
     def is_day(self):
@@ -237,6 +240,11 @@ class Universe:
                 new_scent_trails[pos] = intensity - 1
         self.scent_trails = new_scent_trails
 
+        # Spontaneous disease outbreak
+        if random.random() < self.disease_chance and self.entities:
+            target = random.choice(self.entities)
+            target.is_infected = True
+
         if current_season != self._last_season:
             if current_season == 'winter':
                 for t in self.terrains:
@@ -353,6 +361,23 @@ class Universe:
             energy_loss = 1
             if self.current_event == 'storm':
                 energy_loss = 2
+
+            if entity.is_infected:
+                energy_loss += 1
+                entity.infection_time += 1
+
+                # Recovery
+                if entity.infection_time > 10 and random.random() < 0.2:
+                    entity.is_infected = False
+                    entity.infection_time = 0
+
+                # Spread
+                if entity.is_infected:
+                    for other in self.entities:
+                        if other != entity and other.is_alive and not other.is_infected:
+                            dist = abs(other.x - entity.x) + abs(other.y - entity.y)
+                            if dist <= 2 and random.random() < 0.1:
+                                other.is_infected = True
 
             # Temperature check
             current_temp = self.get_temperature_at(entity.x, entity.y)

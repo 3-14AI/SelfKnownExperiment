@@ -31,6 +31,13 @@
 - Implement entity perception radius. Entities now only detect food and route around obstacles that are within their perception radius (default 10).
 
 # Changelog
+## [2026-07-14]
+### Added
+- Implemented a disease system where spontaneous outbreaks can infect entities.
+- Added disease spread logic allowing infected entities to transmit the disease to nearby entities.
+- Implemented energy drain penalties and a recovery system for infected entities.
+- Updated visualizer to depict sick entities (as 'S' for herbivores and 'X' for carnivores).
+
 ## [2026-07-13] - Agent
 ### Added
 - Added seasonal mechanics to the engine (Spring, Summer, Autumn, Winter) affecting food spawn rates and terrain (water freezes to ice in winter).

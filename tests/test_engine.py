@@ -957,5 +957,80 @@ class TestUniverse(unittest.TestCase):
             random.choice = original_choice
             random.random = original_random
 
+
+    def test_disease_spontaneous_outbreak(self):
+        import random; import src.universe.engine as eng
+        from src.universe.engine import Universe, Entity
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.disease_chance = 1.0
+        u.event_chance = 0.0
+
+        # Create entity and add
+        e = Entity("Healthy", x=5, y=5, is_infected=False)
+        u.add_entity(e)
+
+        original_random = eng.random.random
+        original_choice = eng.random.choice
+        try:
+            eng.random.random = lambda: 0.0
+            eng.random.choice = lambda x: x[0] # always pick the first entity
+
+            u.tick()
+            self.assertTrue(e.is_infected)
+        finally:
+            eng.random.random = original_random
+            eng.random.choice = original_choice
+
+    def test_disease_spread(self):
+        import random; import src.universe.engine as eng
+        from src.universe.engine import Universe, Entity
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.disease_chance = 0.0 # No spontaneous outbreak
+        u.event_chance = 0.0
+
+        # Entity 1 is infected
+        e1 = Entity("Sick", x=5, y=5, energy=20, is_infected=True)
+        # Entity 2 is nearby and should get infected
+        e2 = Entity("Near", x=6, y=6, energy=20, is_infected=False)
+        # Entity 3 is far and should not get infected
+        e3 = Entity("Far", x=0, y=0, energy=20, is_infected=False)
+
+        u.add_entity(e1)
+        u.add_entity(e2)
+        u.add_entity(e3)
+
+        original_random = eng.random.random
+        try:
+            # Force disease spread to succeed
+            eng.random.random = lambda: 0.0
+
+            u.tick()
+
+            self.assertTrue(e1.is_infected)
+            self.assertTrue(e2.is_infected)
+            self.assertFalse(e3.is_infected)
+        finally:
+            eng.random.random = original_random
+
+    def test_disease_energy_loss(self):
+        from src.universe.engine import Universe, Entity
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.disease_chance = 0.0
+        u.event_chance = 0.0
+
+        e_healthy = Entity("Healthy", x=2, y=2, energy=20, is_infected=False)
+        e_sick = Entity("Sick", x=8, y=8, energy=20, is_infected=True)
+
+        u.add_entity(e_healthy)
+        u.add_entity(e_sick)
+
+        u.tick()
+
+        # Healthy loses 1 energy (if base temp is optimal)
+        # Sick loses 2 energy (1 base + 1 disease)
+        self.assertEqual(e_healthy.energy, 19)
+        self.assertEqual(e_sick.energy, 18)
+
 if __name__ == '__main__':
+
     unittest.main()
