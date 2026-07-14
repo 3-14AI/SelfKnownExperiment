@@ -818,5 +818,21 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(child.temperature_tolerance, 3)
 
 
+    def test_flocking_behavior(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        e1 = Entity("E1", x=2, y=2, diet='herbivore')
+        e2 = Entity("E2", x=2, y=4, diet='herbivore')
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+
+        universe.tick()
+
+        # Without food, they should move towards each other (center of mass)
+        # Center is 2, 3. E1 moves to 2, 3 and E2 moves to 2, 3
+        self.assertEqual(e1.x, 2)
+        self.assertEqual(e1.y, 3)
+        self.assertEqual(e2.x, 2)
+        self.assertEqual(e2.y, 3)
+
 if __name__ == '__main__':
     unittest.main()
