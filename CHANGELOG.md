@@ -7,6 +7,9 @@
 - Updated visualizer to render carnivores as 'C'.
 
 ## Today
+- Implemented scent trails: herbivores leave a scent trail on the terrain as they move, which decays over time.
+- Updated carnivore AI to track the strongest adjacent scent trail when no prey is directly visible within perception radius.
+- Added tests for scent trails and carnivore tracking behavior.
 
 ## 2026-07-14
 - Implemented `TemperatureZone` system allowing localized temperature modifiers.

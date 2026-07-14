@@ -834,5 +834,56 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(e2.x, 2)
         self.assertEqual(e2.y, 3)
 
+
+    def test_scent_trail_creation(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        entity = Entity("Deer", x=5, y=5, diet='herbivore')
+        universe.add_entity(entity)
+
+        universe.tick()
+
+        # Herbivore should have left a scent of 20 at its position at the end of the tick
+        self.assertIn((5, 5), universe.scent_trails)
+        self.assertEqual(universe.scent_trails[(5, 5)], 20)
+
+    def test_scent_trail_decay(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        # Initialize an artificial scent trail
+        universe.scent_trails[(0, 0)] = 20
+
+        universe.tick()
+
+        # Scent should decay by 1 each tick
+        self.assertEqual(universe.scent_trails[(0, 0)], 19)
+
+        for _ in range(19):
+            universe.tick()
+
+        # Scent should be completely removed when intensity <= 0
+        self.assertNotIn((0, 0), universe.scent_trails)
+
+    def test_carnivore_scent_tracking(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+
+        # Place a carnivore
+        carnivore = Entity("Wolf", x=5, y=5, diet='carnivore', perception_radius=2)
+        universe.add_entity(carnivore)
+
+        # Add a trail of scent leading right (to x=7).
+        # (5, 5) shouldn't matter as it moves away, but let's make adjacent (6, 5) highest
+        universe.scent_trails[(6, 5)] = 20
+        universe.scent_trails[(5, 6)] = 10
+        universe.scent_trails[(5, 4)] = 10
+        universe.scent_trails[(4, 5)] = 5
+
+        universe.tick()
+
+        # Carnivore should move to the strongest adjacent scent (6, 5)
+        self.assertEqual(carnivore.x, 6)
+        self.assertEqual(carnivore.y, 5)
+
 if __name__ == '__main__':
     unittest.main()

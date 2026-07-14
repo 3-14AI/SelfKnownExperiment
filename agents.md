@@ -57,7 +57,8 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
 ## Completed
+- Implement predators tracking prey by scent trails left over time.
 - Implement group behavior or flocking for entities.
 
 ## Next Steps
-- Implement predators tracking prey by scent trails left over time.
+- Implement natural disasters (volcanoes, earthquakes) that affect terrain globally.
