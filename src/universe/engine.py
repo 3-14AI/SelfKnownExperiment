@@ -516,8 +516,12 @@ class Universe:
                         child_defense += random.randint(-1, 1)
                         child_defense = max(0, child_defense)
 
+                    child_diet = entity.diet
+                    if random.random() < mutation_chance:
+                        child_diet = 'carnivore' if entity.diet == 'herbivore' else 'herbivore'
+
                     child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y,
-                                   max_age=child_max_age, perception_radius=child_perception_radius, diet=entity.diet,
+                                   max_age=child_max_age, perception_radius=child_perception_radius, diet=child_diet,
                                    preferred_temperature=child_preferred_temperature, temperature_tolerance=child_temperature_tolerance,
                                    species=entity.species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain)
