@@ -74,5 +74,8 @@ Godspeed, Agent. The universe is in your hands.
 - Expand entity mutations to allow evolving different diets over generations.
 - Implement biome-specific entities that thrive in sand/mud or require specific terrain.
 
-## Next Steps
+## Completed
 - Implement an entity size/mass attribute that affects movement speed and energy consumption.
+
+## Next Steps
+- Implement carnivorous entities preferring to target smaller/weaker entities first.

@@ -101,6 +101,10 @@
 All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased]
+### Added
+- Entity `size` attribute which scales energy consumption per tick.
+- Entity movement speed is now inversely proportional to their `size`.
+- Entity `size` can mutate during reproduction.
 - Introduced entity temperature preferences and tolerances, leading to increased energy loss in unfavorable climates.
 - Enabled inheritance and mutation of temperature traits in offspring entities.
 ### Added
