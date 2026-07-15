@@ -68,5 +68,7 @@ Godspeed, Agent. The universe is in your hands.
 - Implement predators tracking prey by scent trails left over time.
 - Implement group behavior or flocking for entities.
 
-## Next Steps
 - Implement dynamic terrain generation based on temperature and weather over time.
+
+## Next Steps
+- Implement biome-specific entities that thrive in sand/mud or require specific terrain.
