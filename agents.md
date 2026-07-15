@@ -70,5 +70,9 @@ Godspeed, Agent. The universe is in your hands.
 
 - Implement dynamic terrain generation based on temperature and weather over time.
 
-## Next Steps
+## Completed
 - Implement biome-specific entities that thrive in sand/mud or require specific terrain.
+
+## Next Steps
+- Implement dynamic terrain generation based on temperature and weather over time.
+- Expand entity mutations to allow evolving different diets over generations.

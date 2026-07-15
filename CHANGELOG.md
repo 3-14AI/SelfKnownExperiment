@@ -1,6 +1,13 @@
 # CHANGELOG
 
 ## [2026-07-15]
+
+### Added
+- Implemented biome-specific entity behavior by adding `preferred_terrain` attribute to entities.
+- Entities thriving on their preferred terrain receive reduced energy loss.
+- Entities situated outside their preferred terrain (if specified) suffer an additional energy loss penalty.
+- Updated `agents.md` to reflect task completion.
+
 ### Added
 - Analyzed recent project changes (Disease, Scent Trails, Communication, Combat, Symbiosis, Disasters) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
