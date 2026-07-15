@@ -1047,10 +1047,18 @@ class TestUniverse(unittest.TestCase):
         u.add_entity(e2)
         u.add_entity(e3)
 
+        # To prevent entity movement from moving them apart or breaking our deterministic random override
+        e1.perception_radius = 0
+        e2.perception_radius = 0
+        e3.perception_radius = 0
+
         original_random = eng.random.random
         try:
-            # Force disease spread to succeed
-            eng.random.random = lambda: 0.0
+            # Force disease spread to succeed, recovery to fail, and any other random check to fail
+            def fake_random():
+                return 0.0 # Always < 0.1 for disease spread
+
+            eng.random.random = fake_random
 
             u.tick()
 

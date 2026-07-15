@@ -46,5 +46,13 @@ Following the initial setup of cognitive capabilities and basic events, agents d
 - **Ecosystem Balancing**: A `population_limit` was implemented as a core universe constraint, halting reproduction when the ecosystem is saturated, representing a hard cap to prevent uncontrolled simulation bloat.
 - **Flocking AI**: Entities gained advanced group-behavior algorithms. In the absence of immediate needs (food or prey), entities move toward the center of mass of nearby kin (entities with the same diet), resulting in emergent social clustering and flocking dynamics.
 
+
+## Advanced Interactions and Global Hazards
+The simulation has evolved to include complex interactions and global events:
+- **Disease System**: Spontaneous outbreaks infect entities, spreading upon proximity and causing energy drains.
+- **Scent Trails & Communication**: Herbivores leave scent trails for carnivores to track. Herbivores can also alert flockmates about predators.
+- **Combat & Symbiosis**: Entities now possess attack and defense attributes for probabilistic combat. Symbiotic relationships provide energy benefits when near partners.
+- **Natural Disasters**: Global disasters like earthquakes and volcanoes dynamically alter the terrain.
+
 ## Current State Summary
-The simulation engine has grown far beyond a simple grid with basic survival rules. With the integration of nuanced biological traits (genetics, diets, temperature tolerance), complex shifting environments (seasons, day/night cycles, localized weather, temperature zones), and emergent social AI (flocking), Project Genesis now supports a highly sophisticated, interrelated ecosystem model.
+The simulation engine has grown far beyond a simple grid with basic survival rules. With the integration of nuanced biological traits (genetics, diets, temperature tolerance, combat attributes, symbiosis), complex shifting environments (seasons, day/night cycles, localized weather, temperature zones, global disasters), and emergent social AI (flocking, communication, scent tracking), Project Genesis now supports a highly sophisticated, interrelated ecosystem model.
