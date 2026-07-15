@@ -25,6 +25,7 @@ class Entity:
         self.perception_radius = perception_radius
         self.preferred_temperature = preferred_temperature
         self.temperature_tolerance = temperature_tolerance
+        self.alerted_predator_pos = None
         self.is_infected = is_infected
         self.infection_time = infection_time
         self.memory = set()
@@ -224,6 +225,23 @@ class Universe:
             if dist < min_dist:
                 min_dist = dist
                 nearest = e
+        return nearest
+
+
+    def get_nearest_predator(self, x, y, max_distance=None):
+        if not self.entities:
+            return None
+
+        nearest = None
+        min_dist = float('inf')
+        for e in self.entities:
+            if e.diet == 'carnivore' and e.is_alive:
+                dist = abs(e.x - x) + abs(e.y - y)
+                if max_distance is not None and dist > max_distance:
+                    continue
+                if dist < min_dist:
+                    min_dist = dist
+                    nearest = e
         return nearest
 
 
@@ -467,30 +485,64 @@ class Universe:
                     can_move = False
                 if entity.diet == 'herbivore':
                     if can_move:
-                        nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=effective_perception)
-                        if nearest_food:
-                            path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=effective_perception, memory=entity.memory)
-                            if path and len(path) > 0:
-                                dx, dy = path[0]
-                                try:
-                                    self.move_entity(entity, dx, dy)
-                                except ValueError:
-                                    pass # Blocked
-                        else:
-                            # Flocking behavior: move towards center of mass of nearby flockmates
-                            flockmates = self.get_nearby_flockmates(entity, effective_perception)
-                            if flockmates:
-                                center_x = sum(e.x for e in flockmates) // len(flockmates)
-                                center_y = sum(e.y for e in flockmates) // len(flockmates)
-                                if center_x != entity.x or center_y != entity.y:
-                                    path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory)
-                                    if path and len(path) > 0:
-                                        dx, dy = path[0]
-                                        try:
-                                            self.move_entity(entity, dx, dy)
-                                        except ValueError:
-                                            pass
+                        # Communication & Flee behavior
+                        nearest_predator = self.get_nearest_predator(entity.x, entity.y, max_distance=effective_perception)
+                        if nearest_predator:
+                            entity.alerted_predator_pos = (nearest_predator.x, nearest_predator.y)
+                            # Alert nearby flockmates (double perception radius for communication)
+                            flockmates_to_alert = self.get_nearby_flockmates(entity, effective_perception * 2)
+                            for f in flockmates_to_alert:
+                                f.alerted_predator_pos = (nearest_predator.x, nearest_predator.y)
 
+                        if entity.alerted_predator_pos:
+                            px, py = entity.alerted_predator_pos
+                            # Try to move away from predator
+                            best_pos = None
+                            max_dist = -1
+                            for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
+                                nx, ny = entity.x + dx, entity.y + dy
+                                try:
+                                    # Basic bounds/terrain check before moving
+                                    if 0 <= nx < self.width and 0 <= ny < self.height:
+                                        terrains_here = self.get_terrains_at(nx, ny)
+                                        if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                                            dist_to_predator = abs(nx - px) + abs(ny - py)
+                                            if dist_to_predator > max_dist:
+                                                max_dist = dist_to_predator
+                                                best_pos = (dx, dy)
+                                except Exception:
+                                    pass
+
+                            if best_pos:
+                                try:
+                                    self.move_entity(entity, best_pos[0], best_pos[1])
+                                except ValueError:
+                                    pass
+                            entity.alerted_predator_pos = None
+                        else:
+                            nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=effective_perception)
+                            if nearest_food:
+                                path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=effective_perception, memory=entity.memory)
+                                if path and len(path) > 0:
+                                    dx, dy = path[0]
+                                    try:
+                                        self.move_entity(entity, dx, dy)
+                                    except ValueError:
+                                        pass # Blocked
+                            else:
+                                # Flocking behavior: move towards center of mass of nearby flockmates
+                                flockmates = self.get_nearby_flockmates(entity, effective_perception)
+                                if flockmates:
+                                    center_x = sum(e.x for e in flockmates) // len(flockmates)
+                                    center_y = sum(e.y for e in flockmates) // len(flockmates)
+                                    if center_x != entity.x or center_y != entity.y:
+                                        path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory)
+                                        if path and len(path) > 0:
+                                            dx, dy = path[0]
+                                            try:
+                                                self.move_entity(entity, dx, dy)
+                                            except ValueError:
+                                                pass
 
                     # Check for food at entity location
                     foods_here = self.get_foods_at(entity.x, entity.y)

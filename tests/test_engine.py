@@ -445,7 +445,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(food_spawn_rate=0.0)
         universe.event_chance = 0.0
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=100)
-        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=0)
+        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=0, perception_radius=0)
         universe.add_entity(carnivore)
         universe.add_entity(herbivore)
 
@@ -468,7 +468,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         # High defense, 0 attack -> 100% escape chance
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=0)
-        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=100)
+        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=100, perception_radius=0)
         universe.add_entity(carnivore)
         universe.add_entity(herbivore)
 
@@ -494,7 +494,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         # Low defense, high attack -> 0% escape chance
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=100)
-        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=0)
+        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=0, perception_radius=0)
         universe.add_entity(carnivore)
         universe.add_entity(herbivore)
 
@@ -1105,6 +1105,36 @@ class TestUniverse(unittest.TestCase):
         # Base energy loss is 1. Symbiosis reduces it by 1 -> loss is 0.
         self.assertEqual(e_sym.energy, 20)
         self.assertEqual(e_partner.energy, 20)
+
+
+    def test_communication_alert_predator(self):
+        universe = Universe(width=20, height=20, disease_chance=0.0)
+        universe.event_chance = 0.0 # prevent random events
+
+        # Predator at (0, 0)
+        carnivore = Entity(name="Carnivore", x=0, y=0, diet="carnivore", perception_radius=10, energy=100)
+        universe.add_entity(carnivore)
+
+        # Herbivore 1 is near predator, sees it (at 3, 0)
+        h1 = Entity(name="H1", x=3, y=0, diet="herbivore", perception_radius=5, energy=100)
+        universe.add_entity(h1)
+
+        # Herbivore 2 is out of range of predator (at 8, 0) - distance to predator is 8 > 5
+        # but within communication range of Herbivore 1 (distance 5 <= 10, which is effective_perception * 2)
+        h2 = Entity(name="H2", x=8, y=0, diet="herbivore", perception_radius=5, energy=100)
+        universe.add_entity(h2)
+
+        # Run tick
+        universe.tick()
+
+        # Both herbivores should have moved away from (0, 0) because h1 saw the predator
+        # and alerted h2.
+
+        # H1 was at (3,0), should move away from (0,0) -> (4,0)
+        self.assertGreater(h1.x + h1.y, 3)
+
+        # H2 was at (8,0), should move away from (0,0) -> (9,0)
+        self.assertGreater(h2.x + h2.y, 8)
 
 if __name__ == '__main__':
 

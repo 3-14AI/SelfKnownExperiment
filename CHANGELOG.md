@@ -14,6 +14,10 @@
 - Updated visualizer to render carnivores as 'C'.
 
 ## Today
+- Implemented a communication system allowing herbivores to alert nearby flockmates of predators.
+- Entities that see a predator communicate its location to flockmates within double their perception radius.
+- Alerted entities will actively try to move away from the predator's known location.
+- Added `get_nearest_predator` method and `test_communication_alert_predator` tests.
 - Implemented scent trails: herbivores leave a scent trail on the terrain as they move, which decays over time.
 - Updated carnivore AI to track the strongest adjacent scent trail when no prey is directly visible within perception radius.
 - Added tests for scent trails and carnivore tracking behavior.
