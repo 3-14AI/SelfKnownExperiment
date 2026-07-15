@@ -7,7 +7,13 @@ class Food:
         self.energy = energy
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None):
+        if species is None:
+            species = name
+        if symbiotic_with is None:
+            symbiotic_with = []
+        self.species = species
+        self.symbiotic_with = symbiotic_with
         self.name = name
         self.x = x
         self.y = y
@@ -384,6 +390,16 @@ class Universe:
             if not (entity.preferred_temperature - entity.temperature_tolerance <= current_temp <= entity.preferred_temperature + entity.temperature_tolerance):
                 energy_loss += 1
 
+            # Symbiosis check
+            if entity.symbiotic_with:
+                for other in self.entities:
+                    if other != entity and other.is_alive and other.species in entity.symbiotic_with:
+                        dist = abs(other.x - entity.x) + abs(other.y - entity.y)
+                        if dist <= 2:
+                            # Reduced energy loss due to symbiosis benefit
+                            energy_loss = max(0, energy_loss - 1)
+                            break
+
             entity.energy -= energy_loss
             # Age by 1 per tick
             entity.age += 1
@@ -422,7 +438,8 @@ class Universe:
 
                     child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y,
                                    max_age=child_max_age, perception_radius=child_perception_radius, diet=entity.diet,
-                                   preferred_temperature=child_preferred_temperature, temperature_tolerance=child_temperature_tolerance)
+                                   preferred_temperature=child_preferred_temperature, temperature_tolerance=child_temperature_tolerance,
+                                   species=entity.species, symbiotic_with=entity.symbiotic_with.copy())
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)

@@ -1,4 +1,8 @@
 # CHANGELOG
+
+## [2026-07-15]
+### Added
+- Implemented a symbiotic relationship system for entities. Entities can now have a `species` and a `symbiotic_with` list. When near their symbiotic partners, they receive a benefit (reduced energy loss). Added `test_symbiosis_benefit` to verify the functionality.
 - Added global natural disasters: earthquakes (modifying wall terrain) and volcanoes (spawning ash terrain).
 ## 2026-07-13
 - Implemented Population Limit logic in the Universe engine. Entities will no longer reproduce if the total number of entities reaches or exceeds the `population_limit` (default 1000).
