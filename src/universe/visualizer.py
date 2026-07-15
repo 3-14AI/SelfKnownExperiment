@@ -17,6 +17,10 @@ class CLIVisualizer:
                     grid[terrain.y][terrain.x] = '*'
                 elif terrain.terrain_type == 'ash':
                     grid[terrain.y][terrain.x] = ':'
+                elif terrain.terrain_type == 'mud':
+                    grid[terrain.y][terrain.x] = 'm'
+                elif terrain.terrain_type == 'sand':
+                    grid[terrain.y][terrain.x] = ','
 
         # Add food
         for food in self.universe.foods:

@@ -868,6 +868,8 @@ class TestUniverse(unittest.TestCase):
 
     def test_flocking_behavior(self):
         universe = Universe(width=10, height=10, food_spawn_rate=0)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
         e1 = Entity("E1", x=2, y=2, diet='herbivore')
         e2 = Entity("E2", x=2, y=4, diet='herbivore')
         universe.add_entity(e1)
@@ -1035,6 +1037,7 @@ class TestUniverse(unittest.TestCase):
         u = Universe(width=10, height=10, food_spawn_rate=0.0)
         u.disease_chance = 0.0 # No spontaneous outbreak
         u.event_chance = 0.0
+        u.localized_event_chance = 0.0
 
         # Entity 1 is infected
         e1 = Entity("Sick", x=5, y=5, energy=20, is_infected=True)
@@ -1143,6 +1146,148 @@ class TestUniverse(unittest.TestCase):
 
         # H2 was at (8,0), should move away from (0,0) -> (9,0)
         self.assertGreater(h2.x + h2.y, 8)
+
+
+    def test_dynamic_base_temperature(self):
+        from src.universe.engine import Universe
+        u = Universe(width=10, height=10, season_length=10)
+        u.event_chance = 0.0
+
+        u.time = 0 # Spring
+        u.tick()
+        self.assertEqual(u.base_temperature, 20)
+
+        u.time = 10 # Summer
+        u.tick()
+        self.assertEqual(u.base_temperature, 30)
+
+        u.time = 20 # Autumn
+        u.tick()
+        self.assertEqual(u.base_temperature, 10)
+
+        u.time = 30 # Winter
+        u.tick()
+        self.assertEqual(u.base_temperature, -5)
+
+    def test_localized_water_ice_transition(self):
+        from src.universe.engine import Universe, Terrain, TemperatureZone
+        u = Universe(width=10, height=10, season_length=100) # Ensure no season change during tick 1
+        u.event_chance = 0.0
+
+        # Spring -> Base temp 20
+        u.time = 0
+        u.tick()
+
+        # Add water
+        u.add_terrain(Terrain(x=2, y=2, terrain_type='water'))
+        # Add ice
+        u.add_terrain(Terrain(x=5, y=5, terrain_type='ice'))
+
+        # Create cold zone around water (base 20 - 25 = -5)
+        u.add_temperature_zone(TemperatureZone(x=2, y=2, radius=2, temperature_modifier=-25))
+        # Warm zone around ice (base 20 + 0 = 20 > 0, so ice will melt even without zone, but let's be explicit)
+
+        u.tick()
+
+        # Water should become ice because local temp <= 0
+        t_2_2 = u.get_terrains_at(2, 2)[0]
+        self.assertEqual(t_2_2.terrain_type, 'ice')
+
+        # Ice should become water because local temp > 0
+        t_5_5 = u.get_terrains_at(5, 5)[0]
+        self.assertEqual(t_5_5.terrain_type, 'water')
+
+    def test_rain_mud_and_washing(self):
+        import random; import src.universe.engine as eng
+        from src.universe.engine import Universe, Terrain
+        u = Universe(width=10, height=10)
+        u.event_chance = 0.0
+        u.localized_event_chance = 1.0 # Guarantee localized event
+
+        u.add_terrain(Terrain(x=5, y=5, terrain_type='ash'))
+        u.add_terrain(Terrain(x=6, y=6, terrain_type='sand'))
+
+        original_random = eng.random.random
+        original_choice = eng.random.choice
+        original_randint = eng.random.randint
+
+        try:
+            # Force 'rain'
+            eng.random.choice = lambda x: 'rain'
+            # Force conditions for event and mud creation
+            eng.random.random = lambda: 0.0
+
+            # Force event at (5,5), radius 5, duration 1
+            # Then force the 3 tries for mud generation to hit (5,5), (6,6), (7,7)
+            call_count = 0
+            def fake_randint(a, b):
+                nonlocal call_count
+                call_count += 1
+                if call_count == 1: return 5 # event x
+                if call_count == 2: return 5 # event y
+                if call_count == 3: return 5 # radius
+                if call_count == 4: return 2 # duration
+                if call_count == 5: return 0 # rain food x offset
+                if call_count == 6: return 0 # rain food y offset
+                # 3 terrain spots
+                if call_count == 7: return 0  # rx offset (5,5) - ash
+                if call_count == 8: return 0
+                if call_count == 9: return 1  # rx offset (6,6) - sand
+                if call_count == 10: return 1
+                if call_count == 11: return 2 # rx offset (7,7) - empty -> mud
+                if call_count == 12: return 2
+                return original_randint(a, b)
+
+            eng.random.randint = fake_randint
+
+            u.tick()
+
+            terrains = [(t.x, t.y, t.terrain_type) for t in u.terrains]
+
+            # Ash at 5,5 washed away
+            self.assertFalse(any(t[0] == 5 and t[1] == 5 and t[2] == 'ash' for t in terrains))
+            # Sand at 6,6 washed away
+            self.assertFalse(any(t[0] == 6 and t[1] == 6 and t[2] == 'sand' for t in terrains))
+            # Mud created at 7,7
+            self.assertTrue(any(t[0] == 7 and t[1] == 7 and t[2] == 'mud' for t in terrains))
+
+        finally:
+            eng.random.random = original_random
+            eng.random.choice = original_choice
+            eng.random.randint = original_randint
+
+    def test_heat_creates_sand(self):
+        import random; import src.universe.engine as eng
+        from src.universe.engine import Universe
+        u = Universe(width=10, height=10)
+        u.event_chance = 0.0
+        u.time = 0 # Spring, base temp 20
+
+        # We force 'summer' and base temp 30
+        u.time = 10
+        u.season_length = 10
+
+        original_random = eng.random.random
+        original_randint = eng.random.randint
+
+        try:
+            # Force random to pass 50% chance for summer sand creation
+            eng.random.random = lambda: 0.0
+
+            # Force randint to always target (5,5) for the 5 tries
+            eng.random.randint = lambda a, b: 5
+
+            u.tick()
+
+            # Since (5,5) was empty and temp >= 30, it should have sand.
+            # Note: The logic tries 5 times, but get_terrains_at checks if empty,
+            # so it only adds it once at (5,5).
+            terrains = [(t.x, t.y, t.terrain_type) for t in u.terrains]
+            self.assertTrue(any(t[0] == 5 and t[1] == 5 and t[2] == 'sand' for t in terrains))
+
+        finally:
+            eng.random.random = original_random
+            eng.random.randint = original_randint
 
 if __name__ == '__main__':
 

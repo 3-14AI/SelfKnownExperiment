@@ -272,15 +272,31 @@ class Universe:
             target.is_infected = True
 
         if current_season != self._last_season:
-            if current_season == 'winter':
-                for t in self.terrains:
-                    if t.terrain_type == 'water':
-                        t.terrain_type = 'ice'
-            elif self._last_season == 'winter' and current_season == 'spring':
-                for t in self.terrains:
-                    if t.terrain_type == 'ice':
-                        t.terrain_type = 'water'
             self._last_season = current_season
+
+        if current_season == 'spring':
+            self.base_temperature = 20
+        elif current_season == 'summer':
+            self.base_temperature = 30
+        elif current_season == 'autumn':
+            self.base_temperature = 10
+        elif current_season == 'winter':
+            self.base_temperature = -5
+
+        # Localized temperature-based terrain transitions
+        terrains_to_remove = []
+        for t in self.terrains:
+            local_temp = self.get_temperature_at(t.x, t.y)
+            if t.terrain_type == 'water' and local_temp <= 0:
+                t.terrain_type = 'ice'
+            elif t.terrain_type == 'ice' and local_temp > 0:
+                t.terrain_type = 'water'
+            elif t.terrain_type == 'mud' and local_temp >= 20 and random.random() < 0.05:
+                terrains_to_remove.append(t)
+
+        for t in terrains_to_remove:
+            if t in self.terrains:
+                self.terrains.remove(t)
 
         # Handle events
         if self.current_event:
@@ -336,6 +352,20 @@ class Universe:
                     if 0 <= fx < self.width and 0 <= fy < self.height:
                         if (fx - event.x)**2 + (fy - event.y)**2 <= event.radius**2:
                             self.add_food(Food(x=fx, y=fy))
+
+                # Rain dynamic terrain (mud creation, washing away ash/sand)
+                for _ in range(3): # Try a few spots per tick
+                    rx = event.x + random.randint(-event.radius, event.radius)
+                    ry = event.y + random.randint(-event.radius, event.radius)
+                    if 0 <= rx < self.width and 0 <= ry < self.height:
+                        if (rx - event.x)**2 + (ry - event.y)**2 <= event.radius**2:
+                            terrains_here = self.get_terrains_at(rx, ry)
+                            if terrains_here:
+                                for t in terrains_here:
+                                    if t.terrain_type in ['ash', 'sand']:
+                                        self.terrains.remove(t)
+                            elif random.random() < 0.1: # 10% chance to create mud if empty
+                                self.add_terrain(Terrain(x=rx, y=ry, terrain_type='mud'))
             elif event.event_type == 'fire':
                 for fx in range(max(0, event.x - event.radius), min(self.width, event.x + event.radius + 1)):
                     for fy in range(max(0, event.y - event.radius), min(self.height, event.y + event.radius + 1)):
@@ -359,6 +389,15 @@ class Universe:
                             for t in terrains_here:
                                 if t.terrain_type not in ['water', 'ice', 'ash']:
                                     t.terrain_type = 'ash'
+
+        # High temperatures/drought create sand
+        if self.current_event == 'drought' or (self.current_season == 'summer' and random.random() < 0.5):
+            for _ in range(5):
+                hx = random.randint(0, self.width - 1)
+                hy = random.randint(0, self.height - 1)
+                if self.get_temperature_at(hx, hy) >= 30:
+                    if not self.get_terrains_at(hx, hy):
+                        self.add_terrain(Terrain(x=hx, y=hy, terrain_type='sand'))
 
         # Spawn new food
         current_food_spawn_rate = self.food_spawn_rate
