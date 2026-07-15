@@ -287,7 +287,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe()
         universe.current_event = 'storm'
         universe.event_remaining_time = 5
-        entity = Entity("Adam", energy=10)
+        entity = Entity("Adam", energy=10, preferred_temperature=20, temperature_tolerance=10)
         universe.add_entity(entity)
         universe.tick()
         self.assertEqual(entity.energy, 8)
@@ -1030,6 +1030,33 @@ class TestUniverse(unittest.TestCase):
         # Sick loses 2 energy (1 base + 1 disease)
         self.assertEqual(e_healthy.energy, 19)
         self.assertEqual(e_sick.energy, 18)
+
+
+    def test_symbiosis_benefit(self):
+        from src.universe.engine import Entity, Universe
+
+        # Test basic energy loss without symbiosis benefit
+        u_isolated = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
+        u_isolated.event_chance = 0.0 # prevent random energy modifiers
+        e_isolated = Entity("Herbivore", x=2, y=2, energy=20, species="Herbivore", symbiotic_with=["Bird"], preferred_temperature=20, temperature_tolerance=10)
+        u_isolated.add_entity(e_isolated)
+        u_isolated.tick()
+        self.assertEqual(e_isolated.energy, 19)
+
+        # Test energy loss with symbiosis benefit
+        u_sym = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
+        u_sym.event_chance = 0.0
+        e_sym = Entity("Herbivore", x=2, y=2, energy=20, species="Herbivore", symbiotic_with=["Bird"], preferred_temperature=20, temperature_tolerance=10)
+        e_partner = Entity("Bird", x=3, y=2, energy=20, species="Bird", symbiotic_with=["Herbivore"], preferred_temperature=20, temperature_tolerance=10)
+
+        u_sym.add_entity(e_sym)
+        u_sym.add_entity(e_partner)
+
+        u_sym.tick()
+
+        # Base energy loss is 1. Symbiosis reduces it by 1 -> loss is 0.
+        self.assertEqual(e_sym.energy, 20)
+        self.assertEqual(e_partner.energy, 20)
 
 if __name__ == '__main__':
 
