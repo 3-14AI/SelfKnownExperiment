@@ -185,3 +185,12 @@ The following updates were made:
 * Entities exhibit flocking behavior when no food or prey is nearby.
 * They naturally move towards the center of mass of adjacent entities that share their specific diet.
 * This adds complex emergent movement patterns and social clustering to the ecosystem.
+
+## 27. Advanced Interactions and Global Hazards
+Several advanced mechanics have been introduced recently, further increasing the simulation's complexity:
+* **Disease System:** A disease system was added where spontaneous outbreaks can occur and spread between entities in close proximity, causing energy drain.
+* **Scent Trails:** Herbivores now leave scent trails that decay over time. Carnivores track the strongest adjacent scent trail when no prey is directly visible.
+* **Communication System:** Herbivores can alert nearby flockmates of predators, causing them to move away.
+* **Combat and Defense Mechanics:** Entities were given attack and defense attributes with probabilistic combat resolution when carnivores hunt prey.
+* **Symbiotic Relationships:** Entities can form symbiotic relationships, receiving energy benefits when near their partners.
+* **Natural Disasters:** Global natural disasters were added, such as earthquakes (modifying wall terrain) and volcanoes (spawning ash terrain).
