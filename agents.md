@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement a communication system where entities can alert others of predators.
 - Implement a combat or defense system for entities to protect against predators.
 - Implement a symbiotic relationship system where certain entity species benefit from being near each other.
 - Implement a disease or plague system that spreads between entities when they are in close proximity.
@@ -61,8 +62,9 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented a food/resource system allowing entities to consume resources to regain energy.
 
 ## Completed
+- Implement a communication system where entities can alert others of predators.
 - Implement predators tracking prey by scent trails left over time.
 - Implement group behavior or flocking for entities.
 
 ## Next Steps
-- Implement a communication system where entities can alert others of predators.
+- Implement dynamic terrain generation based on temperature and weather over time.
