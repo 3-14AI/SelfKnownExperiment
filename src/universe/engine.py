@@ -7,7 +7,7 @@ class Food:
         self.energy = energy
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None):
         if species is None:
             species = name
         if symbiotic_with is None:
@@ -16,6 +16,7 @@ class Entity:
         self.symbiotic_with = symbiotic_with
         self.attack = attack
         self.defense = defense
+        self.preferred_terrain = preferred_terrain
         self.name = name
         self.x = x
         self.y = y
@@ -459,6 +460,16 @@ class Universe:
                             energy_loss = max(0, energy_loss - 1)
                             break
 
+            # Terrain check
+            if entity.preferred_terrain:
+                terrains_here = self.get_terrains_at(entity.x, entity.y)
+                terrain_types = [t.terrain_type for t in terrains_here]
+                if entity.preferred_terrain in terrain_types:
+                    energy_loss = max(0, energy_loss - 1)
+                else:
+                    energy_loss += 1
+
+
             entity.energy -= energy_loss
             # Age by 1 per tick
             entity.age += 1
@@ -509,7 +520,7 @@ class Universe:
                                    max_age=child_max_age, perception_radius=child_perception_radius, diet=entity.diet,
                                    preferred_temperature=child_preferred_temperature, temperature_tolerance=child_temperature_tolerance,
                                    species=entity.species, symbiotic_with=entity.symbiotic_with.copy(),
-                                   attack=child_attack, defense=child_defense)
+                                   attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain)
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)

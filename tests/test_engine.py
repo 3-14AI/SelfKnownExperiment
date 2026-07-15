@@ -939,7 +939,7 @@ class TestUniverse(unittest.TestCase):
     def test_global_earthquake(self):
         from src.universe.engine import Universe, Terrain
         import random
-        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.event_chance = 1.0
 
         # force earthquake and force 1.0 random for cell modification
@@ -974,7 +974,7 @@ class TestUniverse(unittest.TestCase):
     def test_global_volcano(self):
         from src.universe.engine import Universe, Terrain
         import random
-        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.event_chance = 1.0
 
         original_choice = random.choice
@@ -1011,7 +1011,7 @@ class TestUniverse(unittest.TestCase):
     def test_disease_spontaneous_outbreak(self):
         import random; import src.universe.engine as eng
         from src.universe.engine import Universe, Entity
-        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.disease_chance = 1.0
         u.event_chance = 0.0
 
@@ -1034,7 +1034,7 @@ class TestUniverse(unittest.TestCase):
     def test_disease_spread(self):
         import random; import src.universe.engine as eng
         from src.universe.engine import Universe, Entity
-        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.disease_chance = 0.0 # No spontaneous outbreak
         u.event_chance = 0.0
         u.localized_event_chance = 0.0
@@ -1073,7 +1073,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_disease_energy_loss(self):
         from src.universe.engine import Universe, Entity
-        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.disease_chance = 0.0
         u.event_chance = 0.0
 
@@ -1289,6 +1289,31 @@ class TestUniverse(unittest.TestCase):
             eng.random.random = original_random
             eng.random.randint = original_randint
 
+
+    def test_preferred_terrain(self):
+        from src.universe.engine import Entity, Universe, Terrain
+        u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
+        u.event_chance = 0.0 # prevent random energy modifiers
+
+        # Add mud at (2, 2)
+        u.add_terrain(Terrain(x=2, y=2, terrain_type='mud'))
+
+        # Entity thriving in mud
+        e_mud = Entity("MudMonster", x=2, y=2, energy=20, preferred_terrain='mud', preferred_temperature=20, temperature_tolerance=10)
+        u.add_entity(e_mud)
+
+        # Entity not on preferred terrain
+        e_lost = Entity("MudMonster2", x=3, y=3, energy=20, preferred_terrain='mud', preferred_temperature=20, temperature_tolerance=10)
+        u.add_entity(e_lost)
+
+        u.tick()
+
+        # Base energy loss is 1. Thriving in mud reduces it by 1 -> loss is 0.
+        self.assertEqual(e_mud.energy, 20)
+        # Base energy loss is 1. Not on preferred terrain adds 1 -> loss is 2.
+        self.assertEqual(e_lost.energy, 18)
+
 if __name__ == '__main__':
+
 
     unittest.main()
