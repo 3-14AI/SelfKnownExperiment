@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement a combat or defense system for entities to protect against predators.
 - Implement a symbiotic relationship system where certain entity species benefit from being near each other.
 - Implement a disease or plague system that spreads between entities when they are in close proximity.
 - Implement natural disasters (volcanoes, earthquakes) that affect terrain globally.
@@ -64,4 +65,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implement group behavior or flocking for entities.
 
 ## Next Steps
-- Implement a combat or defense system for entities to protect against predators.
+- Implement a communication system where entities can alert others of predators.
