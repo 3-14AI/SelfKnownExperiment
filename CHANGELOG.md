@@ -2,6 +2,7 @@
 
 ## [2026-07-15]
 ### Added
+- Added attack and defense attributes to Entity class, mutation logic for these traits, and probabilistic combat resolution when carnivores hunt prey.
 - Implemented a symbiotic relationship system for entities. Entities can now have a `species` and a `symbiotic_with` list. When near their symbiotic partners, they receive a benefit (reduced energy loss). Added `test_symbiosis_benefit` to verify the functionality.
 - Added global natural disasters: earthquakes (modifying wall terrain) and volcanoes (spawning ash terrain).
 ## 2026-07-13

@@ -444,8 +444,8 @@ class TestUniverse(unittest.TestCase):
     def test_carnivore_eating(self):
         universe = Universe(food_spawn_rate=0.0)
         universe.event_chance = 0.0
-        carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10)
-        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10)
+        carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=100)
+        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=0)
         universe.add_entity(carnivore)
         universe.add_entity(herbivore)
 
@@ -461,6 +461,54 @@ class TestUniverse(unittest.TestCase):
 
         # Carnivore lost 2 energy from 2 ticks, gained 10 from prey -> 10 - 2 + 10 = 18
         self.assertEqual(carnivore.energy, 17)
+
+
+    def test_combat_defense_escape(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        # High defense, 0 attack -> 100% escape chance
+        carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=0)
+        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=100)
+        universe.add_entity(carnivore)
+        universe.add_entity(herbivore)
+
+        # Force escape by forcing random to 0.0
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0
+            universe.tick()
+            universe.tick()
+        finally:
+            random.random = original_random
+
+        # Check prey escaped
+        self.assertIn(herbivore, universe.entities)
+        # Both lost energy from struggles and ticks
+        self.assertLess(carnivore.energy, 10)
+        self.assertLess(herbivore.energy, 10)
+
+
+    def test_combat_defense_eaten(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        # Low defense, high attack -> 0% escape chance
+        carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=100)
+        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=0)
+        universe.add_entity(carnivore)
+        universe.add_entity(herbivore)
+
+        # Force eaten by forcing random to 0.99
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.99
+            universe.tick()
+            universe.tick()
+        finally:
+            random.random = original_random
+
+        self.assertNotIn(herbivore, universe.entities)
 
     def test_carnivore_genetics(self):
         universe = Universe(reproduction_threshold=15, reproduction_cost=10, food_spawn_rate=0.0)
