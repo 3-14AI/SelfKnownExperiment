@@ -1,5 +1,11 @@
 # CHANGELOG
 
+
+## [2026-07-15]
+### Added
+- Expanded entity genetics: Entities now have a chance to mutate their `diet` (e.g., from 'herbivore' to 'carnivore' or vice versa) during reproduction.
+- Added `test_diet_mutation` in `tests/test_engine.py` to isolate and verify the diet mutation logic.
+
 ## [2026-07-15]
 
 ### Added

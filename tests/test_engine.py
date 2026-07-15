@@ -1,3 +1,4 @@
+from unittest import mock
 import unittest
 from src.universe.engine import Universe, Entity, Food, Terrain
 
@@ -1312,6 +1313,35 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(e_mud.energy, 20)
         # Base energy loss is 1. Not on preferred terrain adds 1 -> loss is 2.
         self.assertEqual(e_lost.energy, 18)
+
+
+    @mock.patch('src.universe.engine.random.random')
+    def test_diet_mutation(self, mock_random):
+        # Force random.random to return 0.0 to guarantee mutations
+        mock_random.return_value = 0.0
+
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0  # Mock random events
+        universe.reproduction_threshold = 15
+        universe.reproduction_cost = 5
+
+        # Provide a parent entity
+        entity = Entity("Parent", x=5, y=5, energy=20, diet='herbivore')
+        # Setting age appropriately so it doesn't just die
+        entity.age = 0
+        entity.max_age = 50
+        universe.add_entity(entity)
+
+        # In case the parent is out of its preferred temperature and losing energy:
+        universe.base_temperature = 20
+        entity.preferred_temperature = 20
+        entity.temperature_tolerance = 40
+
+        universe.tick()
+
+        self.assertEqual(len(universe.entities), 2)
+        child = [e for e in universe.entities if e.name == "Parent_child"][0]
+        self.assertEqual(child.diet, 'carnivore')
 
 if __name__ == '__main__':
 
