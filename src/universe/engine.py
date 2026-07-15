@@ -7,7 +7,7 @@ class Food:
         self.energy = energy
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1):
         if species is None:
             species = name
         if symbiotic_with is None:
@@ -17,6 +17,7 @@ class Entity:
         self.attack = attack
         self.defense = defense
         self.preferred_terrain = preferred_terrain
+        self.size = size
         self.name = name
         self.x = x
         self.y = y
@@ -424,9 +425,9 @@ class Universe:
 
         for entity in self.entities:
             # Consume energy per tick
-            energy_loss = 1
+            energy_loss = entity.size
             if self.current_event == 'storm':
-                energy_loss = 2
+                energy_loss = 2 * entity.size
 
             if entity.is_infected:
                 energy_loss += 1
@@ -487,6 +488,7 @@ class Universe:
                     child_temperature_tolerance = entity.temperature_tolerance
                     child_attack = entity.attack
                     child_defense = entity.defense
+                    child_size = entity.size
 
                     # Mutation chance
                     mutation_chance = 0.1
@@ -520,11 +522,15 @@ class Universe:
                     if random.random() < mutation_chance:
                         child_diet = 'carnivore' if entity.diet == 'herbivore' else 'herbivore'
 
+                    if random.random() < mutation_chance:
+                        child_size += random.randint(-1, 1)
+                        child_size = max(1, child_size)
+
                     child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y,
                                    max_age=child_max_age, perception_radius=child_perception_radius, diet=child_diet,
                                    preferred_temperature=child_preferred_temperature, temperature_tolerance=child_temperature_tolerance,
                                    species=entity.species, symbiotic_with=entity.symbiotic_with.copy(),
-                                   attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain)
+                                   attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size)
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)
@@ -536,6 +542,8 @@ class Universe:
 
                 can_move = True
                 if self.is_night and random.random() < 0.5:
+                    can_move = False
+                if self.time % entity.size != 0:
                     can_move = False
                 if entity.diet == 'herbivore':
                     if can_move:

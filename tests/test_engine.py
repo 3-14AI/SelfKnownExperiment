@@ -1326,7 +1326,7 @@ class TestUniverse(unittest.TestCase):
         universe.reproduction_cost = 5
 
         # Provide a parent entity
-        entity = Entity("Parent", x=5, y=5, energy=20, diet='herbivore')
+        entity = Entity("Parent", x=5, y=5, energy=50, diet='herbivore', size=1)
         # Setting age appropriately so it doesn't just die
         entity.age = 0
         entity.max_age = 50
@@ -1342,6 +1342,52 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(len(universe.entities), 2)
         child = [e for e in universe.entities if e.name == "Parent_child"][0]
         self.assertEqual(child.diet, 'carnivore')
+
+
+    def test_entity_size_affects_energy_and_movement(self):
+        from src.universe.engine import Universe, Entity
+
+        # Test Energy Consumption
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        universe.reproduction_threshold = 100
+
+        small_entity = Entity("Small", x=2, y=2, energy=20, size=1)
+        large_entity = Entity("Large", x=8, y=8, energy=20, size=3)
+
+        universe.add_entity(small_entity)
+        universe.add_entity(large_entity)
+
+        universe.tick()
+
+        # small_entity should lose 1 energy (base energy loss = size)
+        # large_entity should lose 3 energy
+        self.assertEqual(small_entity.energy, 19)
+        self.assertEqual(large_entity.energy, 17)
+
+        # Test Movement Speed
+        # A size 3 entity should only move every 3 ticks
+        large_mover = Entity("Mover", x=5, y=5, energy=50, size=3, diet='herbivore')
+        # Setup so it wants to move
+        from src.universe.engine import Food
+        universe.add_food(Food(x=6, y=5))
+        universe.add_entity(large_mover)
+
+        # Reset universe time so we can predictably test modulo
+        universe.time = 0
+
+        # At tick 1, 1 % 3 != 0, so it shouldn't move
+        universe.tick()
+        self.assertEqual(large_mover.x, 5)
+
+        # At tick 2, 2 % 3 != 0, shouldn't move
+        universe.tick()
+        self.assertEqual(large_mover.x, 5)
+
+        # At tick 3, 3 % 3 == 0, should move towards food
+        universe.tick()
+        self.assertEqual(large_mover.x, 6)
+
 
 if __name__ == '__main__':
 
