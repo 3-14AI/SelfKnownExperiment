@@ -307,6 +307,9 @@ class Universe:
         elif current_season == 'winter':
             self.base_temperature = -5
 
+        if self.current_event == 'blizzard':
+            self.base_temperature -= 20
+
         # Localized temperature-based terrain transitions
         terrains_to_remove = []
         for t in self.terrains:
@@ -328,7 +331,13 @@ class Universe:
             if self.event_remaining_time <= 0:
                 self.current_event = None
         elif random.random() < self.event_chance:
-            self.current_event = random.choice(['storm', 'drought', 'earthquake', 'volcano'])
+            if current_season == 'spring' or current_season == 'autumn':
+                event_choices = ['storm', 'earthquake', 'volcano']
+            elif current_season == 'summer':
+                event_choices = ['storm', 'drought', 'earthquake', 'volcano']
+            else: # winter
+                event_choices = ['blizzard', 'earthquake', 'volcano']
+            self.current_event = random.choice(event_choices)
             self.event_remaining_time = random.randint(5, 15)
 
             if self.current_event == 'earthquake':
@@ -356,7 +365,15 @@ class Universe:
 
         # Handle localized events
         if random.random() < self.localized_event_chance:
-            event_type = random.choice(['rain', 'fire'])
+            if current_season == 'spring':
+                event_type = random.choice(['rain', 'rain', 'fire'])
+            elif current_season == 'summer':
+                event_type = random.choice(['rain', 'fire', 'fire'])
+            elif current_season == 'autumn':
+                event_type = random.choice(['rain', 'fire'])
+            else: # winter
+                event_type = 'snow'
+
             event_x = random.randint(0, self.width - 1)
             event_y = random.randint(0, self.height - 1)
             radius = random.randint(3, 8)
@@ -414,6 +431,22 @@ class Universe:
                             for t in terrains_here:
                                 if t.terrain_type not in ['water', 'ice', 'ash']:
                                     t.terrain_type = 'ash'
+            elif event.event_type == 'snow':
+                # Convert water to ice and other terrain to snow randomly
+                for _ in range(3):
+                    rx = event.x + random.randint(-event.radius, event.radius)
+                    ry = event.y + random.randint(-event.radius, event.radius)
+                    if 0 <= rx < self.width and 0 <= ry < self.height:
+                        if (rx - event.x)**2 + (ry - event.y)**2 <= event.radius**2:
+                            terrains_here = self.get_terrains_at(rx, ry)
+                            if terrains_here:
+                                for t in terrains_here:
+                                    if t.terrain_type == 'water':
+                                        t.terrain_type = 'ice'
+                                    elif t.terrain_type not in ['wall', 'ice'] and random.random() < 0.5:
+                                        t.terrain_type = 'snow'
+                            elif random.random() < 0.3:
+                                self.add_terrain(Terrain(x=rx, y=ry, terrain_type='snow'))
 
         # High temperatures/drought create sand
         if self.current_event == 'drought' or (self.current_season == 'summer' and random.random() < 0.5):
@@ -442,7 +475,17 @@ class Universe:
         if random.random() < current_food_spawn_rate:
             x = random.randint(0, self.width - 1)
             y = random.randint(0, self.height - 1)
-            ptype = random.choice(['generic', 'berry', 'leaf', 'flower'])
+
+            if current_season == 'spring':
+                choices = ['generic', 'berry', 'leaf', 'flower', 'flower', 'flower']
+            elif current_season == 'summer':
+                choices = ['generic', 'berry', 'berry', 'berry', 'leaf', 'flower']
+            elif current_season == 'autumn':
+                choices = ['generic', 'berry', 'leaf', 'leaf', 'leaf', 'flower']
+            else: # winter
+                choices = ['generic', 'generic', 'generic', 'generic', 'berry', 'leaf']
+
+            ptype = random.choice(choices)
             self.add_food(Food(x=x, y=y, plant_type=ptype))
 
         new_entities = []
@@ -452,6 +495,8 @@ class Universe:
             energy_loss = entity.size
             if self.current_event == 'storm':
                 energy_loss = 2 * entity.size
+            elif self.current_event == 'blizzard':
+                energy_loss = 3 * entity.size
 
             if entity.is_infected:
                 energy_loss += 1
