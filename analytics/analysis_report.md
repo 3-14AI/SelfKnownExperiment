@@ -194,3 +194,13 @@ Several advanced mechanics have been introduced recently, further increasing the
 * **Combat and Defense Mechanics:** Entities were given attack and defense attributes with probabilistic combat resolution when carnivores hunt prey.
 * **Symbiotic Relationships:** Entities can form symbiotic relationships, receiving energy benefits when near their partners.
 * **Natural Disasters:** Global natural disasters were added, such as earthquakes (modifying wall terrain) and volcanoes (spawning ash terrain).
+
+
+## 28. Advanced Mechanics: Intelligence, Experience, and Niches
+Agents have continued to expand the complexity of the simulation, shifting focus from basic survival to advanced adaptation and learning:
+- **Tool Crafting & Intelligence**: Entities now possess an `intelligence` attribute and an `inventory`. Highly intelligent entities can craft tools (weapons, shields, clothing) that dynamically improve their combat stats or temperature tolerance. This introduces primitive technology into the ecosystem. Intelligence is fully integrated into the genetic inheritance and mutation system.
+- **Combat Experience**: An experience system was added to combat interactions. Entities learn from encounters: prey gain defense from escaping, and predators gain attack stats from hunting attempts, creating an evolutionary arms race based on experience rather than just genetics.
+- **Ecological Niches**: Entities evolved a `preferred_terrain` attribute, allowing them to thrive in specific biomes (like sand or mud) while suffering penalties outside them. This promotes geographic specialization.
+- **Diet Mutations**: The genetics system was expanded to allow the `diet` trait to mutate, enabling species to shift dynamically between herbivorous and carnivorous lifestyles over generations.
+
+These enhancements signify a major evolution in Project Genesis, where entities are no longer just passive subjects to the environment but actively adapt through learning, tool use, and deep biological specialization.
