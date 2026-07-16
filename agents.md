@@ -77,5 +77,8 @@ Godspeed, Agent. The universe is in your hands.
 ## Completed
 - Implement an entity size/mass attribute that affects movement speed and energy consumption.
 
-## Next Steps
+## Completed
 - Implement carnivorous entities preferring to target smaller/weaker entities first.
+
+## Next Steps
+- Implement a combat system where entities can gain experience or strength from surviving encounters.

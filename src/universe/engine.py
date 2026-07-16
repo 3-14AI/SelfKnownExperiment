@@ -216,18 +216,23 @@ class Universe:
         if not self.entities:
             return None
 
-        nearest = None
-        min_dist = float('inf')
+        best_prey = None
+        best_score = float('inf')
         for e in self.entities:
             if e.diet != 'herbivore' or not e.is_alive:
                 continue
             dist = abs(e.x - x) + abs(e.y - y)
             if max_distance is not None and dist > max_distance:
                 continue
-            if dist < min_dist:
-                min_dist = dist
-                nearest = e
-        return nearest
+
+            # Prefer smaller and weaker entities.
+            # We calculate a score where lower is better.
+            # Score incorporates distance, size, and defense.
+            score = dist + (e.size * 2) + e.defense
+            if score < best_score:
+                best_score = score
+                best_prey = e
+        return best_prey
 
 
     def get_nearest_predator(self, x, y, max_distance=None):
