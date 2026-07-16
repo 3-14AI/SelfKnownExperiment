@@ -94,5 +94,8 @@ Godspeed, Agent. The universe is in your hands.
 ## Completed
 - Implement a more complex weather system with distinct seasons affecting terrain and food growth differently.
 
-## Next Steps
+## Completed
 - Implement an evolution system where entity species slowly change over time based on successful genetic mutations and environmental fitness.
+
+## Next Steps
+- Develop more complex environmental interaction, such as shelter building

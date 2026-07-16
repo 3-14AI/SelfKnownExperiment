@@ -1700,6 +1700,70 @@ class TestUniverse(unittest.TestCase):
         all_terrains = [t.terrain_type for t in universe.terrains]
         self.assertTrue('ice' in all_terrains or 'snow' in all_terrains)
 
+
+
+    def test_evolution_speciation(self):
+        universe = Universe(reproduction_threshold=20, reproduction_cost=10)
+        universe.event_chance = 0.0
+
+        import random
+        original_random = random.random
+        original_randint = random.randint
+
+        try:
+            # Force mutation to happen
+            random.random = lambda: 0.05
+            random.randint = lambda a, b: b
+
+            parent = Entity("Parent", species="OriginalSpecies", x=5, y=5, energy=25, generation=0, mutations=4)
+            universe.add_entity(parent)
+
+            universe.tick()
+
+            self.assertEqual(len(universe.entities), 2)
+            child = [e for e in universe.entities if "child" in e.name][0]
+
+            self.assertEqual(child.generation, 1)
+            # Mutations should wrap around to 0 and species should evolve
+            self.assertEqual(child.mutations, 0)
+            self.assertEqual(child.species, "OriginalSpecies_evo")
+
+        finally:
+            random.random = original_random
+            random.randint = original_randint
+
+    def test_predator_adaptation(self):
+        universe = Universe(reproduction_threshold=20, reproduction_cost=10)
+        universe.event_chance = 0.0
+
+        # Keep running until it adapts or fail after 100 ticks
+        parent = Entity("Predator", diet='carnivore', species="PredSpecies", x=5, y=5, energy=2500, target_species=["OldPrey"])
+        universe.add_entity(parent)
+
+        prey = Entity("Prey", species="NewPreySpecies", x=10, y=10, energy=5000)
+        universe.add_entity(prey)
+
+        adapted = False
+        import random
+        original_choice = random.choice
+        random.choice = lambda x: "NewPreySpecies"
+
+        try:
+            for _ in range(100):
+                parent.energy = 250 # Ensure it keeps reproducing
+                universe.tick()
+                children = [e for e in universe.entities if "child" in e.name and "Predator" in e.name]
+                for child in children:
+                    if child.target_species and "NewPreySpecies" in child.target_species:
+                        adapted = True
+                        break
+                if adapted:
+                    break
+        finally:
+            random.choice = original_choice
+
+        self.assertTrue(adapted, "Predator never adapted to NewPreySpecies")
+
 if __name__ == '__main__':
 
 
