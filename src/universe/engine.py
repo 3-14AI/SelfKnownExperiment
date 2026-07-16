@@ -8,9 +8,11 @@ class Food:
         self.plant_type = plant_type
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0):
         self.target_species = target_species
         self.target_plants = target_plants
+        self.generation = generation
+        self.mutations = mutations
         if species is None:
             species = name
         if symbiotic_with is None:
@@ -573,53 +575,83 @@ class Universe:
                     child_intelligence = entity.intelligence
                     child_target_species = entity.target_species.copy() if entity.target_species else None
                     child_target_plants = entity.target_plants.copy() if entity.target_plants else None
+                    child_generation = entity.generation + 1
+                    child_mutations_count = entity.mutations
+                    child_species = entity.species
 
                     # Mutation chance
                     mutation_chance = 0.1
+                    mutation_occurred = False
                     if random.random() < mutation_chance:
                         # Mutate max_age by up to +/- 5
                         child_max_age += random.randint(-5, 5)
                         child_max_age = max(10, child_max_age) # Ensure it doesn't go too low
+                        mutation_occurred = True
 
                     if random.random() < mutation_chance:
                         # Mutate perception_radius by up to +/- 2
                         child_perception_radius += random.randint(-2, 2)
                         child_perception_radius = max(1, child_perception_radius) # Minimum perception of 1
+                        mutation_occurred = True
 
                     if random.random() < mutation_chance:
                         child_preferred_temperature += random.randint(-5, 5)
                         child_preferred_temperature = max(-20, min(60, child_preferred_temperature))
+                        mutation_occurred = True
 
                     if random.random() < mutation_chance:
                         child_temperature_tolerance += random.randint(-2, 2)
                         child_temperature_tolerance = max(1, child_temperature_tolerance)
+                        mutation_occurred = True
 
                     if random.random() < mutation_chance:
                         child_attack += random.randint(-1, 1)
                         child_attack = max(0, child_attack)
+                        mutation_occurred = True
 
                     if random.random() < mutation_chance:
                         child_defense += random.randint(-1, 1)
                         child_defense = max(0, child_defense)
+                        mutation_occurred = True
 
                     child_diet = entity.diet
                     if random.random() < mutation_chance:
                         child_diet = 'carnivore' if entity.diet == 'herbivore' else 'herbivore'
+                        mutation_occurred = True
 
                     if random.random() < mutation_chance:
                         child_size += random.randint(-1, 1)
                         child_size = max(1, child_size)
+                        mutation_occurred = True
 
                     if random.random() < mutation_chance:
                         child_intelligence += random.randint(-1, 1)
                         child_intelligence = max(1, child_intelligence)
+                        mutation_occurred = True
+
+                    if mutation_occurred:
+                        child_mutations_count += 1
+                        if child_mutations_count >= 5:
+                            child_species = child_species + "_evo"
+                            child_mutations_count = 0
+
+                        # Predator adaptation
+                        if child_diet == 'carnivore' and child_target_species is not None:
+                            # 20% chance to adapt diet if mutates
+                            if random.random() < 0.20:
+                                all_species = list(set([e.species for e in self.entities]))
+                                if all_species:
+                                    new_target = random.choice(all_species)
+                                    if new_target not in child_target_species:
+                                        child_target_species.append(new_target)
 
                     child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y,
                                    max_age=child_max_age, perception_radius=child_perception_radius, diet=child_diet,
                                    preferred_temperature=child_preferred_temperature, temperature_tolerance=child_temperature_tolerance,
-                                   species=entity.species, symbiotic_with=entity.symbiotic_with.copy(),
+                                   species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
-                                   intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants)
+                                   intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
+                                   generation=child_generation, mutations=child_mutations_count)
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)
