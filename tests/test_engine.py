@@ -1510,6 +1510,74 @@ class TestUniverse(unittest.TestCase):
         universe = Universe()
         universe.time = 0
         universe._last_season = 'winter'
+    def test_specialized_herbivore(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000
+        universe.event_chance = 0.0
+
+        # Herbivore only eats 'berry'
+        h = Entity("Herb", x=0, y=0, energy=10, diet='herbivore', target_plants=['berry'])
+        universe.add_entity(h)
+
+        f1 = Food(x=0, y=1, energy=10, plant_type='leaf')
+        f2 = Food(x=0, y=2, energy=10, plant_type='berry')
+        universe.add_food(f1)
+        universe.add_food(f2)
+
+        # Should ignore f1 and go to f2
+        universe.tick()
+
+        self.assertEqual(h.x, 0)
+        self.assertEqual(h.y, 1) # Moved towards f2
+
+        universe.tick()
+        self.assertEqual(h.x, 0)
+        self.assertEqual(h.y, 2)
+        # Should have eaten f2 and gained 10 energy (minus 2 for ticks) = 18
+        self.assertEqual(h.energy, 18)
+
+        # F1 is still there
+        self.assertEqual(len(universe.foods), 1)
+        self.assertEqual(universe.foods[0].plant_type, 'leaf')
+
+    @unittest.mock.patch('src.universe.engine.random.random', return_value=0.99)
+    def test_specialized_carnivore(self, mock_random):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000
+        universe.event_chance = 0.0
+
+        # Carnivore only eats 'Mouse'
+        c = Entity("Carn", x=0, y=0, energy=10, diet='carnivore', target_species=['Mouse'], attack=100) # Give high attack so it eats
+        universe.add_entity(c)
+
+        prey1 = Entity("Rabbit", x=0, y=1, energy=10, diet='herbivore', perception_radius=0)
+        prey2 = Entity("Mouse", x=0, y=2, energy=10, diet='herbivore', perception_radius=0)
+        universe.add_entity(prey1)
+        universe.add_entity(prey2)
+
+        universe.tick()
+
+        # Should ignore Rabbit and move towards Mouse
+        self.assertEqual(c.x, 0)
+        self.assertEqual(c.y, 1) # Moved towards Mouse
+
+        # Since it moved to (0, 1), it is on same square as Rabbit.
+        # But target species is Mouse, so it shouldn't eat Rabbit.
+        # Let's verify Rabbit is still alive.
+        preys_alive = [e for e in universe.entities if e.diet == 'herbivore' and e.is_alive]
+        self.assertEqual(len(preys_alive), 2)
+
+        universe.tick()
+
+        # Moved to (0, 2), eats Mouse
+        self.assertEqual(c.x, 0)
+        self.assertEqual(c.y, 2)
+
+        # Mouse eaten, Rabbit alive
+        preys_alive = [e for e in universe.entities if e.diet == 'herbivore' and e.is_alive]
+        self.assertEqual(len(preys_alive), 1)
+        self.assertEqual(preys_alive[0].name, "Rabbit")
+
 
         # Base temperature for spring (time=0) is 20.
         # So we set preferred temp to 50. Normal tolerance is 10 (bounds 40-60). 20 is outside bounds. -> normal loses energy.
@@ -1556,6 +1624,7 @@ class TestUniverse(unittest.TestCase):
             # Roll 0.5 > 0.25, so prey is eaten
             universe.tick()
             self.assertTrue(prey.energy <= 0)
+
 
 if __name__ == '__main__':
 
