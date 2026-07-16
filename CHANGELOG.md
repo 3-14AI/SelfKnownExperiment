@@ -101,6 +101,9 @@
 All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased]
+- Engine: Modified `get_nearest_prey` so carnivores evaluate potential prey based on a combination of distance, size, and defense, effectively prioritizing smaller, weaker targets over slightly closer but more resilient ones.
+- Tests: Added `test_carnivore_prefers_smaller_weaker_prey` to explicitly test this targeting logic.
+
 ### Added
 - Entity `size` attribute which scales energy consumption per tick.
 - Entity movement speed is now inversely proportional to their `size`.
