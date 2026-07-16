@@ -671,9 +671,21 @@ class Universe:
                             # Prey escapes
                             entity.energy -= 1
                             prey_to_eat.energy -= 1
+
+                            # Prey gains experience from surviving
+                            prey_to_eat.defense += 0.5
+                            prey_to_eat.attack += 0.1
+
+                            # Predator learns from failure
+                            entity.attack += 0.2
                         else:
                             # Prey is eaten
                             entity.energy += prey_to_eat.energy
+
+                            # Gain experience/strength from eating prey
+                            entity.attack += 0.5
+                            entity.defense += 0.5
+
                             prey_to_eat.energy = 0 # Kill prey
 
             if entity.is_alive and entity.diet == 'herbivore':

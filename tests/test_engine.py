@@ -144,7 +144,10 @@ class TestUniverse(unittest.TestCase):
     def test_entity_dies(self):
         universe = Universe()
         universe.event_chance = 0.0
-        entity = Entity("Adam", energy=1)
+        # Give enough energy to survive one tick but not the next, considering temperature
+        # or set preferred temp to avoid penalty
+        entity = Entity("Adam", energy=1, preferred_temperature=20, temperature_tolerance=10)
+        universe.base_temperature = 20
         universe.add_entity(entity)
         universe.tick()
         self.assertEqual(entity.energy, 0)
@@ -1317,11 +1320,7 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(e_lost.energy, 18)
 
 
-    @mock.patch('src.universe.engine.random.random')
-    def test_diet_mutation(self, mock_random):
-        # Force random.random to return 0.0 to guarantee mutations
-        mock_random.return_value = 0.0
-
+    def test_diet_mutation(self):
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0  # Mock random events
         universe.reproduction_threshold = 15
@@ -1339,7 +1338,13 @@ class TestUniverse(unittest.TestCase):
         entity.preferred_temperature = 20
         entity.temperature_tolerance = 40
 
-        universe.tick()
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0
+            universe.tick()
+        finally:
+            random.random = original_random
 
         # Just look for the child if the parent somehow dies or something
         child = [e for e in universe.entities if e.name == "Parent_child"]
@@ -1352,10 +1357,16 @@ class TestUniverse(unittest.TestCase):
         # Test Energy Consumption
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
+        universe.time = 0
         universe.reproduction_threshold = 100
 
         small_entity = Entity("Small", x=2, y=2, energy=20, size=1)
         large_entity = Entity("Large", x=8, y=8, energy=20, size=3)
+        # set preferred temperature to base so they don't lose extra energy
+        small_entity.preferred_temperature = 20
+        large_entity.preferred_temperature = 20
+        universe.base_temperature = 20
+
 
         universe.add_entity(small_entity)
         universe.add_entity(large_entity)
@@ -1411,6 +1422,58 @@ class TestUniverse(unittest.TestCase):
 
         nearest = universe.get_nearest_prey(carnivore.x, carnivore.y, max_distance=10)
         self.assertEqual(nearest.name, "Rabbit", "Carnivore should prefer smaller and weaker prey even if further away")
+
+    def test_combat_experience(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+
+        carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=5.0, defense=2.0)
+        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=5.0, attack=1.0, perception_radius=0)
+
+        universe.add_entity(carnivore)
+        universe.add_entity(herbivore)
+
+        # Initial stats
+        c_init_attack = carnivore.attack
+        c_init_defense = carnivore.defense
+        h_init_defense = herbivore.defense
+        h_init_attack = herbivore.attack
+
+        # Force escape by forcing random to 0.0
+        import random
+        original_random = random.random
+        try:
+            # First interaction: escape
+            random.random = lambda: 0.0
+            universe.tick()
+            universe.tick()
+
+            # Check experience from escape
+            self.assertEqual(carnivore.attack, c_init_attack + 0.2)
+            self.assertEqual(herbivore.defense, h_init_defense + 0.5)
+            self.assertEqual(herbivore.attack, h_init_attack + 0.1)
+
+            # Move carnivore back to try again
+            carnivore.x = 2
+            carnivore.y = 0
+            herbivore.x = 2
+            herbivore.y = 0
+
+            # Update stats variables for next check
+            c_post_escape_attack = carnivore.attack
+            c_post_escape_defense = carnivore.defense
+
+            # Second interaction: eaten
+            random.random = lambda: 0.99
+            universe.tick()
+
+            # Check experience from eating
+            self.assertEqual(carnivore.attack, c_post_escape_attack + 0.5)
+            self.assertEqual(carnivore.defense, c_post_escape_defense + 0.5)
+
+        finally:
+            random.random = original_random
+
 
 if __name__ == '__main__':
 

@@ -75,6 +75,14 @@
 - Added tests in `test_engine.py` to ensure memory is updated correctly and utilized in pathfinding.
 
 
+## [Unreleased]
+### Added
+- Implemented an experience system for combat interactions:
+  - Entities gain attack/defense stats when surviving encounters with predators (escaping).
+  - Predators gain attack stats when failing to capture prey (learning from failure).
+  - Predators gain larger attack/defense stat boosts when successfully hunting and eating prey.
+- Updated `agents.md` to reflect completed tasks and new steps.
+
 ## [Unreleased] - 2026-07-10
 ### Added
 - Implemented environmental events system in the Universe engine ('storm', 'drought').
