@@ -29,6 +29,9 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement a combat system where entities can gain experience or strength from surviving encounters.
+
+## Completed
 - Analyzed recent project changes (Disease, Scent Trails, Communication, Combat, Symbiosis, Disasters) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Implement a communication system where entities can alert others of predators.
 - Implement a combat or defense system for entities to protect against predators.
@@ -81,4 +84,5 @@ Godspeed, Agent. The universe is in your hands.
 - Implement carnivorous entities preferring to target smaller/weaker entities first.
 
 ## Next Steps
-- Implement a combat system where entities can gain experience or strength from surviving encounters.
+- Implement a more complex weather system with distinct seasons affecting terrain and food growth differently.
+- Introduce tool usage or simple crafting mechanics for intelligent entities.
