@@ -1,13 +1,16 @@
 import random
 
 class Food:
-    def __init__(self, x=0, y=0, energy=5):
+    def __init__(self, x=0, y=0, energy=5, plant_type='generic'):
         self.x = x
         self.y = y
         self.energy = energy
+        self.plant_type = plant_type
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None):
+        self.target_species = target_species
+        self.target_plants = target_plants
         if species is None:
             species = name
         if symbiotic_with is None:
@@ -195,16 +198,21 @@ class Universe:
     def get_entities_at(self, x, y):
         return [e for e in self.entities if e.x == x and e.y == y]
 
-    def get_foods_at(self, x, y):
-        return [f for f in self.foods if f.x == x and f.y == y]
+    def get_foods_at(self, x, y, entity=None):
+        foods = [f for f in self.foods if f.x == x and f.y == y]
+        if entity and entity.target_plants is not None:
+            foods = [f for f in foods if f.plant_type in entity.target_plants]
+        return foods
 
-    def get_nearest_food(self, x, y, max_distance=None):
+    def get_nearest_food(self, x, y, max_distance=None, entity=None):
         if not self.foods:
             return None
 
         nearest = None
         min_dist = float('inf')
         for food in self.foods:
+            if entity and entity.target_plants is not None and food.plant_type not in entity.target_plants:
+                continue
             dist = abs(food.x - x) + abs(food.y - y)
             if max_distance is not None and dist > max_distance:
                 continue
@@ -213,10 +221,13 @@ class Universe:
                 nearest = food
         return nearest
 
-    def get_preys_at(self, x, y):
-        return [e for e in self.entities if e.x == x and e.y == y and e.diet == 'herbivore' and e.is_alive]
+    def get_preys_at(self, x, y, entity=None):
+        preys = [e for e in self.entities if e.x == x and e.y == y and e.diet == 'herbivore' and e.is_alive]
+        if entity and entity.target_species is not None:
+            preys = [p for p in preys if p.species in entity.target_species]
+        return preys
 
-    def get_nearest_prey(self, x, y, max_distance=None):
+    def get_nearest_prey(self, x, y, max_distance=None, entity=None):
         if not self.entities:
             return None
 
@@ -224,6 +235,8 @@ class Universe:
         best_score = float('inf')
         for e in self.entities:
             if e.diet != 'herbivore' or not e.is_alive:
+                continue
+            if entity and entity.target_species is not None and e.species not in entity.target_species:
                 continue
             dist = abs(e.x - x) + abs(e.y - y)
             if max_distance is not None and dist > max_distance:
@@ -362,7 +375,8 @@ class Universe:
                     fy = event.y + random.randint(-event.radius, event.radius)
                     if 0 <= fx < self.width and 0 <= fy < self.height:
                         if (fx - event.x)**2 + (fy - event.y)**2 <= event.radius**2:
-                            self.add_food(Food(x=fx, y=fy))
+                            ptype = random.choice(['generic', 'berry', 'leaf', 'flower'])
+                            self.add_food(Food(x=fx, y=fy, plant_type=ptype))
 
                 # Rain dynamic terrain (mud creation, washing away ash/sand)
                 for _ in range(3): # Try a few spots per tick
@@ -428,7 +442,8 @@ class Universe:
         if random.random() < current_food_spawn_rate:
             x = random.randint(0, self.width - 1)
             y = random.randint(0, self.height - 1)
-            self.add_food(Food(x=x, y=y))
+            ptype = random.choice(['generic', 'berry', 'leaf', 'flower'])
+            self.add_food(Food(x=x, y=y, plant_type=ptype))
 
         new_entities = []
 
@@ -511,6 +526,8 @@ class Universe:
                     child_defense = entity.defense
                     child_size = entity.size
                     child_intelligence = entity.intelligence
+                    child_target_species = entity.target_species.copy() if entity.target_species else None
+                    child_target_plants = entity.target_plants.copy() if entity.target_plants else None
 
                     # Mutation chance
                     mutation_chance = 0.1
@@ -557,7 +574,7 @@ class Universe:
                                    preferred_temperature=child_preferred_temperature, temperature_tolerance=child_temperature_tolerance,
                                    species=entity.species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
-                                   intelligence=child_intelligence)
+                                   intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants)
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)
@@ -609,7 +626,7 @@ class Universe:
                                     pass
                             entity.alerted_predator_pos = None
                         else:
-                            nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=effective_perception)
+                            nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                             if nearest_food:
                                 path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=effective_perception, memory=entity.memory)
                                 if path and len(path) > 0:
@@ -634,14 +651,14 @@ class Universe:
                                                 pass
 
                     # Check for food at entity location
-                    foods_here = self.get_foods_at(entity.x, entity.y)
+                    foods_here = self.get_foods_at(entity.x, entity.y, entity=entity)
                     if foods_here:
                         food_to_eat = foods_here[0]
                         entity.energy += food_to_eat.energy
                         self.foods.remove(food_to_eat)
                 elif entity.diet == 'carnivore':
                     if can_move:
-                        nearest_prey = self.get_nearest_prey(entity.x, entity.y, max_distance=effective_perception)
+                        nearest_prey = self.get_nearest_prey(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                         if nearest_prey:
                             path = self.find_path(entity.x, entity.y, nearest_prey.x, nearest_prey.y, max_distance=effective_perception, memory=entity.memory)
                             if path and len(path) > 0:
@@ -683,7 +700,7 @@ class Universe:
 
 
                     # Check for prey at entity location
-                    preys_here = self.get_preys_at(entity.x, entity.y)
+                    preys_here = self.get_preys_at(entity.x, entity.y, entity=entity)
                     if preys_here:
                         prey_to_eat = preys_here[0]
                         effective_attack = entity.attack + (2 if 'weapon' in entity.inventory else 0)

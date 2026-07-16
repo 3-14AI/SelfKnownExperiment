@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 
 ## Completed
+- Implement complex ecosystem dependencies (e.g. specialized predators that only eat specific species, or herbivores that require specific plants).
 - Analyzed recent project changes (Experience, Intelligence, Tool Crafting, Diet Mutation, Preferred Terrain) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
 ## Completed
@@ -92,4 +93,3 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Next Steps
 - Implement a more complex weather system with distinct seasons affecting terrain and food growth differently.
-- Implement complex ecosystem dependencies (e.g. specialized predators that only eat specific species, or herbivores that require specific plants).
