@@ -1475,6 +1475,74 @@ class TestUniverse(unittest.TestCase):
             random.random = original_random
 
 
+
+    def test_tool_crafting(self):
+        universe = Universe()
+        # Mock random so the 10% craft chance always succeeds
+        with mock.patch('src.universe.engine.random.random', return_value=0.05):
+            # High intelligence and energy
+            smart_entity = Entity("Smart", intelligence=5, energy=20)
+            universe.add_entity(smart_entity)
+
+            universe.tick()
+
+            # Energy deducted
+            self.assertEqual(smart_entity.energy, 15 - smart_entity.size) # 20 - 5 (craft) - size (tick)
+            # Tool added
+            self.assertEqual(len(smart_entity.inventory), 1)
+            self.assertTrue(smart_entity.inventory[0] in ['weapon', 'shield', 'clothing'])
+
+    def test_tool_benefits(self):
+        universe = Universe()
+        universe.time = 0
+        universe._last_season = 'winter'
+
+        # Base temperature for spring (time=0) is 20.
+        # So we set preferred temp to 50. Normal tolerance is 10 (bounds 40-60). 20 is outside bounds. -> normal loses energy.
+        normal = Entity("Normal", preferred_temperature=50, temperature_tolerance=10, energy=50)
+
+        # Clothed tolerance is 10 + 10 (from clothing) = 20. (bounds 30-70). Wait, 20 is STILL outside bounds!
+        # Let's adjust preferred temp so clothing makes the difference.
+        # Base temp = 20.
+        # Preferred = 35. Normal tolerance = 10 (bounds 25-45). 20 is outside!
+        # Clothed tolerance = 20 (bounds 15-55). 20 is INSIDE!
+        clothed = Entity("Clothed", preferred_temperature=35, temperature_tolerance=10, energy=50, inventory=['clothing'])
+
+        universe.add_entity(normal)
+        universe.add_entity(clothed)
+
+        # Mock random to avoid spontaneous disease outbreaks causing random energy loss
+        with mock.patch('src.universe.engine.random.random', return_value=0.99):
+            universe.tick()
+
+        # normal loses size (1) + temp penalty (1) = 2
+        # clothed loses size (1) + NO temp penalty = 1
+        # Need to be exact in case size or default tick loss changes, so we just compare them
+        self.assertTrue(normal.energy < clothed.energy)
+
+        # Test combat logic with tools
+        predator = Entity("Wolf", diet='carnivore', attack=1, energy=50, inventory=['weapon'], perception_radius=0)
+        prey = Entity("Sheep", diet='herbivore', defense=1, energy=50, perception_radius=0)
+
+        # Give them identical starting energy for a clean comparison
+        predator.energy = 50
+        prey.energy = 50
+        predator.x, predator.y = 5, 5
+        prey.x, prey.y = 5, 5
+
+        universe.entities = []
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Without mock, let's just test that the effective stats logic doesn't crash
+        # For actual verification we'd need to mock the random combat roll.
+        # But we'll force the outcome by manipulating the escape chance indirectly.
+        # prey defense=1, predator attack=1+weapon(2)=3 -> total 4, escape chance 1/4 = 0.25
+        with mock.patch('src.universe.engine.random.random', return_value=0.5):
+            # Roll 0.5 > 0.25, so prey is eaten
+            universe.tick()
+            self.assertTrue(prey.energy <= 0)
+
 if __name__ == '__main__':
 
 

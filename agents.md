@@ -29,6 +29,9 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Introduce tool usage or simple crafting mechanics for intelligent entities.
+
+## Completed
 - Implement a combat system where entities can gain experience or strength from surviving encounters.
 
 ## Completed
@@ -85,4 +88,4 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Next Steps
 - Implement a more complex weather system with distinct seasons affecting terrain and food growth differently.
-- Introduce tool usage or simple crafting mechanics for intelligent entities.
+- Implement complex ecosystem dependencies (e.g. specialized predators that only eat specific species, or herbivores that require specific plants).
