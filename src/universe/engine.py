@@ -7,11 +7,15 @@ class Food:
         self.energy = energy
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None):
         if species is None:
             species = name
         if symbiotic_with is None:
             symbiotic_with = []
+        if inventory is None:
+            inventory = []
+        self.inventory = inventory
+        self.intelligence = intelligence
         self.species = species
         self.symbiotic_with = symbiotic_with
         self.attack = attack
@@ -451,9 +455,21 @@ class Universe:
                             if dist <= 2 and random.random() < 0.1:
                                 other.is_infected = True
 
+            # Crafting Mechanics
+            if entity.intelligence >= 5 and entity.energy > 15:
+                if random.random() < 0.1: # 10% chance per tick to craft something
+                    needed_tools = [t for t in ['weapon', 'shield', 'clothing'] if t not in entity.inventory]
+                    if needed_tools:
+                        crafted_tool = random.choice(needed_tools)
+                        entity.inventory.append(crafted_tool)
+                        entity.energy -= 5
+
             # Temperature check
             current_temp = self.get_temperature_at(entity.x, entity.y)
-            if not (entity.preferred_temperature - entity.temperature_tolerance <= current_temp <= entity.preferred_temperature + entity.temperature_tolerance):
+            effective_tolerance = entity.temperature_tolerance
+            if 'clothing' in entity.inventory:
+                effective_tolerance += 10
+            if not (entity.preferred_temperature - effective_tolerance <= current_temp <= entity.preferred_temperature + effective_tolerance):
                 energy_loss += 1
 
             # Symbiosis check
@@ -494,6 +510,7 @@ class Universe:
                     child_attack = entity.attack
                     child_defense = entity.defense
                     child_size = entity.size
+                    child_intelligence = entity.intelligence
 
                     # Mutation chance
                     mutation_chance = 0.1
@@ -531,11 +548,16 @@ class Universe:
                         child_size += random.randint(-1, 1)
                         child_size = max(1, child_size)
 
+                    if random.random() < mutation_chance:
+                        child_intelligence += random.randint(-1, 1)
+                        child_intelligence = max(1, child_intelligence)
+
                     child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y,
                                    max_age=child_max_age, perception_radius=child_perception_radius, diet=child_diet,
                                    preferred_temperature=child_preferred_temperature, temperature_tolerance=child_temperature_tolerance,
                                    species=entity.species, symbiotic_with=entity.symbiotic_with.copy(),
-                                   attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size)
+                                   attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
+                                   intelligence=child_intelligence)
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)
@@ -664,8 +686,10 @@ class Universe:
                     preys_here = self.get_preys_at(entity.x, entity.y)
                     if preys_here:
                         prey_to_eat = preys_here[0]
-                        total_stats = entity.attack + prey_to_eat.defense
-                        escape_chance = prey_to_eat.defense / total_stats if total_stats > 0 else 0.5
+                        effective_attack = entity.attack + (2 if 'weapon' in entity.inventory else 0)
+                        effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)
+                        total_stats = effective_attack + effective_defense
+                        escape_chance = effective_defense / total_stats if total_stats > 0 else 0.5
 
                         if random.random() < escape_chance:
                             # Prey escapes

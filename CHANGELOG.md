@@ -29,6 +29,11 @@
 - Updated visualizer to render carnivores as 'C'.
 
 ## Today
+- Implemented `intelligence` and `inventory` attributes for entities.
+- Added crafting mechanics: highly intelligent entities with sufficient energy have a chance to craft tools ('weapon', 'shield', 'clothing') each tick.
+- Tools provide distinct advantages: clothing increases temperature tolerance, weapons increase predator attack strength, and shields increase prey defense.
+- Genetic inheritance now supports passing down and mutating the `intelligence` attribute.
+
 - Implemented a communication system allowing herbivores to alert nearby flockmates of predators.
 - Entities that see a predator communicate its location to flockmates within double their perception radius.
 - Alerted entities will actively try to move away from the predator's known location.
