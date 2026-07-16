@@ -91,5 +91,8 @@ Godspeed, Agent. The universe is in your hands.
 ## Completed
 - Implement carnivorous entities preferring to target smaller/weaker entities first.
 
-## Next Steps
+## Completed
 - Implement a more complex weather system with distinct seasons affecting terrain and food growth differently.
+
+## Next Steps
+- Implement an evolution system where entity species slowly change over time based on successful genetic mutations and environmental fitness.

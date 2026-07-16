@@ -88,6 +88,17 @@
 - Added tests in `test_engine.py` to ensure memory is updated correctly and utilized in pathfinding.
 
 
+
+## [Unreleased]
+### Added
+- Implemented complex seasonal weather system.
+- Added seasonal variance to global event probabilities (e.g. blizzards only in winter, droughts only in summer).
+- Added global `blizzard` event which severely reduces temperature and increases entity energy decay.
+- Added localized `snow` event that spawns in winter and converts terrain to ice and snow.
+- Updated `CLIVisualizer` to render `snow` terrain as `s`.
+- Added seasonal variance to the `plant_type` of naturally spawning food (e.g. flowers in spring, berries in summer).
+- Updated `agents.md` tracking progress.
+
 ## [Unreleased]
 ### Added
 - Implemented an experience system for combat interactions:
