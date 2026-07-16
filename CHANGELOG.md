@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## [2026-07-16]
+### Added
+- Analyzed recent project changes (Experience, Intelligence, Tool Crafting, Diet Mutation, Preferred Terrain) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
+- Updated `agents.md` tracking progress.
+
+
+
 ## [2026-07-15]
 ### Added
 - Expanded entity genetics: Entities now have a chance to mutate their `diet` (e.g., from 'herbivore' to 'carnivore' or vice versa) during reproduction.

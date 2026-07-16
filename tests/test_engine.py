@@ -173,7 +173,8 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(at_10_11[0], f3)
 
     def test_entity_eats_food(self):
-        universe = Universe(food_spawn_rate=0.0) # Disable random food spawn for this test
+        universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction # Disable random food spawn for this test
         universe.event_chance = 0.0
         entity = Entity("Adam", energy=10, x=5, y=5)
         food = Food(energy=5, x=5, y=5)
@@ -220,6 +221,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_seeks_food(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         entity = Entity("Adam", x=0, y=0)
         food = Food(x=2, y=2)
         universe.add_entity(entity)
@@ -258,6 +260,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_aging(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         entity = Entity("OldMan", energy=100, max_age=3)
         universe.add_entity(entity)
 
@@ -317,6 +320,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_perception_radius_food(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         entity = Entity("Adam", x=0, y=0, perception_radius=2)
         universe.add_entity(entity)
         universe.add_food(Food(x=3, y=0, energy=5))
@@ -340,6 +344,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_perception_radius_obstacle(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         entity = Entity("Adam", x=0, y=0, perception_radius=3)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=0, y=1, terrain_type='wall'))
@@ -355,6 +360,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_memory_update(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         entity = Entity("Adam", x=0, y=0, perception_radius=2)
         universe.add_entity(entity)
         # Wall is within perception radius
@@ -369,6 +375,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_find_path_with_memory(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         entity = Entity("Adam", x=0, y=0, perception_radius=1)
         universe.add_entity(entity)
         universe.add_food(Food(x=0, y=2, energy=5))
@@ -447,6 +454,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_carnivore_eating(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         universe.event_chance = 0.0
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=100)
         herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=0, perception_radius=0)
@@ -469,6 +477,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_combat_defense_escape(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         universe.event_chance = 0.0
         # High defense, 0 attack -> 100% escape chance
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=0)
@@ -495,6 +504,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_combat_defense_eaten(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         universe.event_chance = 0.0
         # Low defense, high attack -> 0% escape chance
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=100)
@@ -627,6 +637,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_localized_rain_event(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         universe.event_chance = 0.0 # disable global events
         universe.localized_event_chance = 0.0
 
@@ -660,6 +671,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_localized_fire_event(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         universe.event_chance = 0.0 # disable global events
         universe.localized_event_chance = 0.0
 
@@ -893,6 +905,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_scent_trail_creation(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         universe.event_chance = 0.0
         entity = Entity("Deer", x=5, y=5, diet='herbivore')
         universe.add_entity(entity)
@@ -905,6 +918,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_scent_trail_decay(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         universe.event_chance = 0.0
         # Initialize an artificial scent trail
         universe.scent_trails[(0, 0)] = 20
@@ -922,6 +936,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_carnivore_scent_tracking(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         universe.event_chance = 0.0
 
         # Place a carnivore
@@ -1325,6 +1340,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0  # Mock random events
         universe.reproduction_threshold = 15
         universe.reproduction_cost = 5
+        universe.population_limit = 1000
 
         # Provide a parent entity
         entity = Entity("Parent", x=5, y=5, energy=50, diet='herbivore', size=1)
@@ -1338,15 +1354,12 @@ class TestUniverse(unittest.TestCase):
         entity.preferred_temperature = 20
         entity.temperature_tolerance = 40
 
-        import random
-        original_random = random.random
-        try:
-            random.random = lambda: 0.0
+        from unittest.mock import patch
+        with patch('src.universe.engine.random.random', return_value=0.0):
             universe.tick()
-        finally:
-            random.random = original_random
 
         # Just look for the child if the parent somehow dies or something
+
         child = [e for e in universe.entities if e.name == "Parent_child"]
         self.assertTrue(len(child) > 0)
         self.assertEqual(child[0].diet, 'carnivore')
@@ -1425,6 +1438,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_combat_experience(self):
         universe = Universe(food_spawn_rate=0.0)
+        universe.reproduction_threshold = 1000  # Prevent reproduction
         universe.event_chance = 0.0
 
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=5.0, defense=2.0)
