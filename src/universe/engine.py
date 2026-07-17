@@ -8,8 +8,9 @@ class Food:
         self.plant_type = plant_type
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False):
         self.target_species = target_species
+        self.is_sleeping = is_sleeping
 
         if diet == 'herbivore' and target_plants is None:
             target_plants = ['generic', 'berry', 'leaf', 'flower']
@@ -531,6 +532,12 @@ class Universe:
             terrains_here = self.get_terrains_at(entity.x, entity.y)
             in_shelter = any(t.terrain_type == 'shelter' for t in terrains_here)
 
+            if self.is_night:
+                if not entity.is_sleeping and random.random() < 0.2:
+                    entity.is_sleeping = True
+            else:
+                entity.is_sleeping = False
+
             # Consume energy per tick
             energy_loss = entity.size
             if self.current_event == 'storm':
@@ -621,6 +628,9 @@ class Universe:
             # Shelter healing/recovery
             if in_shelter:
                 energy_loss -= 2
+
+            if entity.is_sleeping:
+                energy_loss -= 3
 
             entity.energy -= energy_loss
             # Age by 1 per tick
@@ -728,7 +738,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False)
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)
@@ -739,7 +749,7 @@ class Universe:
                         entity.memory.add((t.x, t.y))
 
                 can_move = True
-                if self.is_night and random.random() < 0.5:
+                if entity.is_sleeping:
                     can_move = False
                 if self.time % entity.size != 0:
                     can_move = False
@@ -893,6 +903,7 @@ class Universe:
                         total_stats = effective_attack + effective_defense
                         escape_chance = effective_defense / total_stats if total_stats > 0 else 0.5
 
+                        prey_to_eat.is_sleeping = False
                         if random.random() < escape_chance:
                             # Prey escapes
                             entity.energy -= 1

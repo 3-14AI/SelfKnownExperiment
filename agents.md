@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implement sleep mechanism where entities recover energy when resting.
 - Implemented Hydration System where entities lose hydration over time, seek out water when thirsty, and drink when adjacent to water tiles.
 - Analyzed recent project changes (Scavengers, Shelters, Specialized Dependencies, Hydration System) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Develop more complex environmental interaction, such as shelter building.
@@ -106,4 +107,4 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented scavenger diet and corpse mechanic where entities leave behind meat when dying of natural causes.
 
 ## Next Steps
-- Implement sleep mechanism where entities recover energy when resting.
+- Implement dynamic seasons that affect food growth rates differently.

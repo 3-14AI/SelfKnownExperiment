@@ -2,6 +2,7 @@
 
 ## [2026-07-17]
 ### Added
+- Implemented a sleep mechanism for entities to recover energy while resting at night.
 - Analyzed recent project changes (Scavengers, Shelters, Specialized Dependencies, Hydration System) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Implemented a `scavenger` diet for entities. Scavengers target and eat `meat`.
 - Entities that die from natural causes (age, starvation, disease, events) now leave behind `meat` at their coordinates based on their size.
