@@ -568,6 +568,9 @@ class Universe:
                 else:
                     energy_loss += 1
 
+            # Shelter healing/recovery
+            if in_shelter:
+                energy_loss -= 2
 
             entity.energy -= energy_loss
             # Age by 1 per tick

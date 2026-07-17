@@ -471,7 +471,6 @@ class TestUniverse(unittest.TestCase):
         # Herbivore should be dead, removed from entities
         self.assertNotIn(herbivore, universe.entities)
 
-        # Carnivore lost 2 energy from 2 ticks, gained 10 from prey -> 10 - 2 + 10 = 18
         self.assertEqual(carnivore.energy, 17)
 
 
@@ -1745,8 +1744,16 @@ class TestUniverse(unittest.TestCase):
 
         adapted = False
         import random
+
+        # We need a custom side effect for choice to only return NewPreySpecies for species targets
+        # Otherwise, if it chooses entities for disease (like random.choice(self.entities)), it will break!
         original_choice = random.choice
-        random.choice = lambda x: "NewPreySpecies"
+        def custom_choice(seq):
+            if seq and isinstance(seq, list) and isinstance(seq[0], Entity):
+                return original_choice(seq)
+            return "NewPreySpecies"
+
+        random.choice = custom_choice
 
         try:
             for _ in range(100):
@@ -1784,8 +1791,21 @@ class TestUniverse(unittest.TestCase):
         terrains = universe.get_terrains_at(5, 5)
         self.assertTrue(any(t.terrain_type == 'shelter' for t in terrains))
 
-        # Energy loss: 1 (base tick) + 10 (shelter cost) + 5 (crafting cost since mock=0.01) = 16. Energy should be 50 - 16 = 34.
-        self.assertEqual(builder.energy, 34)
+        # Energy loss: 1 (base tick) + 10 (shelter cost) + 5 (crafting cost since mock=0.01) = 16.
+        # But wait, now shelter heals! So we are in a shelter immediately.
+        # Base loss (1) - 2 (shelter healing) = -1. Wait, let's recount.
+        # energy = 50.
+        # energy -= 10 (shelter) -> 40
+        # energy -= 5 (crafting) -> 35
+        # energy_loss = 1 (size)
+        # shelter built, so in_shelter = True ? Actually in_shelter is evaluated before building, but wait.
+        # Let's check engine.py: `in_shelter` is evaluated at the start of the loop.
+        # Then `in_shelter = True` inside the shelter building block.
+        # Then `in_shelter` is used at the end for healing.
+        # So it does heal on the same tick!
+        # energy_loss = 1 - 2 = -1.
+        # So energy = 35 - (-1) = 36.
+        self.assertEqual(builder.energy, 36)
 
     def test_shelter_benefits(self):
         universe = Universe(food_spawn_rate=0.0)
@@ -1807,11 +1827,27 @@ class TestUniverse(unittest.TestCase):
         with unittest.mock.patch('src.universe.engine.random.random', return_value=0.99):
             universe.tick()
 
-        # e1 in shelter: loss = size (2). energy = 50 - 2 = 48
+        # e1 in shelter: loss = size (2) - 2 (healing) = 0. energy = 50 - 0 = 50
         # e2 no shelter: loss = 2 * size (4). energy = 50 - 4 = 46
-        self.assertEqual(e1.energy, 48)
+        self.assertEqual(e1.energy, 50)
         self.assertEqual(e2.energy, 46)
 
+
+
+    def test_shelter_healing(self):
+        universe = Universe(food_spawn_rate=0.0, reproduction_threshold=1000)
+        universe.event_chance = 0.0
+
+        # Entity with size 1 (default energy loss 1)
+        entity = Entity("Healer", x=0, y=0, size=1, energy=50)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=0, y=0, terrain_type='shelter'))
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.99):
+            universe.tick()
+
+        # Base energy loss 1. Shelter heals 2. Net loss = -1. Energy should be 51.
+        self.assertEqual(entity.energy, 51)
 
 if __name__ == '__main__':
 
