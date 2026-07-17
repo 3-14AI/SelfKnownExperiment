@@ -493,12 +493,15 @@ class Universe:
         new_entities = []
 
         for entity in self.entities:
+            terrains_here = self.get_terrains_at(entity.x, entity.y)
+            in_shelter = any(t.terrain_type == 'shelter' for t in terrains_here)
+
             # Consume energy per tick
             energy_loss = entity.size
             if self.current_event == 'storm':
-                energy_loss = 2 * entity.size
+                energy_loss = 2 * entity.size if not in_shelter else entity.size
             elif self.current_event == 'blizzard':
-                energy_loss = 3 * entity.size
+                energy_loss = 3 * entity.size if not in_shelter else entity.size
 
             if entity.is_infected:
                 energy_loss += 1
@@ -517,6 +520,16 @@ class Universe:
                             if dist <= 2 and random.random() < 0.1:
                                 other.is_infected = True
 
+            # Shelter Building Mechanics
+            if entity.intelligence >= 5 and entity.energy > 20 and not in_shelter:
+                build_chance = 0.05
+                if self.current_event in ['storm', 'blizzard']:
+                    build_chance = 0.15
+                if random.random() < build_chance:
+                    self.add_terrain(Terrain(x=entity.x, y=entity.y, terrain_type='shelter'))
+                    entity.energy -= 10
+                    in_shelter = True
+
             # Crafting Mechanics
             if entity.intelligence >= 5 and entity.energy > 15:
                 if random.random() < 0.1: # 10% chance per tick to craft something
@@ -531,6 +544,8 @@ class Universe:
             effective_tolerance = entity.temperature_tolerance
             if 'clothing' in entity.inventory:
                 effective_tolerance += 10
+            if in_shelter:
+                effective_tolerance += 15
             if not (entity.preferred_temperature - effective_tolerance <= current_temp <= entity.preferred_temperature + effective_tolerance):
                 energy_loss += 1
 
@@ -780,8 +795,11 @@ class Universe:
                     preys_here = self.get_preys_at(entity.x, entity.y, entity=entity)
                     if preys_here:
                         prey_to_eat = preys_here[0]
+                        prey_in_shelter = any(t.terrain_type == 'shelter' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y))
                         effective_attack = entity.attack + (2 if 'weapon' in entity.inventory else 0)
                         effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)
+                        if prey_in_shelter:
+                            effective_defense += 3
                         total_stats = effective_attack + effective_defense
                         escape_chance = effective_defense / total_stats if total_stats > 0 else 0.5
 
