@@ -267,22 +267,24 @@ class TestUniverse(unittest.TestCase):
     def test_entity_seeks_food(self):
         universe = Universe(food_spawn_rate=0.0)
         universe.reproduction_threshold = 1000  # Prevent reproduction
-        entity = Entity("Adam", x=0, y=0)
+        entity = Entity("Adam", x=0, y=0, is_sleeping=False)
         food = Food(x=2, y=2)
         universe.add_entity(entity)
         universe.add_food(food)
 
-        # Previously entities could move diagonally (1, 1). BFS only moves orthogonally.
-        # It takes 4 orthogonal moves to reach (2, 2) from (0, 0).
-        universe.tick()
-        universe.tick()
-        universe.tick()
-        self.assertEqual(len(universe.foods), 1) # Hasn't reached food yet
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.9):
+            # Previously entities could move diagonally (1, 1). BFS only moves orthogonally.
+            # It takes 4 orthogonal moves to reach (2, 2) from (0, 0).
+            universe.tick()
+            universe.tick()
+            universe.tick()
+            self.assertEqual(len(universe.foods), 1) # Hasn't reached food yet
 
-        universe.tick() # Reaches and eats food
-        self.assertEqual(entity.x, 2)
-        self.assertEqual(entity.y, 2)
-        self.assertEqual(len(universe.foods), 0) # Food eaten
+            universe.tick() # Reaches and eats food
+            self.assertEqual(entity.x, 2)
+            self.assertEqual(entity.y, 2)
+            self.assertEqual(len(universe.foods), 0) # Food eaten
 
 
     def test_entity_reproduction(self):
@@ -1364,14 +1366,16 @@ class TestUniverse(unittest.TestCase):
         u.add_terrain(Terrain(x=2, y=2, terrain_type='mud'))
 
         # Entity thriving in mud
-        e_mud = Entity("MudMonster", x=2, y=2, energy=20, preferred_terrain='mud', preferred_temperature=20, temperature_tolerance=10)
+        e_mud = Entity("MudMonster", x=2, y=2, energy=20, preferred_terrain='mud', preferred_temperature=20, temperature_tolerance=10, is_sleeping=False)
         u.add_entity(e_mud)
 
         # Entity not on preferred terrain
-        e_lost = Entity("MudMonster2", x=3, y=3, energy=20, preferred_terrain='mud', preferred_temperature=20, temperature_tolerance=10)
+        e_lost = Entity("MudMonster2", x=3, y=3, energy=20, preferred_terrain='mud', preferred_temperature=20, temperature_tolerance=10, is_sleeping=False)
         u.add_entity(e_lost)
 
-        u.tick()
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.9):
+            u.tick()
 
         # Base energy loss is 1. Thriving in mud reduces it by 1 -> loss is 0.
         self.assertEqual(e_mud.energy, 20)
@@ -1720,12 +1724,10 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(entity)
         initial_energy = entity.energy
 
-        universe.tick()
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.9):
+            universe.tick()
 
-        # energy loss should be 3 * entity.size = 6
-        # plus standard time-based age loss if it triggers, but test says 3 != 4
-        # Wait, the energy loss base is entity.size. In blizzard it's 3 * entity.size.
-        # But maybe there's other decay? Let's use <= initial_energy - 6
         self.assertTrue(entity.energy <= initial_energy - 6)
 
     def test_localized_snow_event(self):
@@ -1962,6 +1964,69 @@ class TestUniverse(unittest.TestCase):
         dist_to_water_before = abs(3 - 1) + abs(3 - 1)
         dist_to_water_after = abs(entity.x - 1) + abs(entity.y - 1)
         self.assertTrue(dist_to_water_after < dist_to_water_before, "Entity should move towards water when thirsty.")
+
+
+    def test_entity_sleep_night(self):
+        universe = Universe(width=10, height=10, day_length=10)
+        universe.time = 6 # Night time
+        self.assertTrue(universe.is_night)
+
+        e = Entity(name="Sleeper", x=0, y=0, energy=10, size=1, age=0, max_age=50, is_sleeping=False)
+        universe.add_entity(e)
+
+        # Disable random.random() logic for test reliability
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.1): # < 0.2 chance
+            universe.tick()
+
+        self.assertTrue(e.is_sleeping)
+
+    def test_entity_wakes_up_day(self):
+        universe = Universe(width=10, height=10, day_length=10)
+        universe.time = 0 # Day time
+        self.assertFalse(universe.is_night)
+
+        e = Entity(name="Waker", x=0, y=0, energy=10, size=1, age=0, max_age=50, is_sleeping=True)
+        universe.add_entity(e)
+
+        universe.tick()
+        self.assertFalse(e.is_sleeping)
+
+    def test_entity_sleep_recovery(self):
+        universe = Universe(width=10, height=10, day_length=10)
+        universe.time = 6 # Night time
+
+        e = Entity(name="Recover", x=0, y=0, energy=10, size=1, age=0, max_age=50, is_sleeping=False)
+        universe.add_entity(e)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.1): # entity goes to sleep
+            universe.tick()
+
+        self.assertTrue(e.is_sleeping)
+        # energy should be: initial(10) - base_loss(1) + sleep_recovery(3) = 12
+        # minus hydration loss if any. Actually, base_loss is size=1, hydration -= 1 (but max is 50 so no energy loss).
+        # So energy change = -1 + 3 = +2
+        self.assertEqual(e.energy, 12)
+
+    def test_prey_wakes_up_when_attacked(self):
+        universe = Universe(width=10, height=10, day_length=10)
+        universe.time = 6 # Night time
+
+        predator = Entity(name="Predator", x=0, y=0, diet='carnivore', energy=20, attack=10, target_species=['Prey'])
+        prey = Entity(name="Prey", x=0, y=0, diet='herbivore', energy=10, is_sleeping=True, defense=10, species='Prey')
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        import unittest.mock
+        # 0.9 bypasses sleep check, bypasses any other chances until escape chance where 0.9 > escape_chance (0.5).
+        # It gets eaten and energy set to 0. But we just care if it woke up.
+        with unittest.mock.patch('random.random', return_value=0.9):
+            universe.tick()
+
+        self.assertFalse(prey.is_sleeping)
+
 
 if __name__ == '__main__':
 
