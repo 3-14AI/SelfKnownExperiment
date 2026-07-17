@@ -91,6 +91,14 @@
 
 ## [Unreleased]
 ### Added
+- Implemented shelter building mechanics. Intelligent entities with enough energy can construct shelters on their terrain.
+- Shelters provide environmental protection by negating energy drain penalties from storms and blizzards.
+- Shelters increase entities' temperature tolerance, allowing them to survive in extreme climates.
+- Added combat advantage for prey hiding in shelters, granting them increased defense against predators.
+- Updated the `CLIVisualizer` to render shelters as `^`.
+
+
+### Added
 - Implemented complex seasonal weather system.
 - Added seasonal variance to global event probabilities (e.g. blizzards only in winter, droughts only in summer).
 - Added global `blizzard` event which severely reduces temperature and increases entity energy decay.

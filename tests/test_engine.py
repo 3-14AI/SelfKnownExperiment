@@ -1764,6 +1764,55 @@ class TestUniverse(unittest.TestCase):
 
         self.assertTrue(adapted, "Predator never adapted to NewPreySpecies")
 
+
+    @unittest.mock.patch('src.universe.engine.random.random', return_value=0.01)
+    def test_shelter_building(self, mock_random):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        universe.reproduction_threshold = 1000
+
+        builder = Entity("Builder", x=5, y=5, intelligence=10, energy=50)
+        universe.add_entity(builder)
+
+        # Ensure no shelter exists initially
+        terrains = universe.get_terrains_at(5, 5)
+        self.assertFalse(any(t.terrain_type == 'shelter' for t in terrains))
+
+        universe.tick()
+
+        # Check if shelter was built
+        terrains = universe.get_terrains_at(5, 5)
+        self.assertTrue(any(t.terrain_type == 'shelter' for t in terrains))
+
+        # Energy loss: 1 (base tick) + 10 (shelter cost) + 5 (crafting cost since mock=0.01) = 16. Energy should be 50 - 16 = 34.
+        self.assertEqual(builder.energy, 34)
+
+    def test_shelter_benefits(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        universe.reproduction_threshold = 1000
+
+        # Test 1: Weather penalty negation
+        # We need an entity in a shelter during a storm
+        e1 = Entity("E1", x=0, y=0, size=2, energy=50)
+        universe.add_entity(e1)
+        universe.add_terrain(Terrain(x=0, y=0, terrain_type='shelter'))
+
+        e2 = Entity("E2", x=1, y=1, size=2, energy=50)
+        universe.add_entity(e2)
+
+        universe.current_event = 'storm'
+        universe.event_remaining_time = 10
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.99):
+            universe.tick()
+
+        # e1 in shelter: loss = size (2). energy = 50 - 2 = 48
+        # e2 no shelter: loss = 2 * size (4). energy = 50 - 4 = 46
+        self.assertEqual(e1.energy, 48)
+        self.assertEqual(e2.energy, 46)
+
+
 if __name__ == '__main__':
 
 
