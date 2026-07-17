@@ -100,4 +100,7 @@ Godspeed, Agent. The universe is in your hands.
 ## Completed
 - Implement a system where entities can heal or recover energy over time when in a shelter
 
+## Completed
+- Implemented scavenger diet and corpse mechanic where entities leave behind meat when dying of natural causes.
+
 ## Next Steps

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## [2026-07-17]
+### Added
+- Implemented a `scavenger` diet for entities. Scavengers target and eat `meat`.
+- Entities that die from natural causes (age, starvation, disease, events) now leave behind `meat` at their coordinates based on their size.
+- Updated carnivore logic so they will prey on scavengers as well as herbivores.
+- Updated `CLIVisualizer` to render scavengers as 'V' ('W' if sick) and meat as '%'.
+- Expanded genetic mutations allowing entities to randomly mutate into scavengers.
+
+
 
 ## [2026-07-16]
 ### Added

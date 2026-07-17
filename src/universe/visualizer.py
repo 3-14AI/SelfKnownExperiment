@@ -29,15 +29,26 @@ class CLIVisualizer:
         # Add food
         for food in self.universe.foods:
             if 0 <= food.x < self.universe.width and 0 <= food.y < self.universe.height:
-                grid[food.y][food.x] = 'f'
+                grid[food.y][food.x] = '%' if getattr(food, 'plant_type', 'generic') == 'meat' else 'f'
 
         # Add entities (entities overwrite food in visualization if on same spot)
         for entity in self.universe.entities:
             if 0 <= entity.x < self.universe.width and 0 <= entity.y < self.universe.height:
+                diet = getattr(entity, 'diet', 'herbivore')
                 if getattr(entity, 'is_infected', False):
-                    grid[entity.y][entity.x] = 'X' if getattr(entity, 'diet', 'herbivore') == 'carnivore' else 'S'
+                    if diet == 'carnivore':
+                        grid[entity.y][entity.x] = 'X'
+                    elif diet == 'scavenger':
+                        grid[entity.y][entity.x] = 'W'
+                    else:
+                        grid[entity.y][entity.x] = 'S'
                 else:
-                    grid[entity.y][entity.x] = 'C' if getattr(entity, 'diet', 'herbivore') == 'carnivore' else 'E'
+                    if diet == 'carnivore':
+                        grid[entity.y][entity.x] = 'C'
+                    elif diet == 'scavenger':
+                        grid[entity.y][entity.x] = 'V'
+                    else:
+                        grid[entity.y][entity.x] = 'E'
 
         # Join lines
         return '\n'.join(''.join(row) for row in grid)
