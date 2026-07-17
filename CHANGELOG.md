@@ -103,6 +103,10 @@
 
 ## [Unreleased]
 ### Added
+- Fixed food spawn logic to properly handle spawn rates greater than 1.0 (e.g. spring's 1.5 multiplier).
+- Refactored `Universe.tick` to calculate a whole integer spawn count and use a fractional chance for an additional food item, correctly simulating rates like 1.5 food/tick.
+
+### Added
 - Implemented Hydration System. Entities now lose hydration over time, and suffer energy penalties if dehydrated.
 - Entities can drink from adjacent water terrain to restore hydration.
 - Updated Entity AI to seek out and pathfind to water when their hydration is critically low (<= 50%).

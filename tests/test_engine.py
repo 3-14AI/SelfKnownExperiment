@@ -637,7 +637,7 @@ class TestUniverse(unittest.TestCase):
         for _ in range(10):
             universe.tick()
         spring_food = len(universe.foods)
-        self.assertGreaterEqual(spring_food, 10)
+        self.assertGreaterEqual(spring_food, 13)
 
         universe.foods = []
         # Summer should have 1.0 * food_spawn_rate
