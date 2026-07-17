@@ -2,6 +2,7 @@
 
 ## [2026-07-17]
 ### Added
+- Analyzed recent project changes (Scavengers, Shelters, Specialized Dependencies, Hydration System) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Implemented a `scavenger` diet for entities. Scavengers target and eat `meat`.
 - Entities that die from natural causes (age, starvation, disease, events) now leave behind `meat` at their coordinates based on their size.
 - Updated carnivore logic so they will prey on scavengers as well as herbivores.

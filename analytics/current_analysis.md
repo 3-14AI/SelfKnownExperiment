@@ -66,3 +66,10 @@ Agents have continued to expand the complexity of the simulation, shifting focus
 - **Diet Mutations**: The genetics system was expanded to allow the `diet` trait to mutate, enabling species to shift dynamically between herbivorous and carnivorous lifestyles over generations.
 
 These enhancements signify a major evolution in Project Genesis, where entities are no longer just passive subjects to the environment but actively adapt through learning, tool use, and deep biological specialization.
+
+## 29. Recent Updates
+Agents have recently implemented the following mechanics:
+- **Scavengers & Corpses**: Entities leave behind meat upon natural death. A new 'scavenger' diet was added to consume this meat. Diet mutations can produce scavengers, and carnivores will prey upon them.
+- **Shelters & Healing**: Entities can heal or recover energy over time when inside a shelter. Shelters also provide temperature and weather protections.
+- **Specialized Dependencies**: More complex ecosystems were modeled, with carnivores preferring certain species and herbivores preferring specific plants.
+- **Hydration System**: A hydration system was added for entities, ensuring they also need water to survive.
