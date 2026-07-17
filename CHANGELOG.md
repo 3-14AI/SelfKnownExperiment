@@ -102,6 +102,11 @@
 
 ## [Unreleased]
 ### Added
+- Implemented Hydration System. Entities now lose hydration over time, and suffer energy penalties if dehydrated.
+- Entities can drink from adjacent water terrain to restore hydration.
+- Updated Entity AI to seek out and pathfind to water when their hydration is critically low (<= 50%).
+
+### Added
 - Implemented shelter building mechanics. Intelligent entities with enough energy can construct shelters on their terrain.
 - Shelters provide environmental protection by negating energy drain penalties from storms and blizzards.
 - Shelters increase entities' temperature tolerance, allowing them to survive in extreme climates.
