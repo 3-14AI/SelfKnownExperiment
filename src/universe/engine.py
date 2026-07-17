@@ -10,6 +10,11 @@ class Food:
 class Entity:
     def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0):
         self.target_species = target_species
+
+        if diet == 'herbivore' and target_plants is None:
+            target_plants = ['generic', 'berry', 'leaf', 'flower']
+        elif diet == 'scavenger' and target_plants is None:
+            target_plants = ['meat']
         self.target_plants = target_plants
         self.generation = generation
         self.mutations = mutations
@@ -39,6 +44,7 @@ class Entity:
         self.alerted_predator_pos = None
         self.is_infected = is_infected
         self.infection_time = infection_time
+        self.was_eaten = False
         self.memory = set()
         self.diet = diet
         self.preferred_temperature = preferred_temperature
@@ -224,7 +230,7 @@ class Universe:
         return nearest
 
     def get_preys_at(self, x, y, entity=None):
-        preys = [e for e in self.entities if e.x == x and e.y == y and e.diet == 'herbivore' and e.is_alive]
+        preys = [e for e in self.entities if e.x == x and e.y == y and e.diet in ['herbivore', 'scavenger'] and e.is_alive]
         if entity and entity.target_species is not None:
             preys = [p for p in preys if p.species in entity.target_species]
         return preys
@@ -236,7 +242,7 @@ class Universe:
         best_prey = None
         best_score = float('inf')
         for e in self.entities:
-            if e.diet != 'herbivore' or not e.is_alive:
+            if e.diet not in ['herbivore', 'scavenger'] or not e.is_alive:
                 continue
             if entity and entity.target_species is not None and e.species not in entity.target_species:
                 continue
@@ -634,8 +640,11 @@ class Universe:
 
                     child_diet = entity.diet
                     if random.random() < mutation_chance:
-                        child_diet = 'carnivore' if entity.diet == 'herbivore' else 'herbivore'
+                        child_diet = random.choice(['herbivore', 'carnivore', 'scavenger'])
                         mutation_occurred = True
+                        # Reset target preferences on diet change
+                        child_target_plants = None
+                        child_target_species = None
 
                     if random.random() < mutation_chance:
                         child_size += random.randint(-1, 1)
@@ -684,7 +693,7 @@ class Universe:
                     can_move = False
                 if self.time % entity.size != 0:
                     can_move = False
-                if entity.diet == 'herbivore':
+                if entity.diet in ['herbivore', 'scavenger']:
                     if can_move:
                         # Communication & Flee behavior
                         nearest_predator = self.get_nearest_predator(entity.x, entity.y, max_distance=effective_perception)
@@ -826,10 +835,17 @@ class Universe:
                             entity.defense += 0.5
 
                             prey_to_eat.energy = 0 # Kill prey
+                            prey_to_eat.was_eaten = True
 
-            if entity.is_alive and entity.diet == 'herbivore':
+            if entity.is_alive and entity.diet in ['herbivore', 'scavenger']:
                 self.scent_trails[(entity.x, entity.y)] = 20
 
+
+
+        dead_entities = [e for e in self.entities if not e.is_alive]
+        for dead in dead_entities:
+            if not getattr(dead, 'was_eaten', False):
+                self.add_food(Food(x=dead.x, y=dead.y, energy=dead.size * 5, plant_type='meat'))
 
         self.entities = [e for e in self.entities if e.is_alive]
         for child in new_entities:
