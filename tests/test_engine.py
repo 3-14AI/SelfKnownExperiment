@@ -1901,6 +1901,68 @@ class TestUniverse(unittest.TestCase):
         # Base energy loss 1. Shelter heals 2. Net loss = -1. Energy should be 51.
         self.assertEqual(entity.energy, 51)
 
+
+    def test_hydration_loss_and_penalty(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        entity = Entity("thirst_test", x=5, y=5, energy=20, hydration=2, max_hydration=10)
+        universe.add_entity(entity)
+
+        universe.tick()
+        self.assertEqual(entity.hydration, 1)
+        self.assertEqual(entity.energy, 19) # Normal decay (size 1)
+
+        universe.tick()
+        self.assertEqual(entity.hydration, 0)
+        self.assertEqual(entity.energy, 17) # Hydration reached 0, penalty applies here too since we decay before checking in tick()
+
+        universe.tick()
+        self.assertEqual(entity.hydration, -1)
+        self.assertEqual(entity.energy, 15) # Penalty applied (+1 energy loss)
+
+    def test_hydration_recovery_adjacent_to_water(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        # Add water at 6,5
+        water = Terrain(x=6, y=5, terrain_type='water')
+        universe.add_terrain(water)
+
+        entity = Entity("drink_test", x=5, y=5, energy=20, hydration=2, max_hydration=10)
+        universe.add_entity(entity)
+
+        universe.tick()
+        # Hydration drops to 1, but then adjacent to water is checked and it recovers to max (10)
+        self.assertEqual(entity.hydration, 10)
+
+    def test_entity_seeks_water_when_thirsty(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+
+        # Water at 1,1
+        water = Terrain(x=1, y=1, terrain_type='water')
+        universe.add_terrain(water)
+
+        # Food at 5,5
+        food = Food(x=5, y=5, energy=10)
+        universe.add_food(food)
+
+        # Entity at 3,3, very thirsty
+        entity = Entity("seeker", x=3, y=3, hydration=2, max_hydration=10, perception_radius=10, size=1)
+        universe.time = 0
+        universe.add_entity(entity)
+
+        universe.tick()
+
+        # Expected path from (3,3) to (1,1) is up/left. (3,3) -> (2,3) -> (2,2) -> (2,1)
+        # Should move towards water instead of food (which is at 5,5)
+        # Pathfinding to 1,1 from 3,3 usually moves to 2,3 or 3,2.
+        dist_to_water_before = abs(3 - 1) + abs(3 - 1)
+        dist_to_water_after = abs(entity.x - 1) + abs(entity.y - 1)
+        self.assertTrue(dist_to_water_after < dist_to_water_before, "Entity should move towards water when thirsty.")
+
 if __name__ == '__main__':
 
 
