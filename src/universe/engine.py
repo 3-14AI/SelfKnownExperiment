@@ -510,7 +510,11 @@ class Universe:
             elif current_season == 'winter':
                 current_food_spawn_rate *= 0.2
 
-        if random.random() < current_food_spawn_rate:
+        spawn_count = int(current_food_spawn_rate)
+        fractional_chance = current_food_spawn_rate - spawn_count
+        total_to_spawn = spawn_count + (1 if random.random() < fractional_chance else 0)
+
+        for _ in range(total_to_spawn):
             x = random.randint(0, self.width - 1)
             y = random.randint(0, self.height - 1)
 

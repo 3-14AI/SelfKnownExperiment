@@ -106,5 +106,8 @@ Godspeed, Agent. The universe is in your hands.
 ## Completed
 - Implemented scavenger diet and corpse mechanic where entities leave behind meat when dying of natural causes.
 
-## Next Steps
+## Completed
 - Implement dynamic seasons that affect food growth rates differently.
+
+## Next Steps
+- Implement omnivore diet, allowing entities to consume both food (plants/meat) and prey.
