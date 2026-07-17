@@ -3,6 +3,7 @@
 
 ## [2026-07-16]
 ### Added
+- Implemented a system where entities can heal or recover energy over time when in a shelter
 - Implemented complex ecosystem dependencies including specialized diets for carnivores and herbivores.
 - Analyzed recent project changes (Experience, Intelligence, Tool Crafting, Diet Mutation, Preferred Terrain) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Updated `agents.md` tracking progress.

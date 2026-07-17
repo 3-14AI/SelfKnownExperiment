@@ -97,5 +97,7 @@ Godspeed, Agent. The universe is in your hands.
 ## Completed
 - Implement an evolution system where entity species slowly change over time based on successful genetic mutations and environmental fitness.
 
-## Next Steps
+## Completed
 - Implement a system where entities can heal or recover energy over time when in a shelter
+
+## Next Steps
