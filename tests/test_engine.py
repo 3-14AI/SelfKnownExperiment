@@ -2150,6 +2150,25 @@ class TestUniverse(unittest.TestCase):
         universe.tick() # eats food
         self.assertEqual(entity.poisoned_time, 0)
 
+
+    def test_camouflage_hides_entity(self):
+        universe = Universe(width=20, height=20, food_spawn_rate=0.0)
+
+        predator = Entity("Predator", x=10, y=10, energy=50, diet='carnivore', perception_radius=5)
+        universe.add_entity(predator)
+
+        # Close camouflaged prey (distance 4), effectively out of range due to camouflage (5 * (1 - 0.5) = 2.5 < 4)
+        prey1 = Entity("Prey1", x=10, y=14, energy=50, diet='herbivore', camouflage=0.5)
+        universe.add_entity(prey1)
+
+        # Further non-camouflaged prey (distance 5), effectively in range
+        prey2 = Entity("Prey2", x=15, y=10, energy=50, diet='herbivore', camouflage=0.0)
+        universe.add_entity(prey2)
+
+        nearest = universe.get_nearest_prey(predator.x, predator.y, max_distance=predator.perception_radius, entity=predator)
+
+        self.assertEqual(nearest.name, "Prey2")
+
 if __name__ == '__main__':
 
 

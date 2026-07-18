@@ -1,6 +1,10 @@
 # CHANGELOG
 
 ### Added
+- Implemented `camouflage` trait for entities, which reduces the distance at which they can be detected by other entities.
+- Entities can genetically inherit and mutate camouflage up to a maximum of 80% (0.8).
+
+### Added
 - Implemented toxicity and poison mechanics where food and entities can be toxic.
 - Entities consuming toxic food or prey become poisoned and lose extra energy.
 - Entities can genetically inherit and mutate poison resistance and toxicity.

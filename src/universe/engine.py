@@ -9,13 +9,14 @@ class Food:
         self.toxicity = toxicity
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, toxicity=0, poison_resistance=0, poisoned_time=0):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0):
         self.target_species = target_species
         self.is_sleeping = is_sleeping
         self.is_aquatic = is_aquatic
         self.toxicity = toxicity
         self.poison_resistance = poison_resistance
         self.poisoned_time = poisoned_time
+        self.camouflage = camouflage
 
         if diet == 'herbivore' and target_plants is None:
             target_plants = ['generic', 'berry', 'leaf', 'flower', 'toxic_plant']
@@ -293,7 +294,7 @@ class Universe:
             if entity and entity.target_species is not None and e.species not in entity.target_species:
                 continue
             dist = abs(e.x - x) + abs(e.y - y)
-            if max_distance is not None and dist > max_distance:
+            if max_distance is not None and dist > (max_distance * (1.0 - getattr(e, 'camouflage', 0.0))):
                 continue
 
             # Prefer smaller and weaker entities.
@@ -315,7 +316,7 @@ class Universe:
         for e in self.entities:
             if e.diet == 'carnivore' and e.is_alive:
                 dist = abs(e.x - x) + abs(e.y - y)
-                if max_distance is not None and dist > max_distance:
+                if max_distance is not None and dist > (max_distance * (1.0 - getattr(e, 'camouflage', 0.0))):
                     continue
                 if dist < min_dist:
                     min_dist = dist
@@ -682,6 +683,7 @@ class Universe:
                     child_max_hydration = entity.max_hydration
                     child_toxicity = entity.toxicity
                     child_poison_resistance = entity.poison_resistance
+                    child_camouflage = entity.camouflage
                     child_target_species = entity.target_species.copy() if entity.target_species else None
                     child_target_plants = entity.target_plants.copy() if entity.target_plants else None
                     child_generation = entity.generation + 1
@@ -754,6 +756,10 @@ class Universe:
                         child_intelligence = max(1, child_intelligence)
                         mutation_occurred = True
 
+                    if random.random() < mutation_chance:
+                        child_camouflage = min(0.8, max(0.0, child_camouflage + random.uniform(-0.1, 0.1)))
+                        mutation_occurred = True
+
                     if mutation_occurred:
                         child_mutations_count += 1
                         if child_mutations_count >= 5:
@@ -776,7 +782,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage)
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)
