@@ -1805,6 +1805,8 @@ class TestUniverse(unittest.TestCase):
         def custom_choice(seq):
             if seq and isinstance(seq, list) and isinstance(seq[0], Entity):
                 return original_choice(seq)
+            if seq and isinstance(seq, list) and isinstance(seq[0], int):
+                return original_choice(seq)
             return "NewPreySpecies"
 
         random.choice = custom_choice
@@ -2056,6 +2058,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_omnivore_seeks_and_hunts_prey(self):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.time = 0
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
 
@@ -2110,6 +2113,42 @@ class TestUniverse(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             universe.move_entity(entity, 1, 0)
+
+
+    def test_entity_poisoned_by_toxic_food(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.time = 0
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        entity = Entity("Adam", energy=20, x=5, y=5, poison_resistance=0)
+        entity.size = 1
+        entity.preferred_terrain = None
+        universe.base_temperature = 20
+        entity.preferred_temperature = 20
+        food = Food(energy=5, x=5, y=5, toxicity=1)
+        universe.add_entity(entity)
+        universe.add_food(food)
+        universe.tick() # eats food
+        self.assertTrue(entity.poisoned_time > 0)
+        self.assertEqual(entity.poisoned_time, 5)
+
+    def test_entity_poison_resistance(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.time = 0
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        entity = Entity("Adam", energy=20, x=5, y=5, poison_resistance=2)
+        entity.size = 1
+        entity.preferred_terrain = None
+        universe.base_temperature = 20
+        entity.preferred_temperature = 20
+        food = Food(energy=5, x=5, y=5, toxicity=1)
+        universe.add_entity(entity)
+        universe.add_food(food)
+        universe.tick() # eats food
+        self.assertEqual(entity.poisoned_time, 0)
 
 if __name__ == '__main__':
 

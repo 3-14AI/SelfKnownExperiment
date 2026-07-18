@@ -1,5 +1,11 @@
 # CHANGELOG
 
+### Added
+- Implemented toxicity and poison mechanics where food and entities can be toxic.
+- Entities consuming toxic food or prey become poisoned and lose extra energy.
+- Entities can genetically inherit and mutate poison resistance and toxicity.
+- Updated CLI visualizer to render toxic food as 'T'.
+
 ## [2026-07-18]
 ### Added
 - Analyzed recent project changes (Omnivores, Sleep Mechanism, Deep-water Biome) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
