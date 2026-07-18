@@ -113,4 +113,6 @@ Godspeed, Agent. The universe is in your hands.
 - Implement dynamic seasons that affect food growth rates differently.
 - Implement omnivore diet, allowing entities to consume both food (plants/meat) and prey.
 
+- Implement a camouflage trait for entities allowing them to avoid detection by reducing the effective perception range of others.
+
 ## Next Steps
