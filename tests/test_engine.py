@@ -2078,6 +2078,39 @@ class TestUniverse(unittest.TestCase):
         self.assertTrue(prey.was_eaten)
 
 
+
+    def test_aquatic_entity_movement_valid(self):
+        universe = Universe(width=5, height=5)
+        universe.add_terrain(Terrain(1, 1, 'water'))
+        universe.add_terrain(Terrain(2, 1, 'deep-water'))
+
+        entity = Entity("Fish", x=1, y=1, is_aquatic=True)
+        universe.add_entity(entity)
+
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.x, 2)
+        self.assertEqual(entity.y, 1)
+
+    def test_aquatic_entity_movement_invalid(self):
+        universe = Universe(width=5, height=5)
+        universe.add_terrain(Terrain(1, 1, 'water'))
+
+        entity = Entity("Fish", x=1, y=1, is_aquatic=True)
+        universe.add_entity(entity)
+
+        with self.assertRaises(ValueError):
+            universe.move_entity(entity, 1, 0) # trying to move onto land (no terrain)
+
+    def test_land_entity_movement_blocked_by_deep_water(self):
+        universe = Universe(width=5, height=5)
+        universe.add_terrain(Terrain(1, 1, 'deep-water'))
+
+        entity = Entity("Dog", x=0, y=1, is_aquatic=False)
+        universe.add_entity(entity)
+
+        with self.assertRaises(ValueError):
+            universe.move_entity(entity, 1, 0)
+
 if __name__ == '__main__':
 
 

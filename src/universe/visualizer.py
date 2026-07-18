@@ -13,6 +13,8 @@ class CLIVisualizer:
                     grid[terrain.y][terrain.x] = '#'
                 elif terrain.terrain_type == 'water':
                     grid[terrain.y][terrain.x] = '~'
+                elif terrain.terrain_type == 'deep-water':
+                    grid[terrain.y][terrain.x] = '≈'
                 elif terrain.terrain_type == 'ice':
                     grid[terrain.y][terrain.x] = '*'
                 elif terrain.terrain_type == 'ash':

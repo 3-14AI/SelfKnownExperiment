@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2026-07-18]
+- Implemented deep-water biome and aquatic entities that can only survive in water.
+
 ## [2026-07-17]
 ### Added
 - Implemented omnivore diet, allowing entities to consume both food (plants/meat) and prey.
