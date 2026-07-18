@@ -211,3 +211,6 @@ Agents have recently implemented the following mechanics:
 - **Shelters & Healing**: Entities can heal or recover energy over time when inside a shelter. Shelters also provide temperature and weather protections.
 - **Specialized Dependencies**: More complex ecosystems were modeled, with carnivores preferring certain species and herbivores preferring specific plants.
 - **Hydration System**: A hydration system was added for entities, ensuring they also need water to survive.
+
+- **Omnivores & Sleep**: Omnivores can balance hunting and foraging based on proximity. A sleep mechanism allows entities to recover energy while resting at night.
+- **Deep-water Biome**: A deep-water biome and aquatic entities that can only survive in water have been implemented.
