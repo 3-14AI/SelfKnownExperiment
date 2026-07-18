@@ -2,6 +2,9 @@
 
 ## [2026-07-17]
 ### Added
+- Implemented omnivore diet, allowing entities to consume both food (plants/meat) and prey.
+- Omnivores will flee from predators, seek water, and balance hunting for prey vs foraging for food based on proximity.
+- Updated `CLIVisualizer` to render omnivores as 'O' (or 'Q' if infected).
 - Implemented a sleep mechanism for entities to recover energy while resting at night.
 - Analyzed recent project changes (Scavengers, Shelters, Specialized Dependencies, Hydration System) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Implemented a `scavenger` diet for entities. Scavengers target and eat `meat`.

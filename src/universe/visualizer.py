@@ -40,6 +40,8 @@ class CLIVisualizer:
                         grid[entity.y][entity.x] = 'X'
                     elif diet == 'scavenger':
                         grid[entity.y][entity.x] = 'W'
+                    elif diet == 'omnivore':
+                        grid[entity.y][entity.x] = 'Q'
                     else:
                         grid[entity.y][entity.x] = 'S'
                 else:
@@ -47,6 +49,8 @@ class CLIVisualizer:
                         grid[entity.y][entity.x] = 'C'
                     elif diet == 'scavenger':
                         grid[entity.y][entity.x] = 'V'
+                    elif diet == 'omnivore':
+                        grid[entity.y][entity.x] = 'O'
                     else:
                         grid[entity.y][entity.x] = 'E'
 
