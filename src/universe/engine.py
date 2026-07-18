@@ -16,6 +16,8 @@ class Entity:
             target_plants = ['generic', 'berry', 'leaf', 'flower']
         elif diet == 'scavenger' and target_plants is None:
             target_plants = ['meat']
+        elif diet == 'omnivore' and target_plants is None:
+            target_plants = ['generic', 'berry', 'leaf', 'flower', 'meat']
         self.target_plants = target_plants
         self.generation = generation
         self.mutations = mutations
@@ -233,7 +235,7 @@ class Universe:
         return nearest
 
     def get_preys_at(self, x, y, entity=None):
-        preys = [e for e in self.entities if e.x == x and e.y == y and e.diet in ['herbivore', 'scavenger'] and e.is_alive]
+        preys = [e for e in self.entities if e.x == x and e.y == y and e.diet in ['herbivore', 'scavenger', 'omnivore'] and e.is_alive and e != entity]
         if entity and entity.target_species is not None:
             preys = [p for p in preys if p.species in entity.target_species]
         return preys
@@ -272,7 +274,9 @@ class Universe:
         best_prey = None
         best_score = float('inf')
         for e in self.entities:
-            if e.diet not in ['herbivore', 'scavenger'] or not e.is_alive:
+            if e.diet not in ['herbivore', 'scavenger', 'omnivore'] or not e.is_alive:
+                continue
+            if e == entity:
                 continue
             if entity and entity.target_species is not None and e.species not in entity.target_species:
                 continue
@@ -699,7 +703,7 @@ class Universe:
 
                     child_diet = entity.diet
                     if random.random() < mutation_chance:
-                        child_diet = random.choice(['herbivore', 'carnivore', 'scavenger'])
+                        child_diet = random.choice(['herbivore', 'carnivore', 'scavenger', 'omnivore'])
                         mutation_occurred = True
                         # Reset target preferences on diet change
                         child_target_plants = None
@@ -838,6 +842,149 @@ class Universe:
                         food_to_eat = foods_here[0]
                         entity.energy += food_to_eat.energy
                         self.foods.remove(food_to_eat)
+                elif entity.diet == 'omnivore':
+                    if can_move:
+                        # Flee behavior
+                        nearest_predator = self.get_nearest_predator(entity.x, entity.y, max_distance=effective_perception)
+                        if nearest_predator:
+                            entity.alerted_predator_pos = (nearest_predator.x, nearest_predator.y)
+                            # Alert nearby flockmates
+                            flockmates_to_alert = self.get_nearby_flockmates(entity, effective_perception * 2)
+                            for f in flockmates_to_alert:
+                                f.alerted_predator_pos = (nearest_predator.x, nearest_predator.y)
+
+                        if entity.alerted_predator_pos:
+                            px, py = entity.alerted_predator_pos
+                            best_pos = None
+                            max_dist = -1
+                            for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
+                                nx, ny = entity.x + dx, entity.y + dy
+                                try:
+                                    if 0 <= nx < self.width and 0 <= ny < self.height:
+                                        terrains_here = self.get_terrains_at(nx, ny)
+                                        if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                                            dist_to_predator = abs(nx - px) + abs(ny - py)
+                                            if dist_to_predator > max_dist:
+                                                max_dist = dist_to_predator
+                                                best_pos = (dx, dy)
+                                except Exception:
+                                    pass
+                            if best_pos:
+                                try:
+                                    self.move_entity(entity, best_pos[0], best_pos[1])
+                                except ValueError:
+                                    pass
+                            entity.alerted_predator_pos = None
+                        else:
+                            moved_for_water = False
+                            if entity.hydration <= entity.max_hydration / 2:
+                                nearest_water = self.get_nearest_water(entity.x, entity.y, max_distance=effective_perception, entity=entity)
+                                if nearest_water:
+                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory)
+                                    if path and len(path) > 0:
+                                        dx, dy = path[0]
+                                        try:
+                                            self.move_entity(entity, dx, dy)
+                                            moved_for_water = True
+                                        except ValueError:
+                                            pass
+
+                            if not moved_for_water:
+                                nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=effective_perception, entity=entity)
+                                nearest_prey = self.get_nearest_prey(entity.x, entity.y, max_distance=effective_perception, entity=entity)
+
+                                target_to_chase = None
+                                dist_food = float('inf')
+                                dist_prey = float('inf')
+
+                                if nearest_food:
+                                    dist_food = abs(nearest_food.x - entity.x) + abs(nearest_food.y - entity.y)
+                                if nearest_prey:
+                                    dist_prey = abs(nearest_prey.x - entity.x) + abs(nearest_prey.y - entity.y)
+
+                                if nearest_food and nearest_prey:
+                                    if dist_food <= dist_prey:
+                                        target_to_chase = nearest_food
+                                    else:
+                                        target_to_chase = nearest_prey
+                                elif nearest_food:
+                                    target_to_chase = nearest_food
+                                elif nearest_prey:
+                                    target_to_chase = nearest_prey
+
+                                if target_to_chase:
+                                    path = self.find_path(entity.x, entity.y, target_to_chase.x, target_to_chase.y, max_distance=effective_perception, memory=entity.memory)
+                                    if path and len(path) > 0:
+                                        dx, dy = path[0]
+                                        try:
+                                            self.move_entity(entity, dx, dy)
+                                        except ValueError:
+                                            pass
+                                else:
+                                    # Scent tracking behavior
+                                    best_scent = 0
+                                    best_pos = None
+                                    for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
+                                        nx, ny = entity.x + dx, entity.y + dy
+                                        if (nx, ny) in self.scent_trails and self.scent_trails[(nx, ny)] > best_scent:
+                                            terrains_here = self.get_terrains_at(nx, ny)
+                                            if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                                                best_scent = self.scent_trails[(nx, ny)]
+                                                best_pos = (dx, dy)
+                                    if best_pos:
+                                        try:
+                                            self.move_entity(entity, best_pos[0], best_pos[1])
+                                        except ValueError:
+                                            pass
+                                    else:
+                                        # Flocking behavior
+                                        flockmates = self.get_nearby_flockmates(entity, effective_perception)
+                                        if flockmates:
+                                            center_x = sum(e.x for e in flockmates) // len(flockmates)
+                                            center_y = sum(e.y for e in flockmates) // len(flockmates)
+                                            if center_x != entity.x or center_y != entity.y:
+                                                path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory)
+                                                if path and len(path) > 0:
+                                                    dx, dy = path[0]
+                                                    try:
+                                                        self.move_entity(entity, dx, dy)
+                                                    except ValueError:
+                                                        pass
+
+                    # Eat food if present, else eat prey
+                    foods_here = self.get_foods_at(entity.x, entity.y, entity=entity)
+                    if foods_here:
+                        food_to_eat = foods_here[0]
+                        entity.energy += food_to_eat.energy
+                        self.foods.remove(food_to_eat)
+                    else:
+                        preys_here = self.get_preys_at(entity.x, entity.y, entity=entity)
+                        if preys_here:
+                            prey_to_eat = preys_here[0]
+                            prey_in_shelter = any(t.terrain_type == 'shelter' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y))
+                            effective_attack = entity.attack + (2 if 'weapon' in entity.inventory else 0)
+                            effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)
+                            if prey_in_shelter:
+                                effective_defense += 3
+                            total_stats = effective_attack + effective_defense
+                            escape_chance = effective_defense / total_stats if total_stats > 0 else 0.5
+
+                            prey_to_eat.is_sleeping = False
+                            if random.random() < escape_chance:
+                                # Prey escapes
+                                entity.energy -= 1
+                                prey_to_eat.energy -= 1
+                                prey_to_eat.defense += 0.5
+                                prey_to_eat.attack += 0.1
+                                entity.attack += 0.2
+                            else:
+                                # Prey is eaten
+                                entity.energy += prey_to_eat.energy
+                                entity.attack += 0.5
+                                entity.defense += 0.5
+                                prey_to_eat.energy = 0
+                                prey_to_eat.was_eaten = True
+
                 elif entity.diet == 'carnivore':
                     if can_move:
                         moved_for_water = False
@@ -930,7 +1077,7 @@ class Universe:
                             prey_to_eat.energy = 0 # Kill prey
                             prey_to_eat.was_eaten = True
 
-            if entity.is_alive and entity.diet in ['herbivore', 'scavenger']:
+            if entity.is_alive and entity.diet in ['herbivore', 'scavenger', 'omnivore']:
                 self.scent_trails[(entity.x, entity.y)] = 20
 
 

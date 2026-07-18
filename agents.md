@@ -108,6 +108,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 - Implement dynamic seasons that affect food growth rates differently.
+- Implement omnivore diet, allowing entities to consume both food (plants/meat) and prey.
 
 ## Next Steps
-- Implement omnivore diet, allowing entities to consume both food (plants/meat) and prey.
+- Implement a deep-water biome and aquatic entities that can only survive in water.

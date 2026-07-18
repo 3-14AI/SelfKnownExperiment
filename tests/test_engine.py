@@ -1403,7 +1403,7 @@ class TestUniverse(unittest.TestCase):
         from unittest.mock import patch
 
         def mock_choice(seq):
-            if set(seq) == {'herbivore', 'carnivore', 'scavenger'}:
+            if set(seq) == {'herbivore', 'carnivore', 'scavenger', 'omnivore'} or set(seq) == {'herbivore', 'carnivore', 'scavenger'}:
                 return 'scavenger'
             if set(seq) == {'weapon', 'shield', 'clothing'}:
                 return 'weapon'
@@ -2026,6 +2026,56 @@ class TestUniverse(unittest.TestCase):
             universe.tick()
 
         self.assertFalse(prey.is_sleeping)
+
+
+
+    def test_omnivore_initialization(self):
+        omnivore = Entity("Omni", diet='omnivore')
+        self.assertIn('generic', omnivore.target_plants)
+        self.assertIn('meat', omnivore.target_plants)
+
+    def test_omnivore_seeks_and_eats_food(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        omni = Entity("Omni", x=1, y=1, energy=10, diet='omnivore', perception_radius=10, size=1)
+        universe.add_entity(omni)
+
+        food = Food(x=2, y=1, energy=5, plant_type='berry')
+        universe.add_food(food)
+
+        universe.tick()
+
+        # Omnivore should move to food and eat it (2, 1)
+        # Energy: starts at 10, -1 for tick, +5 for food = 14
+        self.assertEqual(omni.x, 2)
+        self.assertEqual(omni.y, 1)
+        self.assertEqual(omni.energy, 14)
+        self.assertEqual(len(universe.foods), 0)
+
+    def test_omnivore_seeks_and_hunts_prey(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        omni = Entity("Omni", x=1, y=1, energy=10, diet='omnivore', perception_radius=10, size=1, attack=100)
+        prey = Entity("Prey", x=2, y=1, energy=10, diet='herbivore', defense=0)
+
+        universe.add_entity(omni)
+        universe.add_entity(prey)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.9):
+            universe.tick()
+
+        # Omnivore should move to prey and attack it
+        # The combat logic: attack=100, defense=0 -> escape_chance = 0. Since random() is 0.9 (which is > 0), prey is eaten.
+        # But wait, escape_chance = 0. 0.9 < 0 is False. It hits the "else: Prey is eaten" branch.
+        self.assertEqual(omni.x, 2)
+        self.assertEqual(omni.y, 1)
+        self.assertFalse(prey.is_alive)
+        self.assertTrue(prey.was_eaten)
 
 
 if __name__ == '__main__':
