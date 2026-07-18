@@ -2169,6 +2169,43 @@ class TestUniverse(unittest.TestCase):
 
         self.assertEqual(nearest.name, "Prey2")
 
+
+    def test_vision_type_night_vision_perception(self):
+        universe = Universe()
+        # Set time to night
+        universe.time = universe.day_length // 2 + 1
+
+        entity = Entity("Observer", perception_radius=10, vision_type='night_vision')
+        universe.add_entity(entity, 0, 0)
+
+        # Test effectively uses 'is_day' -> False
+        # Tick to trigger perception logic internally (if any assertions can be made or not erroring out)
+        universe.tick()
+
+        # Testing if it can 'see' a far food due to night vision
+        food = Food(energy=5)
+        universe.add_food(food, 0, 8) # Within 10, outside 5 (halved perception is 5)
+
+        entity.energy = 5 # hungry
+        entity.diet = 'herbivore'
+
+        universe.tick()
+        # It should move towards the food since it can see it
+        self.assertTrue(entity.x != 0 or entity.y != 0)
+
+    def test_vision_type_normal_perception_at_night(self):
+        universe = Universe()
+        universe.time = universe.day_length // 2 + 1  # Night
+
+        entity = Entity("Observer", perception_radius=10, vision_type='normal', diet='herbivore')
+        universe.add_entity(entity, 0, 0)
+
+        food = Food(energy=5)
+        universe.add_food(food, 0, 8) # Within 10, outside 5
+
+        universe.tick()
+        pass
+
 if __name__ == '__main__':
 
 

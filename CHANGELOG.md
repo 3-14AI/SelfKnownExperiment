@@ -1,6 +1,11 @@
 # CHANGELOG
 
 ### Added
+- Implemented `vision_type` trait for entities.
+- Entities with `night_vision` do not suffer from perception radius reduction during the night.
+- Entities can genetically inherit and mutate their vision type between normal and night_vision.
+
+### Added
 - Implemented `camouflage` trait for entities, which reduces the distance at which they can be detected by other entities.
 - Entities can genetically inherit and mutate camouflage up to a maximum of 80% (0.8).
 
