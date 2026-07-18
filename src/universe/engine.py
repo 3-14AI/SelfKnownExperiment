@@ -8,9 +8,10 @@ class Food:
         self.plant_type = plant_type
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False):
         self.target_species = target_species
         self.is_sleeping = is_sleeping
+        self.is_aquatic = is_aquatic
 
         if diet == 'herbivore' and target_plants is None:
             target_plants = ['generic', 'berry', 'leaf', 'flower']
@@ -158,8 +159,7 @@ class Universe:
         if not (0 <= new_x < self.width and 0 <= new_y < self.height):
             raise ValueError(f"Movement out of bounds: ({new_x}, {new_y})")
 
-        terrains_here = self.get_terrains_at(new_x, new_y)
-        if any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+        if not self.is_passable(new_x, new_y, getattr(entity, 'is_aquatic', False)):
             raise ValueError(f"Movement blocked by terrain at ({new_x}, {new_y})")
 
         entity.x = new_x
@@ -168,12 +168,22 @@ class Universe:
     def get_terrains_at(self, x, y):
         return [t for t in self.terrains if t.x == x and t.y == y]
 
+    def is_passable(self, x, y, is_aquatic=False):
+        terrains_here = self.get_terrains_at(x, y)
+        if any(t.terrain_type == 'wall' for t in terrains_here):
+            return False
+        is_water = any(t.terrain_type in ['water', 'deep-water'] for t in terrains_here)
+        if is_aquatic:
+            return is_water
+        else:
+            return not is_water
+
     def add_terrain(self, terrain):
         if not (0 <= terrain.x < self.width and 0 <= terrain.y < self.height):
             raise ValueError(f"Terrain out of bounds: ({terrain.x}, {terrain.y})")
         self.terrains.append(terrain)
 
-    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None):
+    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None, is_aquatic=False):
         from collections import deque
         queue = deque([(start_x, start_y, [])])
         visited = {(start_x, start_y)}
@@ -201,8 +211,7 @@ class Universe:
                             visited.add((new_x, new_y))
                             queue.append((new_x, new_y, path + [(dx, dy)]))
                         else:
-                            terrains_here = self.get_terrains_at(new_x, new_y)
-                            if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                            if self.is_passable(new_x, new_y, is_aquatic):
                                 visited.add((new_x, new_y))
                                 queue.append((new_x, new_y, path + [(dx, dy)]))
 
@@ -260,8 +269,7 @@ class Universe:
                     for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
                         nx, ny = t.x + dx, t.y + dy
                         if 0 <= nx < self.width and 0 <= ny < self.height:
-                            terrains_adj = self.get_terrains_at(nx, ny)
-                            if not any(ta.terrain_type in ['wall', 'water'] for ta in terrains_adj):
+                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False)) if entity else not any(ta.terrain_type in ['wall', 'water', 'deep-water'] for ta in self.get_terrains_at(nx, ny)):
                                 dist_to_adj = abs(nx - x) + abs(ny - y)
                                 if dist_to_adj < min_dist:
                                     min_dist = dist_to_adj
@@ -753,7 +761,7 @@ class Universe:
 
                 # Update entity memory with visible obstacles
                 for t in self.terrains:
-                    if t.terrain_type in ['wall', 'water'] and (abs(t.x - entity.x) + abs(t.y - entity.y)) <= effective_perception:
+                    if not self.is_passable(t.x, t.y, getattr(entity, 'is_aquatic', False)) and (abs(t.x - entity.x) + abs(t.y - entity.y)) <= effective_perception:
                         entity.memory.add((t.x, t.y))
 
                 can_move = True
@@ -782,8 +790,7 @@ class Universe:
                                 try:
                                     # Basic bounds/terrain check before moving
                                     if 0 <= nx < self.width and 0 <= ny < self.height:
-                                        terrains_here = self.get_terrains_at(nx, ny)
-                                        if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False)):
                                             dist_to_predator = abs(nx - px) + abs(ny - py)
                                             if dist_to_predator > max_dist:
                                                 max_dist = dist_to_predator
@@ -802,7 +809,7 @@ class Universe:
                             if entity.hydration <= entity.max_hydration / 2:
                                 nearest_water = self.get_nearest_water(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                                 if nearest_water:
-                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory)
+                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, "is_aquatic", False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -814,7 +821,7 @@ class Universe:
                             if not moved_for_water:
                                 nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                                 if nearest_food:
-                                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=effective_perception, memory=entity.memory)
+                                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, "is_aquatic", False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -828,7 +835,7 @@ class Universe:
                                         center_x = sum(e.x for e in flockmates) // len(flockmates)
                                         center_y = sum(e.y for e in flockmates) // len(flockmates)
                                         if center_x != entity.x or center_y != entity.y:
-                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory)
+                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, "is_aquatic", False))
                                             if path and len(path) > 0:
                                                 dx, dy = path[0]
                                                 try:
@@ -861,8 +868,7 @@ class Universe:
                                 nx, ny = entity.x + dx, entity.y + dy
                                 try:
                                     if 0 <= nx < self.width and 0 <= ny < self.height:
-                                        terrains_here = self.get_terrains_at(nx, ny)
-                                        if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False)):
                                             dist_to_predator = abs(nx - px) + abs(ny - py)
                                             if dist_to_predator > max_dist:
                                                 max_dist = dist_to_predator
@@ -880,7 +886,7 @@ class Universe:
                             if entity.hydration <= entity.max_hydration / 2:
                                 nearest_water = self.get_nearest_water(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                                 if nearest_water:
-                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory)
+                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, "is_aquatic", False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -913,7 +919,7 @@ class Universe:
                                     target_to_chase = nearest_prey
 
                                 if target_to_chase:
-                                    path = self.find_path(entity.x, entity.y, target_to_chase.x, target_to_chase.y, max_distance=effective_perception, memory=entity.memory)
+                                    path = self.find_path(entity.x, entity.y, target_to_chase.x, target_to_chase.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, "is_aquatic", False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -927,8 +933,7 @@ class Universe:
                                     for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
                                         nx, ny = entity.x + dx, entity.y + dy
                                         if (nx, ny) in self.scent_trails and self.scent_trails[(nx, ny)] > best_scent:
-                                            terrains_here = self.get_terrains_at(nx, ny)
-                                            if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False)):
                                                 best_scent = self.scent_trails[(nx, ny)]
                                                 best_pos = (dx, dy)
                                     if best_pos:
@@ -943,7 +948,7 @@ class Universe:
                                             center_x = sum(e.x for e in flockmates) // len(flockmates)
                                             center_y = sum(e.y for e in flockmates) // len(flockmates)
                                             if center_x != entity.x or center_y != entity.y:
-                                                path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory)
+                                                path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, "is_aquatic", False))
                                                 if path and len(path) > 0:
                                                     dx, dy = path[0]
                                                     try:
@@ -991,7 +996,7 @@ class Universe:
                         if entity.hydration <= entity.max_hydration / 2:
                             nearest_water = self.get_nearest_water(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                             if nearest_water:
-                                path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory)
+                                path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, "is_aquatic", False))
                                 if path and len(path) > 0:
                                     dx, dy = path[0]
                                     try:
@@ -1003,7 +1008,7 @@ class Universe:
                         if not moved_for_water:
                             nearest_prey = self.get_nearest_prey(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                             if nearest_prey:
-                                path = self.find_path(entity.x, entity.y, nearest_prey.x, nearest_prey.y, max_distance=effective_perception, memory=entity.memory)
+                                path = self.find_path(entity.x, entity.y, nearest_prey.x, nearest_prey.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, "is_aquatic", False))
                                 if path and len(path) > 0:
                                     dx, dy = path[0]
                                     try:
@@ -1017,8 +1022,7 @@ class Universe:
                                 for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
                                     nx, ny = entity.x + dx, entity.y + dy
                                     if (nx, ny) in self.scent_trails and self.scent_trails[(nx, ny)] > best_scent:
-                                        terrains_here = self.get_terrains_at(nx, ny)
-                                        if not any(t.terrain_type in ['wall', 'water'] for t in terrains_here):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False)):
                                             best_scent = self.scent_trails[(nx, ny)]
                                             best_pos = (dx, dy)
                                 if best_pos:
@@ -1033,7 +1037,7 @@ class Universe:
                                         center_x = sum(e.x for e in flockmates) // len(flockmates)
                                         center_y = sum(e.y for e in flockmates) // len(flockmates)
                                         if center_x != entity.x or center_y != entity.y:
-                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory)
+                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, "is_aquatic", False))
                                             if path and len(path) > 0:
                                                 dx, dy = path[0]
                                                 try:
