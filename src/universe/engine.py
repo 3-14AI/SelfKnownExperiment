@@ -1,24 +1,28 @@
 import random
 
 class Food:
-    def __init__(self, x=0, y=0, energy=5, plant_type='generic'):
+    def __init__(self, x=0, y=0, energy=5, plant_type='generic', toxicity=0):
         self.x = x
         self.y = y
         self.energy = energy
         self.plant_type = plant_type
+        self.toxicity = toxicity
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, toxicity=0, poison_resistance=0, poisoned_time=0):
         self.target_species = target_species
         self.is_sleeping = is_sleeping
         self.is_aquatic = is_aquatic
+        self.toxicity = toxicity
+        self.poison_resistance = poison_resistance
+        self.poisoned_time = poisoned_time
 
         if diet == 'herbivore' and target_plants is None:
-            target_plants = ['generic', 'berry', 'leaf', 'flower']
+            target_plants = ['generic', 'berry', 'leaf', 'flower', 'toxic_plant']
         elif diet == 'scavenger' and target_plants is None:
             target_plants = ['meat']
         elif diet == 'omnivore' and target_plants is None:
-            target_plants = ['generic', 'berry', 'leaf', 'flower', 'meat']
+            target_plants = ['generic', 'berry', 'leaf', 'flower', 'meat', 'toxic_plant']
         self.target_plants = target_plants
         self.generation = generation
         self.mutations = mutations
@@ -540,7 +544,11 @@ class Universe:
                 choices = ['generic', 'generic', 'generic', 'generic', 'berry', 'leaf']
 
             ptype = random.choice(choices)
-            self.add_food(Food(x=x, y=y, plant_type=ptype))
+            toxicity = 0
+            if random.random() < 0.1:
+                ptype = 'toxic_plant'
+                toxicity = random.randint(1, 3)
+            self.add_food(Food(x=x, y=y, plant_type=ptype, toxicity=toxicity))
 
         new_entities = []
 
@@ -626,6 +634,10 @@ class Universe:
                 else:
                     energy_loss += 1
 
+            if getattr(entity, 'poisoned_time', 0) > 0:
+                energy_loss += 1
+                entity.poisoned_time -= 1
+
             # Hydration mechanics
             entity.hydration -= 1
             if entity.hydration <= 0:
@@ -668,6 +680,8 @@ class Universe:
                     child_size = entity.size
                     child_intelligence = entity.intelligence
                     child_max_hydration = entity.max_hydration
+                    child_toxicity = entity.toxicity
+                    child_poison_resistance = entity.poison_resistance
                     child_target_species = entity.target_species.copy() if entity.target_species else None
                     child_target_plants = entity.target_plants.copy() if entity.target_plants else None
                     child_generation = entity.generation + 1
@@ -723,6 +737,14 @@ class Universe:
                         mutation_occurred = True
 
                     if random.random() < mutation_chance:
+                        child_toxicity = max(0, child_toxicity + random.choice([-1, 1]))
+                        mutation_occurred = True
+
+                    if random.random() < mutation_chance:
+                        child_poison_resistance = max(0, child_poison_resistance + random.choice([-1, 1]))
+                        mutation_occurred = True
+
+                    if random.random() < mutation_chance:
                         child_max_hydration += random.randint(-5, 5)
                         child_max_hydration = max(10, child_max_hydration)
                         mutation_occurred = True
@@ -754,7 +776,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance)
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if self.is_day else max(1, entity.perception_radius // 2)
@@ -848,6 +870,8 @@ class Universe:
                     if foods_here:
                         food_to_eat = foods_here[0]
                         entity.energy += food_to_eat.energy
+                        if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
+                            entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
                         self.foods.remove(food_to_eat)
                 elif entity.diet == 'omnivore':
                     if can_move:
@@ -961,6 +985,8 @@ class Universe:
                     if foods_here:
                         food_to_eat = foods_here[0]
                         entity.energy += food_to_eat.energy
+                        if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
+                            entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
                         self.foods.remove(food_to_eat)
                     else:
                         preys_here = self.get_preys_at(entity.x, entity.y, entity=entity)
@@ -985,6 +1011,8 @@ class Universe:
                             else:
                                 # Prey is eaten
                                 entity.energy += prey_to_eat.energy
+                                if getattr(prey_to_eat, 'toxicity', 0) > entity.poison_resistance:
+                                    entity.poisoned_time += (prey_to_eat.toxicity - entity.poison_resistance) * 5
                                 entity.attack += 0.5
                                 entity.defense += 0.5
                                 prey_to_eat.energy = 0
@@ -1073,6 +1101,8 @@ class Universe:
                         else:
                             # Prey is eaten
                             entity.energy += prey_to_eat.energy
+                            if getattr(prey_to_eat, 'toxicity', 0) > entity.poison_resistance:
+                                entity.poisoned_time += (prey_to_eat.toxicity - entity.poison_resistance) * 5
 
                             # Gain experience/strength from eating prey
                             entity.attack += 0.5
@@ -1089,7 +1119,7 @@ class Universe:
         dead_entities = [e for e in self.entities if not e.is_alive]
         for dead in dead_entities:
             if not getattr(dead, 'was_eaten', False):
-                self.add_food(Food(x=dead.x, y=dead.y, energy=dead.size * 5, plant_type='meat'))
+                self.add_food(Food(x=dead.x, y=dead.y, energy=dead.size * 5, plant_type='meat', toxicity=getattr(dead, 'toxicity', 0)))
 
         self.entities = [e for e in self.entities if e.is_alive]
         for child in new_entities:
