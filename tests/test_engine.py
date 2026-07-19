@@ -295,7 +295,9 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(entity)
 
         # Tick 1: entity loses 1 energy to tick, reproduces and spends 10 energy (16 - 1 - 10 = 5)
-        universe.tick()
+        from unittest.mock import patch
+        with patch('src.universe.engine.random.random', return_value=0.5):
+            universe.tick()
 
         self.assertTrue(entity.energy < 10)
         self.assertEqual(len(universe.entities), 2)
@@ -305,6 +307,33 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(child.x, 5)
         self.assertEqual(child.y, 5)
         self.assertEqual(child.energy, 10) # default energy
+
+
+    def test_reproduction_intelligence_modifier(self):
+        universe = Universe(reproduction_threshold=15, reproduction_cost=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+
+        # Intelligence 1 gives 55% chance
+        entity_low_int = Entity("LowInt", energy=20, x=5, y=5, intelligence=1)
+        universe.add_entity(entity_low_int)
+
+        # Intelligence 10 gives 100% chance
+        entity_high_int = Entity("HighInt", energy=20, x=6, y=6, intelligence=10)
+        universe.add_entity(entity_high_int)
+
+        from unittest.mock import patch
+        # With random = 0.6, low int (0.55) fails, high int (1.0) succeeds
+        with patch('src.universe.engine.random.random', return_value=0.6):
+            universe.tick()
+
+        # Low Int did not reproduce
+        self.assertEqual(entity_low_int.energy, 19) # 20 - 1 (tick)
+
+        # High Int reproduced
+        self.assertEqual(entity_high_int.energy, 9) # 20 - 1 (tick) - 10 (reproduction)
+
+        # Only one child created
+        self.assertEqual(len(universe.entities), 3)
 
     def test_entity_aging(self):
         universe = Universe(food_spawn_rate=0.0)
@@ -575,7 +604,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(reproduction_threshold=15, reproduction_cost=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         from unittest.mock import patch
-        with patch('src.universe.engine.random.random', return_value=1.0):
+        with patch('src.universe.engine.random.random', return_value=0.5):
             carnivore = Entity("Lion", energy=16, x=5, y=5, diet='carnivore')
             universe.add_entity(carnivore)
 
@@ -921,7 +950,7 @@ class TestUniverse(unittest.TestCase):
 
         # Force deterministic reproduction by setting random to 1.0 (no mutation)
         original_random = random.random
-        random.random = lambda: 1.0
+        random.random = lambda: 0.5
         u.tick()
         random.random = original_random
 

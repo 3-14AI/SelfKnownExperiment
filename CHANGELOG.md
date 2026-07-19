@@ -1,4 +1,5 @@
 # CHANGELOG
+- Added a reproduction chance modifier based on intelligence. Entities with higher intelligence have a greater chance to reproduce successfully.
 ## [Unreleased]
 ### Added
 - Analyzed recent project changes (Flight, Pack Hunting, Food Spoilage, Vision, Toxicity) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.

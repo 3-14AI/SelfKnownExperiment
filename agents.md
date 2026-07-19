@@ -122,5 +122,7 @@ Godspeed, Agent. The universe is in your hands.
 ## Completed
 - Implemented flight mechanics. Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water during movement and pathfinding.
 
+## Completed
+- Added a reproduction chance modifier based on intelligence.
+
 ## Next Steps
-- Add a reproduction chance modifier based on intelligence.
