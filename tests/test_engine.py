@@ -2277,6 +2277,32 @@ class TestUniverse(unittest.TestCase):
         universe2.tick()
         self.assertTrue(prey2.is_alive)
 
+
+    def test_flying_entity_passable(self):
+        universe = Universe(width=10, height=10)
+
+        flying_entity = Entity("Bird", x=0, y=0, is_flying=True)
+        universe.add_entity(flying_entity)
+
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='wall'))
+        universe.add_terrain(Terrain(x=2, y=0, terrain_type='water'))
+
+        self.assertTrue(universe.is_passable(1, 0, False, True)) # Wall is passable for flying
+        self.assertTrue(universe.is_passable(2, 0, False, True)) # Water is passable for flying
+
+    def test_flying_pathfinding(self):
+        universe = Universe(width=5, height=5)
+        # Wall blocking direct path
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='wall'))
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='wall'))
+        universe.add_terrain(Terrain(x=1, y=2, terrain_type='wall'))
+
+        path = universe.find_path(0, 1, 2, 1, is_flying=True)
+        # Flying entity should go straight through the wall at (1,1)
+        self.assertEqual(len(path), 2)
+        self.assertEqual(path[0], (1, 0)) # First step is +1, 0
+
+
 if __name__ == '__main__':
 
 
