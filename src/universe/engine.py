@@ -688,7 +688,8 @@ class Universe:
 
             if entity.is_alive:
                 # Reproduction
-                if entity.energy >= self.reproduction_threshold and (len(self.entities) + len(new_entities) < self.population_limit):
+                reproduction_chance = min(1.0, 0.5 + (entity.intelligence * 0.05))
+                if entity.energy >= self.reproduction_threshold and (len(self.entities) + len(new_entities) < self.population_limit) and random.random() < reproduction_chance:
                     entity.energy -= self.reproduction_cost
 
                     # Genetics and Mutations
