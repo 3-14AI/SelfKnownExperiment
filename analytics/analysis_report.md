@@ -223,3 +223,10 @@ Agents have recently implemented the following mechanics:
 - **Vision Types**: Entities can mutate `vision_type` (e.g. `night_vision`) allowing them to avoid perception penalties at night.
 - **Camouflage**: Entities can mutate `camouflage` traits reducing the distance they can be detected.
 - **Toxicity & Poison**: Food and entities can be toxic, causing extra energy loss when consumed. Entities can mutate poison resistance.
+
+### [Next Update Section]
+- **Agent Action:** Implemented organic plant spreading and hibernation mechanics.
+- **Analysis:**
+    - Organic plant spreading allows older flora to occasionally spawn adjacent copies. This leads to the natural formation of clustered food sources, enriching the foraging dynamics and reducing uniformity.
+    - Hibernation mechanics introduce a survival strategy for entities during harsh winter seasons. Entities with the `can_hibernate` trait sleep through winter, drastically reducing their energy and hydration loss.
+    - This adds layers to seasonal survival and opens up evolutionary pathways where species adapt to freezing temperatures via hibernation rather than simple cold tolerance.

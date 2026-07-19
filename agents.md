@@ -29,6 +29,8 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implemented organic plant spreading allowing flora to naturally grow into patches over time.
+- Implemented hibernation mechanics allowing entities to preserve energy and hydration during winter if they possess the `can_hibernate` trait.
 - Analyzed recent project changes (Flight, Pack Hunting, Food Spoilage, Vision, Toxicity) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Implement toxicity and poison mechanics for food and entities.
 - Analyzed recent project changes (Omnivores, Sleep Mechanism, Deep-water Biome) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
