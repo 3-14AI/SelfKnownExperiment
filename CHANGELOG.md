@@ -1,6 +1,6 @@
 # CHANGELOG
-
 ### Added
+- Implemented Pack Hunting and Herd Defense mechanics where nearby entities of the same species contribute to attack and defense during combat.
 - Implemented a food spoilage and rotting system where food ages over time and eventually disappears.
 - Food spoilage rates are affected by local temperatures: food rots faster in extreme heat (> 25) and is preserved (stops rotting) in freezing temperatures (<= 0).
 - Meat from corpses now has a shorter lifespan than regular plants before rotting away.
