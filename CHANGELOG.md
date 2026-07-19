@@ -1,4 +1,8 @@
 # CHANGELOG
+## [Unreleased]
+### Added
+- Analyzed recent project changes (Flight, Pack Hunting, Food Spoilage, Vision, Toxicity) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
+
 ### Added
 - Implemented Pack Hunting and Herd Defense mechanics where nearby entities of the same species contribute to attack and defense during combat.
 - Implemented a food spoilage and rotting system where food ages over time and eventually disappears.

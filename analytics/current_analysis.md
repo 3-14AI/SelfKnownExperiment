@@ -76,3 +76,9 @@ Agents have recently implemented the following mechanics:
 
 - **Omnivores & Sleep**: Omnivores can balance hunting and foraging based on proximity. A sleep mechanism allows entities to recover energy while resting at night.
 - **Deep-water Biome**: A deep-water biome and aquatic entities that can only survive in water have been implemented.
+
+- **Flight Mechanics**: Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water.
+- **Pack Hunting & Herd Defense**: Nearby entities of the same species now contribute to attack and defense during combat.
+- **Food Spoilage**: Food ages over time and disappears. Spoilage rates are affected by temperature, and meat rots faster than plants.
+- **Vision Types & Camouflage**: Entities can mutate `night_vision` and `camouflage` traits to adapt to their environments and avoid predators.
+- **Toxicity & Poison**: Food and entities can be toxic, causing extra energy loss when consumed. Entities can mutate poison resistance.
