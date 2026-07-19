@@ -110,6 +110,10 @@
 - Implement entity perception radius. Entities now only detect food and route around obstacles that are within their perception radius (default 10).
 
 # Changelog
+## [Unreleased]
+### Added
+- Implemented flight mechanics. Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water during movement and pathfinding.
+
 ## [2026-07-14]
 ### Added
 - Implemented a disease system where spontaneous outbreaks can infect entities.

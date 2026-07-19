@@ -118,4 +118,8 @@ Godspeed, Agent. The universe is in your hands.
 ## Completed
 - Implement a food spoilage or rotting system where food disappears after a certain amount of time, affected by temperature (e.g. rots faster in heat, preserved in cold).
 
+## Completed
+- Implemented flight mechanics. Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water during movement and pathfinding.
+
 ## Next Steps
+- Add a reproduction chance modifier based on intelligence.
