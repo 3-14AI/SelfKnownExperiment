@@ -1,6 +1,11 @@
 # CHANGELOG
 
 ### Added
+- Implemented a food spoilage and rotting system where food ages over time and eventually disappears.
+- Food spoilage rates are affected by local temperatures: food rots faster in extreme heat (> 25) and is preserved (stops rotting) in freezing temperatures (<= 0).
+- Meat from corpses now has a shorter lifespan than regular plants before rotting away.
+
+### Added
 - Implemented `vision_type` trait for entities.
 - Entities with `night_vision` do not suffer from perception radius reduction during the night.
 - Entities can genetically inherit and mutate their vision type between normal and night_vision.
