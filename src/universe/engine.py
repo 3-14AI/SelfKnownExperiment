@@ -1024,6 +1024,12 @@ class Universe:
                             prey_in_shelter = any(t.terrain_type == 'shelter' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y))
                             effective_attack = entity.attack + (2 if 'weapon' in entity.inventory else 0)
                             effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)
+                            pack_members = [e for e in self.entities if e.species == entity.species and e != entity and e.is_alive and not e.is_sleeping and abs(e.x - entity.x) + abs(e.y - entity.y) <= 3]
+                            herd_members = [e for e in self.entities if e.species == prey_to_eat.species and e != prey_to_eat and e.is_alive and not e.is_sleeping and abs(e.x - prey_to_eat.x) + abs(e.y - prey_to_eat.y) <= 3]
+                            pack_bonus = sum(0.5 * e.attack for e in pack_members)
+                            herd_bonus = sum(0.5 * e.defense for e in herd_members)
+                            effective_attack += pack_bonus
+                            effective_defense += herd_bonus
                             if prey_in_shelter:
                                 effective_defense += 3
                             total_stats = effective_attack + effective_defense
@@ -1110,6 +1116,12 @@ class Universe:
                         prey_in_shelter = any(t.terrain_type == 'shelter' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y))
                         effective_attack = entity.attack + (2 if 'weapon' in entity.inventory else 0)
                         effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)
+                        pack_members = [e for e in self.entities if e.species == entity.species and e != entity and e.is_alive and not e.is_sleeping and abs(e.x - entity.x) + abs(e.y - entity.y) <= 3]
+                        herd_members = [e for e in self.entities if e.species == prey_to_eat.species and e != prey_to_eat and e.is_alive and not e.is_sleeping and abs(e.x - prey_to_eat.x) + abs(e.y - prey_to_eat.y) <= 3]
+                        pack_bonus = sum(0.5 * e.attack for e in pack_members)
+                        herd_bonus = sum(0.5 * e.defense for e in herd_members)
+                        effective_attack += pack_bonus
+                        effective_defense += herd_bonus
                         if prey_in_shelter:
                             effective_defense += 3
                         total_stats = effective_attack + effective_defense

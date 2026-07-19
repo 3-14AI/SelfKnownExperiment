@@ -2242,6 +2242,41 @@ class TestUniverse(unittest.TestCase):
             universe.tick()
         self.assertIn(food, universe.foods)
 
+
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_pack_hunting_and_herd_defense(self, mock_random):
+        mock_random.return_value = 0.5
+
+        # Pack hunting scenario
+        universe = Universe(width=10, height=10)
+        predator = Entity("Wolf", x=5, y=5, diet='carnivore', attack=1, defense=1, species="Wolf", hydration=50, energy=50)
+        ally1 = Entity("WolfAlly1", x=6, y=5, diet='carnivore', attack=2, defense=1, species="Wolf", hydration=50, energy=50)
+        ally2 = Entity("WolfAlly2", x=5, y=6, diet='carnivore', attack=2, defense=1, species="Wolf", hydration=50, energy=50)
+        # Defense=2, attack=1. With pack: attack=1+0.5*4=3. Total stats=5. Escape=2/5=0.4 < 0.5 -> eaten.
+        prey = Entity("Sheep", x=5, y=5, diet='herbivore', attack=1, defense=2, species="Sheep", hydration=50, energy=50)
+        universe.add_entity(predator)
+        universe.add_entity(ally1)
+        universe.add_entity(ally2)
+        universe.add_entity(prey)
+
+        universe.tick()
+        self.assertFalse(prey.is_alive)
+
+        # Herd defense scenario
+        universe2 = Universe(width=10, height=10)
+        # predator attack=4, prey defense=1. Without herd: 1/5=0.2. With herd: 2 allies with def=10 -> herd bonus=10. Total def=11. Escape=11/15=0.73 > 0.5 -> escapes.
+        predator2 = Entity("Wolf2", x=5, y=5, diet='carnivore', attack=4, defense=1, species="Wolf", hydration=50, energy=50)
+        prey2 = Entity("Sheep2", x=5, y=5, diet='herbivore', attack=1, defense=1, species="Sheep", hydration=50, energy=50)
+        herd1 = Entity("SheepHerd1", x=6, y=5, diet='herbivore', attack=1, defense=10, species="Sheep", hydration=50, energy=50)
+        herd2 = Entity("SheepHerd2", x=5, y=6, diet='herbivore', attack=1, defense=10, species="Sheep", hydration=50, energy=50)
+        universe2.add_entity(predator2)
+        universe2.add_entity(prey2)
+        universe2.add_entity(herd1)
+        universe2.add_entity(herd2)
+
+        universe2.tick()
+        self.assertTrue(prey2.is_alive)
+
 if __name__ == '__main__':
 
 
