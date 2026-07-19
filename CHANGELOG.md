@@ -1,4 +1,5 @@
 # CHANGELOG
+- Implemented Oviparity/Egg-Laying mechanic. Entities can mutate the `lays_eggs` trait. When reproducing, instead of immediately spawning a child, they lay an egg (a Food object) that hatches into the offspring after aging.
 - Added a reproduction chance modifier based on intelligence. Entities with higher intelligence have a greater chance to reproduce successfully.
 ## [Unreleased]
 ### Added

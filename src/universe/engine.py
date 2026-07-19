@@ -1,7 +1,8 @@
 import random
 
 class Food:
-    def __init__(self, x=0, y=0, energy=5, plant_type='generic', toxicity=0, age=0, max_age=100):
+    def __init__(self, x=0, y=0, energy=5, plant_type='generic', toxicity=0, age=0, max_age=100, hatch_entity=None):
+        self.hatch_entity = hatch_entity
         self.age = age
         self.max_age = max_age
         self.x = x
@@ -11,7 +12,8 @@ class Food:
         self.toxicity = toxicity
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False):
+        self.lays_eggs = lays_eggs
         self.target_species = target_species
         self.is_sleeping = is_sleeping
         self.is_aquatic = is_aquatic
@@ -533,6 +535,8 @@ class Universe:
                 food.age += 1
             if food.age < food.max_age:
                 active_foods.append(food)
+            elif getattr(food, 'hatch_entity', None) is not None:
+                self.entities.append(food.hatch_entity)
 
             # Organic spreading
             if food.age > 10 and random.random() < 0.005 and getattr(food, 'plant_type', 'generic') != 'meat':
@@ -737,6 +741,7 @@ class Universe:
                     child_camouflage = entity.camouflage
                     child_vision_type = getattr(entity, 'vision_type', 'normal')
                     child_can_hibernate = getattr(entity, 'can_hibernate', False)
+                    child_lays_eggs = getattr(entity, 'lays_eggs', False)
                     child_is_flying = getattr(entity, 'is_flying', False)
                     child_target_species = entity.target_species.copy() if entity.target_species else None
                     child_target_plants = entity.target_plants.copy() if entity.target_plants else None
@@ -803,6 +808,10 @@ class Universe:
                     if random.random() < mutation_chance:
                         child_can_hibernate = not child_can_hibernate
                         mutation_occurred = True
+
+                    if random.random() < mutation_chance:
+                        child_lays_eggs = not child_lays_eggs
+                        mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_max_hydration += random.randint(-5, 5)
                         child_max_hydration = max(10, child_max_hydration)
@@ -847,8 +856,12 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate)
-                    new_entities.append(child)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs)
+                    if getattr(entity, 'lays_eggs', False):
+                        egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
+                        self.add_food(egg)
+                    else:
+                        new_entities.append(child)
 
                 effective_perception = entity.perception_radius if (self.is_day or getattr(entity, 'vision_type', 'normal') == 'night_vision') else max(1, entity.perception_radius // 2)
 
@@ -1204,6 +1217,6 @@ class Universe:
             if not getattr(dead, 'was_eaten', False):
                 self.add_food(Food(x=dead.x, y=dead.y, energy=dead.size * 5, plant_type='meat', toxicity=getattr(dead, 'toxicity', 0), max_age=60))
 
-        self.entities = [e for e in self.entities if e.is_alive]
+        self.entities = [e for e in self.entities if getattr(e, "is_alive", True)]
         for child in new_entities:
             self.add_entity(child)
