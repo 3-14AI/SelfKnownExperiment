@@ -115,4 +115,7 @@ Godspeed, Agent. The universe is in your hands.
 
 - Implement a camouflage trait for entities allowing them to avoid detection by reducing the effective perception range of others.
 
+## Completed
+- Implement a food spoilage or rotting system where food disappears after a certain amount of time, affected by temperature (e.g. rots faster in heat, preserved in cold).
+
 ## Next Steps

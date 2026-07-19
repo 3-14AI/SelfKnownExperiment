@@ -1,7 +1,9 @@
 import random
 
 class Food:
-    def __init__(self, x=0, y=0, energy=5, plant_type='generic', toxicity=0):
+    def __init__(self, x=0, y=0, energy=5, plant_type='generic', toxicity=0, age=0, max_age=100):
+        self.age = age
+        self.max_age = max_age
         self.x = x
         self.y = y
         self.energy = energy
@@ -512,6 +514,21 @@ class Universe:
                 if self.get_temperature_at(hx, hy) >= 30:
                     if not self.get_terrains_at(hx, hy):
                         self.add_terrain(Terrain(x=hx, y=hy, terrain_type='sand'))
+
+        # Food spoilage logic
+        active_foods = []
+        for food in self.foods:
+            temp = self.get_temperature_at(food.x, food.y)
+            if temp > 25:
+                food.age += 2
+            elif temp <= 0:
+                food.age += 0
+            else:
+                food.age += 1
+            if food.age < food.max_age:
+                active_foods.append(food)
+        self.foods = active_foods
+
 
         # Spawn new food
         current_food_spawn_rate = self.food_spawn_rate
@@ -1131,7 +1148,7 @@ class Universe:
         dead_entities = [e for e in self.entities if not e.is_alive]
         for dead in dead_entities:
             if not getattr(dead, 'was_eaten', False):
-                self.add_food(Food(x=dead.x, y=dead.y, energy=dead.size * 5, plant_type='meat', toxicity=getattr(dead, 'toxicity', 0)))
+                self.add_food(Food(x=dead.x, y=dead.y, energy=dead.size * 5, plant_type='meat', toxicity=getattr(dead, 'toxicity', 0), max_age=60))
 
         self.entities = [e for e in self.entities if e.is_alive]
         for child in new_entities:

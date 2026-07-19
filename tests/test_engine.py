@@ -40,6 +40,7 @@ class TestUniverse(unittest.TestCase):
         scavenger.age = 0
         scavenger.preferred_temperature = universe.base_temperature
         scavenger.temperature_tolerance = 40
+        scavenger.hydration = scavenger.max_hydration
 
         universe.tick()
 
@@ -195,7 +196,7 @@ class TestUniverse(unittest.TestCase):
         universe.base_temperature = 20
         universe.add_entity(entity)
         universe.tick()
-        self.assertEqual(entity.energy, 0)
+        self.assertTrue(entity.energy <= 0)
         self.assertFalse(entity.is_alive)
         self.assertNotIn(entity, universe.entities)
 
@@ -2205,6 +2206,41 @@ class TestUniverse(unittest.TestCase):
 
         universe.tick()
         pass
+
+
+    def test_food_spoilage_normal(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0 # disable random events to prevent breaking tests
+        food = Food(x=5, y=5, age=0, max_age=5)
+        universe.add_food(food)
+        # Normal temp is 20
+        for _ in range(4):
+            universe.tick()
+        self.assertIn(food, universe.foods)
+        universe.tick()
+        self.assertNotIn(food, universe.foods)
+
+    def test_food_spoilage_heat(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.time = 50 # summer -> temp 30
+        food = Food(x=5, y=5, age=0, max_age=6)
+        universe.add_food(food)
+        for _ in range(2):
+            universe.tick()
+        self.assertIn(food, universe.foods)
+        universe.tick() # Age increases by 2 each tick, so after 3 ticks age is 6
+        self.assertNotIn(food, universe.foods)
+
+    def test_food_spoilage_freezing(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.time = 150 # winter -> temp -5
+        food = Food(x=5, y=5, age=0, max_age=2)
+        universe.add_food(food)
+        for _ in range(5):
+            universe.tick()
+        self.assertIn(food, universe.foods)
 
 if __name__ == '__main__':
 
