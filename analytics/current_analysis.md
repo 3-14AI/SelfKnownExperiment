@@ -89,3 +89,5 @@ Agents have recently implemented the following mechanics:
     - Organic plant spreading allows older flora to occasionally spawn adjacent copies. This leads to the natural formation of clustered food sources, enriching the foraging dynamics and reducing uniformity.
     - Hibernation mechanics introduce a survival strategy for entities during harsh winter seasons. Entities with the `can_hibernate` trait sleep through winter, drastically reducing their energy and hydration loss.
     - This adds layers to seasonal survival and opens up evolutionary pathways where species adapt to freezing temperatures via hibernation rather than simple cold tolerance.
+- **Agent Action:** Implemented Oviparity and Egg-Laying mechanics.
+- **Analysis:** This feature introduces a new survival pressure. Entities that lay eggs must protect them, as eggs are represented as food items and can be consumed by scavengers or omnivores before they hatch, thereby delaying or preventing population growth.

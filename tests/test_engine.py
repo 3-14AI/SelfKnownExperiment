@@ -2027,6 +2027,8 @@ class TestUniverse(unittest.TestCase):
     def test_entity_sleep_recovery(self):
         universe = Universe(width=10, height=10, day_length=10)
         universe.time = 6 # Night time
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
 
         e = Entity(name="Recover", x=0, y=0, energy=10, size=1, age=0, max_age=50, is_sleeping=False)
         universe.add_entity(e)
@@ -2359,6 +2361,38 @@ class TestUniverse(unittest.TestCase):
         foods_here = universe.get_foods_at(6, 6)
         self.assertEqual(len(foods_here), 1)
         self.assertEqual(foods_here[0].plant_type, 'berry')
+
+
+    def test_oviparity_and_hatching(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+
+        # Entity with lays_eggs = True and sufficient energy
+        parent = Entity(name="EggLayer", x=0, y=0, energy=40, lays_eggs=True, intelligence=10)
+        universe.add_entity(parent)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0): # guarantee reproduction, no mutations
+            universe.tick()
+
+        # Check if an egg was created
+        egg = None
+        for f in universe.foods:
+            if getattr(f, 'hatch_entity', None) is not None:
+                egg = f
+                break
+        self.assertIsNotNone(egg)
+        self.assertEqual(len(universe.entities), 1) # Child is in the egg, not directly spawned
+
+        # Fast forward time to hatch the egg
+        for _ in range(25):
+            universe.tick()
+
+        # Check if the egg hatched
+        self.assertEqual(len(universe.entities), 2)
+        self.assertTrue(any("child" in e.name for e in universe.entities))
+
 
 if __name__ == '__main__':
 
