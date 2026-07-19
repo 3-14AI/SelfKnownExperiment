@@ -11,7 +11,7 @@ class Food:
         self.toxicity = toxicity
 
 class Entity:
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal'):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False):
         self.target_species = target_species
         self.is_sleeping = is_sleeping
         self.is_aquatic = is_aquatic
@@ -21,6 +21,8 @@ class Entity:
         self.poisoned_time = poisoned_time
         self.camouflage = camouflage
         self.vision_type = vision_type
+        self.can_hibernate = can_hibernate
+        self.is_hibernating = False
 
         if diet == 'herbivore' and target_plants is None:
             target_plants = ['generic', 'berry', 'leaf', 'flower', 'toxic_plant']
@@ -518,7 +520,8 @@ class Universe:
                     if not self.get_terrains_at(hx, hy):
                         self.add_terrain(Terrain(x=hx, y=hy, terrain_type='sand'))
 
-        # Food spoilage logic
+
+        # Food spoilage and organic spreading logic
         active_foods = []
         for food in self.foods:
             temp = self.get_temperature_at(food.x, food.y)
@@ -530,6 +533,17 @@ class Universe:
                 food.age += 1
             if food.age < food.max_age:
                 active_foods.append(food)
+
+            # Organic spreading
+            if food.age > 10 and random.random() < 0.005 and getattr(food, 'plant_type', 'generic') != 'meat':
+                dx = random.choice([-1, 0, 1])
+                dy = random.choice([-1, 0, 1])
+                if dx != 0 or dy != 0:
+                    nx, ny = food.x + dx, food.y + dy
+                    if 0 <= nx < self.width and 0 <= ny < self.height:
+                        if not self.get_foods_at(nx, ny) and not any(f.x == nx and f.y == ny for f in active_foods) and not any(t.terrain_type in ['water', 'wall', 'ice'] for t in self.get_terrains_at(nx, ny)):
+                            active_foods.append(Food(x=nx, y=ny, energy=food.energy, plant_type=food.plant_type, toxicity=food.toxicity))
+
         self.foods = active_foods
 
 
@@ -578,109 +592,124 @@ class Universe:
             terrains_here = self.get_terrains_at(entity.x, entity.y)
             in_shelter = any(t.terrain_type == 'shelter' for t in terrains_here)
 
-            if self.is_night:
-                if not entity.is_sleeping and random.random() < 0.2:
-                    entity.is_sleeping = True
+
+            if current_season == 'winter' and getattr(entity, 'can_hibernate', False):
+                entity.is_hibernating = True
+                entity.is_sleeping = True
             else:
-                entity.is_sleeping = False
+                entity.is_hibernating = False
+                if self.is_night:
+                    if not entity.is_sleeping and random.random() < 0.2:
+                        entity.is_sleeping = True
+                else:
+                    entity.is_sleeping = False
+
+
 
             # Consume energy per tick
-            energy_loss = entity.size
-            if self.current_event == 'storm':
-                energy_loss = 2 * entity.size if not in_shelter else entity.size
-            elif self.current_event == 'blizzard':
-                energy_loss = 3 * entity.size if not in_shelter else entity.size
-
-            if entity.is_infected:
-                energy_loss += 1
-                entity.infection_time += 1
-
-                # Recovery
-                if entity.infection_time > 10 and random.random() < 0.2:
-                    entity.is_infected = False
-                    entity.infection_time = 0
-
-                # Spread
-                if entity.is_infected:
-                    for other in self.entities:
-                        if other != entity and other.is_alive and not other.is_infected:
-                            dist = abs(other.x - entity.x) + abs(other.y - entity.y)
-                            if dist <= 2 and random.random() < 0.1:
-                                other.is_infected = True
-
-            # Shelter Building Mechanics
-            if entity.intelligence >= 5 and entity.energy > 20 and not in_shelter:
-                build_chance = 0.05
-                if self.current_event in ['storm', 'blizzard']:
-                    build_chance = 0.15
-                if random.random() < build_chance:
-                    self.add_terrain(Terrain(x=entity.x, y=entity.y, terrain_type='shelter'))
-                    entity.energy -= 10
-                    in_shelter = True
-
-            # Crafting Mechanics
-            if entity.intelligence >= 5 and entity.energy > 15:
-                if random.random() < 0.1: # 10% chance per tick to craft something
-                    needed_tools = [t for t in ['weapon', 'shield', 'clothing'] if t not in entity.inventory]
-                    if needed_tools:
-                        crafted_tool = random.choice(needed_tools)
-                        entity.inventory.append(crafted_tool)
-                        entity.energy -= 5
-
-            # Temperature check
-            current_temp = self.get_temperature_at(entity.x, entity.y)
-            effective_tolerance = entity.temperature_tolerance
-            if 'clothing' in entity.inventory:
-                effective_tolerance += 10
-            if in_shelter:
-                effective_tolerance += 15
-            if not (entity.preferred_temperature - effective_tolerance <= current_temp <= entity.preferred_temperature + effective_tolerance):
-                energy_loss += 1
-
-            # Symbiosis check
-            if entity.symbiotic_with:
-                for other in self.entities:
-                    if other != entity and other.is_alive and other.species in entity.symbiotic_with:
-                        dist = abs(other.x - entity.x) + abs(other.y - entity.y)
-                        if dist <= 2:
-                            # Reduced energy loss due to symbiosis benefit
-                            energy_loss = max(0, energy_loss - 1)
-                            break
-
-            # Terrain check
-            if entity.preferred_terrain:
-                terrains_here = self.get_terrains_at(entity.x, entity.y)
-                terrain_types = [t.terrain_type for t in terrains_here]
-                if entity.preferred_terrain in terrain_types:
-                    energy_loss = max(0, energy_loss - 1)
+            if getattr(entity, 'is_hibernating', False):
+                if self.time % 10 == 0:
+                    energy_loss = 1
+                    entity.hydration -= 1
                 else:
+                    energy_loss = 0
+            else:
+                energy_loss = entity.size
+                if self.current_event == 'storm':
+                    energy_loss = 2 * entity.size if not in_shelter else entity.size
+                elif self.current_event == 'blizzard':
+                    energy_loss = 3 * entity.size if not in_shelter else entity.size
+
+                if entity.is_infected:
+                    energy_loss += 1
+                    entity.infection_time += 1
+
+                    # Recovery
+                    if entity.infection_time > 10 and random.random() < 0.2:
+                        entity.is_infected = False
+                        entity.infection_time = 0
+
+                    # Spread
+                    if entity.is_infected:
+                        for other in self.entities:
+                            if other != entity and other.is_alive and not other.is_infected:
+                                dist = abs(other.x - entity.x) + abs(other.y - entity.y)
+                                if dist <= 2 and random.random() < 0.1:
+                                    other.is_infected = True
+
+                # Shelter Building Mechanics
+                if entity.intelligence >= 5 and entity.energy > 20 and not in_shelter:
+                    build_chance = 0.05
+                    if self.current_event in ['storm', 'blizzard']:
+                        build_chance = 0.15
+                    if random.random() < build_chance:
+                        self.add_terrain(Terrain(x=entity.x, y=entity.y, terrain_type='shelter'))
+                        entity.energy -= 10
+                        in_shelter = True
+
+                # Crafting Mechanics
+                if entity.intelligence >= 5 and entity.energy > 15:
+                    if random.random() < 0.1: # 10% chance per tick to craft something
+                        needed_tools = [t for t in ['weapon', 'shield', 'clothing'] if t not in entity.inventory]
+                        if needed_tools:
+                            crafted_tool = random.choice(needed_tools)
+                            entity.inventory.append(crafted_tool)
+                            entity.energy -= 5
+
+                # Temperature check
+                current_temp = self.get_temperature_at(entity.x, entity.y)
+                effective_tolerance = entity.temperature_tolerance
+                if 'clothing' in entity.inventory:
+                    effective_tolerance += 10
+                if in_shelter:
+                    effective_tolerance += 15
+                if not (entity.preferred_temperature - effective_tolerance <= current_temp <= entity.preferred_temperature + effective_tolerance):
                     energy_loss += 1
 
-            if getattr(entity, 'poisoned_time', 0) > 0:
-                energy_loss += 1
-                entity.poisoned_time -= 1
+                # Symbiosis check
+                if entity.symbiotic_with:
+                    for other in self.entities:
+                        if other != entity and other.is_alive and other.species in entity.symbiotic_with:
+                            dist = abs(other.x - entity.x) + abs(other.y - entity.y)
+                            if dist <= 2:
+                                # Reduced energy loss due to symbiosis benefit
+                                energy_loss = max(0, energy_loss - 1)
+                                break
 
-            # Hydration mechanics
-            entity.hydration -= 1
-            if entity.hydration <= 0:
-                energy_loss += 1
+                # Terrain check
+                if entity.preferred_terrain:
+                    terrains_here = self.get_terrains_at(entity.x, entity.y)
+                    terrain_types = [t.terrain_type for t in terrains_here]
+                    if entity.preferred_terrain in terrain_types:
+                        energy_loss = max(0, energy_loss - 1)
+                    else:
+                        energy_loss += 1
 
-            # Check if adjacent to water to drink
-            water_adjacent = False
-            for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0), (0, 0)]:
-                terrains_here = self.get_terrains_at(entity.x + dx, entity.y + dy)
-                if any(t.terrain_type == 'water' for t in terrains_here):
-                    water_adjacent = True
-                    break
-            if water_adjacent:
-                entity.hydration = entity.max_hydration
+                if getattr(entity, 'poisoned_time', 0) > 0:
+                    energy_loss += 1
+                    entity.poisoned_time -= 1
 
-            # Shelter healing/recovery
-            if in_shelter:
-                energy_loss -= 2
+                # Hydration mechanics
+                entity.hydration -= 1
+                if entity.hydration <= 0:
+                    energy_loss += 1
 
-            if entity.is_sleeping:
-                energy_loss -= 3
+                # Check if adjacent to water to drink
+                water_adjacent = False
+                for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0), (0, 0)]:
+                    terrains_here = self.get_terrains_at(entity.x + dx, entity.y + dy)
+                    if any(t.terrain_type == 'water' for t in terrains_here):
+                        water_adjacent = True
+                        break
+                if water_adjacent:
+                    entity.hydration = entity.max_hydration
+
+                # Shelter healing/recovery
+                if in_shelter:
+                    energy_loss -= 2
+
+                if entity.is_sleeping:
+                    energy_loss -= 3
 
             entity.energy -= energy_loss
             # Age by 1 per tick
@@ -689,7 +718,7 @@ class Universe:
             if entity.is_alive:
                 # Reproduction
                 reproduction_chance = min(1.0, 0.5 + (entity.intelligence * 0.05))
-                if entity.energy >= self.reproduction_threshold and (len(self.entities) + len(new_entities) < self.population_limit) and random.random() < reproduction_chance:
+                if not entity.is_sleeping and entity.energy >= self.reproduction_threshold and (len(self.entities) + len(new_entities) < self.population_limit) and random.random() < reproduction_chance:
                     entity.energy -= self.reproduction_cost
 
                     # Genetics and Mutations
@@ -707,6 +736,7 @@ class Universe:
                     child_poison_resistance = entity.poison_resistance
                     child_camouflage = entity.camouflage
                     child_vision_type = getattr(entity, 'vision_type', 'normal')
+                    child_can_hibernate = getattr(entity, 'can_hibernate', False)
                     child_is_flying = getattr(entity, 'is_flying', False)
                     child_target_species = entity.target_species.copy() if entity.target_species else None
                     child_target_plants = entity.target_plants.copy() if entity.target_plants else None
@@ -771,6 +801,9 @@ class Universe:
                         mutation_occurred = True
 
                     if random.random() < mutation_chance:
+                        child_can_hibernate = not child_can_hibernate
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
                         child_max_hydration += random.randint(-5, 5)
                         child_max_hydration = max(10, child_max_hydration)
                         mutation_occurred = True
@@ -814,7 +847,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate)
                     new_entities.append(child)
 
                 effective_perception = entity.perception_radius if (self.is_day or getattr(entity, 'vision_type', 'normal') == 'night_vision') else max(1, entity.perception_radius // 2)

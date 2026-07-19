@@ -2,6 +2,8 @@
 - Added a reproduction chance modifier based on intelligence. Entities with higher intelligence have a greater chance to reproduce successfully.
 ## [Unreleased]
 ### Added
+- Implemented organic plant spreading allowing flora to naturally grow into patches over time.
+- Implemented hibernation mechanics allowing entities to preserve energy and hydration during winter if they possess the `can_hibernate` trait.
 - Analyzed recent project changes (Flight, Pack Hunting, Food Spoilage, Vision, Toxicity) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
 ### Added

@@ -36,25 +36,30 @@ class CLIVisualizer:
         # Add entities (entities overwrite food in visualization if on same spot)
         for entity in self.universe.entities:
             if 0 <= entity.x < self.universe.width and 0 <= entity.y < self.universe.height:
+
                 diet = getattr(entity, 'diet', 'herbivore')
+                is_hibernating = getattr(entity, 'is_hibernating', False)
+
                 if getattr(entity, 'is_infected', False):
                     if diet == 'carnivore':
-                        grid[entity.y][entity.x] = 'X'
+                        char = 'X'
                     elif diet == 'scavenger':
-                        grid[entity.y][entity.x] = 'W'
+                        char = 'W'
                     elif diet == 'omnivore':
-                        grid[entity.y][entity.x] = 'Q'
+                        char = 'Q'
                     else:
-                        grid[entity.y][entity.x] = 'S'
+                        char = 'S'
                 else:
                     if diet == 'carnivore':
-                        grid[entity.y][entity.x] = 'C'
+                        char = 'C'
                     elif diet == 'scavenger':
-                        grid[entity.y][entity.x] = 'V'
+                        char = 'V'
                     elif diet == 'omnivore':
-                        grid[entity.y][entity.x] = 'O'
+                        char = 'O'
                     else:
-                        grid[entity.y][entity.x] = 'E'
+                        char = 'E'
+
+                grid[entity.y][entity.x] = char.lower() if is_hibernating else char
 
         # Join lines
         return '\n'.join(''.join(row) for row in grid)

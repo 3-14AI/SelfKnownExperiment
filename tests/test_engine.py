@@ -2332,6 +2332,34 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(path[0], (1, 0)) # First step is +1, 0
 
 
+
+    def test_hibernation(self):
+        universe = Universe()
+        universe.time = universe.season_length * 3  # Winter season
+        entity = Entity("test", x=5, y=5, energy=20, can_hibernate=True)
+        universe.add_entity(entity)
+        universe.tick()
+        self.assertTrue(entity.is_hibernating)
+        self.assertTrue(entity.is_sleeping)
+        initial_energy = entity.energy
+        initial_hydration = entity.hydration
+        universe.time = universe.season_length * 3 + 1 # tick not divisible by 10
+        universe.tick()
+        self.assertEqual(entity.energy, initial_energy) # energy_loss = 0
+        self.assertEqual(entity.hydration, initial_hydration) # hydration loss = 0
+
+    def test_plant_spreading(self):
+        universe = Universe(food_spawn_rate=0.0)
+        food = Food(x=5, y=5, plant_type='berry', age=15)
+        universe.add_food(food)
+        # Mock random to guarantee spread condition
+        with unittest.mock.patch('random.random', return_value=0.001):
+            with unittest.mock.patch('random.choice', return_value=1): # dx=1, dy=1
+                universe.tick()
+        foods_here = universe.get_foods_at(6, 6)
+        self.assertEqual(len(foods_here), 1)
+        self.assertEqual(foods_here[0].plant_type, 'berry')
+
 if __name__ == '__main__':
 
 
