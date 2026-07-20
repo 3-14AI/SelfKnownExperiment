@@ -16,7 +16,9 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50):
+        self.max_stamina = max_stamina
+        self.stamina = stamina
         self.level = level
         self.experience = experience
         self.lays_eggs = lays_eggs
@@ -197,6 +199,8 @@ class Universe:
 
         entity.x = new_x
         entity.y = new_y
+        if hasattr(entity, 'stamina'):
+            entity.stamina = max(0, entity.stamina - 1)
 
     def get_terrains_at(self, x, y):
         return [t for t in self.terrains if t.x == x and t.y == y]
@@ -625,16 +629,21 @@ class Universe:
             in_shelter = any(t.terrain_type == 'shelter' for t in terrains_here)
 
 
+            start_pos_x, start_pos_y = entity.x, entity.y
+
             if current_season == 'winter' and getattr(entity, 'can_hibernate', False):
                 entity.is_hibernating = True
                 entity.is_sleeping = True
             else:
                 entity.is_hibernating = False
-                if self.is_night:
+                if getattr(entity, 'stamina', 50) <= 0:
+                    entity.is_sleeping = True
+                elif self.is_night:
                     if not entity.is_sleeping and random.random() < 0.2:
                         entity.is_sleeping = True
                 else:
-                    entity.is_sleeping = False
+                    if getattr(entity, 'stamina', 50) >= getattr(entity, 'max_stamina', 50) * 0.5:
+                        entity.is_sleeping = False
 
 
 
@@ -774,6 +783,7 @@ class Universe:
                     child_lays_eggs = getattr(entity, 'lays_eggs', False)
                     child_can_hoard = getattr(entity, 'can_hoard', False)
                     child_is_flying = getattr(entity, 'is_flying', False)
+                    child_max_stamina = getattr(entity, 'max_stamina', 50)
                     child_target_species = entity.target_species.copy() if entity.target_species else None
                     child_target_plants = entity.target_plants.copy() if entity.target_plants else None
                     child_generation = entity.generation + 1
@@ -847,6 +857,10 @@ class Universe:
                         child_can_hoard = not child_can_hoard
                         mutation_occurred = True
                     if random.random() < mutation_chance:
+                        child_max_stamina += random.randint(-5, 5)
+                        child_max_stamina = max(10, child_max_stamina)
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
                         child_max_hydration += random.randint(-5, 5)
                         child_max_hydration = max(10, child_max_hydration)
                         mutation_occurred = True
@@ -890,7 +904,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
@@ -1146,7 +1160,11 @@ class Universe:
                             prey_to_eat = preys_here[0]
                             prey_in_shelter = any(t.terrain_type == 'shelter' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y))
                             effective_attack = entity.attack + (2 if 'weapon' in entity.inventory else 0)
+                            if getattr(entity, 'stamina', 50) <= 10:
+                                effective_attack *= 0.5
                             effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)
+                            if getattr(prey_to_eat, 'stamina', 50) <= 10:
+                                effective_defense *= 0.5
                             pack_members = [e for e in self.entities if e.species == entity.species and e != entity and e.is_alive and not e.is_sleeping and abs(e.x - entity.x) + abs(e.y - entity.y) <= 3]
                             herd_members = [e for e in self.entities if e.species == prey_to_eat.species and e != prey_to_eat and e.is_alive and not e.is_sleeping and abs(e.x - prey_to_eat.x) + abs(e.y - prey_to_eat.y) <= 3]
                             pack_bonus = sum(0.5 * e.attack for e in pack_members)
@@ -1167,6 +1185,8 @@ class Universe:
                                 prey_to_eat.attack += 0.1
                                 entity.attack += 0.2
                                 prey_to_eat.add_experience(2)
+                                entity.stamina = max(0, getattr(entity, 'stamina', 50) - 5)
+                                prey_to_eat.stamina = max(0, getattr(prey_to_eat, 'stamina', 50) - 5)
                             else:
                                 # Prey is eaten
                                 entity.energy = min(entity.max_energy, entity.energy + prey_to_eat.energy)
@@ -1175,6 +1195,7 @@ class Universe:
                                 entity.attack += 0.5
                                 entity.defense += 0.5
                                 entity.add_experience(5)
+                                entity.stamina = max(0, getattr(entity, 'stamina', 50) - 2)
                                 prey_to_eat.energy = 0
                                 prey_to_eat.was_eaten = True
 
@@ -1240,7 +1261,11 @@ class Universe:
                         prey_to_eat = preys_here[0]
                         prey_in_shelter = any(t.terrain_type == 'shelter' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y))
                         effective_attack = entity.attack + (2 if 'weapon' in entity.inventory else 0)
+                        if getattr(entity, 'stamina', 50) <= 10:
+                            effective_attack *= 0.5
                         effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)
+                        if getattr(prey_to_eat, 'stamina', 50) <= 10:
+                            effective_defense *= 0.5
                         pack_members = [e for e in self.entities if e.species == entity.species and e != entity and e.is_alive and not e.is_sleeping and abs(e.x - entity.x) + abs(e.y - entity.y) <= 3]
                         herd_members = [e for e in self.entities if e.species == prey_to_eat.species and e != prey_to_eat and e.is_alive and not e.is_sleeping and abs(e.x - prey_to_eat.x) + abs(e.y - prey_to_eat.y) <= 3]
                         pack_bonus = sum(0.5 * e.attack for e in pack_members)
@@ -1265,6 +1290,8 @@ class Universe:
 
                             # Predator learns from failure
                             entity.attack += 0.2
+                            entity.stamina = max(0, getattr(entity, 'stamina', 50) - 5)
+                            prey_to_eat.stamina = max(0, getattr(prey_to_eat, 'stamina', 50) - 5)
                         else:
                             # Prey is eaten
                             entity.energy = min(entity.max_energy, entity.energy + prey_to_eat.energy)
@@ -1275,12 +1302,18 @@ class Universe:
                             entity.attack += 0.5
                             entity.add_experience(5)
                             entity.defense += 0.5
+                            entity.stamina = max(0, getattr(entity, 'stamina', 50) - 2)
 
                             prey_to_eat.energy = 0 # Kill prey
                             prey_to_eat.was_eaten = True
 
             if entity.is_alive and entity.diet in ['herbivore', 'scavenger', 'omnivore']:
                 self.scent_trails[(entity.x, entity.y)] = 20
+
+            if entity.is_alive:
+                if entity.x == start_pos_x and entity.y == start_pos_y:
+                    recovery = 5 if entity.is_sleeping else 2
+                    entity.stamina = min(getattr(entity, 'max_stamina', 50), getattr(entity, 'stamina', 50) + recovery)
 
 
 

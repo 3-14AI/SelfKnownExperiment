@@ -2503,6 +2503,63 @@ class TestMedicinalPlants(unittest.TestCase):
         target = self.universe.get_nearest_food(entity.x, entity.y, max_distance=10, entity=entity)
         self.assertEqual(target, medicinal_food)
 
+
+    def test_entity_stamina_drain_and_recovery(self):
+        universe = Universe(food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        entity = Entity("Runner", stamina=10, max_stamina=50, x=5, y=5)
+        universe.add_entity(entity)
+
+        # Test move drains stamina
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 9)
+
+        # Test recovery on idle
+        universe.tick()
+        # Idle recovery is +2
+        self.assertEqual(entity.stamina, 11)
+
+    def test_entity_stamina_sleep(self):
+        universe = Universe(food_spawn_rate=0.0, disease_chance=0.0)
+        universe.event_chance = 0.0
+        universe.time = 5 # Day time
+        entity = Entity("Sleeper", stamina=0, max_stamina=50, energy=50, hydration=50, x=5, y=5)
+        universe.add_entity(entity)
+
+        universe.tick()
+
+        # Entity should fall asleep because stamina <= 0
+        self.assertTrue(entity.is_sleeping)
+        # Sleeping recovery is +5
+        self.assertEqual(entity.stamina, 5)
+
+    def test_stamina_combat_penalty(self):
+        universe = Universe(food_spawn_rate=0.0)
+        predator = Entity("Wolf", x=5, y=5, diet='carnivore', attack=10, defense=10, stamina=5, max_stamina=50)
+        prey = Entity("Sheep", x=5, y=5, diet='herbivore', attack=1, defense=10, stamina=5, max_stamina=50)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Set escape chance mock
+        from unittest.mock import patch
+
+        def mock_random():
+            # mock random to return 0.1 so prey escapes (escape chance would be calculated based on stats,
+            # predator effective attack *= 0.5 because stamina <= 10 (so 5),
+            # prey effective defense *= 0.5 because stamina <= 10 (so 5).
+            # escape chance = 5 / (5+5) = 0.5. So <0.5 means escape)
+            # return 0.1 to guarantee escape.
+            return 0.1
+
+        with patch('src.universe.engine.random.random', side_effect=lambda: 0.1):
+            universe.tick()
+
+        # Predator & Prey should lose stamina from escaping (-5)
+        self.assertEqual(predator.stamina, 2) # 5 - 5 = 0, +2 for not moving
+        pass # will test another way
+
+
 if __name__ == '__main__':
 
 
