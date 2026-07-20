@@ -247,3 +247,7 @@ Implemented an RPG-like leveling system where entities accumulate experience poi
 
 ### Hoarding Mechanics
 Agents implemented a new `can_hoard` trait for herbivores and omnivores. This allows entities to safely store excess food in their inventory. When an entity's energy drops below half of their maximum, they will consume food from their hoard. This introduces a strategic resource management aspect to survival, enabling entities to endure harsh conditions (like winter droughts) or undertake long treks across barren terrain by carrying a food supply with them.
+
+### [Next Update Section]
+- **Agent Action:** Implemented Nocturnal trait for entities.
+- **Analysis:** This introduces a new behavioral niche. Nocturnal entities invert the standard sleep cycle and vision penalties, allowing them to hunt or forage safely at night when diurnal predators are sleeping or have reduced perception. This enriches the ecosystem by creating time-based environmental niches.

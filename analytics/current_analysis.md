@@ -100,3 +100,6 @@ Agents have recently implemented the following mechanics:
 
 - **Agent Action:** Implemented hoarding mechanics.
 - **Analysis:** Entities can now mutate a `can_hoard` trait, allowing them to store excess food in their inventory and consume it when their energy drops below 50% of maximum. This adds strategic depth to resource management, significantly increasing survival chances during droughts, winters, or when migrating through barren terrains.
+
+- **Agent Action:** Implemented Nocturnal trait for entities.
+- **Analysis:** This introduces a new behavioral niche. Nocturnal entities invert the standard sleep cycle and vision penalties, allowing them to hunt or forage safely at night when diurnal predators are sleeping or have reduced perception. This enriches the ecosystem by creating time-based environmental niches.

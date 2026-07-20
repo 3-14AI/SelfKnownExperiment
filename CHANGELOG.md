@@ -1,4 +1,10 @@
 # Changelog
+
+## [Unreleased]
+### Added
+- Implemented Nocturnal trait. Entities can mutate `is_nocturnal`.
+- Nocturnal entities invert their sleep cycles, sleeping during the day and being active at night.
+- Nocturnal entities retain full perception at night but have halved perception during the day.
 ## [Unreleased]
 ### Added
 - Implemented stamina system. Entities have `stamina` and `max_stamina` attributes, losing stamina when moving or participating in combat, and falling asleep if it drops to 0.
