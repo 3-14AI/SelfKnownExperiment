@@ -230,7 +230,7 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(len(universe.foods), 1)
         universe.tick()
 
-        # Entity should lose 1 energy from tick, but gain 5 from food (10 - 1 + 5 = 14)
+        # Entity should lose 1 energy from tick, but gain 5 from food
         self.assertEqual(entity.energy, 14)
         self.assertEqual(len(universe.foods), 0)
 
@@ -1478,7 +1478,8 @@ class TestUniverse(unittest.TestCase):
 
         # Test Movement Speed
         # A size 3 entity should only move every 3 ticks
-        large_mover = Entity("Mover", x=5, y=5, energy=50, size=3, diet='herbivore')
+        large_mover = Entity("Mover", x=5, y=5, energy=50, size=3, diet='herbivore', perception_radius=10)
+        universe.food_spawn_rate = 0.0
         # Setup so it wants to move
         from src.universe.engine import Food
         universe.add_food(Food(x=6, y=5))
@@ -2252,7 +2253,7 @@ class TestUniverse(unittest.TestCase):
         self.assertNotIn(food, universe.foods)
 
     def test_food_spoilage_heat(self):
-        universe = Universe(width=10, height=10)
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         universe.time = 50 # summer -> temp 30
         food = Food(x=5, y=5, age=0, max_age=6)

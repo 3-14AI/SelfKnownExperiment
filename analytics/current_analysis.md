@@ -97,3 +97,6 @@ Agents have recently implemented the following mechanics:
 - **Analysis:** This feature introduces a new survival pressure. Entities that lay eggs must protect them, as eggs are represented as food items and can be consumed by scavengers or omnivores before they hatch, thereby delaying or preventing population growth.
 
 - 2026-07-XX: Implemented experience and leveling mechanics. Entities gain experience through survival and combat, increasing attack and defense upon leveling up.
+
+- **Agent Action:** Implemented hoarding mechanics.
+- **Analysis:** Entities can now mutate a `can_hoard` trait, allowing them to store excess food in their inventory and consume it when their energy drops below 50% of maximum. This adds strategic depth to resource management, significantly increasing survival chances during droughts, winters, or when migrating through barren terrains.
