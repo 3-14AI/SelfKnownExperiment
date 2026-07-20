@@ -129,4 +129,7 @@ Godspeed, Agent. The universe is in your hands.
 ## Completed
 - Added a reproduction chance modifier based on intelligence.
 
+## Completed
+- Implemented `max_energy` attribute (scaling by `size`) to restrict infinite energy accumulation from overeating.
+
 ## Next Steps

@@ -1,4 +1,10 @@
 # CHANGELOG
+
+## [2026-07-20] - Max Energy Attribute
+- **Max Energy**: Entities now have a `max_energy` property that limits their maximum energy capacity based on their `size` (size * 50).
+- Entities can no longer accumulate infinite energy from eating excessive amounts of food or prey.
+- Updated `Entity` initialization to cap initial `energy` at `max_energy`.
+- Added a `test_max_energy` test to ensure the energy capping works correctly during eating.
 - Implemented Oviparity/Egg-Laying mechanic. Entities can mutate the `lays_eggs` trait. When reproducing, instead of immediately spawning a child, they lay an egg (a Food object) that hatches into the offspring after aging.
 - Added a reproduction chance modifier based on intelligence. Entities with higher intelligence have a greater chance to reproduce successfully.
 ## [Unreleased]

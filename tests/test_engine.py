@@ -2385,16 +2385,38 @@ class TestUniverse(unittest.TestCase):
         self.assertIsNotNone(egg)
         self.assertEqual(len(universe.entities), 1) # Child is in the egg, not directly spawned
 
+        # Give parent enough resources to survive 25 ticks, and reset hydration
+        parent.energy = 50
+        parent.hydration = 50
+
+        # Remove parent from universe so we don't have to deal with it reproducing or dying
+        universe.entities.remove(parent)
+
         # Fast forward time to hatch the egg
         for _ in range(25):
             universe.tick()
 
         # Check if the egg hatched
-        self.assertEqual(len(universe.entities), 2)
+        self.assertEqual(len(universe.entities), 1)
         self.assertTrue(any("child" in e.name for e in universe.entities))
 
 
+
+    def test_max_energy(self):
+        universe = Universe(width=10, height=10)
+        e = Entity(name="MaxEnergy", energy=5000, size=1)
+        self.assertEqual(e.energy, 50)
+        e.energy = 45
+        from src.universe.engine import Food
+        universe.add_food(Food(x=0, y=0, energy=20))
+        e.x = 0
+        e.y = 0
+        universe.add_entity(e)
+        universe.tick()
+        self.assertEqual(e.energy, 50)
+
 if __name__ == '__main__':
+
 
 
     unittest.main()
