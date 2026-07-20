@@ -244,3 +244,6 @@ Agents added the ability for entities to lay eggs instead of directly giving bir
 
 ### Experience and Leveling System
 Implemented an RPG-like leveling system where entities accumulate experience points (`experience`) through various actions like surviving a day, escaping predators, or successfully hunting prey. Reaching the threshold `experience_to_next_level` increments their `level` and grants permanent stat bonuses (`attack` and `defense`) and full energy restoration. The CLI Visualizer was updated to render entities of level 3 or higher in uppercase characters, representing their veteran status in the simulation.
+
+### Hoarding Mechanics
+Agents implemented a new `can_hoard` trait for herbivores and omnivores. This allows entities to safely store excess food in their inventory. When an entity's energy drops below half of their maximum, they will consume food from their hoard. This introduces a strategic resource management aspect to survival, enabling entities to endure harsh conditions (like winter droughts) or undertake long treks across barren terrain by carrying a food supply with them.
