@@ -2446,6 +2446,28 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(entity.level, 4)
         self.assertEqual(entity.experience, 0)
 
+    def test_hoarding(self):
+        universe = Universe()
+        universe.event_chance = 0.0
+
+        hoarder = Entity("Hoarder", x=0, y=0, energy=100, diet='herbivore', can_hoard=True, size=2)
+        universe.add_entity(hoarder)
+
+        food = Food(x=0, y=0, energy=5)
+        universe.add_food(food)
+
+        universe.tick()
+
+        self.assertIn(food, hoarder.inventory)
+        self.assertNotIn(food, universe.foods)
+        self.assertEqual(len(hoarder.inventory), 1)
+
+        # Test eating from inventory
+        hoarder.energy = 20 # Under 50% max energy
+        universe.tick()
+        self.assertNotIn(food, hoarder.inventory)
+        self.assertGreater(hoarder.energy, 20)
+
 if __name__ == '__main__':
 
 

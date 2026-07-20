@@ -16,10 +16,11 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False):
         self.level = level
         self.experience = experience
         self.lays_eggs = lays_eggs
+        self.can_hoard = can_hoard
         self.target_species = target_species
         self.is_sleeping = is_sleeping
         self.is_aquatic = is_aquatic
@@ -763,6 +764,7 @@ class Universe:
                     child_vision_type = getattr(entity, 'vision_type', 'normal')
                     child_can_hibernate = getattr(entity, 'can_hibernate', False)
                     child_lays_eggs = getattr(entity, 'lays_eggs', False)
+                    child_can_hoard = getattr(entity, 'can_hoard', False)
                     child_is_flying = getattr(entity, 'is_flying', False)
                     child_target_species = entity.target_species.copy() if entity.target_species else None
                     child_target_plants = entity.target_plants.copy() if entity.target_plants else None
@@ -834,6 +836,9 @@ class Universe:
                         child_lays_eggs = not child_lays_eggs
                         mutation_occurred = True
                     if random.random() < mutation_chance:
+                        child_can_hoard = not child_can_hoard
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
                         child_max_hydration += random.randint(-5, 5)
                         child_max_hydration = max(10, child_max_hydration)
                         mutation_occurred = True
@@ -877,7 +882,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
@@ -890,6 +895,16 @@ class Universe:
                 for t in self.terrains:
                     if not self.is_passable(t.x, t.y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False)) and (abs(t.x - entity.x) + abs(t.y - entity.y)) <= effective_perception:
                         entity.memory.add((t.x, t.y))
+
+                # Eat from inventory if hungry and has hoarded food
+                if getattr(entity, 'can_hoard', False) and entity.energy <= entity.max_energy * 0.5:
+                    hoarded_foods = [item for item in entity.inventory if isinstance(item, Food)]
+                    if hoarded_foods:
+                        food_to_eat = hoarded_foods[0]
+                        entity.inventory.remove(food_to_eat)
+                        entity.energy = min(entity.max_energy, entity.energy + food_to_eat.energy)
+                        if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
+                            entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
 
                 can_move = True
                 if entity.is_sleeping:
@@ -974,10 +989,14 @@ class Universe:
                     foods_here = self.get_foods_at(entity.x, entity.y, entity=entity)
                     if foods_here:
                         food_to_eat = foods_here[0]
-                        entity.energy = min(entity.max_energy, entity.energy + food_to_eat.energy)
-                        if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
-                            entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
-                        self.foods.remove(food_to_eat)
+                        if getattr(entity, 'can_hoard', False) and entity.energy >= entity.max_energy - 10 and len([item for item in entity.inventory if isinstance(item, Food)]) < entity.size * 2:
+                            entity.inventory.append(food_to_eat)
+                            self.foods.remove(food_to_eat)
+                        else:
+                            entity.energy = min(entity.max_energy, entity.energy + food_to_eat.energy)
+                            if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
+                                entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
+                            self.foods.remove(food_to_eat)
                 elif entity.diet == 'omnivore':
                     if can_move:
                         # Flee behavior
@@ -1089,10 +1108,14 @@ class Universe:
                     foods_here = self.get_foods_at(entity.x, entity.y, entity=entity)
                     if foods_here:
                         food_to_eat = foods_here[0]
-                        entity.energy = min(entity.max_energy, entity.energy + food_to_eat.energy)
-                        if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
-                            entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
-                        self.foods.remove(food_to_eat)
+                        if getattr(entity, 'can_hoard', False) and entity.energy >= entity.max_energy - 10 and len([item for item in entity.inventory if isinstance(item, Food)]) < entity.size * 2:
+                            entity.inventory.append(food_to_eat)
+                            self.foods.remove(food_to_eat)
+                        else:
+                            entity.energy = min(entity.max_energy, entity.energy + food_to_eat.energy)
+                            if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
+                                entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
+                            self.foods.remove(food_to_eat)
                     else:
                         preys_here = self.get_preys_at(entity.x, entity.y, entity=entity)
                         if preys_here:

@@ -1,4 +1,11 @@
-# CHANGELOG
+# Changelog
+## [Unreleased]
+### Added
+- Implemented Hoarding Mechanics. Entities can now mutate a `can_hoard` trait.
+- Entities with this trait will collect and store excess food in their inventory when their energy is near maximum and they have free capacity.
+- Entities will automatically consume hoarded food from their inventory when their energy drops below 50% of their maximum capacity.
+- Added test coverage in `test_engine.py` to verify hoarding behavior.
+
 
 ## [Unreleased]
 ### Added
