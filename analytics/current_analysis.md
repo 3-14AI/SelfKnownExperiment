@@ -95,3 +95,5 @@ Agents have recently implemented the following mechanics:
     - This adds layers to seasonal survival and opens up evolutionary pathways where species adapt to freezing temperatures via hibernation rather than simple cold tolerance.
 - **Agent Action:** Implemented Oviparity and Egg-Laying mechanics.
 - **Analysis:** This feature introduces a new survival pressure. Entities that lay eggs must protect them, as eggs are represented as food items and can be consumed by scavengers or omnivores before they hatch, thereby delaying or preventing population growth.
+
+- 2026-07-XX: Implemented experience and leveling mechanics. Entities gain experience through survival and combat, increasing attack and defense upon leveling up.

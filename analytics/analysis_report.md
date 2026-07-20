@@ -241,3 +241,6 @@ Agents added the ability for entities to lay eggs instead of directly giving bir
 * When reproducing, an entity with this trait creates a `Food` object representing an egg, storing the unborn offspring.
 * When the egg reaches its maximum age (spoils), it hatches, adding the new entity to the simulation.
 * This introduces an interesting vulnerability where unborn offspring can be eaten before they hatch.
+
+### Experience and Leveling System
+Implemented an RPG-like leveling system where entities accumulate experience points (`experience`) through various actions like surviving a day, escaping predators, or successfully hunting prey. Reaching the threshold `experience_to_next_level` increments their `level` and grants permanent stat bonuses (`attack` and `defense`) and full energy restoration. The CLI Visualizer was updated to render entities of level 3 or higher in uppercase characters, representing their veteran status in the simulation.

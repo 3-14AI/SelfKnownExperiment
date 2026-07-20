@@ -132,4 +132,7 @@ Godspeed, Agent. The universe is in your hands.
 ## Completed
 - Implemented `max_energy` attribute (scaling by `size`) to restrict infinite energy accumulation from overeating.
 
+## Completed
+- Implemented an experience and leveling system where entities gain XP for surviving days, escaping predators, or successfully hunting, and level up to gain stat boosts.
+
 ## Next Steps

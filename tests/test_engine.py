@@ -2415,6 +2415,37 @@ class TestUniverse(unittest.TestCase):
         universe.tick()
         self.assertEqual(e.energy, 50)
 
+    def test_entity_experience_and_level_up(self):
+        universe = Universe(day_length=10)
+        entity = Entity("Hero", energy=50, max_age=100)
+        universe.add_entity(entity)
+
+        # Test base level
+        self.assertEqual(entity.level, 1)
+        self.assertEqual(entity.experience, 0)
+        self.assertEqual(entity.experience_to_next_level, 10)
+
+        # Test daily XP
+        universe.time = 9
+        universe.tick()
+        self.assertEqual(entity.experience, 1)
+
+        # Test manual add exp and level up
+        init_attack = entity.attack
+        init_defense = entity.defense
+        entity.add_experience(9)
+
+        self.assertEqual(entity.level, 2)
+        self.assertEqual(entity.experience, 0)
+        self.assertEqual(entity.attack, init_attack + 1)
+        self.assertEqual(entity.defense, init_defense + 1)
+        self.assertEqual(entity.energy, entity.max_energy)
+
+        # Test multiple level ups at once
+        entity.add_experience(50) # levels to 2(needs 20), 3(needs 30) -> exact 50
+        self.assertEqual(entity.level, 4)
+        self.assertEqual(entity.experience, 0)
+
 if __name__ == '__main__':
 
 

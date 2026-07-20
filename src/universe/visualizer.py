@@ -59,7 +59,7 @@ class CLIVisualizer:
                     else:
                         char = 'E'
 
-                grid[entity.y][entity.x] = char.lower() if is_hibernating else char
+                grid[entity.y][entity.x] = char.lower() if is_hibernating else (char.upper() if getattr(entity, 'level', 1) >= 3 else char)
 
         # Join lines
         return '\n'.join(''.join(row) for row in grid)
