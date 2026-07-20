@@ -12,6 +12,10 @@ class Food:
         self.toxicity = toxicity
 
 class Entity:
+    @property
+    def max_energy(self):
+        return self.size * 50
+
     def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False):
         self.lays_eggs = lays_eggs
         self.target_species = target_species
@@ -52,7 +56,7 @@ class Entity:
         self.name = name
         self.x = x
         self.y = y
-        self.energy = energy
+        self.energy = min(energy, size * 50)
         self.age = age
         self.max_age = max_age
         self.perception_radius = perception_radius
@@ -953,7 +957,7 @@ class Universe:
                     foods_here = self.get_foods_at(entity.x, entity.y, entity=entity)
                     if foods_here:
                         food_to_eat = foods_here[0]
-                        entity.energy += food_to_eat.energy
+                        entity.energy = min(entity.max_energy, entity.energy + food_to_eat.energy)
                         if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
                             entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
                         self.foods.remove(food_to_eat)
@@ -1068,7 +1072,7 @@ class Universe:
                     foods_here = self.get_foods_at(entity.x, entity.y, entity=entity)
                     if foods_here:
                         food_to_eat = foods_here[0]
-                        entity.energy += food_to_eat.energy
+                        entity.energy = min(entity.max_energy, entity.energy + food_to_eat.energy)
                         if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
                             entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
                         self.foods.remove(food_to_eat)
@@ -1100,7 +1104,7 @@ class Universe:
                                 entity.attack += 0.2
                             else:
                                 # Prey is eaten
-                                entity.energy += prey_to_eat.energy
+                                entity.energy = min(entity.max_energy, entity.energy + prey_to_eat.energy)
                                 if getattr(prey_to_eat, 'toxicity', 0) > entity.poison_resistance:
                                     entity.poisoned_time += (prey_to_eat.toxicity - entity.poison_resistance) * 5
                                 entity.attack += 0.5
@@ -1196,7 +1200,7 @@ class Universe:
                             entity.attack += 0.2
                         else:
                             # Prey is eaten
-                            entity.energy += prey_to_eat.energy
+                            entity.energy = min(entity.max_energy, entity.energy + prey_to_eat.energy)
                             if getattr(prey_to_eat, 'toxicity', 0) > entity.poison_resistance:
                                 entity.poisoned_time += (prey_to_eat.toxicity - entity.poison_resistance) * 5
 
