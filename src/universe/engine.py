@@ -16,7 +16,9 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0):
+        self.level = level
+        self.experience = experience
         self.lays_eggs = lays_eggs
         self.target_species = target_species
         self.is_sleeping = is_sleeping
@@ -72,6 +74,19 @@ class Entity:
         self.temperature_tolerance = temperature_tolerance
         self.hydration = hydration
         self.max_hydration = max_hydration
+
+    @property
+    def experience_to_next_level(self):
+        return self.level * 10
+
+    def add_experience(self, amount):
+        self.experience += amount
+        while self.experience >= self.experience_to_next_level:
+            self.experience -= self.experience_to_next_level
+            self.level += 1
+            self.attack += 1
+            self.defense += 1
+            self.energy = self.max_energy
 
     @property
     def is_alive(self):
@@ -722,6 +737,8 @@ class Universe:
             entity.energy -= energy_loss
             # Age by 1 per tick
             entity.age += 1
+            if self.time % self.day_length == 0:
+                entity.add_experience(1)
 
             if entity.is_alive:
                 # Reproduction
@@ -860,7 +877,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
@@ -1102,6 +1119,7 @@ class Universe:
                                 prey_to_eat.defense += 0.5
                                 prey_to_eat.attack += 0.1
                                 entity.attack += 0.2
+                                prey_to_eat.add_experience(2)
                             else:
                                 # Prey is eaten
                                 entity.energy = min(entity.max_energy, entity.energy + prey_to_eat.energy)
@@ -1109,6 +1127,7 @@ class Universe:
                                     entity.poisoned_time += (prey_to_eat.toxicity - entity.poison_resistance) * 5
                                 entity.attack += 0.5
                                 entity.defense += 0.5
+                                entity.add_experience(5)
                                 prey_to_eat.energy = 0
                                 prey_to_eat.was_eaten = True
 
@@ -1194,6 +1213,7 @@ class Universe:
 
                             # Prey gains experience from surviving
                             prey_to_eat.defense += 0.5
+                            prey_to_eat.add_experience(2)
                             prey_to_eat.attack += 0.1
 
                             # Predator learns from failure
@@ -1206,6 +1226,7 @@ class Universe:
 
                             # Gain experience/strength from eating prey
                             entity.attack += 0.5
+                            entity.add_experience(5)
                             entity.defense += 0.5
 
                             prey_to_eat.energy = 0 # Kill prey

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [Unreleased]
+### Added
+- Implemented an experience and leveling system for entities. Entities gain experience by surviving days, escaping predators, or successfully hunting.
+- Entities level up upon reaching experience thresholds, gaining attack, defense, and full energy restoration.
+- Updated `CLIVisualizer` to render entities of level 3 or higher with uppercase characters.
 ## [2026-07-20] - Max Energy Attribute
 - **Max Energy**: Entities now have a `max_energy` property that limits their maximum energy capacity based on their `size` (size * 50).
 - Entities can no longer accumulate infinite energy from eating excessive amounts of food or prey.
