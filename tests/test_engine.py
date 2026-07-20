@@ -2256,6 +2256,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         universe.time = 50 # summer -> temp 30
+        universe.base_temperature = 30
         food = Food(x=5, y=5, age=0, max_age=6)
         universe.add_food(food)
         for _ in range(2):
@@ -2451,7 +2452,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe()
         universe.event_chance = 0.0
 
-        hoarder = Entity("Hoarder", x=0, y=0, energy=100, diet='herbivore', can_hoard=True, size=2)
+        hoarder = Entity("Hoarder", x=0, y=0, energy=105, diet='herbivore', can_hoard=True, size=2, hydration=1000, max_hydration=1000)
         universe.add_entity(hoarder)
 
         food = Food(x=0, y=0, energy=5)
@@ -2468,6 +2469,39 @@ class TestUniverse(unittest.TestCase):
         universe.tick()
         self.assertNotIn(food, hoarder.inventory)
         self.assertGreater(hoarder.energy, 20)
+
+
+class TestMedicinalPlants(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+
+    def test_medicinal_cures_disease_and_poison(self):
+        entity = Entity("sick_herbivore", x=1, y=1, diet='herbivore', energy=20)
+        entity.is_infected = True
+        entity.target_plants = ['generic', 'berry', 'leaf', 'flower', 'toxic_plant', 'medicinal']
+        entity.infection_time = 5
+        entity.poisoned_time = 10
+        self.universe.add_entity(entity)
+        food = Food(x=1, y=1, plant_type='medicinal', energy=5)
+        self.universe.add_food(food)
+        self.universe.tick()
+        self.assertFalse(entity.is_infected)
+        self.assertEqual(entity.infection_time, 0)
+        self.assertEqual(entity.poisoned_time, 0)
+        self.assertNotIn(food, self.universe.foods)
+
+    def test_sick_entity_prioritizes_medicinal_plant(self):
+        entity = Entity("sick_herbivore", x=1, y=1, diet='herbivore', energy=20, perception_radius=10)
+        entity.is_infected = True
+        entity.target_plants = ['generic', 'medicinal']
+        self.universe.add_entity(entity)
+        generic_food = Food(x=2, y=1, plant_type='generic')  # distance 1
+        medicinal_food = Food(x=5, y=1, plant_type='medicinal') # distance 4
+        self.universe.add_food(generic_food)
+        self.universe.add_food(medicinal_food)
+        target = self.universe.get_nearest_food(entity.x, entity.y, max_distance=10, entity=entity)
+        self.assertEqual(target, medicinal_food)
 
 if __name__ == '__main__':
 
