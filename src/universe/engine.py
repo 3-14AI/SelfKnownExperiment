@@ -34,11 +34,11 @@ class Entity:
         self.is_hibernating = False
 
         if diet == 'herbivore' and target_plants is None:
-            target_plants = ['generic', 'berry', 'leaf', 'flower', 'toxic_plant']
+            target_plants = ['generic', 'berry', 'leaf', 'flower', 'toxic_plant', 'medicinal']
         elif diet == 'scavenger' and target_plants is None:
             target_plants = ['meat']
         elif diet == 'omnivore' and target_plants is None:
-            target_plants = ['generic', 'berry', 'leaf', 'flower', 'meat', 'toxic_plant']
+            target_plants = ['generic', 'berry', 'leaf', 'flower', 'meat', 'toxic_plant', 'medicinal']
         self.target_plants = target_plants
         self.generation = generation
         self.mutations = mutations
@@ -267,8 +267,13 @@ class Universe:
 
         nearest = None
         min_dist = float('inf')
+        needs_medicine = entity is not None and (getattr(entity, 'is_infected', False) or getattr(entity, 'poisoned_time', 0) > 0) and (entity.target_plants is None or 'medicinal' in entity.target_plants)
+        has_medicinal = any(f.plant_type == 'medicinal' for f in self.foods) if needs_medicine else False
+
         for food in self.foods:
             if entity and entity.target_plants is not None and food.plant_type not in entity.target_plants:
+                continue
+            if needs_medicine and has_medicinal and food.plant_type != 'medicinal':
                 continue
             dist = abs(food.x - x) + abs(food.y - y)
             if max_distance is not None and dist > max_distance:
@@ -605,9 +610,12 @@ class Universe:
 
             ptype = random.choice(choices)
             toxicity = 0
-            if random.random() < 0.1:
+            rand_val = random.random()
+            if rand_val < 0.1:
                 ptype = 'toxic_plant'
                 toxicity = random.randint(1, 3)
+            elif rand_val < 0.15:
+                ptype = 'medicinal'
             self.add_food(Food(x=x, y=y, plant_type=ptype, toxicity=toxicity))
 
         new_entities = []
@@ -905,6 +913,14 @@ class Universe:
                         entity.energy = min(entity.max_energy, entity.energy + food_to_eat.energy)
                         if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
                             entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
+                        if getattr(food_to_eat, 'plant_type', '') == 'medicinal':
+                            entity.is_infected = False
+                            entity.infection_time = 0
+                            entity.poisoned_time = 0
+                        if getattr(food_to_eat, 'plant_type', '') == 'medicinal':
+                            entity.is_infected = False
+                            entity.infection_time = 0
+                            entity.poisoned_time = 0
 
                 can_move = True
                 if entity.is_sleeping:
@@ -989,13 +1005,17 @@ class Universe:
                     foods_here = self.get_foods_at(entity.x, entity.y, entity=entity)
                     if foods_here:
                         food_to_eat = foods_here[0]
-                        if getattr(entity, 'can_hoard', False) and entity.energy >= entity.max_energy - 10 and len([item for item in entity.inventory if isinstance(item, Food)]) < entity.size * 2:
+                        if getattr(entity, 'can_hoard', False) and entity.energy >= entity.max_energy - 20 and len([item for item in entity.inventory if isinstance(item, Food)]) < entity.size * 2:
                             entity.inventory.append(food_to_eat)
                             self.foods.remove(food_to_eat)
                         else:
                             entity.energy = min(entity.max_energy, entity.energy + food_to_eat.energy)
                             if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
                                 entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
+                            if getattr(food_to_eat, 'plant_type', '') == 'medicinal':
+                                entity.is_infected = False
+                                entity.infection_time = 0
+                                entity.poisoned_time = 0
                             self.foods.remove(food_to_eat)
                 elif entity.diet == 'omnivore':
                     if can_move:
@@ -1108,13 +1128,17 @@ class Universe:
                     foods_here = self.get_foods_at(entity.x, entity.y, entity=entity)
                     if foods_here:
                         food_to_eat = foods_here[0]
-                        if getattr(entity, 'can_hoard', False) and entity.energy >= entity.max_energy - 10 and len([item for item in entity.inventory if isinstance(item, Food)]) < entity.size * 2:
+                        if getattr(entity, 'can_hoard', False) and entity.energy >= entity.max_energy - 20 and len([item for item in entity.inventory if isinstance(item, Food)]) < entity.size * 2:
                             entity.inventory.append(food_to_eat)
                             self.foods.remove(food_to_eat)
                         else:
                             entity.energy = min(entity.max_energy, entity.energy + food_to_eat.energy)
                             if getattr(food_to_eat, 'toxicity', 0) > entity.poison_resistance:
                                 entity.poisoned_time += (food_to_eat.toxicity - entity.poison_resistance) * 5
+                            if getattr(food_to_eat, 'plant_type', '') == 'medicinal':
+                                entity.is_infected = False
+                                entity.infection_time = 0
+                                entity.poisoned_time = 0
                             self.foods.remove(food_to_eat)
                     else:
                         preys_here = self.get_preys_at(entity.x, entity.y, entity=entity)

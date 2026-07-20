@@ -31,7 +31,7 @@ class CLIVisualizer:
         # Add food
         for food in self.universe.foods:
             if 0 <= food.x < self.universe.width and 0 <= food.y < self.universe.height:
-                grid[food.y][food.x] = 'o' if getattr(food, 'hatch_entity', None) is not None else ('T' if getattr(food, 'toxicity', 0) > 0 else ('%' if getattr(food, 'plant_type', 'generic') == 'meat' else 'f'))
+                grid[food.y][food.x] = 'o' if getattr(food, 'hatch_entity', None) is not None else ('T' if getattr(food, 'toxicity', 0) > 0 else ('+' if getattr(food, 'plant_type', 'generic') == 'medicinal' else ('%' if getattr(food, 'plant_type', 'generic') == 'meat' else 'f')))
 
         # Add entities (entities overwrite food in visualization if on same spot)
         for entity in self.universe.entities:
