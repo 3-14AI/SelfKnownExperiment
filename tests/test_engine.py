@@ -2560,6 +2560,58 @@ class TestMedicinalPlants(unittest.TestCase):
         pass # will test another way
 
 
+
+    def test_nocturnal_sleep_cycle(self):
+        from src.universe.engine import Universe, Entity
+        import src.universe.engine as eng
+        u = Universe(food_spawn_rate=0.0)
+        u.disease_chance = 0.0
+
+        # Test day time
+        u.time = 5 # Day time
+        e_diurnal = Entity("Diurnal", stamina=50, max_stamina=50, is_nocturnal=False)
+        e_nocturnal = Entity("Nocturnal", stamina=50, max_stamina=50, is_nocturnal=True)
+        u.add_entity(e_diurnal)
+        u.add_entity(e_nocturnal)
+
+        original_random = eng.random.random
+        eng.random.random = lambda: 0.0 # Force sleep trigger
+        try:
+            u.tick()
+            self.assertFalse(e_diurnal.is_sleeping) # Awake during day
+            self.assertTrue(e_nocturnal.is_sleeping) # Asleep during day
+
+            # Test night time
+            e_diurnal.is_sleeping = False
+            e_nocturnal.is_sleeping = False
+            u.time = 15 # Night time
+            u.tick()
+            self.assertTrue(e_diurnal.is_sleeping) # Asleep at night
+            self.assertFalse(e_nocturnal.is_sleeping) # Awake at night
+        finally:
+            eng.random.random = original_random
+
+    def test_nocturnal_perception(self):
+        from src.universe.engine import Universe, Entity
+        u = Universe(food_spawn_rate=0.0)
+        u.disease_chance = 0.0
+
+        u.time = 5 # Day time
+        e_nocturnal = Entity("Noct", is_nocturnal=True, perception_radius=10, vision_type='normal', x=0, y=0)
+        u.add_entity(e_nocturnal)
+
+        from src.universe.engine import Terrain
+        u.add_terrain(Terrain(x=10, y=0, terrain_type='wall')) # distance 10
+        u.tick()
+        # During the day, perception is halved to 5. Distance 10 should not be seen.
+        self.assertNotIn((10, 0), e_nocturnal.memory)
+
+        e_nocturnal.memory = set()
+        u.time = 15 # Night time
+        u.tick()
+        # During the night, perception is full (10). Distance 10 should be seen.
+        self.assertIn((10, 0), e_nocturnal.memory)
+
 if __name__ == '__main__':
 
 
