@@ -1,6 +1,7 @@
 # Changelog
 ## [Unreleased]
 ### Added
+- Implemented stamina system. Entities have `stamina` and `max_stamina` attributes, losing stamina when moving or participating in combat, and falling asleep if it drops to 0.
 - Implemented Hoarding Mechanics. Entities can now mutate a `can_hoard` trait.
 - Entities with this trait will collect and store excess food in their inventory when their energy is near maximum and they have free capacity.
 - Entities will automatically consume hoarded food from their inventory when their energy drops below 50% of their maximum capacity.
