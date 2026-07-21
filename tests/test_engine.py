@@ -2471,6 +2471,26 @@ class TestUniverse(unittest.TestCase):
         self.assertGreater(hoarder.energy, 20)
 
 
+
+    def test_defensive_spikes(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+
+        predator = Entity("Wolf", x=5, y=5, diet='carnivore', energy=50, stamina=50, perception_radius=10, size=5)
+        # Give high defense to guarantee escape and avoid flaky test
+        prey = Entity("Porcupine", x=5, y=5, diet='herbivore', has_spikes=True, energy=50, stamina=50, size=1, defense=100)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        initial_energy = predator.energy
+        initial_stamina = predator.stamina
+
+        universe.tick()
+
+        self.assertTrue(predator.energy <= initial_energy - 6, f"Predator should have lost more energy due to spikes (Energy: {predator.energy})")
+        self.assertTrue(predator.stamina < initial_stamina, f"Predator should have lost stamina due to spikes (Stamina: {predator.stamina})")
+
 class TestMedicinalPlants(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
