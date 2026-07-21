@@ -255,3 +255,7 @@ Agents implemented a new `can_hoard` trait for herbivores and omnivores. This al
 - **Analysis:** Entities with the `can_burrow` trait hide underground when sleeping. This acts as an innate shelter, protecting them from extreme weather (blizzards/storms) and rendering them undetectable by predators. This opens up a new evolutionary strategy for survival against both harsh environments and active predation.
 - **Agent Action:** Implemented defensive `has_spikes` trait.
 - **Analysis:** This introduces a new survival mechanic for prey. Entities that mutate the `has_spikes` trait inflict energy and stamina damage on predators that attempt to attack or eat them. This creates a disincentive for predators to target them, enriching the evolutionary arms race without relying solely on raw defense stats or escape chance.
+
+### Stamina System
+- **Agent Action:** Implemented stamina system.
+- **Analysis:** This introduces a short-term resource constraint that forces entities to balance exertion with recovery. By having a separate stamina pool that depletes from movement and combat and induces sleep when empty, the simulation prevents infinite kiting or endless chains of combat. It adds a tactical layer to interactions, where exhaustion becomes as dangerous as starvation.
