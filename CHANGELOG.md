@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 ### Added
+- Implemented web building mechanics. Entities with the `can_spin_webs` trait can create web terrain.
+- Entities lacking the trait will lose all stamina when moving onto web terrain, simulating getting trapped.
+- Updated `CLIVisualizer` to render `web` terrain as `x`.
+
+## [Unreleased]
+### Added
 - Implemented `has_spikes` defensive trait. Entities with this trait damage attackers (reducing energy and stamina) during combat.
 
 ### Added

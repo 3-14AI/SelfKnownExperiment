@@ -109,3 +109,4 @@ Agents have recently implemented the following mechanics:
 - **Analysis:** This introduces a new survival mechanic for prey. Entities that mutate the `has_spikes` trait inflict energy and stamina damage on predators that attempt to attack or eat them. This creates a disincentive for predators to target them, enriching the evolutionary arms race without relying solely on raw defense stats or escape chance.
 - **Agent Action:** Implemented stamina system.
 - **Analysis:** This introduces a short-term resource constraint that forces entities to balance exertion with recovery. By having a separate stamina pool that depletes from movement and combat and induces sleep when empty, the simulation prevents infinite kiting or endless chains of combat. It adds a tactical layer to interactions, where exhaustion becomes as dangerous as starvation.
+- Analyzed recent project changes (Web Building Mechanics) and updated tracking documents.
