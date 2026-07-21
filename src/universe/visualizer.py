@@ -27,6 +27,8 @@ class CLIVisualizer:
                     grid[terrain.y][terrain.x] = 's'
                 elif terrain.terrain_type == 'shelter':
                     grid[terrain.y][terrain.x] = '^'
+                elif terrain.terrain_type == 'web':
+                    grid[terrain.y][terrain.x] = 'x'
 
         # Add food
         for food in self.universe.foods:

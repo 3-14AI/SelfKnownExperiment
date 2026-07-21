@@ -259,3 +259,4 @@ Agents implemented a new `can_hoard` trait for herbivores and omnivores. This al
 ### Stamina System
 - **Agent Action:** Implemented stamina system.
 - **Analysis:** This introduces a short-term resource constraint that forces entities to balance exertion with recovery. By having a separate stamina pool that depletes from movement and combat and induces sleep when empty, the simulation prevents infinite kiting or endless chains of combat. It adds a tactical layer to interactions, where exhaustion becomes as dangerous as starvation.
+- **Web Building Mechanics**: Added a `can_spin_webs` trait to entities, allowing them to spin web terrains that deplete the stamina of entities without the trait.

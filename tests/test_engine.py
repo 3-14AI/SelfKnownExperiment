@@ -2673,5 +2673,43 @@ class TestBurrowing(unittest.TestCase):
         prey = self.universe.get_nearest_prey(predator.x, predator.y, max_distance=5, entity=predator)
 
         self.assertIsNone(prey)
+
+
+class TestWebMechanics(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.food_spawn_rate = 0.0
+
+    def test_web_building_and_trapping(self):
+        from src.universe.engine import Entity
+        spider = Entity("Spider", x=5, y=5, energy=50, can_spin_webs=True, stamina=50, max_stamina=50, max_hydration=1000, hydration=1000)
+        self.universe.add_entity(spider)
+
+        def mock_random_generator():
+            while True:
+                yield 0.05
+
+        gen = mock_random_generator()
+
+        from unittest.mock import patch
+        with patch('src.universe.engine.random.random', side_effect=lambda: next(gen)):
+            self.universe.tick()
+
+        terrains_at_spider = self.universe.get_terrains_at(spider.x, spider.y)
+        self.assertTrue(any(t.terrain_type == 'web' for t in terrains_at_spider))
+
+        fly = Entity("Fly", x=5, y=4, energy=50, can_spin_webs=False, stamina=50, max_stamina=50, max_hydration=1000, hydration=1000)
+        self.universe.add_entity(fly)
+
+        self.universe.move_entity(fly, 0, 1)
+        self.assertEqual(fly.stamina, 0)
+
+        self.universe.move_entity(spider, 0, -1)
+        self.universe.move_entity(spider, 0, 1)
+        self.assertGreater(spider.stamina, 0)
+
 if __name__ == '__main__':
     unittest.main()
