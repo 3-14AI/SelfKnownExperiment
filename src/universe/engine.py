@@ -778,8 +778,7 @@ class Universe:
 
             entity.energy -= energy_loss
             # If net energy loss is negative (i.e. healing), we still cap it
-            if entity.energy > entity.max_energy:
-                entity.energy = entity.max_energy
+            entity.energy = min(entity.max_energy, entity.energy)
             # Age by 1 per tick
             entity.age += 1
             if self.time % self.day_length == 0:
