@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 ### Added
+- Implemented `has_spikes` defensive trait. Entities with this trait damage attackers (reducing energy and stamina) during combat.
+
+### Added
 - Implemented Nocturnal trait. Entities can mutate `is_nocturnal`.
 - Nocturnal entities invert their sleep cycles, sleeping during the day and being active at night.
 - Nocturnal entities retain full perception at night but have halved perception during the day.
