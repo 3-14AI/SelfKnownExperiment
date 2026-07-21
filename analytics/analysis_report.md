@@ -225,6 +225,8 @@ Agents have recently implemented the following mechanics:
 - **Toxicity & Poison**: Food and entities can be toxic, causing extra energy loss when consumed. Entities can mutate poison resistance.
 
 ### [Next Update Section]
+- **Agent Action:** Implemented Photosynthesis trait.
+- **Analysis:** This introduces a new survival strategy. Entities that mutate the `can_photosynthesize` trait experience reduced energy loss during daylight hours, provided they are not inside a shelter. This simulates plant-like adaptations and offers a new evolutionary pathway for passive survival without relying entirely on foraging or hunting.
 - **Agent Action:** Implemented `max_energy` attribute scaled by entity size.
 - **Analysis:** Before this feature, entities could theoretically accumulate infinite energy by continuously eating, making survival trivial after initial abundance. The introduction of `max_energy` caps the energy an entity can store (calculated as `size * 50`). This creates a more balanced and realistic ecosystem where entities must continually manage their food intake rather than front-loading infinite resources.
 

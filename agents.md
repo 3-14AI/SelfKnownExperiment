@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implemented Photosynthesis trait. Entities with `can_photosynthesize` lose less energy during the day as long as they are not inside a shelter.
 - Implemented web building mechanics allowing entities with `can_spin_webs` to place stamina-draining traps.
 - Analyzed recent project changes (Stamina System) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Implemented defensive spikes/thorns trait. Entities with `has_spikes` damage their attackers during combat.

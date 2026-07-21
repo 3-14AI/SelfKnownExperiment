@@ -1926,22 +1926,22 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
 
         # Entity with size 1 (default energy loss 1)
-        entity = Entity("Healer", x=0, y=0, size=1, energy=50)
+        entity = Entity("Healer", x=0, y=0, size=1, energy=40)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='shelter'))
 
         with unittest.mock.patch('src.universe.engine.random.random', return_value=0.99):
             universe.tick()
 
-        # Base energy loss 1. Shelter heals 2. Net loss = -1. Energy should be 51.
-        self.assertEqual(entity.energy, 51)
+        # Base energy loss 1. Shelter heals 2. Net loss = -1. Energy should be 41.
+        self.assertEqual(entity.energy, 41)
 
 
     def test_hydration_loss_and_penalty(self):
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
-        entity = Entity("thirst_test", x=5, y=5, energy=20, hydration=2, max_hydration=10)
+        entity = Entity("thirst_test", x=5, y=5, energy=20, hydration=2, max_hydration=10, can_photosynthesize=False)
         universe.add_entity(entity)
 
         universe.tick()
@@ -2257,6 +2257,8 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         universe.time = 50 # summer -> temp 30
         universe.base_temperature = 30
+        # Prevent summer transition overriding base temp in tick by setting last_season
+        universe._last_season = 'summer'
         food = Food(x=5, y=5, age=0, max_age=6)
         universe.add_food(food)
         for _ in range(2):
@@ -2710,6 +2712,38 @@ class TestWebMechanics(unittest.TestCase):
         self.universe.move_entity(spider, 0, -1)
         self.universe.move_entity(spider, 0, 1)
         self.assertGreater(spider.stamina, 0)
+
+
+    def test_photosynthesis(self):
+        universe = Universe(width=10, height=10)
+        universe.time = 0 # force day (day length is 20)
+        universe.base_temperature = 20
+
+        e1 = Entity(name="P1", x=5, y=5, energy=20, can_photosynthesize=True, size=1)
+        e2 = Entity(name="P2", x=5, y=5, energy=20, can_photosynthesize=False, size=1)
+
+        # Avoid reproduction, aging death, hydration loss
+        e1.age = 5
+        e2.age = 5
+        e1.max_age = 100
+        e2.max_age = 100
+        e1.hydration = e1.max_hydration
+        e2.hydration = e2.max_hydration
+        e1.preferred_temperature = 20
+        e2.preferred_temperature = 20
+        e1.intelligence = 1
+        e2.intelligence = 1
+        e1.can_spin_webs = False
+        e2.can_spin_webs = False
+        universe.base_temperature = 20
+
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+
+        universe._last_season = universe.current_season # avoid season change
+        universe.tick()
+
+        self.assertGreater(e1.energy, e2.energy, "Photosynthesizing entity should lose less energy during the day.")
 
 if __name__ == '__main__':
     unittest.main()

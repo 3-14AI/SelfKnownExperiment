@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+- 2026-07-21: Implemented photosynthesis trait allowing entities to gain energy efficiency during the day.
 ### Added
 - Implemented web building mechanics. Entities with the `can_spin_webs` trait can create web terrain.
 - Entities lacking the trait will lose all stamina when moving onto web terrain, simulating getting trapped.

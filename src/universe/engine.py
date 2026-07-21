@@ -16,7 +16,8 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, can_photosynthesize=False):
+        self.can_photosynthesize = can_photosynthesize
         self.can_spin_webs = can_spin_webs
         self.max_stamina = max_stamina
         self.stamina = stamina
@@ -771,7 +772,14 @@ class Universe:
                 if entity.is_sleeping:
                     energy_loss -= 3
 
+                # Photosynthesis
+                if getattr(entity, 'can_photosynthesize', False) and self.is_day and not in_shelter:
+                    energy_loss -= 2
+
             entity.energy -= energy_loss
+            # If net energy loss is negative (i.e. healing), we still cap it
+            if entity.energy > entity.max_energy:
+                entity.energy = entity.max_energy
             # Age by 1 per tick
             entity.age += 1
             if self.time % self.day_length == 0:
@@ -805,6 +813,7 @@ class Universe:
                     child_can_burrow = getattr(entity, 'can_burrow', False)
                     child_has_spikes = getattr(entity, 'has_spikes', False)
                     child_can_spin_webs = getattr(entity, 'can_spin_webs', False)
+                    child_can_photosynthesize = getattr(entity, 'can_photosynthesize', False)
                     child_is_flying = getattr(entity, 'is_flying', False)
                     child_max_stamina = getattr(entity, 'max_stamina', 50)
                     child_target_species = entity.target_species.copy() if entity.target_species else None
@@ -892,6 +901,9 @@ class Universe:
                         child_can_spin_webs = not child_can_spin_webs
                         mutation_occurred = True
                     if random.random() < mutation_chance:
+                        child_can_photosynthesize = not child_can_photosynthesize
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
                         child_max_stamina += random.randint(-5, 5)
                         child_max_stamina = max(10, child_max_stamina)
                         mutation_occurred = True
@@ -939,7 +951,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, can_photosynthesize=child_can_photosynthesize)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
