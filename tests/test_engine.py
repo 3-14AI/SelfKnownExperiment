@@ -1926,15 +1926,17 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
 
         # Entity with size 1 (default energy loss 1)
-        entity = Entity("Healer", x=0, y=0, size=1, energy=50)
+        entity = Entity("Healer", x=0, y=0, size=1, energy=40)
+        entity.max_hydration = 100
+        entity.hydration = 100
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='shelter'))
 
         with unittest.mock.patch('src.universe.engine.random.random', return_value=0.99):
             universe.tick()
 
-        # Base energy loss 1. Shelter heals 2. Net loss = -1. Energy should be 51.
-        self.assertEqual(entity.energy, 51)
+        # Base energy loss 1. Shelter heals 2. Net loss = -1. Energy should be 41.
+        self.assertEqual(entity.energy, 41)
 
 
     def test_hydration_loss_and_penalty(self):

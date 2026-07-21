@@ -772,6 +772,7 @@ class Universe:
                     energy_loss -= 3
 
             entity.energy -= energy_loss
+            entity.energy = min(entity.max_energy, entity.energy)
             # Age by 1 per tick
             entity.age += 1
             if self.time % self.day_length == 0:
