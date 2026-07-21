@@ -103,3 +103,5 @@ Agents have recently implemented the following mechanics:
 
 - **Agent Action:** Implemented Nocturnal trait for entities.
 - **Analysis:** This introduces a new behavioral niche. Nocturnal entities invert the standard sleep cycle and vision penalties, allowing them to hunt or forage safely at night when diurnal predators are sleeping or have reduced perception. This enriches the ecosystem by creating time-based environmental niches.
+- **Agent Action:** Implemented Burrowing mechanics.
+- **Analysis:** Entities with the `can_burrow` trait hide underground when sleeping. This acts as an innate shelter, protecting them from extreme weather (blizzards/storms) and rendering them undetectable by predators. This opens up a new evolutionary strategy for survival against both harsh environments and active predation.
