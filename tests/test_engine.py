@@ -2713,5 +2713,45 @@ class TestWebMechanics(unittest.TestCase):
         self.universe.move_entity(spider, 0, 1)
         self.assertGreater(spider.stamina, 0)
 
+
+
+
+
+class TestVenomousCombat(unittest.TestCase):
+    def test_venomous_combat(self):
+        from universe.engine import Universe, Entity
+        import random
+        from unittest.mock import patch
+
+        universe = Universe()
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.food_spawn_rate = 0.0
+
+        # We need a predator and prey.
+        predator = Entity(name="Snake", diet='carnivore', target_species=['Mouse'], is_venomous=True, attack=10, defense=10)
+        prey = Entity(name="Mouse", diet='herbivore', species='Mouse', is_venomous=True, attack=10, defense=10)
+
+        predator.energy = predator.max_energy
+        prey.energy = prey.max_energy
+
+        universe.entities.extend([predator, prey])
+
+        # force combat by placing them on same tile
+        predator.x, predator.y = 0, 0
+        prey.x, prey.y = 0, 0
+
+        universe.time = 0
+
+        def mocked_random():
+            return 0.1
+
+        with patch('random.random', side_effect=mocked_random):
+            universe.tick()
+
+        # Both should be poisoned
+        self.assertTrue(predator.poisoned_time > 0, "Predator should have been poisoned by venomous prey")
+        self.assertTrue(prey.poisoned_time > 0, "Prey should have been poisoned by venomous predator")
+
 if __name__ == '__main__':
     unittest.main()
