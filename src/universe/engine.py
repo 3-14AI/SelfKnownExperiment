@@ -16,7 +16,7 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False):
         self.max_stamina = max_stamina
         self.stamina = stamina
         self.level = level
@@ -35,6 +35,7 @@ class Entity:
         self.vision_type = vision_type
         self.can_hibernate = can_hibernate
         self.is_hibernating = False
+        self.can_burrow = can_burrow
 
         if diet == 'herbivore' and target_plants is None:
             target_plants = ['generic', 'berry', 'leaf', 'flower', 'toxic_plant', 'medicinal']
@@ -330,6 +331,8 @@ class Universe:
             if e.diet not in ['herbivore', 'scavenger', 'omnivore'] or not e.is_alive:
                 continue
             if e == entity:
+                continue
+            if getattr(e, 'can_burrow', False) and e.is_sleeping:
                 continue
             if entity and entity.target_species is not None and e.species not in entity.target_species:
                 continue
@@ -627,7 +630,7 @@ class Universe:
 
         for entity in self.entities:
             terrains_here = self.get_terrains_at(entity.x, entity.y)
-            in_shelter = any(t.terrain_type == 'shelter' for t in terrains_here)
+            in_shelter = any(t.terrain_type == 'shelter' for t in terrains_here) or (getattr(entity, 'can_burrow', False) and entity.is_sleeping)
 
 
             start_pos_x, start_pos_y = entity.x, entity.y
@@ -784,6 +787,7 @@ class Universe:
                     child_lays_eggs = getattr(entity, 'lays_eggs', False)
                     child_can_hoard = getattr(entity, 'can_hoard', False)
                     child_is_nocturnal = getattr(entity, 'is_nocturnal', False)
+                    child_can_burrow = getattr(entity, 'can_burrow', False)
                     child_is_flying = getattr(entity, 'is_flying', False)
                     child_max_stamina = getattr(entity, 'max_stamina', 50)
                     child_target_species = entity.target_species.copy() if entity.target_species else None
@@ -862,6 +866,9 @@ class Universe:
                         child_is_nocturnal = not child_is_nocturnal
                         mutation_occurred = True
                     if random.random() < mutation_chance:
+                        child_can_burrow = not child_can_burrow
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
                         child_max_stamina += random.randint(-5, 5)
                         child_max_stamina = max(10, child_max_stamina)
                         mutation_occurred = True
@@ -909,7 +916,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
