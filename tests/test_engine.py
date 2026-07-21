@@ -2612,8 +2612,46 @@ class TestMedicinalPlants(unittest.TestCase):
         # During the night, perception is full (10). Distance 10 should be seen.
         self.assertIn((10, 0), e_nocturnal.memory)
 
+
+
+
+
+
+class TestBurrowing(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.food_spawn_rate = 0.0
+        self.universe.population_limit = 1000
+
+    def test_burrowing_entity_acts_as_shelter(self):
+        entity = Entity("Burrower", x=5, y=5, size=1, energy=50, stamina=0, can_burrow=True, diet='herbivore', preferred_temperature=20, max_stamina=10)
+        entity.is_sleeping = True
+        entity.energy = 50
+        entity.stamina = 0
+        entity.hydration = entity.max_hydration
+
+        self.universe.add_entity(entity)
+        self.universe.current_event = 'blizzard'
+        initial_energy = entity.energy
+
+        self.universe.tick()
+
+        self.assertTrue(entity.energy >= initial_energy - 3)
+
+    def test_burrowing_entity_hidden_from_predator(self):
+        burrower = Entity("Burrower", x=5, y=5, energy=50, can_burrow=True, diet='herbivore')
+        burrower.is_sleeping = True
+        burrower.stamina = 0
+
+        predator = Entity("Predator", x=5, y=6, energy=50, diet='carnivore', target_species=["Burrower"], intelligence=1, perception_radius=5)
+
+        self.universe.add_entity(burrower)
+        self.universe.add_entity(predator)
+
+        prey = self.universe.get_nearest_prey(predator.x, predator.y, max_distance=5, entity=predator)
+
+        self.assertIsNone(prey)
 if __name__ == '__main__':
-
-
-
     unittest.main()
