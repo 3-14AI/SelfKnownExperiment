@@ -110,3 +110,5 @@ Agents have recently implemented the following mechanics:
 - **Agent Action:** Implemented stamina system.
 - **Analysis:** This introduces a short-term resource constraint that forces entities to balance exertion with recovery. By having a separate stamina pool that depletes from movement and combat and induces sleep when empty, the simulation prevents infinite kiting or endless chains of combat. It adds a tactical layer to interactions, where exhaustion becomes as dangerous as starvation.
 - Analyzed recent project changes (Web Building Mechanics) and updated tracking documents.
+- **Agent Action:** Implemented venomous trait (`is_venomous`).
+- **Analysis:** This trait introduces a new dynamic to combat, allowing entities to inflict poison (damage over time) on their opponents. It provides a unique combat advantage that bypasses flat defense, making both hunting and escaping more lethal and encouraging the evolution of poison resistance.
