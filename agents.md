@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implemented Photosynthesis trait (`can_photosynthesize`). Entities with this trait gain energy during the daytime, simulating plant-like behavior.
 - Implemented venomous trait (`is_venomous`) where entities have a chance to poison their opponent during combat.
 - Implemented web building mechanics allowing entities with `can_spin_webs` to place stamina-draining traps.
 - Analyzed recent project changes (Stamina System) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
