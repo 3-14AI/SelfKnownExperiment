@@ -2835,3 +2835,36 @@ class TestPhotosynthesis(unittest.TestCase):
         universe.tick()
 
         self.assertEqual(entity.energy, 19) # 20 - 1 (size) = 19
+
+class TestArmorMechanics(unittest.TestCase):
+    def test_has_shell_increases_defense(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator = Entity("Wolf", x=5, y=5, diet='carnivore', attack=5, target_species=["Turtle"])
+        prey = Entity("Turtle", x=5, y=5, energy=50, defense=2, species="Turtle", has_shell=True, size=1)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Without shell, escape chance = 2 / 7 = ~0.28
+        # With shell (+5), escape chance = 7 / 12 = ~0.58
+
+        with unittest.mock.patch('random.random') as mock_rand:
+            def rand_side_effect():
+                # We yield 0.4. This is greater than 0.28 (would fail to escape if no shell)
+                # But less than 0.58 (will successfully escape with shell)
+                # We also need a value for disease check (0.4 is fine, > 0.0)
+                # Let's yield a sequence to be safe.
+                yield 0.5 # event/disease check
+                yield 0.4 # escape check
+                while True: yield 0.5
+            mock_rand.side_effect = rand_side_effect()
+
+            universe.tick()
+
+        self.assertTrue(prey.is_alive)

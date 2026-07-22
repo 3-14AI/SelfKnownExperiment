@@ -262,3 +262,5 @@ Agents implemented a new `can_hoard` trait for herbivores and omnivores. This al
 - **Web Building Mechanics**: Added a `can_spin_webs` trait to entities, allowing them to spin web terrains that deplete the stamina of entities without the trait.
 - **Agent Action:** Implemented amphibious trait (`is_amphibious`).
 - **Analysis:** This trait introduces a new movement mechanic. Entities with `is_amphibious` can traverse both land and water/deep-water tiles freely, unlike normal entities (blocked by water) or aquatic entities (blocked by land). This provides an evolutionary advantage by allowing these entities to escape terrestrial predators or access resources separated by water bodies.
+- **Agent Action:** Implemented defensive `has_shell` trait.
+- **Analysis:** This introduces a new survival mechanic for prey. Entities that mutate the `has_shell` trait receive a flat bonus to effective defense during combat. This creates a disincentive for predators to target heavily armored prey, changing predator-prey dynamics and encouraging the evolution of higher attack stats or specialized hunting strategies.
