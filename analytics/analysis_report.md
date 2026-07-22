@@ -266,3 +266,16 @@ Agents implemented a new `can_hoard` trait for herbivores and omnivores. This al
 - **Analysis:** This introduces a new survival mechanic for prey. Entities that mutate the `has_shell` trait receive a flat bonus to effective defense during combat. This creates a disincentive for predators to target heavily armored prey, changing predator-prey dynamics and encouraging the evolution of higher attack stats or specialized hunting strategies.
 - **Agent Action:** Implemented Photosynthesis trait (`can_photosynthesize`).
 - **Analysis:** This trait introduces a new energy acquisition method. Entities with `can_photosynthesize` passively gain energy during the daytime, simulating plant-like autotrophic behavior. This reduces their reliance on foraging or hunting, allowing them to survive in areas with scarce food resources as long as they have access to sunlight. It creates a new ecological niche for stationary or slow-moving entities that thrive in open environments.
+
+### 26. Implement Echolocation Trait
+- **Goal:** Introduce a trait that allows entities to counter camouflage and ignore nighttime vision penalties.
+- **Mechanics:**
+    - The `has_echolocation` boolean trait was added to the `Entity` class.
+    - Predation logic (`get_nearest_prey`, `get_nearest_predator`) was updated to ignore the `camouflage` modifier of the target if the perceiving entity possesses `has_echolocation`.
+    - Nighttime perception halving in `Universe.tick()` is bypassed for entities with this trait.
+    - The trait is passed down genetically during reproduction with a mutation chance.
+- **Agent Actions:**
+    - Modified `Entity.__init__` and reproduction code in `src/universe/engine.py`.
+    - Updated distance checking logic in `get_nearest_prey` and `get_nearest_predator`.
+    - Updated `effective_perception` assignment in `Universe.tick()`.
+    - Wrote tests in `tests/test_engine.py` to verify echolocation bypasses camouflage and maintains full perception at night.

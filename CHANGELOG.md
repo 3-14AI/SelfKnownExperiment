@@ -1,5 +1,10 @@
 # Changelog
 
+
+## [Unreleased]
+### Added
+- Added `has_echolocation` trait to entities. Echolocation allows entities to bypass camouflage when detecting prey or predators, and prevents their perception radius from being halved during the night.
+
 ## [Unreleased]
 ### Added
 - Analyzed recent project changes (Photosynthesis trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
