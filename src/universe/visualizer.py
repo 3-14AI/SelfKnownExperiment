@@ -52,7 +52,9 @@ class CLIVisualizer:
                     else:
                         char = 'S'
                 else:
-                    if getattr(entity, 'can_photosynthesize', False):
+                    if getattr(entity, 'is_aposematic', False):
+                        char = 'A'
+                    elif getattr(entity, 'can_photosynthesize', False):
                         char = 'P'
                     elif diet == 'carnivore':
                         char = 'C'

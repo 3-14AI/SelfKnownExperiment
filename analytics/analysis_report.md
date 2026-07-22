@@ -279,3 +279,4 @@ Agents implemented a new `can_hoard` trait for herbivores and omnivores. This al
     - Updated distance checking logic in `get_nearest_prey` and `get_nearest_predator`.
     - Updated `effective_perception` assignment in `Universe.tick()`.
     - Wrote tests in `tests/test_engine.py` to verify echolocation bypasses camouflage and maintains full perception at night.
+- Implemented Aposematism trait (`is_aposematic`), rendering entities visually unappealing to predators. Well-fed predators will ignore them, but starving predators will still attack.
