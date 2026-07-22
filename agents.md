@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implemented Fruiting trait (`is_fruiting`). Entities with this trait can passively drop food (fruit) when well-fed, allowing them to support symbiotic species or act as anglerfish-like predators that bait herbivores.
 - Implemented aging growth mechanics where newly born entities start at a smaller size and gradually grow to their genetic maximum as they age.
 - Implemented Aposematism trait (`is_aposematic`) which makes predators ignore the entity unless they are starving.
 - Implemented echolocation trait (`has_echolocation`). Entities with this trait bypass camouflage and night-time vision penalties.
