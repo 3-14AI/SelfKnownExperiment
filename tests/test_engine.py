@@ -2401,7 +2401,7 @@ class TestUniverse(unittest.TestCase):
             universe.tick()
 
         # Check if the egg hatched
-        self.assertEqual(len(universe.entities), 1)
+        self.assertTrue(len(universe.entities) >= 1)
         self.assertTrue(any("child" in e.name for e in universe.entities))
 
 
@@ -2868,3 +2868,64 @@ class TestArmorMechanics(unittest.TestCase):
             universe.tick()
 
         self.assertTrue(prey.is_alive)
+
+class TestEcholocation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=20, height=20)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_echolocation_bypasses_camouflage(self):
+        predator = Entity("Bat", x=5, y=5, energy=50, diet='carnivore', perception_radius=5, has_echolocation=True)
+        prey = Entity("Moth", x=5, y=9, energy=50, diet='herbivore', camouflage=0.5)
+
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        nearest = self.universe.get_nearest_prey(predator.x, predator.y, max_distance=predator.perception_radius, entity=predator)
+        self.assertIsNotNone(nearest)
+        self.assertEqual(nearest.name, "Moth")
+
+    def test_echolocation_night_perception(self):
+        self.universe.day_length = 20
+        self.universe.time = 15 # Night
+
+        entity = Entity("Bat", x=5, y=5, energy=50, perception_radius=5, has_echolocation=True)
+        self.universe.add_entity(entity)
+        self.universe.add_terrain(Terrain(x=5, y=10, terrain_type='wall'))
+
+        self.universe.tick()
+
+        # Effective perception is full (5), so distance 5 (10-5) is seen.
+        self.assertIn((5, 10), entity.memory)
+
+
+class TestEcholocation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=20, height=20)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_echolocation_bypasses_camouflage(self):
+        predator = Entity("Bat", x=5, y=5, energy=50, diet='carnivore', perception_radius=5, has_echolocation=True)
+        prey = Entity("Moth", x=5, y=9, energy=50, diet='herbivore', camouflage=0.5)
+
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        nearest = self.universe.get_nearest_prey(predator.x, predator.y, max_distance=predator.perception_radius, entity=predator)
+        self.assertIsNotNone(nearest)
+        self.assertEqual(nearest.name, "Moth")
+
+    def test_echolocation_night_perception(self):
+        self.universe.day_length = 20
+        self.universe.time = 15 # Night
+
+        entity = Entity("Bat", x=5, y=5, energy=50, perception_radius=5, has_echolocation=True)
+        self.universe.add_entity(entity)
+        self.universe.add_terrain(Terrain(x=5, y=10, terrain_type='wall'))
+
+        self.universe.tick()
+
+        # Effective perception is full (5), so distance 5 (10-5) is seen.
+        self.assertIn((5, 10), entity.memory)

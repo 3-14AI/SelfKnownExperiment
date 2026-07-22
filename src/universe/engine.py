@@ -16,8 +16,9 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False):
         self.is_amphibious = is_amphibious
+        self.has_echolocation = has_echolocation
         self.has_shell = has_shell
         self.can_photosynthesize = can_photosynthesize
         self.is_venomous = is_venomous
@@ -350,8 +351,12 @@ class Universe:
             if entity and entity.target_species is not None and e.species not in entity.target_species:
                 continue
             dist = abs(e.x - x) + abs(e.y - y)
-            if max_distance is not None and dist > (max_distance * (1.0 - getattr(e, 'camouflage', 0.0))):
-                continue
+            if max_distance is not None:
+                camou = getattr(e, 'camouflage', 0.0)
+                if entity and getattr(entity, 'has_echolocation', False):
+                    camou = 0.0
+                if dist > (max_distance * (1.0 - camou)):
+                    continue
 
             # Prefer smaller and weaker entities.
             # We calculate a score where lower is better.
@@ -363,7 +368,7 @@ class Universe:
         return best_prey
 
 
-    def get_nearest_predator(self, x, y, max_distance=None):
+    def get_nearest_predator(self, x, y, max_distance=None, entity=None):
         if not self.entities:
             return None
 
@@ -372,8 +377,12 @@ class Universe:
         for e in self.entities:
             if e.diet == 'carnivore' and e.is_alive:
                 dist = abs(e.x - x) + abs(e.y - y)
-                if max_distance is not None and dist > (max_distance * (1.0 - getattr(e, 'camouflage', 0.0))):
-                    continue
+                if max_distance is not None:
+                    camou = getattr(e, 'camouflage', 0.0)
+                    if entity and getattr(entity, 'has_echolocation', False):
+                        camou = 0.0
+                    if dist > (max_distance * (1.0 - camou)):
+                        continue
                 if dist < min_dist:
                     min_dist = dist
                     nearest = e
@@ -818,6 +827,7 @@ class Universe:
                     child_is_venomous = getattr(entity, 'is_venomous', False)
                     child_is_amphibious = getattr(entity, 'is_amphibious', False)
                     child_has_shell = getattr(entity, 'has_shell', False)
+                    child_has_echolocation = getattr(entity, 'has_echolocation', False)
                     child_can_photosynthesize = getattr(entity, 'can_photosynthesize', False)
                     child_is_flying = getattr(entity, 'is_flying', False)
                     child_max_stamina = getattr(entity, 'max_stamina', 50)
@@ -945,6 +955,10 @@ class Universe:
                         child_has_shell = not child_has_shell
                         mutation_occurred = True
 
+                    if random.random() < mutation_chance:
+                        child_has_echolocation = not child_has_echolocation
+                        mutation_occurred = True
+
                     if mutation_occurred:
                         child_mutations_count += 1
                         if child_mutations_count >= 5:
@@ -967,14 +981,14 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
                     else:
                         new_entities.append(child)
 
-                effective_perception = entity.perception_radius if (self.is_day != getattr(entity, 'is_nocturnal', False) or getattr(entity, 'vision_type', 'normal') == 'night_vision') else max(1, entity.perception_radius // 2)
+                effective_perception = entity.perception_radius if (self.is_day != getattr(entity, 'is_nocturnal', False) or getattr(entity, 'vision_type', 'normal') == 'night_vision' or getattr(entity, 'has_echolocation', False)) else max(1, entity.perception_radius // 2)
 
                 # Update entity memory with visible obstacles
                 for t in self.terrains:
@@ -1007,7 +1021,7 @@ class Universe:
                 if entity.diet in ['herbivore', 'scavenger']:
                     if can_move:
                         # Communication & Flee behavior
-                        nearest_predator = self.get_nearest_predator(entity.x, entity.y, max_distance=effective_perception)
+                        nearest_predator = self.get_nearest_predator(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                         if nearest_predator:
                             entity.alerted_predator_pos = (nearest_predator.x, nearest_predator.y)
                             # Alert nearby flockmates (double perception radius for communication)
@@ -1097,7 +1111,7 @@ class Universe:
                 elif entity.diet == 'omnivore':
                     if can_move:
                         # Flee behavior
-                        nearest_predator = self.get_nearest_predator(entity.x, entity.y, max_distance=effective_perception)
+                        nearest_predator = self.get_nearest_predator(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                         if nearest_predator:
                             entity.alerted_predator_pos = (nearest_predator.x, nearest_predator.y)
                             # Alert nearby flockmates
