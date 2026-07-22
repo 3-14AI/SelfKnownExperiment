@@ -2575,6 +2575,40 @@ class TestUniverse(unittest.TestCase):
         self.assertTrue(predator.energy <= initial_energy - 6, f"Predator should have lost more energy due to spikes (Energy: {predator.energy})")
         self.assertTrue(predator.stamina < initial_stamina, f"Predator should have lost stamina due to spikes (Stamina: {predator.stamina})")
 
+
+    def test_fruiting_drops_food(self):
+        self.universe = Universe(width=10, height=10)
+        entity = Entity(name="FruitingTree", x=5, y=5, energy=100, max_age=100, age=10, is_fruiting=True)
+        entity.size = 3
+        entity.energy = entity.max_energy
+        self.universe.add_entity(entity)
+
+        # Isolate stochastic logic
+        self.universe.disease_chance = 0.0
+        self.universe.food_spawn_rate = 0.0
+        self.universe.event_chance = 0.0
+
+        initial_energy = entity.energy
+
+        # Mock random to trigger fruiting (chance < 0.05)
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.01):
+            self.universe.tick()
+
+        # Check if food was dropped
+        self.assertTrue(any(f.plant_type == 'fruit' for f in self.universe.foods))
+        fruit = [f for f in self.universe.foods if f.plant_type == 'fruit'][0]
+        self.assertEqual(fruit.x, 5)
+        self.assertEqual(fruit.y, 5)
+        self.assertEqual(fruit.energy, 15)
+
+        # Energy should be deducted (10 for fruit + 1 for normal tick loss)
+                # Energy should be deducted (10 for fruit + base loss)
+        # 150 - 10 (fruit) = 140
+        # The base loss is size(3) * 5 = 15, then some environmental loss
+        self.assertTrue(entity.energy < initial_energy - 10)
+        self.assertEqual(entity.energy, 127)
+
 class TestMedicinalPlants(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)

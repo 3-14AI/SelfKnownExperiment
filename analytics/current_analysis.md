@@ -123,3 +123,5 @@ Agents have recently implemented the following mechanics:
 - Implemented Aposematism trait (`is_aposematic`), rendering entities visually unappealing to predators. Well-fed predators will ignore them, but starving predators will still attack.
 - **Agent Action:** Implemented aging growth mechanics.
 - **Analysis:** Entities are now born at a smaller size and gradually grow to their genetic maximum as they age, introducing a vulnerable infantile phase that enriches ecosystem dynamics and survival pressures.
+- **Agent Action:** Implemented Fruiting trait (`is_fruiting`).
+- **Analysis:** This trait introduces a new ecosystem dynamic where entities act as mobile food sources. Entities with `is_fruiting` drop fruit when well-fed, losing some energy in the process. This acts as a powerful evolutionary tool: herbivorous species can develop symbiotic relationships with fruiting entities, following them for food, while predatory entities can evolve this trait to act like anglerfish, dropping bait to lure prey directly to their location.
