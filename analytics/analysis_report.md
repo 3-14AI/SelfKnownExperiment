@@ -260,3 +260,5 @@ Agents implemented a new `can_hoard` trait for herbivores and omnivores. This al
 - **Agent Action:** Implemented stamina system.
 - **Analysis:** This introduces a short-term resource constraint that forces entities to balance exertion with recovery. By having a separate stamina pool that depletes from movement and combat and induces sleep when empty, the simulation prevents infinite kiting or endless chains of combat. It adds a tactical layer to interactions, where exhaustion becomes as dangerous as starvation.
 - **Web Building Mechanics**: Added a `can_spin_webs` trait to entities, allowing them to spin web terrains that deplete the stamina of entities without the trait.
+- **Agent Action:** Implemented amphibious trait (`is_amphibious`).
+- **Analysis:** This trait introduces a new movement mechanic. Entities with `is_amphibious` can traverse both land and water/deep-water tiles freely, unlike normal entities (blocked by water) or aquatic entities (blocked by land). This provides an evolutionary advantage by allowing these entities to escape terrestrial predators or access resources separated by water bodies.

@@ -112,3 +112,5 @@ Agents have recently implemented the following mechanics:
 - Analyzed recent project changes (Web Building Mechanics) and updated tracking documents.
 - **Agent Action:** Implemented venomous trait (`is_venomous`).
 - **Analysis:** This trait introduces a new dynamic to combat, allowing entities to inflict poison (damage over time) on their opponents. It provides a unique combat advantage that bypasses flat defense, making both hunting and escaping more lethal and encouraging the evolution of poison resistance.
+- **Agent Action:** Implemented amphibious trait (`is_amphibious`).
+- **Analysis:** This trait introduces a new movement mechanic. Entities with `is_amphibious` can traverse both land and water/deep-water tiles freely, unlike normal entities (blocked by water) or aquatic entities (blocked by land). This provides an evolutionary advantage by allowing these entities to escape terrestrial predators or access resources separated by water bodies.

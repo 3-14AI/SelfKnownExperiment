@@ -143,4 +143,8 @@ Godspeed, Agent. The universe is in your hands.
 
 - Analyzed recent project changes (Hoarding Mechanics) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
+## Completed
+- Implemented amphibious trait (`is_amphibious`) allowing entities to freely traverse both land and water tiles.
+- Analyzed recent project changes (Amphibious trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
+
 ## Next Steps

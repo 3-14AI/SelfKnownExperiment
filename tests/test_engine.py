@@ -2753,7 +2753,46 @@ class TestVenomousCombat(unittest.TestCase):
         self.assertTrue(predator.poisoned_time > 0, "Predator should have been poisoned by venomous prey")
         self.assertTrue(prey.poisoned_time > 0, "Prey should have been poisoned by venomous predator")
 
+
+
+class TestAmphibiousTrait(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=5, height=5)
+        self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='water'))
+        self.universe.add_terrain(Terrain(x=2, y=3, terrain_type='deep-water'))
+
+    def test_amphibious_movement(self):
+        amphibious_entity = Entity(name="Frog", is_amphibious=True, x=2, y=1)
+        self.universe.add_entity(amphibious_entity)
+
+        # Move to water
+        self.universe.move_entity(amphibious_entity, 0, 1)
+        self.assertEqual(amphibious_entity.x, 2)
+        self.assertEqual(amphibious_entity.y, 2)
+
+        # Move back to land
+        self.universe.move_entity(amphibious_entity, -1, 0)
+        self.assertEqual(amphibious_entity.x, 1)
+        self.assertEqual(amphibious_entity.y, 2)
+
+        # Move to deep-water
+        self.universe.move_entity(amphibious_entity, 1, 1)
+        self.assertEqual(amphibious_entity.x, 2)
+        self.assertEqual(amphibious_entity.y, 3)
+
+    def test_amphibious_passable(self):
+        amphibious_entity = Entity(name="Frog", is_amphibious=True, x=2, y=1)
+        self.assertTrue(self.universe.is_passable(2, 2, is_amphibious=True))
+        self.assertTrue(self.universe.is_passable(1, 1, is_amphibious=True))
+        self.assertTrue(self.universe.is_passable(2, 3, is_amphibious=True))
+
+    def test_normal_entity_not_passable_water(self):
+        normal_entity = Entity(name="Dog", x=2, y=1)
+        self.assertFalse(self.universe.is_passable(2, 2))
+        self.assertTrue(self.universe.is_passable(1, 1))
+
 if __name__ == '__main__':
+
     unittest.main()
 
 class TestPhotosynthesis(unittest.TestCase):
