@@ -1490,6 +1490,7 @@ class TestUniverse(unittest.TestCase):
 
         small_entity = Entity("Small", x=2, y=2, energy=20, size=1)
         large_entity = Entity("Large", x=8, y=8, energy=20, size=3)
+        large_entity.size = 3 # force adult size
         # set preferred temperature to base so they don't lose extra energy
         small_entity.preferred_temperature = 20
         large_entity.preferred_temperature = 20
@@ -1509,6 +1510,7 @@ class TestUniverse(unittest.TestCase):
         # Test Movement Speed
         # A size 3 entity should only move every 3 ticks
         large_mover = Entity("Mover", x=5, y=5, energy=50, size=3, diet='herbivore', perception_radius=10)
+        large_mover.size = 3 # force adult size
         universe.food_spawn_rate = 0.0
         # Setup so it wants to move
         from src.universe.engine import Food
@@ -1531,6 +1533,53 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(large_mover.x, 6)
 
 
+
+
+    def test_entity_aging_growth(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        # Age 0, size 6 entity. Should start at size max(1, 6//3) = 2
+        entity = Entity("Grower", x=5, y=5, energy=5000, size=6, age=0, max_age=100, hydration=5000, max_hydration=5000, can_photosynthesize=True, is_nocturnal=True)
+
+        # Disable interference
+        entity.preferred_temperature = universe.base_temperature
+        entity.temperature_tolerance = 40
+        universe.disease_chance = 0.0
+
+        universe.add_entity(entity)
+
+        self.assertEqual(entity.size, 2)
+        self.assertEqual(entity.max_size, 6)
+
+        for _ in range(10):
+            entity.energy = 5000
+            entity.hydration = 5000
+            entity.stamina = 5000
+            entity.is_infected = False
+            entity.poisoned_time = 0
+            # Ensure it is considered alive (energy>0 and age<=max_age)
+            # Prevent death by random causes by keeping stats high
+            universe.tick()
+            if not entity.is_alive:
+                universe.entities.append(entity) # Force it back alive if something killed it
+
+        # After 10 ticks (age 10), it should grow by 1
+        self.assertEqual(entity.age, 10)
+        self.assertEqual(entity.size, 3)
+
+        for _ in range(30):
+            entity.energy = 5000
+            entity.hydration = 5000
+            entity.stamina = 5000
+            entity.is_infected = False
+            entity.poisoned_time = 0
+            universe.tick()
+            if not entity.is_alive:
+                universe.entities.append(entity)
+
+        # After 40 ticks total (age 40), size should cap at max_size (6)
+        self.assertEqual(entity.age, 40)
+        self.assertEqual(entity.size, 6)
 
     def test_carnivore_prefers_smaller_weaker_prey(self):
         # Create a universe with one carnivore and two herbivores (prey).
@@ -1782,6 +1831,7 @@ class TestUniverse(unittest.TestCase):
 
         # Test energy loss
         entity = Entity("Test", x=0, y=0, size=2)
+        entity.size = 2 # force adult size
         universe.add_entity(entity)
         initial_energy = entity.energy
 
@@ -1932,10 +1982,12 @@ class TestUniverse(unittest.TestCase):
         # Test 1: Weather penalty negation
         # We need an entity in a shelter during a storm
         e1 = Entity("E1", x=0, y=0, size=2, energy=50)
+        e1.size = 2
         universe.add_entity(e1)
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='shelter'))
 
         e2 = Entity("E2", x=1, y=1, size=2, energy=50)
+        e2.size = 2
         universe.add_entity(e2)
 
         universe.current_event = 'storm'
