@@ -4,6 +4,36 @@ from src.universe.engine import Universe, Entity, Food, Terrain
 
 class TestUniverse(unittest.TestCase):
 
+
+    def test_aposematism(self):
+        universe = Universe(width=10, height=10)
+
+        # Aposematic prey
+        prey = Entity("Prey", x=5, y=5, diet='herbivore', is_aposematic=True)
+        universe.add_entity(prey)
+
+        # Starving predator
+        starving_predator = Entity("StarvingPred", x=4, y=5, diet='carnivore', energy=10, size=2) # max 100, energy 10 < 30
+        universe.add_entity(starving_predator)
+
+        # Fed predator
+        fed_predator = Entity("FedPred", x=6, y=5, diet='carnivore', energy=40, size=2) # max 100, energy 40 > 30
+        universe.add_entity(fed_predator)
+
+        # Test nearest prey
+        nearest_starving = universe.get_nearest_prey(4, 5, max_distance=5, entity=starving_predator)
+        self.assertEqual(nearest_starving, prey)
+
+        nearest_fed = universe.get_nearest_prey(6, 5, max_distance=5, entity=fed_predator)
+        self.assertIsNone(nearest_fed)
+
+        # Test get_preys_at
+        preys_at_starving = universe.get_preys_at(5, 5, entity=starving_predator)
+        self.assertEqual(preys_at_starving, [prey])
+
+        preys_at_fed = universe.get_preys_at(5, 5, entity=fed_predator)
+        self.assertEqual(preys_at_fed, [])
+
     def test_corpse_spawns_meat(self):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0

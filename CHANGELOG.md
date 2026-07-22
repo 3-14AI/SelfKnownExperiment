@@ -1,5 +1,8 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- Added Aposematism trait allowing prey to be ignored by well-fed predators.
 
 ## [Unreleased]
 ### Added
