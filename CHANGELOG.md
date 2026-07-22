@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 ### Added
+- Implemented Photosynthesis trait (`can_photosynthesize`). Entities with this trait gain energy during the daytime, simulating plant-like behavior.
+- Updated `CLIVisualizer` to render photosynthesizing entities as `P`.
+
+## [Unreleased]
+### Added
 - Implemented web building mechanics. Entities with the `can_spin_webs` trait can create web terrain.
 - Entities lacking the trait will lose all stamina when moving onto web terrain, simulating getting trapped.
 - Updated `CLIVisualizer` to render `web` terrain as `x`.

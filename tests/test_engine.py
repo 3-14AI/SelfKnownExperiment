@@ -2755,3 +2755,44 @@ class TestVenomousCombat(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestPhotosynthesis(unittest.TestCase):
+    def test_photosynthesis_during_day(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10, day_length=20)
+        universe.time = 0 # It's day
+
+        # Base energy loss would be entity.size (1), but photosynthesis gives +2 during day
+        # So net change = +1
+        entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1)
+        # Disable interference
+        entity.preferred_temperature = universe.base_temperature
+        entity.temperature_tolerance = 40
+        entity.hydration = entity.max_hydration
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.population_limit = 0 # Prevent reproduction draining energy
+        universe.add_entity(entity)
+
+        universe.tick()
+
+        self.assertEqual(entity.energy, 21) # 20 - 1 (size) + 2 (photosynthesis) = 21
+
+    def test_no_photosynthesis_during_night(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10, day_length=20)
+        universe.time = 15 # It's night (time % 20 > 10)
+
+        entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1)
+        # Disable interference
+        entity.preferred_temperature = universe.base_temperature
+        entity.temperature_tolerance = 40
+        entity.hydration = entity.max_hydration
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.population_limit = 0 # Prevent reproduction draining energy
+        universe.add_entity(entity)
+
+        universe.tick()
+
+        self.assertEqual(entity.energy, 19) # 20 - 1 (size) = 19
