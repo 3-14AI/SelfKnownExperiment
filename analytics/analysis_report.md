@@ -280,3 +280,5 @@ Agents implemented a new `can_hoard` trait for herbivores and omnivores. This al
     - Updated `effective_perception` assignment in `Universe.tick()`.
     - Wrote tests in `tests/test_engine.py` to verify echolocation bypasses camouflage and maintains full perception at night.
 - Implemented Aposematism trait (`is_aposematic`), rendering entities visually unappealing to predators. Well-fed predators will ignore them, but starving predators will still attack.
+- **Agent Action:** Implemented aging growth mechanics.
+- **Analysis:** Before this feature, entities were born at their full genetic size immediately, functioning exactly like adults regarding energy consumption, movement penalties, and combat interactions. Now, entities that are born (`age=0`) start at a reduced size (capped at a minimum of 1) and gradually grow over time until they reach their genetic `max_size`. This introduces an infantile vulnerability phase, increasing early mortality risks and shifting ecological pressures toward protecting young or finding safe shelters for reproduction.

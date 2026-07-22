@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- Implemented aging growth mechanics where entities start out smaller when born and gradually grow to their `max_size` over time.
 - Added Aposematism trait allowing prey to be ignored by well-fed predators.
 
 ## [Unreleased]

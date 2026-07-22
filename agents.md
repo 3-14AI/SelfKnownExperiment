@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implemented aging growth mechanics where newly born entities start at a smaller size and gradually grow to their genetic maximum as they age.
 - Implemented Aposematism trait (`is_aposematic`) which makes predators ignore the entity unless they are starving.
 - Implemented echolocation trait (`has_echolocation`). Entities with this trait bypass camouflage and night-time vision penalties.
 - Analyzed recent project changes (Photosynthesis trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.

@@ -67,11 +67,12 @@ class Entity:
         self.attack = attack
         self.defense = defense
         self.preferred_terrain = preferred_terrain
-        self.size = size
+        self.max_size = size
+        self.size = max(1, size // 3) if age == 0 else size
         self.name = name
         self.x = x
         self.y = y
-        self.energy = min(energy, size * 50)
+        self.energy = min(energy, self.size * 50)
         self.age = age
         self.max_age = max_age
         self.perception_radius = perception_radius
@@ -798,6 +799,8 @@ class Universe:
             entity.energy = min(entity.max_energy, entity.energy)
             # Age by 1 per tick
             entity.age += 1
+            if entity.age % 10 == 0 and entity.size < getattr(entity, 'max_size', entity.size):
+                entity.size += 1
             if self.time % self.day_length == 0:
                 entity.add_experience(1)
 
@@ -815,7 +818,7 @@ class Universe:
                     child_temperature_tolerance = entity.temperature_tolerance
                     child_attack = entity.attack
                     child_defense = entity.defense
-                    child_size = entity.size
+                    child_size = getattr(entity, 'max_size', entity.size)
                     child_intelligence = entity.intelligence
                     child_max_hydration = entity.max_hydration
                     child_toxicity = entity.toxicity
