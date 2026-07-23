@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- Implemented `is_immune` trait. Entities can gain immunity to diseases after recovering, preventing reinfection. Immunity can also be inherited by offspring or acquired via genetic mutation.
 - Implemented aging growth mechanics where entities start out smaller when born and gradually grow to their `max_size` over time.
 - Added Aposematism trait allowing prey to be ignored by well-fed predators.
 

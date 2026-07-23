@@ -3,6 +3,41 @@ import unittest
 from src.universe.engine import Universe, Entity, Food, Terrain
 
 class TestUniverse(unittest.TestCase):
+    def test_immunity_prevents_infection(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10, disease_chance=1.0)
+        universe.event_chance = 0.0
+        immune_entity = Entity("Immune", energy=100, is_immune=True)
+        universe.add_entity(immune_entity)
+        vuln_entity = Entity("Vuln", energy=100, is_immune=False)
+        universe.add_entity(vuln_entity)
+        universe.tick()
+        universe.disease_chance = 0.0
+        immune_entity.is_infected = False
+        vuln_entity.is_infected = True
+        immune_entity.x, immune_entity.y = 0, 0
+        vuln_entity.x, vuln_entity.y = 0, 0
+        universe.tick()
+        self.assertFalse(immune_entity.is_infected, "Immune entity should not be infected")
+        self.assertTrue(vuln_entity.is_infected, "Vulnerable entity should stay infected")
+
+    def test_immunity_granted_on_recovery(self):
+        from src.universe.engine import Universe, Entity
+        import random
+        universe = Universe(width=10, height=10, disease_chance=0.0)
+        universe.event_chance = 0.0
+        entity = Entity("Patient Zero", energy=100, is_infected=True, age=10, size=1)
+        entity.infection_time = 11
+        universe.add_entity(entity)
+        original_random = random.random
+        random.random = lambda: 0.1
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
+        self.assertFalse(entity.is_infected, "Entity should have recovered")
+        self.assertTrue(getattr(entity, 'is_immune', False), "Entity should have gained immunity")
+
 
 
     def test_aposematism(self):
