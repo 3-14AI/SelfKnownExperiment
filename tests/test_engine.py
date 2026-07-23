@@ -2598,6 +2598,7 @@ class TestUniverse(unittest.TestCase):
         predator = Entity("Wolf", x=5, y=5, diet='carnivore', energy=50, stamina=50, perception_radius=10, size=5)
         # Give high defense to guarantee escape and avoid flaky test
         prey = Entity("Porcupine", x=5, y=5, diet='herbivore', has_spikes=True, energy=50, stamina=50, size=1, defense=100)
+        predator.target_species = [prey.species]
 
         universe.add_entity(predator)
         universe.add_entity(prey)
@@ -2622,6 +2623,7 @@ class TestUniverse(unittest.TestCase):
         self.universe.disease_chance = 0.0
         self.universe.food_spawn_rate = 0.0
         self.universe.event_chance = 0.0
+        self.universe.reproduction_threshold = 1000
 
         initial_energy = entity.energy
 
@@ -3174,3 +3176,42 @@ class TestImmunity(unittest.TestCase):
             random.random = original_random
         self.assertFalse(entity.is_infected, 'Entity should have recovered')
         self.assertTrue(getattr(entity, 'is_immune', False), 'Entity should have gained immunity')
+
+class TestRegenerativeTrait(unittest.TestCase):
+    def test_regeneration(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        # Test basic energy loss without regeneration
+        e_normal = Entity("Normal", x=5, y=5, energy=40, size=2, hydration=50, max_hydration=50, is_regenerative=False)
+        e_regen = Entity("Regen", x=6, y=5, energy=40, size=2, hydration=50, max_hydration=50, is_regenerative=True)
+
+        universe.add_entity(e_normal)
+        universe.add_entity(e_regen)
+
+        import random
+        original_random = random.random
+        random.random = lambda: 1.0 # bypass sleep and events
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
+
+        # Let's adjust assertions. With random=1.0, no reproduction.
+        # But size=2 initialized with age=0 drops to size=1?
+        # Actually max_size=2? No, `Entity` doesn't have max_size in init unless explicitly set.
+        # If age=0, size becomes `max(1, size // 3)`? Let's check init: `self.max_size = size; self.size = max(1, size // 3) if age == 0 else size`.
+        # So size is 1!
+        # base loss is 1.
+        # e_normal loses 1 energy -> 39.
+        # e_regen loses 1 energy, then regains 2 -> 41, capped at max_energy.
+        # Wait, max_energy = size * 50 = 1 * 50 = 50. So it goes to 41.
+        self.assertEqual(e_normal.energy, 39)
+        self.assertEqual(e_normal.hydration, 49)
+
+        self.assertEqual(e_regen.energy, 41)
+        self.assertEqual(e_regen.hydration, 47)
