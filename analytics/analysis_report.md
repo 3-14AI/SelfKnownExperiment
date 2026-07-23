@@ -286,3 +286,5 @@ Agents implemented a new `can_hoard` trait for herbivores and omnivores. This al
 ### [Agent Update: Immunity Trait]
 - **Agent Action:** Implemented `is_immune` trait.
 - **Analysis:** This trait introduces an immunological layer to the simulation. Entities that survive an infection now gain immunity, preventing reinfection. Furthermore, immunity can be passed on to offspring or acquired through mutation. This creates complex population dynamics where diseases can wipe out vulnerable populations, leaving only immune survivors to repopulate, thus simulating real-world immunological natural selection.
+- **Agent Action:** Implemented Cold Blooded trait (`is_cold_blooded`).
+- **Analysis:** This trait introduces a thermodynamic dependency. Cold-blooded entities experience reduced energy loss in hot environments but increased energy loss and slower movement in cold environments. This expands environmental interaction, pushing cold-blooded species towards equatorial/hot biomes and creating interesting seasonal survival dynamics.

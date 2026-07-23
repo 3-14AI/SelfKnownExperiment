@@ -16,11 +16,12 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False):
         self.is_amphibious = is_amphibious
         self.is_aposematic = is_aposematic
         self.is_fruiting = is_fruiting
         self.is_immune = is_immune
+        self.is_cold_blooded = is_cold_blooded
         self.has_echolocation = has_echolocation
         self.has_shell = has_shell
         self.can_photosynthesize = can_photosynthesize
@@ -743,6 +744,12 @@ class Universe:
 
                 # Temperature check
                 current_temp = self.get_temperature_at(entity.x, entity.y)
+
+                if getattr(entity, 'is_cold_blooded', False):
+                    if current_temp >= 25:
+                        energy_loss = max(0, energy_loss - 1)
+                    elif current_temp <= 5:
+                        energy_loss += 1
                 effective_tolerance = entity.temperature_tolerance
                 if 'clothing' in entity.inventory:
                     effective_tolerance += 10
@@ -842,6 +849,7 @@ class Universe:
                     child_is_aposematic = getattr(entity, 'is_aposematic', False)
                     child_is_fruiting = getattr(entity, 'is_fruiting', False)
                     child_is_immune = getattr(entity, 'is_immune', False)
+                    child_is_cold_blooded = getattr(entity, 'is_cold_blooded', False)
                     child_has_echolocation = getattr(entity, 'has_echolocation', False)
                     child_can_photosynthesize = getattr(entity, 'can_photosynthesize', False)
                     child_is_flying = getattr(entity, 'is_flying', False)
@@ -986,6 +994,10 @@ class Universe:
                         child_is_immune = True
                         mutation_occurred = True
 
+                    if random.random() < mutation_chance:
+                        child_is_cold_blooded = not child_is_cold_blooded
+                        mutation_occurred = True
+
                     if mutation_occurred:
                         child_mutations_count += 1
                         if child_mutations_count >= 5:
@@ -1008,7 +1020,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
@@ -1052,6 +1064,9 @@ class Universe:
                     can_move = False
                 if self.time % entity.size != 0:
                     can_move = False
+                if getattr(entity, 'is_cold_blooded', False) and current_temp <= 5:
+                    if self.time % (entity.size * 2) != 0:
+                        can_move = False
                 if entity.diet in ['herbivore', 'scavenger']:
                     if can_move:
                         # Communication & Flee behavior
