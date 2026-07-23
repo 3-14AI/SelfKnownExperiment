@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Added unit tests for the Immunity trait (`is_immune`) to verify infection prevention and post-recovery immunity acquisition.
 - Analyzed recent project changes (Echolocation, Aposematism, Aging, Fruiting, Immunity, Cold Blooded, Electric traits) and updated the results in the analytics folder.
 - Implemented Electric trait (`is_electric`) and stunned mechanics. Entities with this trait stun their attackers during combat, rendering them unable to move or act for several ticks.
 - Implemented `is_cold_blooded` trait. Entities with this trait gain an energy efficiency advantage in hot temperatures but suffer energy and movement penalties in cold temperatures.

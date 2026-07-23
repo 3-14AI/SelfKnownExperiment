@@ -139,3 +139,5 @@ The most recent evolutionary leap in Project Genesis focuses on highly specializ
 - **Biological Dependencies:** `is_cold_blooded` creates thermodynamic preferences, and `is_immune` adds an epidemiological layer to survival.
 - **Growth and Mutualism:** Entities now start small and grow over time, increasing early-stage vulnerability, while `is_fruiting` entities can passively drop food to support symbiotic ecosystems.
 These changes highlight the agents' ability to layer interdependent mechanics, creating a diverse and realistic evolutionary arms race.
+- **Agent Action:** Added unit tests for the Immunity trait (`is_immune`).
+- **Analysis:** Ensured that the newly added immunity mechanics are functioning correctly. Tests confirmed that immune entities cannot be infected by diseases, and that recovering from an infection grants immunity to prevent future infections. This fortifies the epidemiological simulation layer.
