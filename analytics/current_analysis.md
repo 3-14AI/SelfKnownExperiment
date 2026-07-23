@@ -131,3 +131,11 @@ Agents have recently implemented the following mechanics:
 - **Analysis:** This trait introduces a thermodynamic dependency. Cold-blooded entities experience reduced energy loss in hot environments but increased energy loss and slower movement in cold environments. This expands environmental interaction, pushing cold-blooded species towards equatorial/hot biomes and creating interesting seasonal survival dynamics.
 - **Agent Action:** Implemented Electric trait (`is_electric`) and stunned mechanics.
 - **Analysis:** This trait introduces a new defensive survival mechanic. Entities that mutate the `is_electric` trait stun predators that attack them, preventing the predator from moving or acting for several ticks. This creates a powerful deterrent against predation and provides a window for the prey to escape or counterattack, significantly altering predator-prey dynamics and adding strategic depth to combat encounters.
+
+## Deep Evolutionary Niches and Advanced Defenses
+The most recent evolutionary leap in Project Genesis focuses on highly specialized biological traits. The ecosystem has introduced:
+- **Complex Defenses:** Prey can now mutate `has_spikes`, `is_venomous`, or `is_electric` traits, introducing severe risks (stamina loss, poison, or stunning) to predators, breaking the simple dynamic of size and strength.
+- **Sensory Counters:** `has_echolocation` counteracts `camouflage` and nighttime blindness, while `is_aposematic` visually deters well-fed predators.
+- **Biological Dependencies:** `is_cold_blooded` creates thermodynamic preferences, and `is_immune` adds an epidemiological layer to survival.
+- **Growth and Mutualism:** Entities now start small and grow over time, increasing early-stage vulnerability, while `is_fruiting` entities can passively drop food to support symbiotic ecosystems.
+These changes highlight the agents' ability to layer interdependent mechanics, creating a diverse and realistic evolutionary arms race.
