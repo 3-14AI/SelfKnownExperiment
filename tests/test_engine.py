@@ -2585,7 +2585,13 @@ class TestUniverse(unittest.TestCase):
 
         # Test eating from inventory
         hoarder.energy = 20 # Under 50% max energy
-        universe.tick()
+        import random
+        original_random = random.random
+        random.random = lambda: 1.0 # prevent sleeping which skips turn
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
         self.assertNotIn(food, hoarder.inventory)
         self.assertGreater(hoarder.energy, 20)
 
@@ -2645,10 +2651,7 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(fruit.y, 5)
         self.assertEqual(fruit.energy, 15)
 
-        # Energy should be deducted (10 for fruit + 1 for normal tick loss)
-                # Energy should be deducted (10 for fruit + base loss)
-        # 150 - 10 (fruit) = 140
-        # The base loss is size(3) * 5 = 15, then some environmental loss
+        # Energy should be deducted (10 for fruit + base loss)
         self.assertTrue(entity.energy < initial_energy - 10)
 
 class TestMedicinalPlants(unittest.TestCase):
@@ -3214,4 +3217,32 @@ class TestRegenerativeTrait(unittest.TestCase):
         self.assertEqual(e_normal.hydration, 49)
 
         self.assertEqual(e_regen.energy, 41)
+        self.assertEqual(e_regen.hydration, 47)
+
+class TestRegenerationFeature(unittest.TestCase):
+    def test_regeneration_feature(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        # Normal entity
+        e_normal = Entity("Normal", x=5, y=5, energy=40, size=2, hydration=50, max_hydration=50, is_regenerative=False)
+        # Regenerative entity
+        e_regen = Entity("Regen", x=6, y=5, energy=40, size=2, hydration=50, max_hydration=50, is_regenerative=True)
+
+        universe.add_entity(e_normal)
+        universe.add_entity(e_regen)
+
+        import random
+        original_random = random.random
+        random.random = lambda: 1.0 # bypass sleep and events
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
+
+        self.assertEqual(e_normal.energy, 39)
+        self.assertEqual(e_regen.energy, 41)
+        self.assertEqual(e_normal.hydration, 49)
         self.assertEqual(e_regen.hydration, 47)

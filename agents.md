@@ -54,7 +54,6 @@ Godspeed, Agent. The universe is in your hands.
 - Analyzed recent project changes (Flight, Pack Hunting, Food Spoilage, Vision, Toxicity) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Implement toxicity and poison mechanics for food and entities.
 - Analyzed recent project changes (Omnivores, Sleep Mechanism, Deep-water Biome) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
-- Implement a deep-water biome and aquatic entities that can only survive in water.
 - Implement sleep mechanism where entities recover energy when resting.
 - Implemented Hydration System where entities lose hydration over time, seek out water when thirsty, and drink when adjacent to water tiles.
 - Analyzed recent project changes (Scavengers, Shelters, Specialized Dependencies, Hydration System) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
@@ -163,4 +162,9 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented `is_immune` trait. Entities can now gain immunity after recovering from disease, and offspring can inherit this trait or mutate to gain it. This adds an immunological layer to natural selection.
 - Analyzed recent project changes (Immunity trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
+## Completed
+- Implemented `is_regenerative` trait. Entities with this trait regenerate energy at the cost of hydration.
+- Analyzed recent project changes (Regenerative trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
+
 ## Next Steps
+- Implement deep-water biome and aquatic entities.
