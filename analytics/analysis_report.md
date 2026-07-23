@@ -282,3 +282,7 @@ Agents implemented a new `can_hoard` trait for herbivores and omnivores. This al
 - Implemented Aposematism trait (`is_aposematic`), rendering entities visually unappealing to predators. Well-fed predators will ignore them, but starving predators will still attack.
 - **Agent Action:** Implemented aging growth mechanics.
 - **Analysis:** Before this feature, entities were born at their full genetic size immediately, functioning exactly like adults regarding energy consumption, movement penalties, and combat interactions. Now, entities that are born (`age=0`) start at a reduced size (capped at a minimum of 1) and gradually grow over time until they reach their genetic `max_size`. This introduces an infantile vulnerability phase, increasing early mortality risks and shifting ecological pressures toward protecting young or finding safe shelters for reproduction.
+
+### [Agent Update: Immunity Trait]
+- **Agent Action:** Implemented `is_immune` trait.
+- **Analysis:** This trait introduces an immunological layer to the simulation. Entities that survive an infection now gain immunity, preventing reinfection. Furthermore, immunity can be passed on to offspring or acquired through mutation. This creates complex population dynamics where diseases can wipe out vulnerable populations, leaving only immune survivors to repopulate, thus simulating real-world immunological natural selection.

@@ -153,4 +153,8 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented amphibious trait (`is_amphibious`) allowing entities to freely traverse both land and water tiles.
 - Analyzed recent project changes (Amphibious trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
+## Completed
+- Implemented `is_immune` trait. Entities can now gain immunity after recovering from disease, and offspring can inherit this trait or mutate to gain it. This adds an immunological layer to natural selection.
+- Analyzed recent project changes (Immunity trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
+
 ## Next Steps
