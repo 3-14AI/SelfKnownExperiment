@@ -3080,3 +3080,20 @@ class TestEcholocation(unittest.TestCase):
 
         # Effective perception is full (5), so distance 5 (10-5) is seen.
         self.assertIn((5, 10), entity.memory)
+
+class TestColdBlooded(unittest.TestCase):
+    def test_energy_loss_hot(self):
+        universe = Universe()
+        entity = Entity("Reptile", energy=999, is_cold_blooded=True, size=2, age=100)
+        universe.add_entity(entity)
+
+        universe.base_temperature = 30
+        universe._last_season = universe.current_season
+        entity.temperature_tolerance = 100
+        entity.hydration = 100
+        entity.intelligence = 1
+
+        initial_energy = entity.energy
+        universe.tick()
+
+        self.assertEqual(entity.energy, initial_energy - 2, "Cold-blooded entity should lose less energy in hot environments")
