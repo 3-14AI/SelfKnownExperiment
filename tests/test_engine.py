@@ -3136,3 +3136,41 @@ class TestElectricTrait(unittest.TestCase):
         # The predator should be at (0,0) because it was forced there, and shouldn't move since it's stunned
         self.assertEqual(predator.x, 0)
         self.assertEqual(predator.y, 0)
+
+
+class TestImmunity(unittest.TestCase):
+    def test_immunity_prevents_infection(self):
+        universe = Universe(width=10, height=10)
+        universe.disease_chance = 0.0
+        immune_entity = Entity('Immune', energy=100, is_immune=True)
+        universe.add_entity(immune_entity)
+        vuln_entity = Entity('Vuln', energy=100, is_immune=False)
+        universe.add_entity(vuln_entity)
+        infected_carrier = Entity('Carrier', x=0, y=0, energy=100, is_infected=True)
+        universe.add_entity(infected_carrier)
+        immune_entity.x, immune_entity.y = 0, 0
+        vuln_entity.x, vuln_entity.y = 0, 0
+        import random
+        original_random = random.random
+        random.random = lambda: 0.05
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
+        self.assertFalse(immune_entity.is_infected, 'Immune entity should not be infected')
+        self.assertTrue(vuln_entity.is_infected, 'Vulnerable entity should be infected')
+
+    def test_immunity_gained_after_recovery(self):
+        universe = Universe(width=10, height=10)
+        universe.disease_chance = 0.0
+        entity = Entity('Recovering', energy=100, is_infected=True, infection_time=11)
+        universe.add_entity(entity)
+        import random
+        original_random = random.random
+        random.random = lambda: 0.1
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
+        self.assertFalse(entity.is_infected, 'Entity should have recovered')
+        self.assertTrue(getattr(entity, 'is_immune', False), 'Entity should have gained immunity')
