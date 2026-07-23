@@ -2975,10 +2975,12 @@ class TestPhotosynthesis(unittest.TestCase):
 
     def test_no_photosynthesis_during_night(self):
         from src.universe.engine import Universe, Entity
+        import unittest.mock
+
         universe = Universe(width=10, height=10, day_length=20)
         universe.time = 15 # It's night (time % 20 > 10)
 
-        entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1)
+        entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1, age=100)
         # Disable interference
         entity.preferred_temperature = universe.base_temperature
         entity.temperature_tolerance = 40
@@ -2988,7 +2990,8 @@ class TestPhotosynthesis(unittest.TestCase):
         universe.population_limit = 0 # Prevent reproduction draining energy
         universe.add_entity(entity)
 
-        universe.tick()
+        with unittest.mock.patch('random.random', return_value=1.0):
+            universe.tick()
 
         self.assertEqual(entity.energy, 19) # 20 - 1 (size) = 19
 
