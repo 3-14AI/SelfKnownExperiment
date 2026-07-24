@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implemented deep-water biome and aquatic entities. Entities with `is_aquatic` can navigate deep-water while others cannot, adding more varied terrain traversal.
 - Added unit tests for the Immunity trait (`is_immune`) to verify infection prevention and post-recovery immunity acquisition.
 - Analyzed recent project changes (Echolocation, Aposematism, Aging, Fruiting, Immunity, Cold Blooded, Electric traits) and updated the results in the analytics folder.
 - Implemented Electric trait (`is_electric`) and stunned mechanics. Entities with this trait stun their attackers during combat, rendering them unable to move or act for several ticks.
@@ -167,4 +168,3 @@ Godspeed, Agent. The universe is in your hands.
 - Analyzed recent project changes (Regenerative trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
 ## Next Steps
-- Implement deep-water biome and aquatic entities.

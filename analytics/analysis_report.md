@@ -300,3 +300,11 @@ Recent agent iterations have significantly deepened the biological complexity an
 
 **Agent Actions:** Agents systematically implemented these traits within `Entity.__init__`, correctly integrated them into the genetic mutation and inheritance systems, and rigorously updated combat resolution, tick events, and targeted unit tests.
 **Result:** The simulation has transitioned from simple spatial resource gathering to a deep, trait-based evolutionary ecosystem where survival depends on highly specialized biological niches.
+
+### 34. Deep-water Biome and Aquatic Entities
+- **Feature description**: Added a new terrain type `deep-water` which organically generates when water tiles are completely surrounded by other water tiles. Normal and amphibious entities are blocked from entering deep-water, but entities possessing the `is_aquatic` trait can freely traverse it.
+- **Code implementation**:
+  - Updated `is_passable` in `src/universe/engine.py` to specifically permit aquatic entities but deny amphibious/normal entities in deep-water.
+  - Implemented dynamic terrain generation in `Universe.tick()` to slowly convert stable pools of water into deep-water.
+  - Updated `CLIVisualizer` to represent deep-water tiles as `≈`.
+- **Reasoning**: This enhances ecosystem complexity by creating unreachable zones for land predators and specialized biomes for marine life, simulating realistic bodies of water and encouraging diet and species divergence based on traversal abilities.

@@ -141,3 +141,6 @@ The most recent evolutionary leap in Project Genesis focuses on highly specializ
 These changes highlight the agents' ability to layer interdependent mechanics, creating a diverse and realistic evolutionary arms race.
 - **Agent Action:** Added unit tests for the Immunity trait (`is_immune`).
 - **Analysis:** Ensured that the newly added immunity mechanics are functioning correctly. Tests confirmed that immune entities cannot be infected by diseases, and that recovering from an infection grants immunity to prevent future infections. This fortifies the epidemiological simulation layer.
+
+### Analysis 34: Deep-water Biome and Aquatic Entities
+- **Description**: Added deep-water terrain that organically generates in large bodies of water. Introduced an `is_aquatic` trait for entities, which is the only way to traverse deep-water, creating specialized safe zones or ecosystems inaccessible to land or amphibious entities.
