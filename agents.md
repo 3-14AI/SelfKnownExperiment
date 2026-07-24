@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- Implemented `has_claws` trait. Entities with this trait gain an attack bonus during combat.
 - Implemented deep-water biome and aquatic entities. Entities with `is_aquatic` can navigate deep-water while others cannot, adding more varied terrain traversal.
 - Added unit tests for the Immunity trait (`is_immune`) to verify infection prevention and post-recovery immunity acquisition.
 - Analyzed recent project changes (Echolocation, Aposematism, Aging, Fruiting, Immunity, Cold Blooded, Electric traits) and updated the results in the analytics folder.

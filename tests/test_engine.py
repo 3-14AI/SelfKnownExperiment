@@ -3349,3 +3349,50 @@ class TestRegenerationFeature(unittest.TestCase):
         self.assertEqual(e_regen.energy, 41)
         self.assertEqual(e_normal.hydration, 49)
         self.assertEqual(e_regen.hydration, 47)
+
+class TestClawsFeature(unittest.TestCase):
+    def test_has_claws_increases_attack(self):
+        from universe.engine import Universe, Entity
+        import random
+
+        universe_normal = Universe(width=10, height=10)
+        universe_normal.event_chance = 0.0
+        universe_normal.disease_chance = 0.0
+
+        # Normal entity with 1 attack
+        # Prey with 3 defense
+        # Attack + Defense = 4. Escape chance = 3/4 = 0.75
+        e_normal = Entity("Normal", x=5, y=5, diet='carnivore', energy=40, attack=1, has_claws=False)
+        e_prey_normal = Entity("Prey", x=6, y=5, diet='herbivore', energy=40, defense=3, species="prey")
+        e_normal.target_species = [e_prey_normal.species]
+        universe_normal.add_entity(e_normal)
+        universe_normal.add_entity(e_prey_normal)
+
+        universe_claws = Universe(width=10, height=10)
+        universe_claws.event_chance = 0.0
+        universe_claws.disease_chance = 0.0
+
+        # Claws entity with 1 attack
+        # Prey with 3 defense
+        # Effective attack = 1 + 5 = 6.
+        # Attack + Defense = 9. Escape chance = 3/9 = 0.33
+        e_claws = Entity("Claws", x=5, y=5, diet='carnivore', energy=40, attack=1, has_claws=True)
+        e_prey_claws = Entity("Prey", x=6, y=5, diet='herbivore', energy=40, defense=3, species="prey")
+        e_claws.target_species = [e_prey_claws.species]
+        universe_claws.add_entity(e_claws)
+        universe_claws.add_entity(e_prey_claws)
+
+        original_random = random.random
+        random.random = lambda: 0.5
+        try:
+            # Test normal combat
+            universe_normal.tick()
+            # Test claws combat
+            universe_claws.tick()
+        finally:
+            random.random = original_random
+
+        self.assertTrue(e_prey_normal.is_alive)
+        self.assertTrue(e_normal.is_alive)
+        self.assertFalse(e_prey_claws.is_alive)
+        self.assertTrue(e_claws.is_alive)

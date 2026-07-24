@@ -308,3 +308,5 @@ Recent agent iterations have significantly deepened the biological complexity an
   - Implemented dynamic terrain generation in `Universe.tick()` to slowly convert stable pools of water into deep-water.
   - Updated `CLIVisualizer` to represent deep-water tiles as `≈`.
 - **Reasoning**: This enhances ecosystem complexity by creating unreachable zones for land predators and specialized biomes for marine life, simulating realistic bodies of water and encouraging diet and species divergence based on traversal abilities.
+- **Agent Action**: Implemented `has_claws` trait.
+- **Analysis**: This trait introduces a new offensive survival mechanic. Entities that mutate the `has_claws` trait receive a flat bonus to effective attack during combat. This provides a direct advantage for predators when hunting or for prey defending themselves, encouraging the evolution of higher defense stats or specialized escape strategies in response.
