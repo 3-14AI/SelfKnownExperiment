@@ -1,10 +1,10 @@
 from unittest import mock
 import unittest
-from src.universe.engine import Universe, Entity, Food, Terrain
+from universe.engine import Universe, Entity, Food, Terrain
 
 class TestUniverse(unittest.TestCase):
     def test_immunity_prevents_infection(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         universe = Universe(width=10, height=10, disease_chance=1.0)
         universe.event_chance = 0.0
         immune_entity = Entity("Immune", energy=100, is_immune=True)
@@ -22,7 +22,7 @@ class TestUniverse(unittest.TestCase):
         self.assertTrue(vuln_entity.is_infected, "Vulnerable entity should stay infected")
 
     def test_immunity_granted_on_recovery(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         import random
         universe = Universe(width=10, height=10, disease_chance=0.0)
         universe.event_chance = 0.0
@@ -97,7 +97,7 @@ class TestUniverse(unittest.TestCase):
         # Give enough energy and speed to move
         universe.add_entity(scavenger)
 
-        from src.universe.engine import Food
+        from universe.engine import Food
         universe.add_food(Food(x=1, y=3, plant_type='meat', energy=5))
         universe.add_food(Food(x=1, y=2, plant_type='berry', energy=5))
 
@@ -287,7 +287,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(food_spawn_rate=0.0)
         universe.reproduction_threshold = 1000  # Prevent reproduction # Disable random food spawn for this test
         universe.event_chance = 0.0
-        entity = Entity("Adam", energy=10, x=5, y=5)
+        entity = Entity("Adam", energy=10, x=5, y=5, hydration=1000, max_hydration=1000)
         food = Food(energy=5, x=5, y=5)
         universe.add_entity(entity)
         universe.add_food(food)
@@ -783,7 +783,7 @@ class TestUniverse(unittest.TestCase):
         universe.localized_event_chance = 0.0
 
         # Manually add a rain event
-        from src.universe.engine import LocalizedEvent
+        from universe.engine import LocalizedEvent
         event = LocalizedEvent('rain', 5, 5, radius=3, duration=10)
         universe.localized_events.append(event)
 
@@ -817,7 +817,7 @@ class TestUniverse(unittest.TestCase):
         universe.localized_event_chance = 0.0
 
         # Setup targets within radius
-        from src.universe.engine import LocalizedEvent, Entity, Food, Terrain
+        from universe.engine import LocalizedEvent, Entity, Food, Terrain
 
         e_in = Entity("InRadius", x=5, y=5)
         e_out = Entity("OutRadius", x=10, y=10, diet="carnivore")
@@ -982,7 +982,7 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_temperature_zone_effect(self):
-        from src.universe.engine import TemperatureZone, Entity, Universe
+        from universe.engine import TemperatureZone, Entity, Universe
         u = Universe()
         # Create an entity with base preferred_temp 20 and tolerance 5 (15 to 25)
         e = Entity("TempTest", x=10, y=10, preferred_temperature=20, temperature_tolerance=5)
@@ -1001,7 +1001,7 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(e.energy, 17)
 
     def test_temperature_trait_inheritance(self):
-        from src.universe.engine import Entity, Universe
+        from universe.engine import Entity, Universe
         import random
         # Mock random to avoid mutations making tests flaky
         random.seed(42)
@@ -1099,7 +1099,7 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_global_earthquake(self):
-        from src.universe.engine import Universe, Terrain
+        from universe.engine import Universe, Terrain
         import random
         u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.event_chance = 1.0
@@ -1134,7 +1134,7 @@ class TestUniverse(unittest.TestCase):
             random.random = original_random
 
     def test_global_volcano(self):
-        from src.universe.engine import Universe, Terrain
+        from universe.engine import Universe, Terrain
         import random
         u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.event_chance = 1.0
@@ -1172,7 +1172,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_disease_spontaneous_outbreak(self):
         import random; import src.universe.engine as eng
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.disease_chance = 1.0
         u.event_chance = 0.0
@@ -1195,7 +1195,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_disease_spread(self):
         import random; import src.universe.engine as eng
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.disease_chance = 0.0 # No spontaneous outbreak
         u.event_chance = 0.0
@@ -1234,7 +1234,7 @@ class TestUniverse(unittest.TestCase):
             eng.random.random = original_random
 
     def test_disease_energy_loss(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.disease_chance = 0.0
         u.event_chance = 0.0
@@ -1254,7 +1254,7 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_symbiosis_benefit(self):
-        from src.universe.engine import Entity, Universe
+        from universe.engine import Entity, Universe
 
         # Test basic energy loss without symbiosis benefit
         u_isolated = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
@@ -1311,7 +1311,7 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_dynamic_base_temperature(self):
-        from src.universe.engine import Universe
+        from universe.engine import Universe
         u = Universe(width=10, height=10, season_length=10)
         u.event_chance = 0.0
 
@@ -1332,7 +1332,7 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(u.base_temperature, -5)
 
     def test_localized_water_ice_transition(self):
-        from src.universe.engine import Universe, Terrain, TemperatureZone
+        from universe.engine import Universe, Terrain, TemperatureZone
         u = Universe(width=10, height=10, season_length=100) # Ensure no season change during tick 1
         u.event_chance = 0.0
 
@@ -1361,7 +1361,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_rain_mud_and_washing(self):
         import random; import src.universe.engine as eng
-        from src.universe.engine import Universe, Terrain
+        from universe.engine import Universe, Terrain
         u = Universe(width=10, height=10)
         u.event_chance = 0.0
         u.localized_event_chance = 1.0 # Guarantee localized event
@@ -1420,7 +1420,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_heat_creates_sand(self):
         import random; import src.universe.engine as eng
-        from src.universe.engine import Universe
+        from universe.engine import Universe
         u = Universe(width=10, height=10)
         u.event_chance = 0.0
         u.time = 0 # Spring, base temp 20
@@ -1453,7 +1453,7 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_preferred_terrain(self):
-        from src.universe.engine import Entity, Universe, Terrain
+        from universe.engine import Entity, Universe, Terrain
         u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)
         u.event_chance = 0.0 # prevent random energy modifiers
 
@@ -1515,7 +1515,7 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(child[0].diet, 'scavenger')
 
     def test_entity_size_affects_energy_and_movement(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
 
         # Test Energy Consumption
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
@@ -1524,7 +1524,7 @@ class TestUniverse(unittest.TestCase):
         universe.reproduction_threshold = 100
 
         small_entity = Entity("Small", x=2, y=2, energy=20, size=1)
-        large_entity = Entity("Large", x=8, y=8, energy=20, size=3)
+        large_entity = Entity("Large", x=8, y=8, energy=20, size=3, age=100) # age 100 to force adult size
         large_entity.size = 3 # force adult size
         # set preferred temperature to base so they don't lose extra energy
         small_entity.preferred_temperature = 20
@@ -1544,16 +1544,17 @@ class TestUniverse(unittest.TestCase):
 
         # Test Movement Speed
         # A size 3 entity should only move every 3 ticks
-        large_mover = Entity("Mover", x=5, y=5, energy=50, size=3, diet='herbivore', perception_radius=10)
+        large_mover = Entity("Mover", x=5, y=5, energy=50, size=3, age=100, max_age=200, diet='herbivore', perception_radius=10, max_hydration=1000, hydration=1000)
         large_mover.size = 3 # force adult size
         universe.food_spawn_rate = 0.0
         # Setup so it wants to move
-        from src.universe.engine import Food
+        from universe.engine import Food
         universe.add_food(Food(x=6, y=5))
         universe.add_entity(large_mover)
 
         # Reset universe time so we can predictably test modulo
         universe.time = 0
+        universe.day_length = 100 # ensure it's day
 
         # At tick 1, 1 % 3 != 0, so it shouldn't move
         universe.tick()
@@ -1884,7 +1885,7 @@ class TestUniverse(unittest.TestCase):
         # Add water
         universe.add_terrain(Terrain(x=5, y=5, terrain_type='water'))
 
-        from src.universe.engine import LocalizedEvent
+        from universe.engine import LocalizedEvent
         event = LocalizedEvent('snow', 5, 5, radius=3, duration=10)
         universe.localized_events.append(event)
 
@@ -2528,7 +2529,7 @@ class TestUniverse(unittest.TestCase):
         e = Entity(name="MaxEnergy", energy=5000, size=1)
         self.assertEqual(e.energy, 50)
         e.energy = 45
-        from src.universe.engine import Food
+        from universe.engine import Food
         universe.add_food(Food(x=0, y=0, energy=20))
         e.x = 0
         e.y = 0
@@ -2620,7 +2621,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_fruiting_drops_food(self):
         self.universe = Universe(width=10, height=10)
-        entity = Entity(name="FruitingTree", x=5, y=5, energy=100, max_age=100, age=10, is_fruiting=True)
+        entity = Entity(name="FruitingTree", x=5, y=5, energy=100, max_age=100, age=10, size=3, is_fruiting=True)
         entity.size = 3
         entity.energy = entity.max_energy
         self.universe.add_entity(entity)
@@ -2745,7 +2746,7 @@ class TestMedicinalPlants(unittest.TestCase):
 
 
     def test_nocturnal_sleep_cycle(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         import src.universe.engine as eng
         u = Universe(food_spawn_rate=0.0)
         u.disease_chance = 0.0
@@ -2775,7 +2776,7 @@ class TestMedicinalPlants(unittest.TestCase):
             eng.random.random = original_random
 
     def test_nocturnal_perception(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         u = Universe(food_spawn_rate=0.0)
         u.disease_chance = 0.0
 
@@ -2783,7 +2784,7 @@ class TestMedicinalPlants(unittest.TestCase):
         e_nocturnal = Entity("Noct", is_nocturnal=True, perception_radius=10, vision_type='normal', x=0, y=0)
         u.add_entity(e_nocturnal)
 
-        from src.universe.engine import Terrain
+        from universe.engine import Terrain
         u.add_terrain(Terrain(x=10, y=0, terrain_type='wall')) # distance 10
         u.tick()
         # During the day, perception is halved to 5. Distance 10 should not be seen.
@@ -2840,14 +2841,14 @@ class TestBurrowing(unittest.TestCase):
 
 class TestWebMechanics(unittest.TestCase):
     def setUp(self):
-        from src.universe.engine import Universe
+        from universe.engine import Universe
         self.universe = Universe(width=10, height=10)
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
         self.universe.food_spawn_rate = 0.0
 
     def test_web_building_and_trapping(self):
-        from src.universe.engine import Entity
+        from universe.engine import Entity
         spider = Entity("Spider", x=5, y=5, energy=50, can_spin_webs=True, stamina=50, max_stamina=50, max_hydration=1000, hydration=1000)
         self.universe.add_entity(spider)
 
@@ -2952,13 +2953,115 @@ class TestAmphibiousTrait(unittest.TestCase):
         self.assertFalse(self.universe.is_passable(2, 2))
         self.assertTrue(self.universe.is_passable(1, 1))
 
+
+class TestColdBlooded(unittest.TestCase):
+    def setUp(self):
+        from universe.engine import Universe, Entity, Food
+        self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.time = 0
+
+    def test_cold_blooded_heat_efficiency(self):
+        from universe.engine import Entity
+        self.universe.base_temperature = 30
+        normal = Entity("Normal", x=0, y=0, energy=100, size=2, hydration=1000, max_hydration=1000, age=100)
+        reptile = Entity("Reptile", x=1, y=1, energy=100, size=2, hydration=1000, max_hydration=1000, is_cold_blooded=True, age=100)
+        normal.preferred_temperature = 30
+        reptile.preferred_temperature = 30
+        self.universe.add_entity(normal)
+        self.universe.add_entity(reptile)
+
+        self.universe.tick()
+
+        # Base loss is size(2). Hydration loss doesn't affect energy if high enough.
+        # Normal should lose 2 energy. Reptile should lose 2 - 1 = 1 energy due to heat.
+        self.assertEqual(normal.energy, 98)
+        self.assertEqual(reptile.energy, 99)
+
+    def test_cold_blooded_cold_penalty(self):
+        from universe.engine import Entity
+        self.universe.base_temperature = 0
+        normal = Entity("Normal", x=0, y=0, energy=100, size=2, hydration=1000, max_hydration=1000, age=100)
+        reptile = Entity("Reptile", x=1, y=1, energy=100, size=2, hydration=1000, max_hydration=1000, is_cold_blooded=True, age=100)
+        normal.preferred_temperature = 0
+        reptile.preferred_temperature = 0
+        self.universe.add_entity(normal)
+        self.universe.add_entity(reptile)
+
+        self.universe.tick()
+
+        # Normal loses 2 energy. Reptile loses 2 + 1 = 3 energy due to cold.
+        self.assertEqual(normal.energy, 98)
+        self.assertEqual(reptile.energy, 97)
+
+    def test_cold_blooded_movement_penalty(self):
+        from universe.engine import Entity, Food
+        self.universe.base_temperature = 0
+        reptile = Entity("Reptile", x=5, y=5, energy=100, size=1, age=100, diet='herbivore', perception_radius=10, hydration=1000, max_hydration=1000, is_cold_blooded=True)
+        reptile.preferred_temperature = 0
+        self.universe.add_entity(reptile)
+        self.universe.add_food(Food(x=6, y=5))
+
+        self.universe.time = 0
+        self.universe.day_length = 100
+
+        # Tick 1: time becomes 1. normally size 1 moves every tick. but cold blooded at 0 temp needs time % (1 * 2) == 0.
+        # So 1 % 2 != 0 -> shouldn't move.
+        self.universe.tick()
+        self.assertEqual(reptile.x, 5)
+
+        # Tick 2: time becomes 2. 2 % 2 == 0 -> should move.
+        self.universe.tick()
+        self.assertEqual(reptile.x, 6)
+
+class TestAposematism(unittest.TestCase):
+    def setUp(self):
+        from universe.engine import Universe
+        self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_well_fed_predator_ignores_aposematic_prey(self):
+        from universe.engine import Entity
+        predator = Entity("Predator", x=5, y=5, energy=80, size=2, age=100, max_age=200, diet='carnivore', target_species=['Frog'], hydration=1000, max_hydration=1000)
+        prey = Entity("Frog", x=6, y=5, energy=50, size=1, age=100, max_age=200, species='Frog', is_aposematic=True, hydration=1000, max_hydration=1000)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        # Predator max energy is 100. 80 is >= 30 (100 * 0.3). Should ignore prey.
+        self.universe.time = 1
+        self.universe.day_length = 100
+        # size 2 moves on even ticks, time 1 -> tick() makes it 2.
+        self.universe.tick()
+
+        # Predator should not move towards prey, x stays 5 (assuming no other targets)
+        self.assertEqual(predator.x, 5)
+
+    def test_starving_predator_hunts_aposematic_prey(self):
+        from universe.engine import Entity
+        predator = Entity("Predator", x=5, y=5, energy=20, size=2, age=100, max_age=200, diet='carnivore', target_species=['Frog'], hydration=1000, max_hydration=1000)
+        prey = Entity("Frog", x=6, y=5, energy=50, size=1, age=100, max_age=200, species='Frog', is_aposematic=True, hydration=1000, max_hydration=1000)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        # Predator max energy is 100. 20 is < 30 (100 * 0.3). Should hunt prey.
+        self.universe.time = 1
+        self.universe.day_length = 100
+        # size 2 moves on even ticks, time 1 -> tick() makes it 2.
+        self.universe.tick()
+
+        # Predator moves towards and eats prey
+        self.assertEqual(predator.x, 6)
+
 if __name__ == '__main__':
+
 
     unittest.main()
 
 class TestPhotosynthesis(unittest.TestCase):
     def test_photosynthesis_during_day(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         universe = Universe(width=10, height=10, day_length=20)
         universe.time = 0 # It's day
 
@@ -2979,7 +3082,7 @@ class TestPhotosynthesis(unittest.TestCase):
         self.assertEqual(entity.energy, 21) # 20 - 1 (size) + 2 (photosynthesis) = 21
 
     def test_no_photosynthesis_during_night(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         import unittest.mock
 
         universe = Universe(width=10, height=10, day_length=20)
@@ -3002,7 +3105,7 @@ class TestPhotosynthesis(unittest.TestCase):
 
 class TestArmorMechanics(unittest.TestCase):
     def test_has_shell_increases_defense(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         import unittest.mock
 
         universe = Universe(width=10, height=10)
@@ -3182,7 +3285,7 @@ class TestImmunity(unittest.TestCase):
 
 class TestRegenerativeTrait(unittest.TestCase):
     def test_regeneration(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         import unittest.mock
 
         universe = Universe(width=10, height=10)
@@ -3221,7 +3324,7 @@ class TestRegenerativeTrait(unittest.TestCase):
 
 class TestRegenerationFeature(unittest.TestCase):
     def test_regeneration_feature(self):
-        from src.universe.engine import Universe, Entity
+        from universe.engine import Universe, Entity
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
