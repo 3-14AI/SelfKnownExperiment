@@ -55,5 +55,43 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.C.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+
+    def test_render_infected(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestInfected", x=1, y=1, is_infected=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.S.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_aposematic(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestApos", x=1, y=1, is_aposematic=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.A.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_photosynthesize(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestPhoto", x=1, y=1, can_photosynthesize=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.P.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_hibernating(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("TestHiber", x=1, y=1, diet='carnivore', can_hibernate=True)
+        entity.is_hibernating = True
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.c.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_level(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestLevel", x=1, y=1, diet='omnivore', level=3))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.O.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
 if __name__ == '__main__':
     unittest.main()
