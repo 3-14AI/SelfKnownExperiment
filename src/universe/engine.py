@@ -236,7 +236,8 @@ class Universe:
         if is_flying:
             return True
         if is_amphibious:
-            return True
+            is_deep_water = any(t.terrain_type == 'deep-water' for t in terrains_here)
+            return not is_deep_water
         if is_aquatic:
             return is_water
         else:
