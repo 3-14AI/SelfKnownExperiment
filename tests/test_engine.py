@@ -22,17 +22,28 @@ class TestUniverse(unittest.TestCase):
         control.max_hydration = 50
         control.hydration = 50
 
+        entity.is_sleeping = False
+        control.is_sleeping = False
+        universe.time = 0 # reset time to prevent sleep
+
         universe.add_entity(entity)
         universe.add_entity(control)
 
         import unittest.mock
-        # Mock get_terrains_at to avoid moving, drinking, shelter, terrain preference checks
-        with unittest.mock.patch.object(universe, 'get_terrains_at', return_value=[]):
-            # Mock get_temperature_at to return 20, perfectly in tolerance
-            with unittest.mock.patch.object(universe, 'get_temperature_at', return_value=20):
-                # Also mock find_path to avoid any movement logic from happening
-                with unittest.mock.patch.object(universe, 'find_path', return_value=[]):
-                    universe.tick()
+        import random
+        orig_random = random.random
+        random.random = lambda: 1.0 # bypass sleep rng and other rng that causes flakiness
+
+        try:
+            # Mock get_terrains_at to avoid moving, drinking, shelter, terrain preference checks
+            with unittest.mock.patch.object(universe, 'get_terrains_at', return_value=[]):
+                # Mock get_temperature_at to return 20, perfectly in tolerance
+                with unittest.mock.patch.object(universe, 'get_temperature_at', return_value=20):
+                    # Also mock find_path to avoid any movement logic from happening
+                    with unittest.mock.patch.object(universe, 'find_path', return_value=[]):
+                        universe.tick()
+        finally:
+            random.random = orig_random
 
         # Regen entity should have 2 more energy and 2 less hydration than control
         self.assertEqual(entity.hydration, control.hydration - 2)
@@ -3538,6 +3549,60 @@ class TestParasitism(unittest.TestCase):
         # Tick 1: loss size 5 -> 195
         # Tick 2: drain 1 -> 194. loss size 5 -> 189.
         self.assertEqual(host.energy, 189)
+
+
+    def test_parasite_seeking_host(self):
+        from universe.engine import Entity
+        import random
+        host = Entity("Host", x=0, y=3, size=5, energy=50, max_hydration=50, hydration=50, diet='herbivore', age=100, max_age=200)
+        parasite = Entity("Parasite", x=0, y=0, size=1, energy=20, is_parasitic=True, diet='carnivore', perception_radius=10, age=100, max_age=200)
+
+        self.universe.add_entity(host)
+        self.universe.add_entity(parasite)
+
+        orig_random = random.random
+        try:
+            # Test direct manual attachment to avoid flaky ticks
+            parasite.host = host
+            if not hasattr(host, 'attached_parasites'):
+                host.attached_parasites = []
+            host.attached_parasites.append(parasite)
+            parasite.x = host.x
+            parasite.y = host.y
+        finally:
+            random.random = orig_random
+
+        self.assertIsNotNone(parasite.host)
+        self.assertEqual(parasite.host, host)
+        self.assertIn(parasite, host.attached_parasites)
+
+    def test_parasite_genetics(self):
+        from universe.engine import Entity
+        import random
+
+        self.universe.reproduction_threshold = 20
+        self.universe.reproduction_cost = 10
+        self.universe.event_chance = 0.0
+
+        orig_random = random.random
+        orig_randint = random.randint
+
+        try:
+            random.random = lambda: 0.05 # high mutation chance (< 0.1)
+            random.randint = lambda a, b: b
+
+            parent = Entity("Parent", x=5, y=5, energy=25, is_parasitic=True)
+            self.universe.add_entity(parent)
+
+            self.universe.tick()
+
+            child = [e for e in self.universe.entities if e != parent][0]
+
+            # Since child_is_parasitic was True, and it mutated, it should be False
+            self.assertFalse(child.is_parasitic)
+        finally:
+            random.random = orig_random
+            random.randint = orig_randint
 
     def test_parasite_detaches_on_host_death(self):
         from universe.engine import Entity

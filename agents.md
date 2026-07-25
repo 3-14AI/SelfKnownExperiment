@@ -172,4 +172,9 @@ Godspeed, Agent. The universe is in your hands.
 - Implemented Parasitism (`is_parasitic`) trait. Parasites actively seek out and attach to larger hosts, continually draining their energy and hydration to sustain themselves.
 - Analyzed recent project changes (Parasitism) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
+
+## Completed
+- Ensure that agents read agents.md at the start.
+
 ## Next Steps
+- Implement specialized dependencies between species (e.g. specialized predators that only eat specific species, or herbivores that require specific plants).
