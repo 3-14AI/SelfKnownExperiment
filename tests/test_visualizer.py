@@ -122,5 +122,21 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.U.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+
+    def test_render_can_climb(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestClimb", x=1, y=1, diet='herbivore', can_climb=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.L.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+
+    def test_render_can_climb(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestClimb", x=1, y=1, diet='herbivore', can_climb=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.L.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
 if __name__ == '__main__':
     unittest.main()
