@@ -1,4 +1,7 @@
 # Changelog
+## [Unreleased]
+### Added
+- Implemented `can_climb` trait allowing entities to traverse 'wall' terrain blocks, bypassing obstacles.
 
 ## [Unreleased]
 ### Added
