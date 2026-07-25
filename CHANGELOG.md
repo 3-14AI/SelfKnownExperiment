@@ -1,4 +1,8 @@
 # Changelog
+
+## [Unreleased] - YYYY-MM-DD
+### Added
+- Analyzed recent project changes (Scales trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Added `is_parasitic` trait allowing entities to attach to larger hosts and leech their energy/hydration.
 ## [Unreleased]
 ### Added

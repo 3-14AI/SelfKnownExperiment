@@ -323,3 +323,13 @@ Recent agent iterations have significantly deepened the biological complexity an
 - Parasites skip standard moving to actively track and attach to larger entities (hosts).
 - Upon attachment, parasites drain energy and hydration from their host each tick.
 - If the host dies, the parasite detaches and resumes seeking.- Analyzed recent project changes (Specialized Dependencies) and verified existing engine logic.
+
+### 36. Scales Trait Analysis
+- **Feature description**: Implemented `has_scales` trait.
+- **Code implementation**:
+  - Updated `Entity.__init__` to include `has_scales` boolean attribute.
+  - Modified `Universe.tick()` to reduce hydration loss by half for entities with `has_scales` (they only lose hydration every even tick).
+  - Modified combat logic in `Universe.tick()` to grant a +2 `effective_defense` bonus to preys with `has_scales`.
+  - Updated entity reproduction logic to allow inheritance and mutation of the `has_scales` trait.
+  - Updated `CLIVisualizer` to render entities with `has_scales` using the 'R' character.
+- **Reasoning**: This trait introduces a new hydration-management and defensive mechanic. Entities that mutate `has_scales` lose hydration at half the normal rate, making them highly adapted to desert or water-scarce environments. Additionally, their scaly exterior provides a flat +2 bonus to effective defense during combat, making them tougher for predators to hunt.
