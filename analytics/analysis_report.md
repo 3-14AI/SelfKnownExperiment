@@ -317,3 +317,9 @@ Recent agent iterations have significantly deepened the biological complexity an
   - Updated `Entity.__init__` to include `has_claws` boolean attribute.
   - Updated combat mechanics in `Universe.tick()` to add an attack bonus if the entity `has_claws`.
 - **Reasoning**: Introduces a new offensive survival mechanic. Entities that mutate the `has_claws` trait receive a flat bonus to effective attack during combat. This provides a direct advantage for predators when hunting or for prey defending themselves, encouraging the evolution of higher defense stats or specialized escape strategies in response.
+
+### 18. Parasitism
+- Added `is_parasitic` trait.
+- Parasites skip standard moving to actively track and attach to larger entities (hosts).
+- Upon attachment, parasites drain energy and hydration from their host each tick.
+- If the host dies, the parasite detaches and resumes seeking.
