@@ -62,6 +62,8 @@ class CLIVisualizer:
                         char = 'R'
                     elif getattr(entity, 'has_claws', False):
                         char = 'K'
+                    elif getattr(entity, 'has_fur', False):
+                        char = 'U'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
