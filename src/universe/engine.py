@@ -1044,7 +1044,6 @@ class Universe:
                     if random.random() < mutation_chance:
                         child_is_parasitic = not child_is_parasitic
                         mutation_occurred = True
-                        mutation_occurred = True
 
                     if mutation_occurred:
                         child_mutations_count += 1
