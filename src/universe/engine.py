@@ -16,7 +16,7 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False):
         self.is_amphibious = is_amphibious
         self.is_aposematic = is_aposematic
         self.is_fruiting = is_fruiting
@@ -29,6 +29,8 @@ class Entity:
         self.has_scales = has_scales
         self.has_fur = has_fur
         self.can_climb = can_climb
+        self.pack_hunter = pack_hunter
+        self.shared_target = None
         self.host = None
         self.attached_parasites = []
         self.stunned_time = stunned_time
@@ -1068,6 +1070,10 @@ class Universe:
                     if random.random() < mutation_chance:
                         child_can_climb = not child_can_climb
                         mutation_occurred = True
+
+                    child_pack_hunter = getattr(entity, 'pack_hunter', False)
+                    if random.random() < mutation_chance:
+                        child_pack_hunter = not child_pack_hunter
                         mutation_occurred = True
 
                     if mutation_occurred:
@@ -1092,7 +1098,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb, pack_hunter=child_pack_hunter)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
@@ -1337,6 +1343,18 @@ class Universe:
                                 elif nearest_prey:
                                     target_to_chase = nearest_prey
 
+                                # Pack hunter targeting override
+                                if getattr(entity, 'pack_hunter', False) and entity.diet in ['carnivore', 'omnivore']:
+                                    if target_to_chase and hasattr(target_to_chase, 'species'):
+                                        entity.shared_target = target_to_chase
+                                        # Share with nearby pack members
+                                        for e in self.entities:
+                                            if e != entity and getattr(e, 'pack_hunter', False) and e.species == entity.species and e.is_alive and not e.is_sleeping:
+                                                if abs(e.x - entity.x) + abs(e.y - entity.y) <= effective_perception * 2:
+                                                    e.shared_target = target_to_chase
+                                    elif getattr(entity, 'shared_target', None) and getattr(entity.shared_target, 'is_alive', False):
+                                        target_to_chase = entity.shared_target
+
                                 if target_to_chase:
                                     path = self.find_path(entity.x, entity.y, target_to_chase.x, target_to_chase.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                     if path and len(path) > 0:
@@ -1412,6 +1430,12 @@ class Universe:
                             pack_members = [e for e in self.entities if e.species == entity.species and e != entity and e.is_alive and not e.is_sleeping and abs(e.x - entity.x) + abs(e.y - entity.y) <= 3]
                             herd_members = [e for e in self.entities if e.species == prey_to_eat.species and e != prey_to_eat and e.is_alive and not e.is_sleeping and abs(e.x - prey_to_eat.x) + abs(e.y - prey_to_eat.y) <= 3]
                             pack_bonus = sum(0.5 * e.attack for e in pack_members)
+
+                            # Pack hunter bonus based on number of nearby pack members attacking same target
+                            if getattr(entity, 'pack_hunter', False):
+                                adjacent_pack_hunters = [e for e in pack_members if getattr(e, 'pack_hunter', False) and abs(e.x - prey_to_eat.x) + abs(e.y - prey_to_eat.y) <= 2]
+                                pack_bonus += len(adjacent_pack_hunters) * 2
+
                             herd_bonus = sum(0.5 * e.defense for e in herd_members)
                             effective_attack += pack_bonus
                             effective_defense += herd_bonus
@@ -1469,6 +1493,18 @@ class Universe:
 
                         if not moved_for_water:
                             nearest_prey = self.get_nearest_prey(entity.x, entity.y, max_distance=effective_perception, entity=entity)
+
+                            # Pack hunter targeting override for pure carnivores
+                            if getattr(entity, 'pack_hunter', False) and entity.diet == 'carnivore':
+                                if nearest_prey and hasattr(nearest_prey, 'species'):
+                                    entity.shared_target = nearest_prey
+                                    for e in self.entities:
+                                        if e != entity and getattr(e, 'pack_hunter', False) and e.species == entity.species and e.is_alive and not e.is_sleeping:
+                                            if abs(e.x - entity.x) + abs(e.y - entity.y) <= effective_perception * 2:
+                                                e.shared_target = nearest_prey
+                                elif getattr(entity, 'shared_target', None) and getattr(entity.shared_target, 'is_alive', False):
+                                    nearest_prey = entity.shared_target
+
                             if nearest_prey:
                                 path = self.find_path(entity.x, entity.y, nearest_prey.x, nearest_prey.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                 if path and len(path) > 0:
@@ -1529,6 +1565,11 @@ class Universe:
                         pack_members = [e for e in self.entities if e.species == entity.species and e != entity and e.is_alive and not e.is_sleeping and abs(e.x - entity.x) + abs(e.y - entity.y) <= 3]
                         herd_members = [e for e in self.entities if e.species == prey_to_eat.species and e != prey_to_eat and e.is_alive and not e.is_sleeping and abs(e.x - prey_to_eat.x) + abs(e.y - prey_to_eat.y) <= 3]
                         pack_bonus = sum(0.5 * e.attack for e in pack_members)
+
+                        if getattr(entity, 'pack_hunter', False):
+                            adjacent_pack_hunters = [e for e in pack_members if getattr(e, 'pack_hunter', False) and abs(e.x - prey_to_eat.x) + abs(e.y - prey_to_eat.y) <= 2]
+                            pack_bonus += len(adjacent_pack_hunters) * 2
+
                         herd_bonus = sum(0.5 * e.defense for e in herd_members)
                         effective_attack += pack_bonus
                         effective_defense += herd_bonus

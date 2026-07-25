@@ -3781,3 +3781,63 @@ class TestFurTrait(unittest.TestCase):
             universe.tick()
 
         self.assertEqual(entity.energy, 98)
+
+class TestPackHunterTrait(unittest.TestCase):
+    def setUp(self):
+        from universe.engine import Universe
+        self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_pack_hunter_combat_bonus(self):
+        from universe.engine import Entity
+
+        hunter1 = Entity("Pack1", x=0, y=0, species="Wolf", diet='carnivore', target_species=["Prey1"], attack=5, energy=50, max_age=100, age=50, size=2, pack_hunter=True)
+        hunter2 = Entity("Pack2", x=1, y=0, species="Wolf", diet='carnivore', target_species=["Prey1"], attack=5, energy=50, max_age=100, age=50, size=2, pack_hunter=True)
+        hunter3 = Entity("Pack3", x=0, y=1, species="Wolf", diet='carnivore', target_species=["Prey1"], attack=5, energy=50, max_age=100, age=50, size=2, pack_hunter=True)
+
+        prey = Entity("Prey1", x=0, y=0, species="Prey1", defense=20, energy=50, max_age=100, age=50, size=2)
+
+        self.universe.add_entity(hunter1)
+        self.universe.add_entity(hunter2)
+        self.universe.add_entity(hunter3)
+        self.universe.add_entity(prey)
+
+        import random
+        orig_random = random.random
+        random.random = lambda: 1.0
+
+        try:
+            self.universe.tick()
+        finally:
+            random.random = orig_random
+
+        self.assertFalse(prey.is_alive)
+
+    def test_pack_hunter_target_sharing(self):
+        from universe.engine import Entity
+
+        # We need to make sure entities don't fall asleep or die due to low stamina/energy
+        hunter1 = Entity("Pack1", x=0, y=0, species="Wolf", diet='carnivore', target_species=["Prey1"], attack=5, max_age=100, age=50, size=2, pack_hunter=True, perception_radius=2, hydration=50)
+        hunter2 = Entity("Pack2", x=3, y=0, species="Wolf", diet='carnivore', target_species=["Prey1"], attack=5, max_age=100, age=50, size=2, pack_hunter=True, perception_radius=1, hydration=50)
+        prey = Entity("Prey1", x=1, y=0, species="Prey1", diet="herbivore", defense=2, max_age=100, age=50, size=2)
+
+        hunter1.energy = hunter1.max_energy
+        hunter2.energy = hunter2.max_energy
+        prey.energy = prey.max_energy
+        hunter1.size = 1
+        hunter2.size = 1
+        self.universe.time = 0
+
+        self.universe.add_entity(hunter1)
+        self.universe.add_entity(hunter2)
+        self.universe.add_entity(prey)
+
+        import unittest.mock
+        hunter1.is_sleeping = False
+        hunter2.is_sleeping = False
+        with unittest.mock.patch.object(self.universe, 'get_nearest_prey', wraps=self.universe.get_nearest_prey) as mock:
+                        self.universe.tick()
+
+        self.assertEqual(hunter1.shared_target, prey)
+        self.assertEqual(hunter2.shared_target, prey)

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 ### Added
+- Implemented `pack_hunter` trait. Predatory entities with this trait share their targets with nearby pack members of the same species, and gain an attack bonus during combat when multiple pack members surround the same prey.
+
+## [Unreleased]
+### Added
 - Implemented `has_fur` trait. Entities with fur have increased temperature tolerance in the cold, but suffer energy and movement penalties in hot environments.
 
 ## [Unreleased] - YYYY-MM-DD
