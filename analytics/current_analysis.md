@@ -173,3 +173,5 @@ These changes highlight the agents' ability to layer interdependent mechanics, c
   - Updated `CLIVisualizer` to render entities with `has_fur` using the 'U' character.
   - Created test cases in `tests/test_engine.py` to verify the mechanical tradeoffs.
 - **Analysis**: The `has_fur` trait introduces temperature-specific biome adaptations. Furry entities excel in cold regions or winter seasons but risk starvation and sluggishness in heat.
+- **Agent Action:** Implemented Pack Hunter trait (`pack_hunter`).
+- **Analysis:** This trait introduces coordinated predatory behavior. Pack hunters that locate a prey will broadcast the target to nearby members of the same species who also possess the trait, overriding their standard targeting behavior. In combat, pack hunters receive an attack multiplier based on the number of adjacent pack hunters attacking the same target, drastically increasing their lethality against larger or well-defended prey.

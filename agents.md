@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- [x] Implement `pack_hunter` trait allowing predatory entities to share target tracking and coordinate attacks with nearby entities of the same species.
 - [x] Implemented `has_scales` trait. Entities with this trait lose hydration at half the normal rate and receive a small flat bonus to effective defense during combat.
 - [x] Implemented `has_claws` trait. Entities with this trait gain an attack bonus during combat.
 - [x] Implemented deep-water biome and aquatic entities. Entities with `is_aquatic` can navigate deep-water while others cannot, adding more varied terrain traversal.
