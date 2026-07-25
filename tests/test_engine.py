@@ -2724,6 +2724,10 @@ class TestUniverse(unittest.TestCase):
         self.universe.event_chance = 0.0
         self.universe.reproduction_threshold = 1000
 
+        # Compensate for energy_loss calculation in tick which may subtract more energy than expected
+        # To make sure energy > max_energy * 0.6 is true.
+        entity.energy = entity.max_energy
+
         initial_energy = entity.energy
 
         # Mock random to trigger fruiting (chance < 0.05)
