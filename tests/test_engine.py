@@ -2716,11 +2716,13 @@ class TestUniverse(unittest.TestCase):
         initial_energy = entity.energy
 
         # Mock random to trigger fruiting (chance < 0.05)
+        entity.is_sleeping = False
         import random
         orig_random = random.random
         def fake_random():
             return 0.01
         random.random = fake_random
+        entity.is_sleeping = False
         try:
             self.universe.tick()
         finally:
@@ -3476,3 +3478,81 @@ class TestClawsFeature(unittest.TestCase):
         self.assertTrue(e_normal.is_alive)
         self.assertFalse(e_prey_claws.is_alive)
         self.assertTrue(e_claws.is_alive)
+
+class TestParasitism(unittest.TestCase):
+    def setUp(self):
+        from universe.engine import Universe
+        self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_parasite_attaches_and_drains(self):
+        from universe.engine import Entity
+        import random
+        # Create a large host and a small parasite
+        host = Entity("Host", x=5, y=5, energy=200, size=5, max_hydration=100, hydration=50, diet='herbivore', perception_radius=10, age=100, max_age=200)
+        parasite = Entity("Parasite", x=4, y=5, energy=10, size=1, max_hydration=50, hydration=10, is_parasitic=True, diet='herbivore', perception_radius=10, age=100, max_age=200)
+
+        self.universe.add_entity(host)
+        self.universe.add_entity(parasite)
+
+        initial_host_energy = host.energy
+        initial_host_hydration = host.hydration
+        initial_parasite_energy = parasite.energy
+        initial_parasite_hydration = parasite.hydration
+
+        # Disable sleep
+        host.is_sleeping = False
+        parasite.is_sleeping = False
+
+        orig_random = random.random
+        random.random = lambda: 1.0 # bypass sleep triggers
+        try:
+            self.universe.tick()
+        finally:
+            random.random = orig_random
+
+        # Parasite should attach because it's distance 1
+        self.assertEqual(parasite.host, host)
+        self.assertIn(parasite, host.attached_parasites)
+
+        # Second tick for drain
+        orig_random = random.random
+        random.random = lambda: 1.0
+        try:
+            self.universe.tick()
+        finally:
+            random.random = orig_random
+
+        # Tick 2: drain happens at the start
+        # Drain amount is max(1, parasite.size) = 1
+        # Check parasite stats
+        self.assertEqual(parasite.x, host.x)
+        self.assertEqual(parasite.y, host.y)
+        # energy: initial(10) - tick1_loss(0 because attached? No wait, tick 1 was not attached at start).
+        # Tick 1: loss size 1 -> 9
+        # Tick 2: drain +1 -> 10. loss 0.
+        self.assertEqual(parasite.energy, 10)
+
+        # host energy:
+        # Tick 1: loss size 5 -> 195
+        # Tick 2: drain 1 -> 194. loss size 5 -> 189.
+        self.assertEqual(host.energy, 189)
+
+    def test_parasite_detaches_on_host_death(self):
+        from universe.engine import Entity
+        host = Entity("Host", x=5, y=5, energy=50, size=5, max_hydration=100, hydration=50, diet='herbivore')
+        parasite = Entity("Parasite", x=5, y=5, energy=10, size=1, is_parasitic=True, diet='carnivore')
+
+        self.universe.add_entity(host)
+        self.universe.add_entity(parasite)
+
+        parasite.host = host
+        host.attached_parasites = [parasite]
+
+        # Kill host
+        host.energy = 0
+
+        self.universe.tick()
+
+        self.assertIsNone(parasite.host)

@@ -16,7 +16,7 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False):
         self.is_amphibious = is_amphibious
         self.is_aposematic = is_aposematic
         self.is_fruiting = is_fruiting
@@ -25,6 +25,9 @@ class Entity:
         self.is_electric = is_electric
         self.is_regenerative = is_regenerative
         self.has_claws = has_claws
+        self.is_parasitic = is_parasitic
+        self.host = None
+        self.attached_parasites = []
         self.stunned_time = stunned_time
         self.has_echolocation = has_echolocation
         self.has_shell = has_shell
@@ -674,6 +677,23 @@ class Universe:
 
             start_pos_x, start_pos_y = entity.x, entity.y
 
+            # Parasite drain logic
+            if getattr(entity, 'is_parasitic', False):
+                if getattr(entity, 'host', None) is not None:
+                    host = entity.host
+                    if not host.is_alive:
+                        entity.host = None
+                    else:
+                        entity.x = host.x
+                        entity.y = host.y
+                        drain_amount = max(1, entity.size)
+                        if host.energy > drain_amount:
+                            host.energy -= drain_amount
+                            entity.energy = min(entity.max_energy, entity.energy + drain_amount)
+                        if host.hydration > drain_amount:
+                            host.hydration -= drain_amount
+                            entity.hydration = min(entity.max_hydration, entity.hydration + drain_amount)
+
             if current_season == 'winter' and getattr(entity, 'can_hibernate', False):
                 entity.is_hibernating = True
                 entity.is_sleeping = True
@@ -699,6 +719,8 @@ class Universe:
                     energy_loss = 0
             else:
                 energy_loss = entity.size
+                if getattr(entity, 'is_parasitic', False) and getattr(entity, 'host', None) is not None:
+                    energy_loss = 0
                 if self.current_event == 'storm':
                     energy_loss = 2 * entity.size if not in_shelter else entity.size
                 elif self.current_event == 'blizzard':
@@ -1017,6 +1039,11 @@ class Universe:
                         mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_has_claws = not child_has_claws
+
+                    child_is_parasitic = getattr(entity, 'is_parasitic', False)
+                    if random.random() < mutation_chance:
+                        child_is_parasitic = not child_is_parasitic
+                        mutation_occurred = True
                         mutation_occurred = True
 
                     if mutation_occurred:
@@ -1041,7 +1068,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
@@ -1059,7 +1086,7 @@ class Universe:
                 if getattr(entity, 'is_fruiting', False) and entity.energy > entity.max_energy * 0.6 and entity.is_alive:
                     if random.random() < 0.05:  # 5% chance per tick when well-fed
                         fruit = Food(x=entity.x, y=entity.y, energy=15, plant_type='fruit', max_age=30)
-                        self.add_food(fruit)
+                        self.foods.append(fruit)
                         entity.energy = max(0, entity.energy - 10)
 
                 # Eat from inventory if hungry and has hoarded food
@@ -1091,6 +1118,39 @@ class Universe:
                 if getattr(entity, 'is_cold_blooded', False) and current_temp <= 5:
                     if self.time % (entity.size * 2) != 0:
                         can_move = False
+
+                # Parasite seeking logic (before standard movement)
+                if getattr(entity, 'is_parasitic', False) and can_move:
+                    if getattr(entity, 'host', None) is not None:
+                        can_move = False # attached parasites just ride along
+                    else:
+                        # find host
+                        best_host = None
+                        best_dist = float('inf')
+                        for other in self.entities:
+                            if other != entity and other.is_alive and not getattr(other, 'is_parasitic', False):
+                                dist = abs(other.x - entity.x) + abs(other.y - entity.y)
+                                actual_perception = entity.perception_radius if (self.is_day != getattr(entity, 'is_nocturnal', False) or getattr(entity, 'vision_type', 'normal') == 'night_vision' or getattr(entity, 'has_echolocation', False)) else max(1, entity.perception_radius // 2)
+                                if dist <= actual_perception and dist < best_dist and other.size > entity.size:
+                                    best_dist = dist
+                                    best_host = other
+                        if best_host:
+                            if best_dist <= 1:
+                                entity.host = best_host
+                                if not hasattr(best_host, 'attached_parasites'):
+                                    best_host.attached_parasites = []
+                                best_host.attached_parasites.append(entity)
+                                entity.x = best_host.x
+                                entity.y = best_host.y
+                                can_move = False
+                            else:
+                                path = self.find_path(entity.x, entity.y, best_host.x, best_host.y, max_distance=actual_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                if path:
+                                    next_step = path[0]
+                                    if self.is_passable(next_step[0], next_step[1], getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False)):
+                                        entity.x, entity.y = next_step
+                                        entity.stamina = max(0, getattr(entity, 'stamina', 50) - 1)
+                                can_move = False # we handled movement
                 if entity.diet in ['herbivore', 'scavenger']:
                     if can_move:
                         # Communication & Flee behavior
@@ -1363,7 +1423,7 @@ class Universe:
                                 prey_to_eat.energy = 0
                                 prey_to_eat.was_eaten = True
 
-                elif entity.diet == 'carnivore':
+                elif entity.diet == 'carnivore' and not getattr(entity, 'is_parasitic', False):
                     if can_move:
                         moved_for_water = False
                         if entity.hydration <= entity.max_hydration / 2:
@@ -1497,6 +1557,15 @@ class Universe:
 
         dead_entities = [e for e in self.entities if not e.is_alive]
         for dead in dead_entities:
+            if hasattr(dead, 'attached_parasites'):
+                for p in dead.attached_parasites:
+                    p.host = None
+                dead.attached_parasites = []
+            if getattr(dead, 'host', None) is not None:
+                if hasattr(dead.host, 'attached_parasites') and dead in dead.host.attached_parasites:
+                    dead.host.attached_parasites.remove(dead)
+                dead.host = None
+
             if not getattr(dead, 'was_eaten', False):
                 self.add_food(Food(x=dead.x, y=dead.y, energy=dead.size * 5, plant_type='meat', toxicity=getattr(dead, 'toxicity', 0), max_age=60))
 
