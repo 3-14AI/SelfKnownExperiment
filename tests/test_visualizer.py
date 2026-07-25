@@ -114,5 +114,13 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.R.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+
+    def test_render_has_fur(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestFur", x=1, y=1, diet='herbivore', has_fur=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.U.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
 if __name__ == '__main__':
     unittest.main()

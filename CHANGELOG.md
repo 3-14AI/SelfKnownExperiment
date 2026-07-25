@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- Implemented `has_fur` trait. Entities with fur have increased temperature tolerance in the cold, but suffer energy and movement penalties in hot environments.
+
 ## [Unreleased] - YYYY-MM-DD
 ### Added
 - Analyzed recent project changes (Scales trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.

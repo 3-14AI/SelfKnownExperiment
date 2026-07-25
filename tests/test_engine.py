@@ -2712,7 +2712,8 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_fruiting_drops_food(self):
-        self.universe = Universe(width=10, height=10)
+        self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        self.universe.event_chance = 0.0
         entity = Entity(name="FruitingTree", x=5, y=5, energy=100, max_age=100, age=10, size=3, is_fruiting=True)
         entity.size = 3
         entity.energy = entity.max_energy
@@ -3672,3 +3673,43 @@ class TestScalesFeature(unittest.TestCase):
             self.assertFalse(prey2.is_alive)
         finally:
             random.random = original_random
+
+class TestFurTrait(unittest.TestCase):
+    def test_fur_heat_penalty(self):
+        from universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe()
+        universe.event_chance = 0.0
+        universe.reproduction_threshold = 1000
+
+        entity = Entity("Furry", energy=5000, max_age=200, age=100, size=2, intelligence=1, has_fur=True, preferred_temperature=20, temperature_tolerance=5)
+        universe.add_entity(entity)
+
+        # Force exact temperature evaluation to 50 (Hot)
+        # preferred (20) + tolerance (5) + fur_bonus (15) = 40. 50 is outside, so mismatch (+1 loss)
+        # current_temp >= 25, so fur penalty (+1 loss)
+        # base loss for size 2 is 2
+        # total loss = 4, energy = 100 - 4 = 96
+        with unittest.mock.patch.object(universe, 'get_temperature_at', return_value=50):
+            universe.tick()
+
+        self.assertEqual(entity.energy, 96)
+
+    def test_fur_cold_efficiency(self):
+        from universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe()
+        universe.event_chance = 0.0
+        universe.reproduction_threshold = 1000
+
+        entity = Entity("Furry", energy=5000, max_age=200, age=100, size=2, intelligence=1, has_fur=True, preferred_temperature=20, temperature_tolerance=5)
+        universe.add_entity(entity)
+
+        # Force exact temperature evaluation to 0 (Cold)
+        # preferred (20) - tolerance (5) - fur_bonus (15) = 0. 0 is exactly on boundary, no mismatch
+        # total loss = base loss (2)
+        # energy = 100 - 2 = 98
+        with unittest.mock.patch.object(universe, 'get_temperature_at', return_value=0):
+            universe.tick()
+
+        self.assertEqual(entity.energy, 98)
