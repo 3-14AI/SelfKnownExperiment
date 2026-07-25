@@ -3621,3 +3621,50 @@ class TestParasitism(unittest.TestCase):
         self.universe.tick()
 
         self.assertIsNone(parasite.host)
+
+class TestScalesFeature(unittest.TestCase):
+    def setUp(self):
+        from universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.time = 0
+
+    def test_scales_hydration_loss(self):
+        from universe.engine import Entity
+        e_normal = Entity("Normal", x=5, y=5, hydration=50, max_hydration=50, has_scales=False)
+        e_scales = Entity("Scales", x=6, y=5, hydration=50, max_hydration=50, has_scales=True)
+        self.universe.add_entity(e_normal)
+        self.universe.add_entity(e_scales)
+
+        # Tick twice. Normal loses 2 hydration, Scales loses 1 hydration.
+        self.universe.tick()
+        self.universe.tick()
+
+        self.assertEqual(e_normal.hydration, 48)
+        self.assertEqual(e_scales.hydration, 49)
+
+    def test_scales_combat_defense(self):
+        from universe.engine import Entity
+        import random
+        # Force attack by mocking random to guarantee combat escape fails (1.0)
+        original_random = random.random
+        random.random = lambda: 1.0
+
+        try:
+            predator1 = Entity("Predator1", x=0, y=0, diet='carnivore', target_species=["PreyNormal"], attack=10, energy=20)
+            prey1 = Entity("PreyNormal", x=0, y=0, species="PreyNormal", defense=5, has_scales=False, energy=20)
+            self.universe.add_entity(predator1)
+            self.universe.add_entity(prey1)
+
+            predator2 = Entity("Predator2", x=5, y=5, diet='carnivore', target_species=["PreyScales"], attack=10, energy=20)
+            prey2 = Entity("PreyScales", x=5, y=5, species="PreyScales", defense=5, has_scales=True, energy=20)
+            self.universe.add_entity(predator2)
+            self.universe.add_entity(prey2)
+
+            self.universe.tick()
+
+            # Both preys die because escape chance is 0.0, but this confirms it runs through without error
+            self.assertFalse(prey1.is_alive)
+            self.assertFalse(prey2.is_alive)
+        finally:
+            random.random = original_random

@@ -58,6 +58,8 @@ class CLIVisualizer:
                         char = 'P'
                     elif getattr(entity, 'is_parasitic', False):
                         char = 'D'
+                    elif getattr(entity, 'has_scales', False):
+                        char = 'R'
                     elif getattr(entity, 'has_claws', False):
                         char = 'K'
                     elif diet == 'carnivore':

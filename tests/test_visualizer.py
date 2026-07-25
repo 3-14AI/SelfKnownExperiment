@@ -107,5 +107,12 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.D.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+    def test_render_has_scales(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestScales", x=1, y=1, diet='herbivore', has_scales=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.R.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
 if __name__ == '__main__':
     unittest.main()
