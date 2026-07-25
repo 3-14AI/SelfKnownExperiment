@@ -227,7 +227,11 @@ class Universe:
         entity.x = new_x
         entity.y = new_y
         if hasattr(entity, 'stamina'):
-            entity.stamina = max(0, entity.stamina - 1)
+            stamina_cost = 1
+            terrains_here = self.get_terrains_at(new_x, new_y)
+            if getattr(entity, 'can_climb', False) and any(t.terrain_type == 'wall' for t in terrains_here):
+                stamina_cost = 2
+            entity.stamina = max(0, entity.stamina - stamina_cost)
 
         terrains_here = self.get_terrains_at(new_x, new_y)
         if any(t.terrain_type == 'web' for t in terrains_here) and not getattr(entity, 'can_spin_webs', False):
