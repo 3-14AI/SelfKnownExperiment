@@ -322,4 +322,4 @@ Recent agent iterations have significantly deepened the biological complexity an
 - Added `is_parasitic` trait.
 - Parasites skip standard moving to actively track and attach to larger entities (hosts).
 - Upon attachment, parasites drain energy and hydration from their host each tick.
-- If the host dies, the parasite detaches and resumes seeking.
+- If the host dies, the parasite detaches and resumes seeking.- Analyzed recent project changes (Specialized Dependencies) and verified existing engine logic.

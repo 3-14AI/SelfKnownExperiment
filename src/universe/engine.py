@@ -42,6 +42,7 @@ class Entity:
         self.is_nocturnal = is_nocturnal
         self.can_hoard = can_hoard
         self.target_species = target_species
+        self.target_plants = target_plants
         self.is_sleeping = is_sleeping
         self.is_aquatic = is_aquatic
         self.is_flying = is_flying
