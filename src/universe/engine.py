@@ -16,7 +16,7 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False):
         self.is_amphibious = is_amphibious
         self.is_aposematic = is_aposematic
         self.is_fruiting = is_fruiting
@@ -28,6 +28,7 @@ class Entity:
         self.is_parasitic = is_parasitic
         self.has_scales = has_scales
         self.has_fur = has_fur
+        self.can_climb = can_climb
         self.host = None
         self.attached_parasites = []
         self.stunned_time = stunned_time
@@ -218,7 +219,7 @@ class Universe:
         if not (0 <= new_x < self.width and 0 <= new_y < self.height):
             raise ValueError(f"Movement out of bounds: ({new_x}, {new_y})")
 
-        if not self.is_passable(new_x, new_y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False)):
+        if not self.is_passable(new_x, new_y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
             raise ValueError(f"Movement blocked by terrain at ({new_x}, {new_y})")
 
         entity.x = new_x
@@ -234,9 +235,9 @@ class Universe:
     def get_terrains_at(self, x, y):
         return [t for t in self.terrains if t.x == x and t.y == y]
 
-    def is_passable(self, x, y, is_aquatic=False, is_flying=False, is_amphibious=False):
+    def is_passable(self, x, y, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False):
         terrains_here = self.get_terrains_at(x, y)
-        if not is_flying and any(t.terrain_type == 'wall' for t in terrains_here):
+        if not is_flying and not is_climbing and any(t.terrain_type == 'wall' for t in terrains_here):
             return False
         is_water = any(t.terrain_type in ['water', 'deep-water'] for t in terrains_here)
         if is_flying:
@@ -254,7 +255,7 @@ class Universe:
             raise ValueError(f"Terrain out of bounds: ({terrain.x}, {terrain.y})")
         self.terrains.append(terrain)
 
-    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None, is_aquatic=False, is_flying=False, is_amphibious=False):
+    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False):
         from collections import deque
         queue = deque([(start_x, start_y, [])])
         visited = {(start_x, start_y)}
@@ -282,7 +283,7 @@ class Universe:
                             visited.add((new_x, new_y))
                             queue.append((new_x, new_y, path + [(dx, dy)]))
                         else:
-                            if self.is_passable(new_x, new_y, is_aquatic, is_flying, is_amphibious):
+                            if self.is_passable(new_x, new_y, is_aquatic, is_flying, is_amphibious, is_climbing):
                                 visited.add((new_x, new_y))
                                 queue.append((new_x, new_y, path + [(dx, dy)]))
 
@@ -347,7 +348,7 @@ class Universe:
                     for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
                         nx, ny = t.x + dx, t.y + dy
                         if 0 <= nx < self.width and 0 <= ny < self.height:
-                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False)) if entity else not any(ta.terrain_type in ['wall', 'water', 'deep-water'] for ta in self.get_terrains_at(nx, ny)):
+                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)) if entity else not any(ta.terrain_type in ['wall', 'water', 'deep-water'] for ta in self.get_terrains_at(nx, ny)):
                                 dist_to_adj = abs(nx - x) + abs(ny - y)
                                 if dist_to_adj < min_dist:
                                     min_dist = dist_to_adj
@@ -1059,8 +1060,14 @@ class Universe:
                         mutation_occurred = True
 
                     child_has_fur = getattr(entity, 'has_fur', False)
+                    child_can_climb = getattr(entity, 'can_climb', False)
                     if random.random() < mutation_chance:
                         child_has_fur = not child_has_fur
+                        mutation_occurred = True
+
+                    if random.random() < mutation_chance:
+                        child_can_climb = not child_can_climb
+                        mutation_occurred = True
                         mutation_occurred = True
 
                     if mutation_occurred:
@@ -1085,7 +1092,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
@@ -1096,7 +1103,7 @@ class Universe:
 
                 # Update entity memory with visible obstacles
                 for t in self.terrains:
-                    if not self.is_passable(t.x, t.y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False)) and (abs(t.x - entity.x) + abs(t.y - entity.y)) <= effective_perception:
+                    if not self.is_passable(t.x, t.y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)) and (abs(t.x - entity.x) + abs(t.y - entity.y)) <= effective_perception:
                         entity.memory.add((t.x, t.y))
 
                 # Fruiting behavior: Drop food to bait prey or feed symbionts
@@ -1164,10 +1171,10 @@ class Universe:
                                 entity.y = best_host.y
                                 can_move = False
                             else:
-                                path = self.find_path(entity.x, entity.y, best_host.x, best_host.y, max_distance=actual_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                path = self.find_path(entity.x, entity.y, best_host.x, best_host.y, max_distance=actual_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                 if path:
                                     next_step = path[0]
-                                    if self.is_passable(next_step[0], next_step[1], getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False)):
+                                    if self.is_passable(next_step[0], next_step[1], getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
                                         entity.x, entity.y = next_step
                                         entity.stamina = max(0, getattr(entity, 'stamina', 50) - 1)
                                 can_move = False # we handled movement
@@ -1192,7 +1199,7 @@ class Universe:
                                 try:
                                     # Basic bounds/terrain check before moving
                                     if 0 <= nx < self.width and 0 <= ny < self.height:
-                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False)):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
                                             dist_to_predator = abs(nx - px) + abs(ny - py)
                                             if dist_to_predator > max_dist:
                                                 max_dist = dist_to_predator
@@ -1211,7 +1218,7 @@ class Universe:
                             if entity.hydration <= entity.max_hydration / 2:
                                 nearest_water = self.get_nearest_water(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                                 if nearest_water:
-                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -1223,7 +1230,7 @@ class Universe:
                             if not moved_for_water:
                                 nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                                 if nearest_food:
-                                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -1237,7 +1244,7 @@ class Universe:
                                         center_x = sum(e.x for e in flockmates) // len(flockmates)
                                         center_y = sum(e.y for e in flockmates) // len(flockmates)
                                         if center_x != entity.x or center_y != entity.y:
-                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                             if path and len(path) > 0:
                                                 dx, dy = path[0]
                                                 try:
@@ -1280,7 +1287,7 @@ class Universe:
                                 nx, ny = entity.x + dx, entity.y + dy
                                 try:
                                     if 0 <= nx < self.width and 0 <= ny < self.height:
-                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False)):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
                                             dist_to_predator = abs(nx - px) + abs(ny - py)
                                             if dist_to_predator > max_dist:
                                                 max_dist = dist_to_predator
@@ -1298,7 +1305,7 @@ class Universe:
                             if entity.hydration <= entity.max_hydration / 2:
                                 nearest_water = self.get_nearest_water(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                                 if nearest_water:
-                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -1331,7 +1338,7 @@ class Universe:
                                     target_to_chase = nearest_prey
 
                                 if target_to_chase:
-                                    path = self.find_path(entity.x, entity.y, target_to_chase.x, target_to_chase.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                    path = self.find_path(entity.x, entity.y, target_to_chase.x, target_to_chase.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -1345,7 +1352,7 @@ class Universe:
                                     for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
                                         nx, ny = entity.x + dx, entity.y + dy
                                         if (nx, ny) in self.scent_trails and self.scent_trails[(nx, ny)] > best_scent:
-                                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False)):
+                                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
                                                 best_scent = self.scent_trails[(nx, ny)]
                                                 best_pos = (dx, dy)
                                     if best_pos:
@@ -1360,7 +1367,7 @@ class Universe:
                                             center_x = sum(e.x for e in flockmates) // len(flockmates)
                                             center_y = sum(e.y for e in flockmates) // len(flockmates)
                                             if center_x != entity.x or center_y != entity.y:
-                                                path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                                path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                                 if path and len(path) > 0:
                                                     dx, dy = path[0]
                                                     try:
@@ -1451,7 +1458,7 @@ class Universe:
                         if entity.hydration <= entity.max_hydration / 2:
                             nearest_water = self.get_nearest_water(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                             if nearest_water:
-                                path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                 if path and len(path) > 0:
                                     dx, dy = path[0]
                                     try:
@@ -1463,7 +1470,7 @@ class Universe:
                         if not moved_for_water:
                             nearest_prey = self.get_nearest_prey(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                             if nearest_prey:
-                                path = self.find_path(entity.x, entity.y, nearest_prey.x, nearest_prey.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                path = self.find_path(entity.x, entity.y, nearest_prey.x, nearest_prey.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                 if path and len(path) > 0:
                                     dx, dy = path[0]
                                     try:
@@ -1477,7 +1484,7 @@ class Universe:
                                 for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
                                     nx, ny = entity.x + dx, entity.y + dy
                                     if (nx, ny) in self.scent_trails and self.scent_trails[(nx, ny)] > best_scent:
-                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False)):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
                                             best_scent = self.scent_trails[(nx, ny)]
                                             best_pos = (dx, dy)
                                 if best_pos:
@@ -1492,7 +1499,7 @@ class Universe:
                                         center_x = sum(e.x for e in flockmates) // len(flockmates)
                                         center_y = sum(e.y for e in flockmates) // len(flockmates)
                                         if center_x != entity.x or center_y != entity.y:
-                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False))
+                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                             if path and len(path) > 0:
                                                 dx, dy = path[0]
                                                 try:

@@ -223,6 +223,74 @@ class TestUniverse(unittest.TestCase):
         with self.assertRaises(ValueError):
             universe.add_terrain(Terrain(x=100, y=10))
 
+
+    def test_can_climb_movement(self):
+        from universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=5, height=5)
+        entity = Entity("Climber", x=0, y=0, can_climb=True, energy=200, size=2, age=100, max_age=200)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='wall'))
+
+        self.assertTrue(universe.is_passable(1, 0, is_climbing=True))
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 0)
+
+    def test_can_climb_inheritance(self):
+        from universe.engine import Universe, Entity
+        import random
+
+        universe = Universe(width=5, height=5)
+        universe.reproduction_threshold = 50
+        entity = Entity("ClimberParent", x=0, y=0, can_climb=True, energy=2000, size=2, age=100, max_age=200, intelligence=10)
+        universe.add_entity(entity)
+
+        orig_random = random.random
+        random.random = lambda: 0.5
+
+        try:
+            universe.tick()
+        finally:
+            random.random = orig_random
+
+        children = [e for e in universe.entities if e != entity]
+        if len(children) > 0:
+            self.assertTrue(getattr(children[0], 'can_climb', False))
+
+
+    def test_can_climb_movement(self):
+        from universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=5, height=5)
+        entity = Entity("Climber", x=0, y=0, can_climb=True, energy=200, size=2, age=100, max_age=200)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='wall'))
+
+        self.assertTrue(universe.is_passable(1, 0, is_climbing=True))
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 0)
+
+    def test_can_climb_inheritance(self):
+        from universe.engine import Universe, Entity
+        import random
+
+        universe = Universe(width=5, height=5)
+        universe.reproduction_threshold = 50
+        entity = Entity("ClimberParent", x=0, y=0, can_climb=True, energy=2000, size=2, age=100, max_age=200, intelligence=10)
+        universe.add_entity(entity)
+
+        orig_random = random.random
+        random.random = lambda: 0.5
+
+        try:
+            universe.tick()
+        finally:
+            random.random = orig_random
+
+        children = [e for e in universe.entities if e != entity]
+        if len(children) > 0:
+            self.assertTrue(getattr(children[0], 'can_climb', False))
+
     def test_move_entity_blocked_by_terrain(self):
         universe = Universe(width=10, height=10)
         entity = Entity("Adam", x=5, y=5)
