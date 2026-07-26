@@ -1,6 +1,7 @@
 # Changelog
 ## [Unreleased]
 ### Added
+- Added missing visualizer tests for `has_bioluminescence` and `pack_hunter` traits.
 - Implemented `has_bioluminescence` trait. Entities with this trait bypass night vision penalties for themselves, but are easily spotted by predators at night.
 - Added testing for `has_bioluminescence` in `test_engine.py` to verify perception behaviors.
 - Added visualizer support for `has_bioluminescence` (rendered as 'l').

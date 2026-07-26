@@ -218,6 +218,20 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.k.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+    def test_render_has_bioluminescence(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestBio", x=1, y=1, has_bioluminescence=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.l.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_pack_hunter(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestPack", x=1, y=1, pack_hunter=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.W.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
 if __name__ == '__main__':
 
     unittest.main()
