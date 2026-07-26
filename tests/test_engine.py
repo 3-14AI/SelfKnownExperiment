@@ -461,6 +461,8 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_pathfinding_around_obstacle(self):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
         entity = Entity("Adam", x=0, y=0)
         universe.add_entity(entity)
         universe.add_food(Food(x=2, y=0, energy=5))
@@ -844,14 +846,20 @@ class TestUniverse(unittest.TestCase):
     def test_population_limit(self):
         universe = Universe(reproduction_threshold=15, reproduction_cost=10, food_spawn_rate=0.0, population_limit=2)
         universe.event_chance = 0.0
+        universe.disease_chance = 0.0
         entity1 = Entity("Adam", energy=16, x=5, y=5)
         entity2 = Entity("Eve", energy=16, x=6, y=6)
         universe.add_entity(entity1)
         universe.add_entity(entity2)
+        entity1.is_sleeping = False
+        entity2.is_sleeping = False
 
         # The universe already has 2 entities, which is the population limit.
         # Neither entity should be able to reproduce despite having enough energy.
-        universe.tick()
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=1.0):
+            with unittest.mock.patch.object(universe, 'get_nearest_prey', return_value=None):
+                universe.tick()
 
         self.assertEqual(len(universe.entities), 2)
         # Energy should only decrease by 1 for the tick, not by 10 for reproduction
@@ -2220,21 +2228,25 @@ class TestUniverse(unittest.TestCase):
     def test_hydration_loss_and_penalty(self):
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0
+        universe.disease_chance = 0.0
         universe.localized_event_chance = 0.0
         entity = Entity("thirst_test", x=5, y=5, energy=20, hydration=2, max_hydration=10)
         universe.add_entity(entity)
+        entity.is_sleeping = False
 
-        universe.tick()
-        self.assertEqual(entity.hydration, 1)
-        self.assertEqual(entity.energy, 19) # Normal decay (size 1)
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=1.0):
+            universe.tick()
+            self.assertEqual(entity.hydration, 1)
+            self.assertEqual(entity.energy, 19) # Normal decay (size 1)
 
-        universe.tick()
-        self.assertEqual(entity.hydration, 0)
-        self.assertEqual(entity.energy, 17) # Hydration reached 0, penalty applies here too since we decay before checking in tick()
+            universe.tick()
+            self.assertEqual(entity.hydration, 0)
+            self.assertEqual(entity.energy, 17) # Hydration reached 0, penalty applies here too since we decay before checking in tick()
 
-        universe.tick()
-        self.assertEqual(entity.hydration, -1)
-        self.assertEqual(entity.energy, 15) # Penalty applied (+1 energy loss)
+            universe.tick()
+            self.assertEqual(entity.hydration, -1)
+            self.assertEqual(entity.energy, 15)
 
     def test_hydration_recovery_adjacent_to_water(self):
         universe = Universe(width=10, height=10)
@@ -2782,6 +2794,8 @@ class TestUniverse(unittest.TestCase):
     def test_fruiting_drops_food(self):
         self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
         entity = Entity(name="FruitingTree", x=5, y=5, energy=100, max_age=100, age=10, size=3, is_fruiting=True)
         entity.size = 3
         entity.energy = entity.max_energy
@@ -2801,18 +2815,20 @@ class TestUniverse(unittest.TestCase):
 
         # Mock random to trigger fruiting (chance < 0.05)
         entity.is_sleeping = False
+        # mock get_nearest_prey and get_foods_at just in case it eats
+        import unittest.mock
         import random
         orig_random = random.random
         def fake_random():
             return 0.01
         random.random = fake_random
-        entity.is_sleeping = False
         try:
-            self.universe.tick()
+            with unittest.mock.patch.object(self.universe, 'get_nearest_prey', return_value=None):
+                self.universe.tick()
         finally:
             random.random = orig_random
 
-        # Check if food was dropped
+        # If random is mocked to 0.01 globally, it might trigger multiple fruit drops or other food spawns. Let's just find the fruit.
         self.assertTrue(any(f.plant_type == 'fruit' for f in self.universe.foods))
         fruit = [f for f in self.universe.foods if f.plant_type == 'fruit'][0]
         self.assertEqual(fruit.x, 5)
@@ -3126,6 +3142,8 @@ class TestColdBlooded(unittest.TestCase):
         self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
         self.universe.time = 0
 
     def test_cold_blooded_heat_efficiency(self):
@@ -3185,6 +3203,8 @@ class TestAposematism(unittest.TestCase):
     def setUp(self):
         from universe.engine import Universe
         self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
 
@@ -3569,6 +3589,8 @@ class TestParasitism(unittest.TestCase):
         self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
 
     def test_parasite_attaches_and_drains(self):
         from universe.engine import Entity
@@ -3786,6 +3808,8 @@ class TestPackHunterTrait(unittest.TestCase):
     def setUp(self):
         from universe.engine import Universe
         self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
 

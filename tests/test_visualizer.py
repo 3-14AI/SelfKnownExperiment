@@ -138,5 +138,26 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.L.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+    def test_render_is_regenerative(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestRegen", x=1, y=1, diet='herbivore', is_regenerative=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.G.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_is_immune(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestImmune", x=1, y=1, diet='herbivore', is_immune=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.I.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_is_amphibious(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestAmphi", x=1, y=1, diet='herbivore', is_amphibious=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.B.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
 if __name__ == '__main__':
     unittest.main()

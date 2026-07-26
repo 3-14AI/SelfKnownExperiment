@@ -68,6 +68,12 @@ class CLIVisualizer:
                         char = 'L'
                     elif getattr(entity, 'pack_hunter', False):
                         char = 'W'
+                    elif getattr(entity, 'is_regenerative', False):
+                        char = 'G'
+                    elif getattr(entity, 'is_immune', False):
+                        char = 'I'
+                    elif getattr(entity, 'is_amphibious', False):
+                        char = 'B'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
