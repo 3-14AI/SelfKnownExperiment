@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- [x] Implemented elevation and height map mechanics. Entities are affected by elevation changes (uphill costs more stamina, steep downhill causes slight damage), while flying entities ignore elevation.
 - [x] Implement a `can_climb` trait allowing entities to traverse 'wall' terrain blocks, simulating climbing over obstacles.
 - [x] Implement `pack_hunter` trait allowing predatory entities to share target tracking and coordinate attacks with nearby entities of the same species.
 - [x] Implemented `has_scales` trait. Entities with this trait lose hydration at half the normal rate and receive a small flat bonus to effective defense during combat.
