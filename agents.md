@@ -107,4 +107,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented Parasitism (`is_parasitic`) trait. Parasites actively seek out and attach to larger hosts, continually draining their energy and hydration to sustain themselves.
 - [x] Implemented `has_fur` trait. Entities with this trait gain enhanced cold resistance but suffer increased energy loss and movement penalties in hot environments.
 
+- [x] Implemented `is_volcanic` trait. Entities with this trait thrive in extreme heat, gain energy when standing on `ash` terrain, and are immune to `fire` events.
+
 ## Next Steps
+- [ ] Implement `is_forestal` trait. Entities with this trait gain defense in forest/wooded terrain.
