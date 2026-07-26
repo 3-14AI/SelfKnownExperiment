@@ -211,6 +211,16 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.w.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+
+    def test_render_is_volcanic(self):
+        from universe.engine import Universe, Entity
+        from universe.visualizer import CLIVisualizer
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestVolcanic", x=1, y=1, is_volcanic=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.j.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
     def test_render_has_spikes(self):
         universe = Universe(width=3, height=3)
         universe.add_entity(Entity("TestSpikes", x=1, y=1, has_spikes=True))

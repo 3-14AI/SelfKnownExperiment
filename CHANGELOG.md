@@ -1,6 +1,14 @@
 # Changelog
 ## [Unreleased]
 ### Added
+- Implemented `is_volcanic` trait. Entities with this trait thrive in extreme heat, gain energy when standing on `ash` terrain, and are immune to `fire` events.
+- Entities can inherit and mutate the `is_volcanic` trait.
+- Updated visualizer to render volcanic entities as 'j'.
+- Fixed `is_aquatic` inheritance logic in `engine.py`.
+- Cleaned up duplicated tests in `tests/test_engine.py`.
+
+## [Unreleased]
+### Added
 - Added missing visualizer tests for `has_bioluminescence` and `pack_hunter` traits.
 - Implemented `has_bioluminescence` trait. Entities with this trait bypass night vision penalties for themselves, but are easily spotted by predators at night.
 - Added testing for `has_bioluminescence` in `test_engine.py` to verify perception behaviors.

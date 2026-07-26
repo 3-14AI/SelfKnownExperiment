@@ -2578,6 +2578,49 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(entity.stamina, 10)
         self.assertEqual(entity.energy, 49)
 
+
+    def test_is_volcanic_ash_regeneration(self):
+        from universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=5, height=5)
+        entity = Entity("Volcanic", x=0, y=0, is_volcanic=True, size=1, age=100, max_age=200, energy=40)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=0, y=0, terrain_type='ash'))
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.food_spawn_rate = 0.0
+        entity.is_sleeping = False
+        universe.time = 0
+        import random, unittest.mock
+        orig_random = random.random
+        random.random = lambda: 1.0
+        try:
+            with unittest.mock.patch.object(universe, 'get_temperature_at', return_value=20):
+                universe.tick()
+        finally:
+            random.random = orig_random
+        self.assertEqual(entity.energy, 42)
+
+    def test_is_volcanic_immune_to_fire(self):
+        from universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=5, height=5)
+        entity = Entity("Volcanic", x=0, y=0, is_volcanic=True, energy=40)
+        normal = Entity("Normal", x=1, y=1, is_volcanic=False, energy=40)
+        universe.add_entity(entity)
+        universe.add_entity(normal)
+        event = type('Event', (), {'event_type': 'fire', 'x': 0, 'y': 0, 'radius': 2, 'duration': 2})()
+        universe.current_event = None
+        universe.localized_events = [event]
+        import random, unittest.mock
+        orig_random = random.random
+        random.random = lambda: 1.0
+        try:
+            with unittest.mock.patch.object(universe, 'get_temperature_at', return_value=20):
+                universe.tick()
+        finally:
+            random.random = orig_random
+        self.assertTrue(entity.energy > 0)
+        self.assertTrue(not normal.is_alive or normal.energy <= 0)
+
     def test_elevation_flying_ignores(self):
         from universe.engine import Universe, Entity, Terrain
         universe = Universe(width=10, height=10)

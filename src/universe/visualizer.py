@@ -92,6 +92,8 @@ class CLIVisualizer:
                         char = 'v'
                     elif getattr(entity, 'can_spin_webs', False):
                         char = 'w'
+                    elif getattr(entity, 'is_volcanic', False):
+                        char = 'j'
                     elif getattr(entity, 'has_spikes', False):
                         char = 'k'
                     elif diet == 'carnivore':
