@@ -123,12 +123,7 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertEqual(visualizer.render(), expected_output)
 
 
-    def test_render_can_climb(self):
-        universe = Universe(width=3, height=3)
-        universe.add_entity(Entity("TestClimb", x=1, y=1, diet='herbivore', can_climb=True))
-        visualizer = CLIVisualizer(universe)
-        expected_output = "...\n.L.\n..."
-        self.assertEqual(visualizer.render(), expected_output)
+
 
 
     def test_render_can_climb(self):
@@ -159,5 +154,70 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.B.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+
+    def test_render_is_aquatic(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestAquatic", x=1, y=1, is_aquatic=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.a.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_is_electric(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestElectric", x=1, y=1, is_electric=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.e.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_is_cold_blooded(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestColdBlooded", x=1, y=1, is_cold_blooded=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.b.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_is_fruiting(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestFruiting", x=1, y=1, is_fruiting=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.F.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_has_echolocation(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestEcho", x=1, y=1, has_echolocation=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.E.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_has_shell(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestShell", x=1, y=1, has_shell=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.H.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_is_venomous(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestVenomous", x=1, y=1, is_venomous=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.v.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_can_spin_webs(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestSpinWebs", x=1, y=1, can_spin_webs=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.w.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_has_spikes(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestSpikes", x=1, y=1, has_spikes=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.k.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
 if __name__ == '__main__':
+
     unittest.main()

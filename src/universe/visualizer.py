@@ -74,6 +74,26 @@ class CLIVisualizer:
                         char = 'I'
                     elif getattr(entity, 'is_amphibious', False):
                         char = 'B'
+                    elif getattr(entity, 'has_bioluminescence', False):
+                        char = 'l'
+                    elif getattr(entity, 'is_aquatic', False):
+                        char = 'a'
+                    elif getattr(entity, 'is_electric', False):
+                        char = 'e'
+                    elif getattr(entity, 'is_cold_blooded', False):
+                        char = 'b'
+                    elif getattr(entity, 'is_fruiting', False):
+                        char = 'F'
+                    elif getattr(entity, 'has_echolocation', False):
+                        char = 'E'
+                    elif getattr(entity, 'has_shell', False):
+                        char = 'H'
+                    elif getattr(entity, 'is_venomous', False):
+                        char = 'v'
+                    elif getattr(entity, 'can_spin_webs', False):
+                        char = 'w'
+                    elif getattr(entity, 'has_spikes', False):
+                        char = 'k'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':

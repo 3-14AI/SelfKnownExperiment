@@ -16,7 +16,7 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False):
         self.is_amphibious = is_amphibious
         self.is_aposematic = is_aposematic
         self.is_fruiting = is_fruiting
@@ -30,6 +30,7 @@ class Entity:
         self.has_fur = has_fur
         self.can_climb = can_climb
         self.pack_hunter = pack_hunter
+        self.has_bioluminescence = has_bioluminescence
         self.shared_target = None
         self.host = None
         self.attached_parasites = []
@@ -403,7 +404,14 @@ class Universe:
                 camou = getattr(e, 'camouflage', 0.0)
                 if entity and getattr(entity, 'has_echolocation', False):
                     camou = 0.0
-                if dist > (max_distance * (1.0 - camou)):
+                if getattr(e, 'has_bioluminescence', False):
+                    camou = 0.0
+
+                eff_max_distance = max_distance
+                if entity and getattr(e, 'has_bioluminescence', False) and not self.is_day and getattr(entity, 'vision_type', 'normal') != 'night_vision' and not getattr(entity, 'has_echolocation', False) and not getattr(entity, 'is_nocturnal', False) and not getattr(entity, 'has_bioluminescence', False):
+                    eff_max_distance = entity.perception_radius
+
+                if dist > (eff_max_distance * (1.0 - camou)):
                     continue
 
             # Prefer smaller and weaker entities.
@@ -1097,8 +1105,11 @@ class Universe:
                         mutation_occurred = True
 
                     child_pack_hunter = getattr(entity, 'pack_hunter', False)
+                    child_has_bioluminescence = getattr(entity, 'has_bioluminescence', False)
                     if random.random() < mutation_chance:
                         child_pack_hunter = not child_pack_hunter
+                    if random.random() < mutation_chance:
+                        child_has_bioluminescence = not child_has_bioluminescence
                         mutation_occurred = True
 
                     if mutation_occurred:
@@ -1123,14 +1134,14 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb, pack_hunter=child_pack_hunter)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb, pack_hunter=child_pack_hunter, has_bioluminescence=child_has_bioluminescence)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
                     else:
                         new_entities.append(child)
 
-                effective_perception = entity.perception_radius if (self.is_day != getattr(entity, 'is_nocturnal', False) or getattr(entity, 'vision_type', 'normal') == 'night_vision' or getattr(entity, 'has_echolocation', False)) else max(1, entity.perception_radius // 2)
+                effective_perception = entity.perception_radius if (self.is_day != getattr(entity, 'is_nocturnal', False) or getattr(entity, 'vision_type', 'normal') == 'night_vision' or getattr(entity, 'has_echolocation', False) or getattr(entity, 'has_bioluminescence', False)) else max(1, entity.perception_radius // 2)
 
                 # Update entity memory with visible obstacles
                 for t in self.terrains:
@@ -1188,7 +1199,7 @@ class Universe:
                         for other in self.entities:
                             if other != entity and other.is_alive and not getattr(other, 'is_parasitic', False):
                                 dist = abs(other.x - entity.x) + abs(other.y - entity.y)
-                                actual_perception = entity.perception_radius if (self.is_day != getattr(entity, 'is_nocturnal', False) or getattr(entity, 'vision_type', 'normal') == 'night_vision' or getattr(entity, 'has_echolocation', False)) else max(1, entity.perception_radius // 2)
+                                actual_perception = entity.perception_radius if (self.is_day != getattr(entity, 'is_nocturnal', False) or getattr(entity, 'vision_type', 'normal') == 'night_vision' or getattr(entity, 'has_echolocation', False) or getattr(entity, 'has_bioluminescence', False)) else max(1, entity.perception_radius // 2)
                                 if dist <= actual_perception and dist < best_dist and other.size > entity.size:
                                     best_dist = dist
                                     best_host = other
