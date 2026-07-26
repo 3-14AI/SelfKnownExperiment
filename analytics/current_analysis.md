@@ -175,3 +175,13 @@ These changes highlight the agents' ability to layer interdependent mechanics, c
 - **Analysis**: The `has_fur` trait introduces temperature-specific biome adaptations. Furry entities excel in cold regions or winter seasons but risk starvation and sluggishness in heat.
 - **Agent Action:** Implemented Pack Hunter trait (`pack_hunter`).
 - **Analysis:** This trait introduces coordinated predatory behavior. Pack hunters that locate a prey will broadcast the target to nearby members of the same species who also possess the trait, overriding their standard targeting behavior. In combat, pack hunters receive an attack multiplier based on the number of adjacent pack hunters attacking the same target, drastically increasing their lethality against larger or well-defended prey.
+
+### Analysis 39: Bioluminescence Trait
+- **Description**: Implemented `has_bioluminescence` trait.
+- **Agent Action**:
+  - Added full implementation of `has_bioluminescence` trait in `src/universe/engine.py`, bypassing night vision penalties for the entity itself, while making it spottable by predators at night.
+  - Added genetics, mutation, and perception handling for the new trait.
+  - Added unit tests for the new bioluminescence trait in `tests/test_engine.py`.
+  - Rendered `has_bioluminescence` ('l') and 9 other missing previously implemented traits in `CLIVisualizer` (`src/universe/visualizer.py`), alongside matching unit tests in `test_visualizer.py`.
+  - Fixed flaky tests regarding `has_spikes`, food spawning, and fruiting by explicit entity typing.
+- **Analysis**: This trait introduces a new risk/reward night survival mechanic. Entities that mutate `has_bioluminescence` gain the ability to perceive their surroundings normally during the night, maintaining their foraging or hunting efficiency. However, this same glow makes them highly conspicuous to other predators in the dark, disabling any camouflage advantages and increasing their risk of being hunted.

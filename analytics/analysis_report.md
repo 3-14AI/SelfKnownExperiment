@@ -351,3 +351,14 @@ Recent agent iterations have significantly deepened the biological complexity an
   - Updated `CLIVisualizer` to render pack hunters with the 'W' character.
   - Added tests `test_pack_hunter_combat_bonus` and `test_pack_hunter_target_sharing` in `tests/test_engine.py` and a visualization test in `tests/test_visualizer.py`.
 - **Analysis**: The `pack_hunter` trait introduces sophisticated group intelligence. By coordinating target tracking and overwhelming prey with localized numerical superiority, smaller predatory species can take down much larger or heavily armored prey, mirroring real-world wolf pack hunting tactics.
+
+### 39. Bioluminescence Trait Analysis
+- **Feature description**: Implemented `has_bioluminescence` trait.
+- **Code implementation**:
+  - Added `has_bioluminescence` boolean attribute to `Entity.__init__` and its mutation/inheritance logic.
+  - Modified `Universe.tick()` perception logic so that bioluminescent entities bypass night vision penalties for themselves.
+  - Modified `Universe.tick()` targeting logic so that bioluminescent entities are easily spotted by predators at night.
+  - Updated `CLIVisualizer` to render bioluminescent entities with the 'l' character, alongside 9 other previously implemented traits.
+  - Added unit tests for the bioluminescence trait in `tests/test_engine.py` and visualizer tests in `tests/test_visualizer.py`.
+  - Fixed flaky tests regarding `has_spikes`, food spawning, and fruiting by explicit entity typing.
+- **Reasoning**: This trait introduces a new risk/reward night survival mechanic. Entities that mutate `has_bioluminescence` gain the ability to perceive their surroundings normally during the night, maintaining their foraging or hunting efficiency. However, this same glow makes them highly conspicuous to other predators in the dark, disabling any camouflage advantages and increasing their risk of being hunted.
