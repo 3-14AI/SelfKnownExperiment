@@ -29,6 +29,8 @@ class CLIVisualizer:
                     grid[terrain.y][terrain.x] = '^'
                 elif terrain.terrain_type == 'web':
                     grid[terrain.y][terrain.x] = 'x'
+                elif terrain.terrain_type == 'forest':
+                    grid[terrain.y][terrain.x] = 'Y'
 
         # Add food
         for food in self.universe.foods:
@@ -94,6 +96,8 @@ class CLIVisualizer:
                         char = 'w'
                     elif getattr(entity, 'is_volcanic', False):
                         char = 'j'
+                    elif getattr(entity, 'is_forestal', False):
+                        char = 't'
                     elif getattr(entity, 'has_spikes', False):
                         char = 'k'
                     elif diet == 'carnivore':

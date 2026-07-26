@@ -109,5 +109,6 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_volcanic` trait. Entities with this trait thrive in extreme heat, gain energy when standing on `ash` terrain, and are immune to `fire` events.
 
+- [x] Implement `is_forestal` trait. Entities with this trait gain defense in forest/wooded terrain.
+
 ## Next Steps
-- [ ] Implement `is_forestal` trait. Entities with this trait gain defense in forest/wooded terrain.

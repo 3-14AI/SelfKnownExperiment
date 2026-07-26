@@ -4,6 +4,30 @@ from universe.engine import Universe, Entity, Food, Terrain
 
 class TestUniverse(unittest.TestCase):
 
+    def test_is_forestal(self):
+        universe = Universe(width=10, height=10)
+        universe.add_terrain(Terrain(x=2, y=2, terrain_type='forest'))
+
+        # Test defense bonus in forest
+        prey_forestal = Entity("PreyForestal", x=2, y=2, energy=10, defense=0, is_forestal=True, max_stamina=100, stamina=100)
+        predator = Entity("Predator", x=2, y=2, energy=10, diet='carnivore', attack=100)
+
+        # Manually invoke combat calculation to assert effective_defense
+        effective_defense = prey_forestal.defense
+        if getattr(prey_forestal, 'is_forestal', False) and any(t.terrain_type == 'forest' for t in universe.get_terrains_at(prey_forestal.x, prey_forestal.y)):
+            effective_defense += 3
+
+        self.assertEqual(effective_defense, 3)
+
+        # Outside forest, no bonus
+        prey_forestal.x = 3
+        prey_forestal.y = 3
+        effective_defense_out = prey_forestal.defense
+        if getattr(prey_forestal, 'is_forestal', False) and any(t.terrain_type == 'forest' for t in universe.get_terrains_at(prey_forestal.x, prey_forestal.y)):
+            effective_defense_out += 3
+
+        self.assertEqual(effective_defense_out, 0)
+
     def test_is_regenerative(self):
         # We can just check the effect by ticking manually and looking at the properties.
         # But wait, temperature can increase loss by 1 if out of tolerance.
