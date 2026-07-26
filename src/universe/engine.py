@@ -16,9 +16,10 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False, is_volcanic=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False, is_volcanic=False, is_forestal=False):
         self.is_amphibious = is_amphibious
         self.is_volcanic = is_volcanic
+        self.is_forestal = is_forestal
         self.is_aposematic = is_aposematic
         self.is_fruiting = is_fruiting
         self.is_immune = is_immune
@@ -1112,8 +1113,12 @@ class Universe:
 
                     child_pack_hunter = getattr(entity, 'pack_hunter', False)
                     child_is_volcanic = getattr(entity, 'is_volcanic', False)
+                    child_is_forestal = getattr(entity, 'is_forestal', False)
                     if random.random() < mutation_chance:
                         child_is_volcanic = not child_is_volcanic
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_forestal = not child_is_forestal
                         mutation_occurred = True
 
                     child_has_bioluminescence = getattr(entity, 'has_bioluminescence', False)
@@ -1145,7 +1150,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb, pack_hunter=child_pack_hunter, has_bioluminescence=child_has_bioluminescence, is_volcanic=child_is_volcanic)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb, pack_hunter=child_pack_hunter, has_bioluminescence=child_has_bioluminescence, is_volcanic=child_is_volcanic, is_forestal=child_is_forestal)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
@@ -1468,6 +1473,8 @@ class Universe:
                             if getattr(entity, 'stamina', 50) <= 10:
                                 effective_attack *= 0.5
                             effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)
+                            if getattr(prey_to_eat, 'is_forestal', False) and any(t.terrain_type == 'forest' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 3
                             if getattr(prey_to_eat, 'has_shell', False):
                                 effective_defense += 5
                             if getattr(prey_to_eat, 'has_scales', False):
