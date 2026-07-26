@@ -132,10 +132,11 @@ class LocalizedEvent:
         self.duration = duration
 
 class Terrain:
-    def __init__(self, x=0, y=0, terrain_type='wall'):
+    def __init__(self, x=0, y=0, terrain_type='wall', elevation=0):
         self.x = x
         self.y = y
         self.terrain_type = terrain_type
+        self.elevation = elevation
 
 class TemperatureZone:
     def __init__(self, x, y, radius, temperature_modifier):
@@ -215,7 +216,15 @@ class Universe:
 
         self.entities.append(entity)
 
+
+    def get_elevation_at(self, x, y):
+        terrains = self.get_terrains_at(x, y)
+        if not terrains:
+            return 0
+        return max(getattr(t, 'elevation', 0) for t in terrains)
+
     def move_entity(self, entity, dx, dy):
+        current_elevation = self.get_elevation_at(entity.x, entity.y)
         new_x = entity.x + dx
         new_y = entity.y + dy
         if not (0 <= new_x < self.width and 0 <= new_y < self.height):
@@ -224,16 +233,28 @@ class Universe:
         if not self.is_passable(new_x, new_y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
             raise ValueError(f"Movement blocked by terrain at ({new_x}, {new_y})")
 
+        target_elevation = self.get_elevation_at(new_x, new_y)
+        elevation_diff = target_elevation - current_elevation
+
         entity.x = new_x
         entity.y = new_y
-        if hasattr(entity, 'stamina'):
-            stamina_cost = 1
-            terrains_here = self.get_terrains_at(new_x, new_y)
-            if getattr(entity, 'can_climb', False) and any(t.terrain_type == 'wall' for t in terrains_here):
-                stamina_cost = 2
-            entity.stamina = max(0, entity.stamina - stamina_cost)
 
         terrains_here = self.get_terrains_at(new_x, new_y)
+
+        if hasattr(entity, 'stamina'):
+            stamina_cost = 1
+            if getattr(entity, 'can_climb', False) and any(t.terrain_type == 'wall' for t in terrains_here):
+                stamina_cost = 2
+
+            if not getattr(entity, 'is_flying', False):
+                if elevation_diff > 0:
+                    stamina_cost += elevation_diff
+                elif elevation_diff < -1:
+                    stamina_cost = max(0, stamina_cost - 1)
+                    entity.energy = max(0, entity.energy - 1) # Fall damage risk
+
+            entity.stamina = max(0, entity.stamina - stamina_cost)
+
         if any(t.terrain_type == 'web' for t in terrains_here) and not getattr(entity, 'can_spin_webs', False):
             if hasattr(entity, 'stamina'):
                 entity.stamina = 0
