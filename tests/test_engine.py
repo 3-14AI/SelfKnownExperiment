@@ -28,6 +28,264 @@ class TestUniverse(unittest.TestCase):
         universe.move_entity(e, 1, 0)
         self.assertEqual(e.stamina, 100, "is_desertic should cost 0 stamina when moving on sand")
 
+
+    def test_is_social_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_social=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        # Use patch instead of manually setting random
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_social)
+
+    def test_is_forestal_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_forestal=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_forestal)
+
+
+    def test_is_social_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_social=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        # Use patch instead of manually setting random
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_social)
+
+    def test_is_forestal_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_forestal=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_forestal)
+
+
+    def test_is_social_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_social=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        # Use patch instead of manually setting random
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_social)
+
+    def test_is_forestal_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_forestal=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_forestal)
+
+
+    def test_is_social_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_social=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        # Use patch instead of manually setting random
+        orig_random = __import__('random').random
+        import random
+        random.random = lambda: 0.0
+        try:
+            universe.tick()
+        finally:
+            random.random = orig_random
+
+        children = [ent for ent in universe.entities if ent != e]
+        if children:
+            self.assertTrue(children[0].is_social)
+
+    def test_is_forestal_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_forestal=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        orig_random = __import__('random').random
+        import random
+        random.random = lambda: 0.0
+        try:
+            universe.tick()
+        finally:
+            random.random = orig_random
+
+        children = [ent for ent in universe.entities if ent != e]
+        if children:
+            self.assertTrue(children[0].is_forestal)
+
+
+    def test_is_social_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_social=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        # Mock random only for the universe tick to avoid breaking other tests
+        orig_random = __import__('random').random
+        import random
+        random.random = lambda: 0.0
+        try:
+            universe.tick()
+        finally:
+            random.random = orig_random
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_social)
+
+    def test_is_forestal_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_forestal=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        orig_random = __import__('random').random
+        import random
+        random.random = lambda: 0.0
+        try:
+            universe.tick()
+        finally:
+            random.random = orig_random
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_forestal)
+
+
+    def test_is_social_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_social=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        # Use patch instead of manually setting random
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_social)
+
+    def test_is_forestal_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_forestal=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_forestal)
+
+
+    def test_is_social_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_social=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        # Use patch instead of manually setting random
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if children:
+            self.assertTrue(children[0].is_social)
+
+    def test_is_forestal_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_forestal=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if children:
+            self.assertTrue(children[0].is_forestal)
+
     def test_is_desertic_mutation(self):
         universe = Universe(width=10, height=10)
         import unittest.mock

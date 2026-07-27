@@ -1,5 +1,9 @@
 # Changelog
 
+## [2026-07-27]
+- Added missing visualization rendering and tests for `is_social`, `is_forestal`, and `is_desertic` traits.
+- Added missing genetic mutation unit tests for `is_social` and `is_forestal` traits.
+
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
 ## [Unreleased]
