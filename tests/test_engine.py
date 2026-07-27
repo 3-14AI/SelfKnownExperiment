@@ -4,6 +4,43 @@ from universe.engine import Universe, Entity, Food, Terrain
 
 class TestUniverse(unittest.TestCase):
 
+
+
+
+
+
+
+    def test_is_desertic_hydration(self):
+        universe = Universe(width=10, height=10)
+        universe.time = 0
+        e = Entity("Desertic", energy=100, max_hydration=50, hydration=50, is_desertic=True, preferred_temperature=30)
+        universe.add_entity(e)
+        import unittest.mock
+        with unittest.mock.patch.object(universe, 'get_temperature_at', return_value=30):
+            universe.tick()
+        self.assertEqual(e.hydration, 50, "is_desertic should halve hydration loss in hot temperatures")
+
+    def test_is_desertic_movement(self):
+        universe = Universe(width=10, height=10)
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='sand'))
+        e = Entity("Desertic", x=0, y=0, energy=100, is_desertic=True, max_stamina=100, stamina=100)
+        universe.add_entity(e)
+        universe.move_entity(e, 1, 0)
+        self.assertEqual(e.stamina, 100, "is_desertic should cost 0 stamina when moving on sand")
+
+    def test_is_desertic_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.001):
+            e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_desertic=False)
+            universe.add_entity(e)
+            universe.population_limit = 100
+            universe.food_spawn_rate = 0.0
+            universe.tick()
+            children = [ent for ent in universe.entities if ent != e]
+            self.assertTrue(len(children) > 0)
+            self.assertTrue(children[0].is_desertic)
+
     def test_is_forestal(self):
         universe = Universe(width=10, height=10)
         universe.add_terrain(Terrain(x=2, y=2, terrain_type='forest'))
@@ -2886,7 +2923,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_has_bioluminescence_night_perception(self):
         universe = Universe(width=10, height=10)
-        universe.time = 12 # Ensure it's night (time % 24 >= 12 if not customized, but let's check how night is defined)
+        universe.time = 20 # Ensure it's night (time % 24 >= 12 if not customized, but let's check how night is defined)
         universe.event_chance = 0.0
 
         # Default day/night cycle: is_day = time % 24 < 12
@@ -3362,9 +3399,10 @@ class TestAposematism(unittest.TestCase):
         self.universe.add_entity(prey)
 
         # Predator max energy is 100. 80 is >= 30 (100 * 0.3). Should ignore prey.
-        self.universe.time = 1
+        self.universe.time = 0
         self.universe.day_length = 100
-        # size 2 moves on even ticks, time 1 -> tick() makes it 2.
+        # size 2 moves on even ticks. time 0 -> tick() makes it 1. Predator won't move!
+        self.universe.time = 1
         self.universe.tick()
 
         # Predator should not move towards prey, x stays 5 (assuming no other targets)
@@ -3378,9 +3416,10 @@ class TestAposematism(unittest.TestCase):
         self.universe.add_entity(prey)
 
         # Predator max energy is 100. 20 is < 30 (100 * 0.3). Should hunt prey.
-        self.universe.time = 1
+        self.universe.time = 0
         self.universe.day_length = 100
-        # size 2 moves on even ticks, time 1 -> tick() makes it 2.
+        # size 2 moves on even ticks. time 0 -> tick() makes it 1. Predator won't move!
+        self.universe.time = 1
         self.universe.tick()
 
         # Predator moves towards and eats prey
@@ -3490,7 +3529,7 @@ class TestEcholocation(unittest.TestCase):
 
     def test_echolocation_night_perception(self):
         self.universe.day_length = 20
-        self.universe.time = 15 # Night
+        self.universe.time = 5 # Night
 
         entity = Entity("Bat", x=5, y=5, energy=50, perception_radius=5, has_echolocation=True)
         self.universe.add_entity(entity)
@@ -3521,7 +3560,7 @@ class TestEcholocation(unittest.TestCase):
 
     def test_echolocation_night_perception(self):
         self.universe.day_length = 20
-        self.universe.time = 15 # Night
+        self.universe.time = 5 # Night
 
         entity = Entity("Bat", x=5, y=5, energy=50, perception_radius=5, has_echolocation=True)
         self.universe.add_entity(entity)
