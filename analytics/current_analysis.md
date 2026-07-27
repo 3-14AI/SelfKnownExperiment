@@ -185,3 +185,33 @@ These changes highlight the agents' ability to layer interdependent mechanics, c
   - Rendered `has_bioluminescence` ('l') and 9 other missing previously implemented traits in `CLIVisualizer` (`src/universe/visualizer.py`), alongside matching unit tests in `test_visualizer.py`.
   - Fixed flaky tests regarding `has_spikes`, food spawning, and fruiting by explicit entity typing.
 - **Analysis**: This trait introduces a new risk/reward night survival mechanic. Entities that mutate `has_bioluminescence` gain the ability to perceive their surroundings normally during the night, maintaining their foraging or hunting efficiency. However, this same glow makes them highly conspicuous to other predators in the dark, disabling any camouflage advantages and increasing their risk of being hunted.
+
+### Analysis 40: Desertic Trait
+- **Description**: Implemented `is_desertic` trait.
+- **Agent Action**:
+  - Added `is_desertic` attribute to `Entity.__init__` and its mutation logic.
+  - Modified `Universe.tick()` to reduce hydration loss to 0 in hot climates (`current_temp >= 25`) on odd ticks, and reduce stamina cost to 0 when traversing `sand` terrain.
+- **Analysis**: The `is_desertic` trait introduces biome-specific adaptations for arid environments. Entities with this trait gain distinct survival advantages in heat and on sandy terrain, encouraging ecological divergence where these entities dominate desert biomes while being outcompeted in temperate or aquatic zones.
+
+### Analysis 41: Volcanic Trait
+- **Description**: Implemented `is_volcanic` trait.
+- **Agent Action**:
+  - Added `is_volcanic` attribute to `Entity.__init__` and its mutation logic.
+  - Modified `Universe.tick()` to allow entities to gain energy (`energy_loss -= 3`) on `ash` terrain and become immune to `fire` events (bypassing the instant death mechanic).
+  - Updated visualizer to render volcanic entities as 'j'.
+- **Analysis**: The `is_volcanic` trait creates a highly specialized extremophile niche. These entities thrive in post-disaster scenarios (volcanic eruptions causing fire and ash), reversing the usual negative impacts of these environmental hazards into survival advantages.
+
+### Analysis 42: Forestal Trait
+- **Description**: Implemented `is_forestal` trait.
+- **Agent Action**:
+  - Added `is_forestal` attribute to `Entity.__init__` and its mutation logic.
+  - Modified combat logic in `Universe.tick()` to grant an effective defense bonus (+3) when the prey is positioned on `forest` terrain.
+  - Added visualizer support for forest terrain and forestal entities.
+- **Analysis**: The `is_forestal` trait integrates terrain-based combat advantages. It incentivizes entities to inhabit or retreat to wooded areas for protection, adding a strategic layer to pathfinding and ecosystem distribution.
+
+### Analysis 43: Social Trait
+- **Description**: Implemented `is_social` trait.
+- **Agent Action**:
+  - Added `is_social` attribute to `Entity.__init__` and its mutation logic.
+  - Modified `Universe.tick()` to grant an energy efficiency buff (`energy_loss -= 1`) when near other living entities of the same species within a Manhattan distance of 2.
+- **Analysis**: The `is_social` trait introduces basic herd or flock dynamics. It rewards proximity to conspecifics with reduced energy consumption, naturally leading to the emergence of clustered group behaviors and increased population density for social species.
