@@ -212,6 +212,33 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertEqual(visualizer.render(), expected_output)
 
 
+    def test_render_is_social(self):
+        from universe.engine import Universe, Entity
+        from universe.visualizer import CLIVisualizer
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestSocial", x=1, y=1, is_social=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.p.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_is_forestal(self):
+        from universe.engine import Universe, Entity
+        from universe.visualizer import CLIVisualizer
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestForestal", x=1, y=1, is_forestal=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.t.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
+    def test_render_is_desertic(self):
+        from universe.engine import Universe, Entity
+        from universe.visualizer import CLIVisualizer
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestDesertic", x=1, y=1, is_desertic=True))
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.d.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
     def test_render_is_volcanic(self):
         from universe.engine import Universe, Entity
         from universe.visualizer import CLIVisualizer
