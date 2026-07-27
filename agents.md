@@ -116,7 +116,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Next Steps
 
-- [ ] Implement advanced group hunting tactics for entities with the `pack_hunter` trait (e.g. flanking, cutting off escape routes based on terrain).
+- [x] Implement advanced group hunting tactics for entities with the `pack_hunter` trait (e.g. flanking, cutting off escape routes based on terrain).
 - [ ] Introduce a `disease_vector` trait for scavenger entities, causing them to spread disease more rapidly when interacting with corpses.
 - [ ] Add dynamic water levels. `water` and `deep-water` biomes can dry out into `mud` during extreme droughts or expand during heavy storms, forcing amphibious/aquatic entities to migrate.
 - [ ] Implement `is_nocturnal_predator` specific bonuses, granting a higher attack multiplier when hunting at night.
