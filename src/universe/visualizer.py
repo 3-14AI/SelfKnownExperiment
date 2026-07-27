@@ -102,6 +102,8 @@ class CLIVisualizer:
                         char = 'd'
                     elif getattr(entity, 'is_social', False):
                         char = 'p'
+                    elif getattr(entity, 'is_carnivorous_plant', False):
+                        char = 'c'
                     elif getattr(entity, 'has_spikes', False):
                         char = 'k'
                     elif diet == 'carnivore':
