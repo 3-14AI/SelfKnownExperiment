@@ -112,4 +112,6 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implement `is_forestal` trait. Entities with this trait gain defense in forest/wooded terrain.
 
+- [x] Implemented `is_social` trait. Entities with this trait gain an energy efficiency buff when near other entities of the same species.
+
 ## Next Steps
