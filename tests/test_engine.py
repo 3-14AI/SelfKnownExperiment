@@ -1811,7 +1811,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         universe.time = 0
-        universe.reproduction_threshold = 100
+        universe.reproduction_threshold = 1000
 
         small_entity = Entity("Small", x=2, y=2, energy=20, size=1)
         large_entity = Entity("Large", x=8, y=8, energy=20, size=3, age=100) # age 100 to force adult size
@@ -4108,3 +4108,65 @@ class TestCarnivorousPlant(unittest.TestCase):
         self.assertTrue(large_entity.is_alive)
         self.assertEqual(plant.size, 3)
         self.assertEqual(plant.max_size, 3)
+
+
+class TestPackHunterFlanking(unittest.TestCase):
+    def test_pack_hunter_flanking_tactics(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        # We will set a prey at (5, 5).
+        # We will set two pack hunters targeting the prey.
+        prey = Entity("Prey1", x=5, y=5, species="Prey1", diet="herbivore", defense=2, max_age=100, age=50, size=2)
+        hunter1 = Entity("Pack1", x=4, y=5, species="Wolf", diet='carnivore', target_species=["Prey1"], attack=5, max_age=100, age=50, size=2, pack_hunter=True, perception_radius=10, hydration=50)
+
+        # Second hunter is slightly further away, should flank.
+        # Hunter 1 is already at (4, 5) which is right next to prey at (5, 5).
+        hunter2 = Entity("Pack2", x=5, y=7, species="Wolf", diet='carnivore', target_species=["Prey1"], attack=5, max_age=100, age=50, size=2, pack_hunter=True, perception_radius=10, hydration=50)
+
+        hunter1.energy = hunter1.max_energy
+        hunter2.energy = hunter2.max_energy
+        prey.energy = prey.max_energy
+        hunter1.size = 1
+        hunter2.size = 1
+        universe.time = 0
+
+        # We set them as not sleeping
+        hunter1.is_sleeping = False
+        hunter2.is_sleeping = False
+        prey.is_sleeping = False
+
+        # Give them some shared targets manually to ensure they flank
+        hunter1.shared_target = prey
+        hunter2.shared_target = prey
+
+        universe.add_entity(hunter1)
+        universe.add_entity(hunter2)
+        universe.add_entity(prey)
+
+        # Before tick, hunter2 is at (5, 7). Flank logic should make it target (5, 6), (5, 4), or (6, 5).
+        # We can just test if the pathfinding uses flanking.
+        # We will patch find_path to observe what target_x, target_y it's called with.
+
+        original_find_path = universe.find_path
+
+        target_positions = []
+        def mocked_find_path(start_x, start_y, target_x, target_y, *args, **kwargs):
+            if start_x == hunter2.x and start_y == hunter2.y:
+                target_positions.append((target_x, target_y))
+            return original_find_path(start_x, start_y, target_x, target_y, *args, **kwargs)
+
+        universe.find_path = mocked_find_path
+        universe.tick()
+
+        # Hunter 2 should have targeted an empty adjacent spot of the prey (flanking), not the prey's exact coordinates.
+        # The prey is at (5,5), hunter1 is at (4,5) or has moved into (5,5) during tick to eat.
+        # Actually hunter1 might have eaten the prey or attacked it, let's see what target hunter2 used.
+        self.assertTrue(len(target_positions) > 0)
+        target_x, target_y = target_positions[0]
+
+        # Flanking logic makes target_x, target_y one of the adjacent spots of prey.
+        self.assertTrue((target_x, target_y) != (prey.x, prey.y))
+        dist_to_prey = abs(target_x - prey.x) + abs(target_y - prey.y)
+        self.assertEqual(dist_to_prey, 1)

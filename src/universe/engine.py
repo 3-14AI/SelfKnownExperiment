@@ -1443,7 +1443,24 @@ class Universe:
                                         target_to_chase = entity.shared_target
 
                                 if target_to_chase:
-                                    path = self.find_path(entity.x, entity.y, target_to_chase.x, target_to_chase.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
+                                    target_x, target_y = target_to_chase.x, target_to_chase.y
+                                    if getattr(entity, 'pack_hunter', False) and hasattr(target_to_chase, 'species'):
+                                        pack_mates = [e for e in self.entities if e != entity and getattr(e, 'pack_hunter', False) and e.species == entity.species and getattr(e, 'shared_target', None) == target_to_chase]
+                                        if pack_mates:
+                                            best_flank = None
+                                            best_flank_dist = float('inf')
+                                            for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
+                                                fx, fy = target_to_chase.x + dx, target_to_chase.y + dy
+                                                if self.is_passable(fx, fy, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
+                                                    if not any(e.x == fx and e.y == fy for e in pack_mates):
+                                                        dist = abs(entity.x - fx) + abs(entity.y - fy)
+                                                        if dist < best_flank_dist:
+                                                            best_flank_dist = dist
+                                                            best_flank = (fx, fy)
+                                            if best_flank:
+                                                target_x, target_y = best_flank
+
+                                    path = self.find_path(entity.x, entity.y, target_x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -1595,7 +1612,24 @@ class Universe:
                                     nearest_prey = entity.shared_target
 
                             if nearest_prey:
-                                path = self.find_path(entity.x, entity.y, nearest_prey.x, nearest_prey.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
+                                target_x, target_y = nearest_prey.x, nearest_prey.y
+                                if getattr(entity, 'pack_hunter', False) and hasattr(nearest_prey, 'species'):
+                                    pack_mates = [e for e in self.entities if e != entity and getattr(e, 'pack_hunter', False) and e.species == entity.species and getattr(e, 'shared_target', None) == nearest_prey]
+                                    if pack_mates:
+                                        best_flank = None
+                                        best_flank_dist = float('inf')
+                                        for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
+                                            fx, fy = nearest_prey.x + dx, nearest_prey.y + dy
+                                            if self.is_passable(fx, fy, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
+                                                if not any(e.x == fx and e.y == fy for e in pack_mates):
+                                                    dist = abs(entity.x - fx) + abs(entity.y - fy)
+                                                    if dist < best_flank_dist:
+                                                        best_flank_dist = dist
+                                                        best_flank = (fx, fy)
+                                        if best_flank:
+                                            target_x, target_y = best_flank
+
+                                path = self.find_path(entity.x, entity.y, target_x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))
                                 if path and len(path) > 0:
                                     dx, dy = path[0]
                                     try:
