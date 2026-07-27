@@ -109,9 +109,13 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `has_fur` trait. Entities with this trait gain enhanced cold resistance but suffer increased energy loss and movement penalties in hot environments.
 
 - [x] Implemented `is_volcanic` trait. Entities with this trait thrive in extreme heat, gain energy when standing on `ash` terrain, and are immune to `fire` events.
-
-- [x] Implement `is_forestal` trait. Entities with this trait gain defense in forest/wooded terrain.
-
+- [x] Implemented `is_forestal` trait. Entities with this trait gain defense in forest/wooded terrain.
 - [x] Implemented `is_social` trait. Entities with this trait gain an energy efficiency buff when near other entities of the same species.
 
 ## Next Steps
+
+- [ ] Implement `is_carnivorous_plant` trait. Plants with this trait can consume small entities that move onto their tile, gaining energy and growing larger.
+- [ ] Implement advanced group hunting tactics for entities with the `pack_hunter` trait (e.g. flanking, cutting off escape routes based on terrain).
+- [ ] Introduce a `disease_vector` trait for scavenger entities, causing them to spread disease more rapidly when interacting with corpses.
+- [ ] Add dynamic water levels. `water` and `deep-water` biomes can dry out into `mud` during extreme droughts or expand during heavy storms, forcing amphibious/aquatic entities to migrate.
+- [ ] Implement `is_nocturnal_predator` specific bonuses, granting a higher attack multiplier when hunting at night.
