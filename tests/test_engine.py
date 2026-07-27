@@ -3541,53 +3541,6 @@ class TestEcholocation(unittest.TestCase):
         self.assertIn((5, 10), entity.memory)
 
 
-class TestEcholocation(unittest.TestCase):
-    def setUp(self):
-        self.universe = Universe(width=20, height=20)
-        self.universe.event_chance = 0.0
-        self.universe.disease_chance = 0.0
-
-    def test_echolocation_bypasses_camouflage(self):
-        predator = Entity("Bat", x=5, y=5, energy=50, diet='carnivore', perception_radius=5, has_echolocation=True)
-        prey = Entity("Moth", x=5, y=9, energy=50, diet='herbivore', camouflage=0.5)
-
-        self.universe.add_entity(predator)
-        self.universe.add_entity(prey)
-
-        nearest = self.universe.get_nearest_prey(predator.x, predator.y, max_distance=predator.perception_radius, entity=predator)
-        self.assertIsNotNone(nearest)
-        self.assertEqual(nearest.name, "Moth")
-
-    def test_echolocation_night_perception(self):
-        self.universe.day_length = 20
-        self.universe.time = 5 # Night
-
-        entity = Entity("Bat", x=5, y=5, energy=50, perception_radius=5, has_echolocation=True)
-        self.universe.add_entity(entity)
-        self.universe.add_terrain(Terrain(x=5, y=10, terrain_type='wall'))
-
-        self.universe.tick()
-
-        # Effective perception is full (5), so distance 5 (10-5) is seen.
-        self.assertIn((5, 10), entity.memory)
-
-class TestColdBlooded(unittest.TestCase):
-    def test_energy_loss_hot(self):
-        universe = Universe()
-        entity = Entity("Reptile", energy=999, is_cold_blooded=True, size=2, age=100)
-        universe.add_entity(entity)
-
-        universe.base_temperature = 30
-        universe._last_season = universe.current_season
-        entity.temperature_tolerance = 100
-        entity.hydration = 100
-        entity.intelligence = 1
-
-        initial_energy = entity.energy
-        universe.tick()
-
-        self.assertIn(entity.energy, [initial_energy - 2, initial_energy - 3, initial_energy - 4], "Cold-blooded entity should lose less energy in hot environments")
-
 class TestElectricTrait(unittest.TestCase):
     def test_electric_trait_stun(self):
         universe = Universe(width=10, height=10)
@@ -3694,34 +3647,6 @@ class TestRegenerativeTrait(unittest.TestCase):
         self.assertEqual(e_normal.hydration, 49)
 
         self.assertEqual(e_regen.energy, 41)
-        self.assertEqual(e_regen.hydration, 47)
-
-class TestRegenerationFeature(unittest.TestCase):
-    def test_regeneration_feature(self):
-        from universe.engine import Universe, Entity
-        universe = Universe(width=10, height=10)
-        universe.event_chance = 0.0
-        universe.disease_chance = 0.0
-
-        # Normal entity
-        e_normal = Entity("Normal", x=5, y=5, energy=40, size=2, hydration=50, max_hydration=50, is_regenerative=False)
-        # Regenerative entity
-        e_regen = Entity("Regen", x=6, y=5, energy=40, size=2, hydration=50, max_hydration=50, is_regenerative=True)
-
-        universe.add_entity(e_normal)
-        universe.add_entity(e_regen)
-
-        import random
-        original_random = random.random
-        random.random = lambda: 1.0 # bypass sleep and events
-        try:
-            universe.tick()
-        finally:
-            random.random = original_random
-
-        self.assertEqual(e_normal.energy, 39)
-        self.assertEqual(e_regen.energy, 41)
-        self.assertEqual(e_normal.hydration, 49)
         self.assertEqual(e_regen.hydration, 47)
 
 class TestClawsFeature(unittest.TestCase):
