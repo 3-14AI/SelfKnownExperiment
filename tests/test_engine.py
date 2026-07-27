@@ -31,15 +31,22 @@ class TestUniverse(unittest.TestCase):
     def test_is_desertic_mutation(self):
         universe = Universe(width=10, height=10)
         import unittest.mock
-        with unittest.mock.patch('random.random', return_value=0.001):
-            e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_desertic=False)
-            universe.add_entity(e)
-            universe.population_limit = 100
-            universe.food_spawn_rate = 0.0
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_desertic=False)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+
+        # Don't mock random for everything, just tick
+        # Wait, if we don't mock random, we might not get desertic mutation.
+        # It's better to mock random.random to 0.0 just for tick, or just let 1.0 mutation chance do it.
+        # The mutation check is: if random.random() < mutation_chance: ...
+        with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
-            children = [ent for ent in universe.entities if ent != e]
-            self.assertTrue(len(children) > 0)
-            self.assertTrue(children[0].is_desertic)
+
+        children = [ent for ent in universe.entities if ent != e]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_desertic)
 
     def test_is_forestal(self):
         universe = Universe(width=10, height=10)
@@ -3330,6 +3337,7 @@ class TestColdBlooded(unittest.TestCase):
         self.universe.time = 0
 
     def test_cold_blooded_heat_efficiency(self):
+        import unittest.mock
         from universe.engine import Entity
         self.universe.base_temperature = 30
         normal = Entity("Normal", x=0, y=0, energy=100, size=2, hydration=1000, max_hydration=1000, age=100)
@@ -3339,7 +3347,8 @@ class TestColdBlooded(unittest.TestCase):
         self.universe.add_entity(normal)
         self.universe.add_entity(reptile)
 
-        self.universe.tick()
+        with unittest.mock.patch.object(self.universe, 'get_temperature_at', return_value=30):
+            self.universe.tick()
 
         # Base loss is size(2). Hydration loss doesn't affect energy if high enough.
         # Normal should lose 2 energy. Reptile should lose 2 - 1 = 1 energy due to heat.
@@ -3347,6 +3356,7 @@ class TestColdBlooded(unittest.TestCase):
         self.assertEqual(reptile.energy, 99)
 
     def test_cold_blooded_cold_penalty(self):
+        import unittest.mock
         from universe.engine import Entity
         self.universe.base_temperature = 0
         normal = Entity("Normal", x=0, y=0, energy=100, size=2, hydration=1000, max_hydration=1000, age=100)
@@ -3356,16 +3366,19 @@ class TestColdBlooded(unittest.TestCase):
         self.universe.add_entity(normal)
         self.universe.add_entity(reptile)
 
-        self.universe.tick()
+        with unittest.mock.patch.object(self.universe, 'get_temperature_at', return_value=0):
+            self.universe.tick()
 
         # Normal loses 2 energy. Reptile loses 2 + 1 = 3 energy due to cold.
         self.assertEqual(normal.energy, 98)
         self.assertEqual(reptile.energy, 97)
 
     def test_cold_blooded_movement_penalty(self):
+        import unittest.mock
         from universe.engine import Entity, Food
         self.universe.base_temperature = 0
-        reptile = Entity("Reptile", x=5, y=5, energy=100, size=1, age=100, diet='herbivore', perception_radius=10, hydration=1000, max_hydration=1000, is_cold_blooded=True)
+        # High max age so it doesn't die of old age
+        reptile = Entity("Reptile", x=5, y=5, energy=100, size=1, age=100, max_age=200, diet='herbivore', perception_radius=10, hydration=1000, max_hydration=1000, is_cold_blooded=True)
         reptile.preferred_temperature = 0
         self.universe.add_entity(reptile)
         self.universe.add_food(Food(x=6, y=5))
@@ -3375,11 +3388,15 @@ class TestColdBlooded(unittest.TestCase):
 
         # Tick 1: time becomes 1. normally size 1 moves every tick. but cold blooded at 0 temp needs time % (1 * 2) == 0.
         # So 1 % 2 != 0 -> shouldn't move.
-        self.universe.tick()
+        self.universe._last_season = self.universe.current_season
+        with unittest.mock.patch.object(self.universe, 'get_temperature_at', return_value=0):
+            self.universe.tick()
         self.assertEqual(reptile.x, 5)
 
         # Tick 2: time becomes 2. 2 % 2 == 0 -> should move.
-        self.universe.tick()
+        self.universe._last_season = self.universe.current_season
+        with unittest.mock.patch.object(self.universe, 'get_temperature_at', return_value=0):
+            self.universe.tick()
         self.assertEqual(reptile.x, 6)
 
 class TestAposematism(unittest.TestCase):
@@ -3978,3 +3995,22 @@ class TestPackHunterTrait(unittest.TestCase):
 
         self.assertEqual(hunter1.shared_target, prey)
         self.assertEqual(hunter2.shared_target, prey)
+
+class TestSocial(unittest.TestCase):
+    def test_is_social_efficiency(self):
+        from universe.engine import Entity, Universe
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        e1 = Entity("Social1", x=0, y=0, energy=100, size=2, age=100, max_age=200, is_social=True, species="Soc")
+        e2 = Entity("Social2", x=1, y=0, energy=100, size=2, age=100, max_age=200, is_social=True, species="Soc")
+
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+        universe.reproduction_threshold = 1000 # Prevent reproduction cost
+        universe.tick()
+
+        # Base loss is size(2). Social buff reduces loss by 1.
+        self.assertEqual(e1.energy, 99)
+        self.assertEqual(e2.energy, 99)
