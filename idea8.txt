@@ -1,0 +1,2 @@
+'T' is used for toxic food.
+Let's use 'K' instead for has_tusks. Wait, check 'K'.

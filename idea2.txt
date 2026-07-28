@@ -1,0 +1,7 @@
+Let's add `has_horns`. What mechanics? Maybe they deal damage back when attacked, like `has_spikes`? Or maybe they have a chance to instantly kill smaller prey? Or double attack on first strike?
+
+How about `is_scavenger` trait? No, `diet='scavenger'` exists.
+How about `can_sprint` trait? Can move 2 tiles per tick at the cost of double stamina?
+That's cool! `can_sprint` - if an entity is fleeing or chasing, they can move 2 spaces at once if stamina > 10, draining 5 stamina.
+
+Let's check movement logic:
