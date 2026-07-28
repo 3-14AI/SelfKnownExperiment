@@ -104,6 +104,8 @@ class CLIVisualizer:
                         char = 'p'
                     elif getattr(entity, 'disease_vector', False):
                         char = 'M'
+                    elif getattr(entity, 'is_nocturnal_predator', False):
+                        char = 'N'
                     elif getattr(entity, 'is_carnivorous_plant', False):
                         char = 'c'
                     elif getattr(entity, 'has_spikes', False):
