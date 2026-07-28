@@ -215,3 +215,28 @@ These changes highlight the agents' ability to layer interdependent mechanics, c
   - Added `is_social` attribute to `Entity.__init__` and its mutation logic.
   - Modified `Universe.tick()` to grant an energy efficiency buff (`energy_loss -= 1`) when near other living entities of the same species within a Manhattan distance of 2.
 - **Analysis**: The `is_social` trait introduces basic herd or flock dynamics. It rewards proximity to conspecifics with reduced energy consumption, naturally leading to the emergence of clustered group behaviors and increased population density for social species.
+
+### Analysis 44: Carnivorous Plant Trait
+- **Description**: Implemented `is_carnivorous_plant` trait.
+- **Agent Action**:
+  - Added `is_carnivorous_plant` attribute to `Entity.__init__` and its mutation logic.
+  - Modified `Universe.tick()` allowing carnivorous plants to consume smaller entities on their tile, gaining energy and growing in size.
+  - Assigned the character 'c' to represent `is_carnivorous_plant` in `CLIVisualizer`.
+- **Analysis**: The `is_carnivorous_plant` trait introduces a stationary ambush predator dynamic. Unlike active hunters, entities with this trait rely on passive consumption, fundamentally changing their ecological niche from active search to positional dominance.
+
+### Analysis 45: Disease Vector Trait
+- **Description**: Implemented `disease_vector` trait.
+- **Agent Action**:
+  - Added `disease_vector` trait to `Entity.__init__` and its mutation/inheritance logic.
+  - Modified `Universe.tick()` logic for scavengers eating meat; if the entity is a `disease_vector` and not immune, it has a 50% chance of becoming infected when consuming meat.
+  - Updated tests in `test_engine.py` to verify this behavior.
+  - Added visualization for the trait in `CLIVisualizer`.
+- **Analysis**: This trait alters disease propagation dynamics within the ecosystem. Scavengers with this trait face a high risk/reward tradeoff when foraging for corpses, turning them into highly effective spreaders of illness while maintaining their role as cleanup crews.
+
+### Analysis 46: Nocturnal Predator Trait
+- **Description**: Implemented `is_nocturnal_predator` trait.
+- **Agent Action**:
+  - Added `is_nocturnal_predator` trait to `Entity.__init__` and its mutation/inheritance logic.
+  - Applied a 1.5x multiplier to `effective_attack` when `is_nocturnal_predator` is True and the universe is in the night cycle.
+  - Added 'N' representation in `CLIVisualizer`.
+- **Analysis**: This trait encourages temporal niche specialization. Predators with this trait become significantly more lethal at night, shifting the balance of power based on the time of day and forcing prey to adapt their activity patterns to avoid darkness.

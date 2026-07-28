@@ -8,6 +8,7 @@
 
 ## [Unreleased]
 ### Added
+- Analyzed recent trait implementations (`is_carnivorous_plant`, `disease_vector`, `is_nocturnal_predator`) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Implemented `is_volcanic` trait. Entities with this trait thrive in extreme heat, gain energy when standing on `ash` terrain, and are immune to `fire` events.
 - Entities can inherit and mutate the `is_volcanic` trait.
 - Updated visualizer to render volcanic entities as 'j'.
