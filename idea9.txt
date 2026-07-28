@@ -1,5 +1,0 @@
-I will implement `has_tusks` feature:
-- Entities with this trait gain a flat attack bonus of +3.
-- Herbivores and omnivores with this trait gain +1 energy each tick by digging roots if they are on 'forest', 'mud', or 'sand' terrain.
-- It is visually represented by 'y'.
-- A mutation chance in `Universe.tick()`.

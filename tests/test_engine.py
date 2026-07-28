@@ -3536,10 +3536,37 @@ class TestAposematism(unittest.TestCase):
 
 
 
+    def test_is_scentless_mechanics(self):
+        universe = Universe(width=10, height=10)
+        e = Entity("Scentless", x=5, y=5, is_scentless=True)
+        universe.add_entity(e)
+        universe.tick()
+        # Since it moves, check that no trail was left by this entity
+        for (x, y), val in universe.scent_trails.items():
+            self.assertTrue(False, "is_scentless entity should not leave a scent trail")
+
+        e2 = Entity("Normal", x=6, y=6, is_scentless=False)
+        universe.add_entity(e2)
+        universe.tick()
+        self.assertTrue(len(universe.scent_trails) > 0, "normal entity should leave a scent trail")
+
+    def test_is_scentless_mutation(self):
+        import unittest.mock
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_scentless=False, intelligence=10, lays_eggs=True)
+        universe = Universe(width=20, height=20)
+        universe.add_entity(e)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.food_spawn_rate = 0.0
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+            eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+            self.assertTrue(len(eggs) > 0, "Should have reproduced and laid an egg")
+            child = eggs[0].hatch_entity
+            self.assertTrue(getattr(child, 'is_scentless', False), "is_scentless should mutate")
+
 
 if __name__ == '__main__':
-
-
     unittest.main()
 
 class TestPhotosynthesis(unittest.TestCase):

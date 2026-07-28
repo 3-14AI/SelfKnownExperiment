@@ -1,6 +1,0 @@
-How about `has_tusks` increases attack by 3. And if the entity is an herbivore or omnivore, they gain 1 energy per tick from foraging roots if they are on 'forest' or 'grass'. (Since 'grass' doesn't exist, let's see which terrains: 'sand', 'mud', 'ash', 'forest'). Let's say if they are on 'forest' or 'mud' or 'sand' (anything they can dig in).
-
-Wait, the prompt memory mentions:
-- `CLIVisualizer` assigns specific character representations to traits...
-
-Let's look at `CLIVisualizer` traits.
