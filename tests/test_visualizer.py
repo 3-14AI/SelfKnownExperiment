@@ -290,5 +290,22 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('N', output)
 
+
+
+
+
+    def test_visualizer_is_scentless(self):
+        from universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10)
+        entity = Entity("Scentless", x=1, y=1, is_scentless=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Z', output)
+
+
+
 if __name__ == '__main__':
+
+
     unittest.main()

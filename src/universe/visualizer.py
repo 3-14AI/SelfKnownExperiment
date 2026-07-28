@@ -102,6 +102,8 @@ class CLIVisualizer:
                         char = 'd'
                     elif getattr(entity, 'is_social', False):
                         char = 'p'
+                    elif getattr(entity, 'is_scentless', False):
+                        char = 'Z'
                     elif getattr(entity, 'disease_vector', False):
                         char = 'M'
                     elif getattr(entity, 'is_nocturnal_predator', False):

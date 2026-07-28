@@ -1,7 +1,0 @@
-Let's implement `has_tusks` feature:
-1. `has_tusks` trait in `Entity.__init__`.
-2. Attack bonus of `+3`.
-3. If they are herbivores or omnivores, they get `+1` energy back passively during tick if they are on `mud` or `forest` or `sand` (they root for tubers/bugs).
-4. `CLIVisualizer` gets a character representation (maybe 'T'). (Oh wait, 't' is `is_forestal`, 'T' is not assigned. Let's use 'T').
-
-Let's check if 'T' is used in visualizer.
