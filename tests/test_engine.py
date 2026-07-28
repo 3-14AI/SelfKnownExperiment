@@ -4215,3 +4215,48 @@ class TestPackHunterFlanking(unittest.TestCase):
         self.assertTrue((target_x, target_y) != (prey.x, prey.y))
         dist_to_prey = abs(target_x - prey.x) + abs(target_y - prey.y)
         self.assertEqual(dist_to_prey, 1)
+
+
+    def test_dynamic_water_levels_drought_and_storm(self):
+        import random; import universe.engine as eng
+        from universe.engine import Universe, Terrain
+        u = Universe(width=10, height=10)
+        u.event_chance = 0.0
+        u.current_event = 'drought'
+
+        u.add_terrain(Terrain(x=2, y=2, terrain_type='deep-water'))
+        u.add_terrain(Terrain(x=3, y=3, terrain_type='water'))
+
+        original_randint = eng.random.randint
+
+        try:
+            call_count = 0
+            def fake_randint(a, b):
+                nonlocal call_count
+                call_count += 1
+                if call_count == 1: return 2
+                if call_count == 2: return 2
+                if call_count == 3: return 3
+                if call_count == 4: return 3
+                return original_randint(a, b)
+            eng.random.randint = fake_randint
+
+            u.tick()
+
+            t_2_2 = u.get_terrains_at(2, 2)[0]
+            self.assertIn(t_2_2.terrain_type, ['water', 'deep-water'])
+
+            t_3_3 = u.get_terrains_at(3, 3)[0]
+            self.assertIn(t_3_3.terrain_type, ['mud', 'water'])
+
+            u.current_event = 'storm'
+            call_count = 0
+            u.tick()
+
+            t_2_2 = u.get_terrains_at(2, 2)[0]
+            self.assertIn(t_2_2.terrain_type, ['water', 'deep-water'])
+
+            t_3_3 = u.get_terrains_at(3, 3)[0]
+            self.assertIn(t_3_3.terrain_type, ['mud', 'water'])
+        finally:
+            eng.random.randint = original_randint
