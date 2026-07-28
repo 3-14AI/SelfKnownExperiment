@@ -1523,6 +1523,51 @@ class TestUniverse(unittest.TestCase):
         finally:
             eng.random.random = original_random
 
+    def test_disease_vector_trait(self):
+        from universe.engine import Universe, Entity, Food
+        import random
+
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.disease_chance = 0.0
+        u.event_chance = 0.0
+
+        # Create a scavenger with disease_vector
+        e = Entity("Scavenger", x=5, y=5, diet='scavenger', disease_vector=True, energy=10, max_age=100)
+        u.add_entity(e)
+
+        # Create a meat food source
+        meat = Food(x=5, y=5, energy=10, plant_type='meat')
+        u.add_food(meat)
+
+        # Mock random to force disease infection
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.1):
+            u.tick()
+
+        self.assertTrue(e.is_infected, "Disease vector entity should get infected from eating meat")
+
+    def test_disease_vector_no_infection_when_immune(self):
+        from universe.engine import Universe, Entity, Food
+        import random
+
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.disease_chance = 0.0
+        u.event_chance = 0.0
+
+        # Create a scavenger with disease_vector but is immune
+        e = Entity("Scavenger", x=5, y=5, diet='scavenger', disease_vector=True, is_immune=True, energy=10, max_age=100)
+        u.add_entity(e)
+
+        # Create a meat food source
+        meat = Food(x=5, y=5, energy=10, plant_type='meat')
+        u.add_food(meat)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.1):
+            u.tick()
+
+        self.assertFalse(e.is_infected, "Immune disease vector entity should NOT get infected from eating meat")
+
     def test_disease_energy_loss(self):
         from universe.engine import Universe, Entity
         u = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=100)

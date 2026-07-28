@@ -16,7 +16,8 @@ class Entity:
     def max_energy(self):
         return self.size * 50
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False, is_volcanic=False, is_forestal=False, is_desertic=False, is_social=False, is_carnivorous_plant=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False, is_volcanic=False, is_forestal=False, is_desertic=False, is_social=False, is_carnivorous_plant=False, disease_vector=False):
+        self.disease_vector = disease_vector
         self.is_carnivorous_plant = is_carnivorous_plant
         self.is_amphibious = is_amphibious
         self.is_volcanic = is_volcanic
@@ -1129,6 +1130,7 @@ class Universe:
                     child_is_desertic = getattr(entity, 'is_desertic', False)
                     child_is_social = getattr(entity, 'is_social', False)
                     child_is_carnivorous_plant = getattr(entity, 'is_carnivorous_plant', False)
+                    child_disease_vector = getattr(entity, 'disease_vector', False)
                     if random.random() < mutation_chance:
                         child_is_volcanic = not child_is_volcanic
                         mutation_occurred = True
@@ -1143,6 +1145,9 @@ class Universe:
                         mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_is_carnivorous_plant = not child_is_carnivorous_plant
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_disease_vector = not child_disease_vector
                         mutation_occurred = True
 
                     child_has_bioluminescence = getattr(entity, 'has_bioluminescence', False)
@@ -1168,15 +1173,17 @@ class Universe:
                                     if new_target not in child_target_species:
                                         child_target_species.append(new_target)
 
-                    child = Entity(name=f"{entity.name}_child", x=entity.x, y=entity.y,
+                    child_x = max(0, min(self.width - 1, entity.x))
+                    child_y = max(0, min(self.height - 1, entity.y))
+                    child = Entity(name=f"{entity.name}_child", x=child_x, y=child_y,
                                    max_age=child_max_age, perception_radius=child_perception_radius, diet=child_diet,
                                    preferred_temperature=child_preferred_temperature, temperature_tolerance=child_temperature_tolerance,
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb, pack_hunter=child_pack_hunter, has_bioluminescence=child_has_bioluminescence, is_volcanic=child_is_volcanic, is_forestal=child_is_forestal, is_desertic=child_is_desertic, is_social=child_is_social, is_carnivorous_plant=child_is_carnivorous_plant)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb, pack_hunter=child_pack_hunter, has_bioluminescence=child_has_bioluminescence, is_volcanic=child_is_volcanic, is_forestal=child_is_forestal, is_desertic=child_is_desertic, is_social=child_is_social, is_carnivorous_plant=child_is_carnivorous_plant, disease_vector=child_disease_vector)
                     if getattr(entity, 'lays_eggs', False):
-                        egg = Food(x=entity.x, y=entity.y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
+                        egg = Food(x=child_x, y=child_y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
                     else:
                         new_entities.append(child)
@@ -1212,6 +1219,9 @@ class Universe:
                             entity.is_infected = False
                             entity.infection_time = 0
                             entity.poisoned_time = 0
+                        if getattr(food_to_eat, 'plant_type', '') == 'meat' and getattr(entity, 'disease_vector', False) and not getattr(entity, 'is_immune', False):
+                            if random.random() < 0.5:
+                                entity.is_infected = True
 
                 can_move = True
                 if getattr(entity, 'is_carnivorous_plant', False):
@@ -1360,6 +1370,13 @@ class Universe:
                                 entity.is_infected = False
                                 entity.infection_time = 0
                                 entity.poisoned_time = 0
+                            if getattr(food_to_eat, 'plant_type', '') == 'medicinal':
+                                entity.is_infected = False
+                                entity.infection_time = 0
+                                entity.poisoned_time = 0
+                            if getattr(food_to_eat, 'plant_type', '') == 'meat' and getattr(entity, 'disease_vector', False) and not getattr(entity, 'is_immune', False):
+                                if random.random() < 0.5:
+                                    entity.is_infected = True
                             self.foods.remove(food_to_eat)
                 elif entity.diet == 'omnivore':
                     if can_move:
@@ -1512,6 +1529,13 @@ class Universe:
                                 entity.is_infected = False
                                 entity.infection_time = 0
                                 entity.poisoned_time = 0
+                            if getattr(food_to_eat, 'plant_type', '') == 'medicinal':
+                                entity.is_infected = False
+                                entity.infection_time = 0
+                                entity.poisoned_time = 0
+                            if getattr(food_to_eat, 'plant_type', '') == 'meat' and getattr(entity, 'disease_vector', False) and not getattr(entity, 'is_immune', False):
+                                if random.random() < 0.5:
+                                    entity.is_infected = True
                             self.foods.remove(food_to_eat)
                     else:
                         preys_here = self.get_preys_at(entity.x, entity.y, entity=entity)
@@ -1762,7 +1786,9 @@ class Universe:
                 dead.host = None
 
             if not getattr(dead, 'was_eaten', False):
-                self.add_food(Food(x=dead.x, y=dead.y, energy=dead.size * 5, plant_type='meat', toxicity=getattr(dead, 'toxicity', 0), max_age=60))
+                meat_x = max(0, min(self.width - 1, dead.x))
+                meat_y = max(0, min(self.height - 1, dead.y))
+                self.add_food(Food(x=meat_x, y=meat_y, energy=dead.size * 5, plant_type='meat', toxicity=getattr(dead, 'toxicity', 0), max_age=60))
 
         self.entities = [e for e in self.entities if getattr(e, "is_alive", True)]
         for child in new_entities:

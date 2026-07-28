@@ -3,6 +3,19 @@ from src.universe.engine import Universe, Entity, Food, Terrain
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+    def test_visualizer_disease_vector(self):
+        from universe.engine import Universe, Entity
+        from universe.visualizer import CLIVisualizer
+        universe = Universe(width=5, height=5)
+
+        entity = Entity("Vector", x=2, y=2, disease_vector=True, energy=100, max_age=100)
+        universe.add_entity(entity)
+
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+
+        self.assertIn('M', output)
+
     def test_render_terrain(self):
         universe = Universe(width=3, height=3)
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='wall'))
