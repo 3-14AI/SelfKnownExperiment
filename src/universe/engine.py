@@ -637,6 +637,41 @@ class Universe:
                             elif random.random() < 0.3:
                                 self.add_terrain(Terrain(x=rx, y=ry, terrain_type='snow'))
 
+        # Dynamic water levels
+        if self.current_event == 'drought':
+            for _ in range(10):
+                hx = random.randint(0, self.width - 1)
+                hy = random.randint(0, self.height - 1)
+                terrains_here = self.get_terrains_at(hx, hy)
+                for t in terrains_here:
+                    if t.terrain_type == 'deep-water':
+                        t.terrain_type = 'water'
+                    elif t.terrain_type == 'water':
+                        t.terrain_type = 'mud'
+        elif self.current_event == 'storm':
+            for _ in range(10):
+                hx = random.randint(0, self.width - 1)
+                hy = random.randint(0, self.height - 1)
+                terrains_here = self.get_terrains_at(hx, hy)
+                for t in terrains_here:
+                    if t.terrain_type == 'mud':
+                        t.terrain_type = 'water'
+                    elif t.terrain_type == 'water':
+                        t.terrain_type = 'deep-water'
+
+                if any(t.terrain_type in ['water', 'deep-water'] for t in terrains_here):
+                    for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                        nx, ny = hx + dx, hy + dy
+                        if 0 <= nx < self.width and 0 <= ny < self.height:
+                            adj_terrains = self.get_terrains_at(nx, ny)
+                            if not adj_terrains:
+                                if random.random() < 0.2:
+                                    self.add_terrain(Terrain(x=nx, y=ny, terrain_type='mud'))
+                            else:
+                                for at in adj_terrains:
+                                    if at.terrain_type in ['sand', 'ash']:
+                                        at.terrain_type = 'mud'
+
         # High temperatures/drought create sand
         if self.current_event == 'drought' or (self.current_season == 'summer' and random.random() < 0.5):
             for _ in range(5):
