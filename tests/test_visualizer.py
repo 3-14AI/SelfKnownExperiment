@@ -305,6 +305,14 @@ class TestCLIVisualizer(unittest.TestCase):
 
 
 
+
+    def test_render_is_vampiric(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestVampire", x=1, y=1, is_vampiric=True))
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('y', output)
+
 if __name__ == '__main__':
 
 

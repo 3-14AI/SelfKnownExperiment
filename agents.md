@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implemented Vampiric trait (`is_vampiric`). Entities with this trait drain energy and hydration from their prey during combat, even if the prey escapes.
 - [x] Implement a `can_sprint` trait allowing entities to temporarily move faster at a high stamina cost.
 - [x] Implement advanced group hunting tactics for entities with the `pack_hunter` trait (e.g. flanking, cutting off escape routes based on terrain).
 - [x] Implemented `is_scentless` trait. Entities with this trait do not leave scent trails, making them harder for predators to track.
