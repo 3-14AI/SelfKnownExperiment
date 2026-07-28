@@ -3566,6 +3566,41 @@ class TestAposematism(unittest.TestCase):
             self.assertTrue(getattr(child, 'is_scentless', False), "is_scentless should mutate")
 
 
+
+class TestSprint(unittest.TestCase):
+    def test_can_sprint_movement(self):
+        from src.universe.engine import Universe, Entity, Food
+        universe = Universe(width=10, height=10)
+        # size=2 means normal move on tick % 2 == 0.
+        # So at time=1, normally can_move=False.
+        entity = Entity("Sprinter", x=0, y=0, size=2, max_stamina=50, stamina=50, can_sprint=True, intelligence=1, perception_radius=10, diet='herbivore')
+        universe.add_entity(entity)
+        # Give it a reason to move
+        universe.add_food(Food(x=2, y=0, energy=10))
+
+        universe.time = 0 # tick increments it to 1
+        universe.tick()
+
+        # Because time became 1, 1 % 2 != 0, so normally False.
+        # But can_sprint is True, so it should move and consume extra stamina.
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 0)
+        self.assertTrue(entity.stamina < 50)
+
+    def test_sprint_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=1, y=1, energy=100, can_sprint=False, intelligence=10)
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e.generation == 1]
+        if children:
+            self.assertTrue(children[0].can_sprint)
+
 if __name__ == '__main__':
     unittest.main()
 
