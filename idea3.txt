@@ -1,0 +1,10 @@
+Actually, there's a problem that the tests for a lot of recent traits were not written!
+We can write tests for ALL missing traits to be thorough and helpful, but we should also implement a new trait because of the rule "Only remove items from the `## Next Steps` list after you have fully implemented and tested the corresponding feature." Wait, but `agents.md` has no unchecked items in Next Steps!
+
+Let's just implement a cool new feature: `has_tusks`. Entities with this trait gain a bonus to attack, and when they are foraging (eating plants), they gain more energy because they can dig up roots.
+
+Let's do `can_sprint`. It's cooler.
+If an entity is chasing prey or fleeing a predator, they can move twice in one tick, at the cost of 5 stamina.
+
+Wait, looking at `tests/test_engine.py`, there's no `test_pack_hunter_flanking`? Wait, I saw it before.
+Let's check if the pack hunter advanced group hunting tactics feature is actually implemented.

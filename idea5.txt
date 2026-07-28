@@ -1,0 +1,40 @@
+What about the `is_nocturnal_predator` tests? They exist.
+What about `disease_vector` tests? They exist.
+What about `is_desertic`? They exist.
+What about `is_carnivorous_plant`? They exist.
+
+Wait, check the first few traits listed in `agents.md`:
+- [x] Implement `is_nocturnal_predator`
+- [x] Add dynamic water levels.
+- [x] Introduce `disease_vector`
+- [x] Implemented `is_carnivorous_plant`
+- [x] Implement `is_desertic`
+- [x] Implemented `has_bioluminescence`
+- [x] Implemented elevation and height map mechanics.
+- [x] Implement a `can_climb` trait
+
+If there is NO open item in `agents.md`, I MUST decide on ONE meaningful, manageable step to implement.
+"You must decide on ONE meaningful, manageable step to implement in your current session. It could be bootstrapping a new module, adding a new feature, fixing a bug, refactoring code, or writing tests."
+
+Let's implement a `is_scavenger_specialist` trait. Oh, wait, the `diet` is already 'scavenger'.
+What about a `can_sprint` trait? Or `has_horns`?
+
+I will implement `has_horns` trait.
+Entities with this trait gain a bonus to attack when they are attacking, and also they have a chance to instantly critically strike a target that is much smaller than them, dealing extra damage (e.g., stamina drop or energy drop).
+Or simply: "Entities with `has_horns` gain a flat bonus to attack. If they are herbivores, they can also use their horns to defend themselves, gaining a flat bonus to defense."
+Let's add `has_horns` trait!
+
+Wait, `has_tusks` might be better.
+"Implemented `has_tusks` trait. Entities with this trait gain a flat attack bonus. Additionally, herbivores with this trait can forage for roots, gaining a small amount of energy passively each tick if they are on grass or forest terrain."
+Yes, `has_tusks` is awesome!
+
+Let's implement `has_tusks`:
+1. Add `has_tusks=False` to `Entity.__init__`.
+2. Add mutation logic in `Universe.tick()`.
+3. Add visualization in `CLIVisualizer` (maybe character 't' or 'T').
+4. Add tests for `has_tusks` combat bonus and foraging bonus in `tests/test_engine.py`.
+5. Add test for `has_tusks` visualization in `tests/test_visualizer.py`.
+6. Add it to `agents.md` under `## Completed`.
+7. Pre-commit check.
+
+Wait, let's see how `Universe.tick` does combat:
