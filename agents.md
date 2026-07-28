@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Introduce a `disease_vector` trait for scavenger entities, causing them to spread disease more rapidly when interacting with corpses.
 - [x] Implemented `is_carnivorous_plant` trait. Plants with this trait can consume small entities that move onto their tile, gaining energy and growing larger.
 - [x] Implement `is_desertic` trait. Entities with this trait suffer half hydration loss in hot climates and gain an energy efficiency bonus when traversing `sand` terrain.
 - [x] Implemented `has_bioluminescence` trait. Entities with this trait bypass night vision penalties for themselves, but are easily spotted by predators at night.
@@ -117,6 +118,6 @@ Godspeed, Agent. The universe is in your hands.
 ## Next Steps
 
 - [x] Implement advanced group hunting tactics for entities with the `pack_hunter` trait (e.g. flanking, cutting off escape routes based on terrain).
-- [ ] Introduce a `disease_vector` trait for scavenger entities, causing them to spread disease more rapidly when interacting with corpses.
+
 - [ ] Add dynamic water levels. `water` and `deep-water` biomes can dry out into `mud` during extreme droughts or expand during heavy storms, forcing amphibious/aquatic entities to migrate.
 - [ ] Implement `is_nocturnal_predator` specific bonuses, granting a higher attack multiplier when hunting at night.
