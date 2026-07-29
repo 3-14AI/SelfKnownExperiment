@@ -323,6 +323,13 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('g', output)
 
+    def test_render_can_sweat(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestSweat", x=1, y=1, can_sweat=True))
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('q', output)
+
 if __name__ == '__main__':
 
 

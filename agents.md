@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implemented `can_sweat` trait. Entities with this trait avoid heat-based energy penalties in hot temperatures but suffer increased hydration loss.
 - [x] Implemented `is_detritivore` trait. Entities with this trait consume `ash` and `mud` terrains directly, cleaning up the environment and recovering energy.
 - [x] Implemented Vampiric trait (`is_vampiric`). Entities with this trait drain energy and hydration from their prey during combat, even if the prey escapes.
 - [x] Implement a `can_sprint` trait allowing entities to temporarily move faster at a high stamina cost.
