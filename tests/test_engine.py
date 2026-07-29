@@ -3704,6 +3704,45 @@ class TestUniverse(unittest.TestCase):
         blubber_loss = 50 - blubber.energy
         pass # Ignoring direct heat penalty test due to environmental complexity.
 
+
+    def test_is_mud_bather_recovery(self):
+        universe = Universe(width=10, height=10)
+        universe.terrains.append(Terrain(x=2, y=2, terrain_type='mud'))
+        entity = Entity("MudBather", x=2, y=2, is_mud_bather=True, max_hydration=50, hydration=40, max_stamina=50, stamina=40, energy=100)
+        universe.add_entity(entity)
+
+        # Disable mechanics that drain stamina/hydration to isolate test
+        universe.population_limit = 0
+        entity.intelligence = 1
+        entity.preferred_temperature = 20
+        universe.base_temperature = 20
+        universe.time = 100 # force non-summer
+
+        initial_hydration = entity.hydration
+        initial_stamina = entity.stamina
+
+        universe.tick()
+
+        # Calculate expected changes:
+        # Normal hydration loss is 1 per tick. Mud bather adds +2. Net: +1.
+        # So hydration should be 40 - 1 + 2 = 41.
+        # Stamina is normally recovered by 2 if resting/idle, plus +2 for mud bather.
+        self.assertEqual(entity.hydration, 41)
+        self.assertTrue(entity.stamina > initial_stamina)
+
+    def test_is_mud_bather_mutation(self):
+        universe = Universe(width=10, height=10)
+        # Force a mutation using high intelligence to guarantee reproduction, and mock random
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10, lays_eggs=True)
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertTrue(len(eggs) > 0, "A child egg should have been born")
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_mud_bather', False), "Child should have mutated is_mud_bather to True")
+
     def test_has_blubber_mutation(self):
         universe = Universe(10, 10)
         universe.population_limit = 10
@@ -4215,7 +4254,7 @@ class TestSprint(unittest.TestCase):
 
     def test_is_vampiric_mutation(self):
         universe = Universe(width=10, height=10)
-        parent = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, lays_eggs=True)
+        parent = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, lays_eggs=True, is_mud_bather=True)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
