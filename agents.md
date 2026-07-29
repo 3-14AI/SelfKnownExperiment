@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- [x] Implemented `is_mud_bather` trait. Entities with this trait recover hydration and stamina when on mud terrain.
 - [x] Added missing genetic mutation unit tests for 29 traits in `tests/test_engine.py`.
 
 - [x] Implemented `has_blubber` trait. Entities with this trait have 50% more maximum energy capacity and gain enhanced cold resistance, but suffer severe energy penalties in hot environments.
