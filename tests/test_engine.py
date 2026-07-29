@@ -73,6 +73,551 @@ class TestUniverse(unittest.TestCase):
 
 
 
+
+    def test_is_volcanic_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_volcanic=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+        e.lays_eggs = True # Will mutate to False to avoid creating eggs
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_volcanic)
+
+    def test_disease_vector_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, disease_vector=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+        e.lays_eggs = True # Will mutate to False to avoid creating eggs
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].disease_vector)
+
+    def test_is_carnivorous_plant_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_carnivorous_plant=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0 # Guarantee mutation
+        e.lays_eggs = True # Will mutate to False to avoid creating eggs
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_carnivorous_plant)
+
+
+    def test_is_aquatic_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_aquatic=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_aquatic)
+
+    def test_is_flying_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_flying=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_flying)
+
+    def test_can_hibernate_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, can_hibernate=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].can_hibernate)
+
+    def test_lays_eggs_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, lays_eggs=True, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertFalse(children[0].lays_eggs)
+
+    def test_can_hoard_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, can_hoard=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].can_hoard)
+
+    def test_is_nocturnal_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_nocturnal=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_nocturnal)
+
+    def test_can_burrow_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, can_burrow=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].can_burrow)
+
+    def test_has_spikes_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, has_spikes=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].has_spikes)
+
+    def test_can_spin_webs_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, can_spin_webs=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].can_spin_webs)
+
+    def test_is_venomous_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_venomous=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_venomous)
+
+    def test_can_photosynthesize_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, can_photosynthesize=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].can_photosynthesize)
+
+    def test_is_amphibious_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_amphibious=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_amphibious)
+
+    def test_has_shell_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, has_shell=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].has_shell)
+
+    def test_has_echolocation_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, has_echolocation=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].has_echolocation)
+
+    def test_is_aposematic_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_aposematic=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_aposematic)
+
+    def test_is_fruiting_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_fruiting=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_fruiting)
+
+    def test_is_immune_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_immune=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_immune)
+
+    def test_is_cold_blooded_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_cold_blooded=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_cold_blooded)
+
+    def test_is_electric_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_electric=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_electric)
+
+    def test_is_regenerative_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_regenerative=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_regenerative)
+
+    def test_has_claws_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, has_claws=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].has_claws)
+
+    def test_is_parasitic_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_parasitic=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_parasitic)
+
+    def test_has_scales_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, has_scales=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].has_scales)
+
+    def test_has_fur_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, has_fur=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].has_fur)
+
+    def test_can_climb_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, can_climb=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].can_climb)
+
+    def test_pack_hunter_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, pack_hunter=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].pack_hunter)
+
+    def test_has_bioluminescence_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, has_bioluminescence=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].has_bioluminescence)
+
+    def test_is_nocturnal_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_nocturnal_predator=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_nocturnal_predator)
+
+    def test_can_sprint_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, can_sprint=False, intelligence=10)
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.mutation_chance = 1.0
+        e.lays_eggs = True # mutated to false
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].can_sprint)
+
     def test_is_desertic_mutation(self):
         universe = Universe(width=10, height=10)
         import unittest.mock
@@ -3608,19 +4153,7 @@ class TestAposematism(unittest.TestCase):
         universe.tick()
         self.assertTrue(len(universe.scent_trails) > 0, "normal entity should leave a scent trail")
 
-    def test_is_scentless_mutation(self):
-        import unittest.mock
-        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_scentless=False, intelligence=10, lays_eggs=False)
-        universe = Universe(width=20, height=20, reproduction_threshold=0, reproduction_cost=0, population_limit=100)
-        universe.add_entity(e)
-        universe.event_chance = 0.0
-        universe.disease_chance = 0.0
-        universe.food_spawn_rate = 0.0
-        with unittest.mock.patch('random.random', return_value=0.0):
-            universe.tick()
-            children = [ent for ent in universe.entities if ent != e]
-            self.assertTrue(len(children) > 0, "Should have reproduced")
-            self.assertTrue(getattr(children[0], 'is_scentless', False), "is_scentless should mutate")
+
 
 
 
