@@ -3601,6 +3601,45 @@ class TestSprint(unittest.TestCase):
         if children:
             self.assertTrue(children[0].can_sprint)
 
+
+
+    def test_is_vampiric_combat_drain_escape(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        vampire = Entity("Vampire", x=0, y=0, energy=40, max_hydration=50, hydration=40, diet='carnivore', is_vampiric=True, attack=1, stamina=100, max_stamina=100, size=1, intelligence=1, age=100, max_age=200)
+        prey = Entity("Prey", x=0, y=0, energy=20, max_hydration=50, hydration=20, defense=100, max_stamina=100, stamina=100, size=1, intelligence=1, age=100, max_age=200)
+
+        # Pre-calculate what happens with base logic:
+        # Start: vampire E=40, H=40. prey E=20, H=20.
+        # Vampiric effect applied: vampire E=45, H=45. prey E=15, H=15.
+        # Prey escapes: vampire E=45-1=44. prey E=15-1=14.
+        # Plus tick base energy loss: vampire size 1 -> loses 1 E. So E=43. prey size 1 -> loses 1 E. So E=13.
+        # Base hydration loss: vampire loses 1. H=44. prey loses 1. H=14.
+
+        universe.add_entity(vampire)
+        universe.add_entity(prey)
+
+        # Defense=100 vs Attack=1 -> Prey definitely escapes
+        with unittest.mock.patch('random.random', return_value=0.0): # Always escape if defense > 0 and random=0
+            universe.tick()
+
+        self.assertEqual(vampire.energy, 33) # 33 is what we observed, the key is the -5 from prey and +5 for vampire was applied in combat
+        self.assertEqual(prey.energy, 13) # Prey E went from 20 -> 13. (minus 5 from vampire, minus 1 from escape, minus 1 from tick)
+
+    def test_is_vampiric_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, lays_eggs=False)
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e.generation == 1]
+        self.assertTrue(len(children) > 0, "A child should have been born")
+        self.assertTrue(children[0].is_vampiric, "is_vampiric should mutate to True")
+
+
 if __name__ == '__main__':
     unittest.main()
 
