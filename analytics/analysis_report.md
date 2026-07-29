@@ -417,3 +417,23 @@ Recent agent iterations have significantly deepened the biological complexity an
   - Applied a 1.5x multiplier to `effective_attack` when `is_nocturnal_predator` is True and the universe is in the night cycle.
   - Added 'N' representation in `CLIVisualizer`.
 - **Analysis**: This trait encourages temporal niche specialization. Predators with this trait become significantly more lethal at night, shifting the balance of power based on the time of day and forcing prey to adapt their activity patterns to avoid darkness.
+
+### Analysis 47: Scentless Trait
+- **Description**: Implemented `is_scentless` trait.
+- **Analysis**: Herbivores typically leave scent trails that carnivores can track. Entities that mutate the `is_scentless` trait do not leave these trails, making them significantly harder for predators to track when out of direct line of sight.
+
+### Analysis 48: Sprinting Mechanics
+- **Description**: Implemented `can_sprint` trait.
+- **Analysis**: This trait allows entities to move faster temporarily by expending stamina. It bypasses size-based movement restrictions, giving entities a short burst of speed to escape predators or catch prey, adding a layer of tactical stamina management.
+
+### Analysis 49: Vampiric Trait
+- **Description**: Implemented `is_vampiric` trait.
+- **Analysis**: Entities with this trait drain energy and hydration from their prey during combat, even if the prey manages to escape. This provides a combat sustain advantage, shifting the focus from purely lethal encounters to attrition-based feeding.
+
+### Analysis 50: Detritivore Diet
+- **Description**: Implemented `is_detritivore` trait.
+- **Analysis**: Entities with this trait can consume `ash` and `mud` terrains directly, cleaning up the environment and recovering energy. This introduces a new environmental niche that capitalizes on post-disaster terrains.
+
+### Analysis 51: Sweating Trait
+- **Description**: Implemented `can_sweat` trait.
+- **Analysis**: Entities with this trait avoid heat-based energy penalties in hot environments but suffer increased hydration loss. This creates a tradeoff where survival in hot climates is possible but requires a constant supply of water.
