@@ -330,6 +330,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('q', output)
 
+
+    def test_render_has_blubber(self):
+        universe = Universe(3, 3)
+        universe.add_entity(Entity("TestBlubber", x=1, y=1, has_blubber=True))
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('@', output)
+
 if __name__ == '__main__':
 
 
