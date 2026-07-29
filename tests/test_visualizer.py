@@ -313,7 +313,18 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('y', output)
 
+
+    def test_render_is_detritivore(self):
+        from universe.engine import Universe, Entity
+        from universe.visualizer import CLIVisualizer
+        universe = Universe(width=5, height=5)
+        universe.add_entity(Entity("TestDetritivore", x=1, y=1, is_detritivore=True))
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('g', output)
+
 if __name__ == '__main__':
+
 
 
     unittest.main()

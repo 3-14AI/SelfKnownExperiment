@@ -3040,7 +3040,7 @@ class TestUniverse(unittest.TestCase):
         universe.tick()
 
     def test_bioluminescence_spotted_by_predator_at_night(self):
-        universe = Universe(width=20, height=20)
+        universe = Universe(width=20, height=20, reproduction_threshold=0, reproduction_cost=0)
         universe.time = 13 # Night
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
@@ -3553,7 +3553,7 @@ class TestAposematism(unittest.TestCase):
     def test_is_scentless_mutation(self):
         import unittest.mock
         e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_scentless=False, intelligence=10, lays_eggs=True)
-        universe = Universe(width=20, height=20)
+        universe = Universe(width=20, height=20, reproduction_threshold=0, reproduction_cost=0)
         universe.add_entity(e)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
@@ -3629,18 +3629,52 @@ class TestSprint(unittest.TestCase):
 
     def test_is_vampiric_mutation(self):
         universe = Universe(width=10, height=10)
-        parent = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, lays_eggs=False)
+        parent = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, lays_eggs=True)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
-        children = [e for e in universe.entities if e.generation == 1]
-        self.assertTrue(len(children) > 0, "A child should have been born")
-        self.assertTrue(children[0].is_vampiric, "is_vampiric should mutate to True")
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertTrue(len(eggs) > 0, "A child egg should have been born")
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_vampiric', False), "is_vampiric should mutate to True")
 
+
+
+class TestDetritivore(unittest.TestCase):
+    def test_is_detritivore_consumes_ash(self):
+        from universe.engine import Universe, Entity, Terrain
+        u = Universe(width=5, height=5, reproduction_threshold=0, reproduction_cost=0)
+        u.event_chance = 0.0
+        u.disease_chance = 0.0
+        e = Entity("Detritivore", x=2, y=2, energy=10, is_detritivore=True, max_age=100)
+        u.add_entity(e)
+        t = Terrain(x=2, y=2, terrain_type='ash')
+        u.add_terrain(t)
+
+        self.assertTrue(any(ter.terrain_type == 'ash' for ter in u.terrains))
+        u.tick()
+        # Should have eaten the ash terrain
+        self.assertFalse(any(ter.terrain_type == 'ash' for ter in u.terrains))
+        # Base energy 10, lost 1 for size base, gained 10 from ash = 19
+        self.assertEqual(e.energy, 19)
+
+    def test_is_detritivore_mutation(self):
+        from universe.engine import Universe, Entity
+        import unittest.mock
+        e = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_detritivore=False, intelligence=10, lays_eggs=True)
+        u = Universe(width=5, height=5, reproduction_threshold=0, reproduction_cost=0)
+        u.add_entity(e)
+        u.event_chance = 0.0
+        u.disease_chance = 0.0
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.tick()
+            eggs = [f for f in u.foods if getattr(f, 'hatch_entity', None) is not None]
+            self.assertTrue(len(eggs) > 0, "Should have laid an egg")
+            self.assertTrue(getattr(eggs[0].hatch_entity, 'is_detritivore', False), "is_detritivore should mutate to True")
 
 if __name__ == '__main__':
+
     unittest.main()
 
 class TestPhotosynthesis(unittest.TestCase):
@@ -3722,7 +3756,7 @@ class TestArmorMechanics(unittest.TestCase):
 
 class TestEcholocation(unittest.TestCase):
     def setUp(self):
-        self.universe = Universe(width=20, height=20)
+        self.universe = Universe(width=20, height=20, reproduction_threshold=0, reproduction_cost=0)
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
 
