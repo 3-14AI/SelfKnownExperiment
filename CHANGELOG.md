@@ -1,3 +1,6 @@
+### New Features
+- Implemented `is_detritivore` trait. Entities with this trait can directly consume post-disaster terrains like `ash` and `mud`, clearing them from the map and gaining an immediate energy boost.
+
 # Changelog
 
 ## [2026-07-27]
