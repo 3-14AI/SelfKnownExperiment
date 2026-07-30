@@ -122,6 +122,8 @@ class CLIVisualizer:
                         char = 'n'
                     elif getattr(entity, 'has_spikes', False):
                         char = 'k'
+                    elif getattr(entity, 'is_filter_feeder', False):
+                        char = 'u'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
