@@ -338,6 +338,13 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('@', output)
 
+    def test_render_is_filter_feeder(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestFilterFeeder", x=1, y=1, is_filter_feeder=True))
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('u', output)
+
 if __name__ == '__main__':
 
 
