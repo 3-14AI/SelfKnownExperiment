@@ -345,6 +345,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('u', output)
 
+
+    def test_render_is_gluttonous(self):
+        universe = Universe(10, 10)
+        e = Entity("Glutton", x=2, y=2, is_gluttonous=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('x', output)
+
 if __name__ == '__main__':
 
 
