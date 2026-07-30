@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implemented `is_solitary` trait. Entities with this trait gain an energy efficiency buff when alone, but suffer an energy penalty when near other entities of the same species.
 - [x] Implemented `is_gluttonous` trait. Entities with this trait can overeat beyond their maximum energy capacity (up to 1.5x) but suffer increased passive energy drain.
 - [x] Implemented `is_filter_feeder` trait. Aquatic entities with this trait passively gain small amounts of energy while swimming in `water` or `deep-water` terrains, simulating filter feeding.
 - [x] Added missing genetic mutation unit tests for `is_infected` and `is_sleeping` traits in `tests/test_engine.py`.

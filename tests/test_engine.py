@@ -584,6 +584,22 @@ class TestUniverse(unittest.TestCase):
         if len(children) > 0:
             self.assertTrue(children[0].has_bioluminescence)
 
+    def test_is_scentless_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import random
+        from unittest.mock import patch
+
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_scentless=False, intelligence=10)
+        universe = Universe()
+        universe.add_entity(e)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if children:
+            self.assertTrue(children[0].is_scentless)
+
     def test_is_nocturnal_predator_mutation(self):
         universe = Universe(width=10, height=10)
         import unittest.mock
@@ -3735,7 +3751,7 @@ class TestUniverse(unittest.TestCase):
     def test_is_mud_bather_mutation(self):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10, lays_eggs=False, is_filter_feeder=True)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10, lays_eggs=False, is_filter_feeder=True, is_solitary=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -4255,6 +4271,77 @@ class TestAposematism(unittest.TestCase):
         self.assertEqual(predator.x, 6)
 
 
+
+
+
+    def test_is_solitary_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import random
+        from unittest.mock import patch
+
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_solitary=False, intelligence=10)
+        universe = Universe()
+        universe.add_entity(e)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if children:
+            self.assertTrue(children[0].is_solitary)
+
+    def test_is_solitary_efficiency(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10, population_limit=0)
+        e1 = Entity("Solitary1", x=0, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol")
+        e2 = Entity("Solitary2", x=2, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol")
+
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+
+        e1.is_sleeping = False
+        e2.is_sleeping = False
+        e1.can_photosynthesize = False
+        e2.can_photosynthesize = False
+        e1.intelligence = 1
+        e2.intelligence = 1
+
+        e1.stamina = 100
+        e2.stamina = 100
+        e1.hydration = 50
+        e2.hydration = 50
+        e1.preferred_temperature = 20
+        e2.preferred_temperature = 20
+        e1.temperature_tolerance = 40
+        e2.temperature_tolerance = 40
+        universe.time = 50
+
+        e1.perception_radius = 0
+        e2.perception_radius = 0
+
+        universe.tick()
+
+        self.assertEqual(e1.energy, 48)
+        self.assertEqual(e2.energy, 48)
+
+        universe = Universe(width=10, height=10, population_limit=0)
+        e3 = Entity("Solitary3", x=0, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol")
+        e3.is_sleeping = False
+        e3.can_photosynthesize = False
+        e3.intelligence = 1
+
+        e3.stamina = 100
+        e3.hydration = 50
+        e3.preferred_temperature = 20
+        e3.temperature_tolerance = 40
+        universe.base_temperature = 20
+        e3.perception_radius = 0
+        universe.time = 50
+
+        universe.add_entity(e3)
+        universe.tick()
+
+        self.assertEqual(e3.energy, 50)
 
     def test_is_scentless_mechanics(self):
         universe = Universe(width=10, height=10)
