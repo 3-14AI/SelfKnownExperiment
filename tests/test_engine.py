@@ -840,22 +840,21 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(meats[0].energy, 10)
 
     def test_scavenger_seeks_meat(self):
-        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0, population_limit=0)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
+        universe.base_temperature = 20
 
-        scavenger = Entity("Scavvy", x=1, y=1, energy=10, diet='scavenger', perception_radius=10, size=1)
-        # Give enough energy and speed to move
+        scavenger = Entity("Scavvy", x=1, y=1, energy=10, diet='scavenger', perception_radius=10, size=1, preferred_temperature=20, temperature_tolerance=40)
+        scavenger.stamina = 50
+        scavenger.max_stamina = 50
         universe.add_entity(scavenger)
 
         from universe.engine import Food
         universe.add_food(Food(x=1, y=3, plant_type='meat', energy=5))
         universe.add_food(Food(x=1, y=2, plant_type='berry', energy=5))
 
-        # Disable aging/energy loss interfering with death
         scavenger.age = 0
-        scavenger.preferred_temperature = universe.base_temperature
-        scavenger.temperature_tolerance = 40
         scavenger.hydration = scavenger.max_hydration
 
         universe.tick()
@@ -1127,10 +1126,13 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(len(universe.foods), 0)
 
     def test_entity_pathfinding_around_obstacle(self):
-        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0, population_limit=0)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        entity = Entity("Adam", x=0, y=0)
+        universe.base_temperature = 20
+        entity = Entity("Adam", x=0, y=0, preferred_temperature=20, temperature_tolerance=10)
+        entity.stamina = 50
+        entity.max_stamina = 50
         universe.add_entity(entity)
         universe.add_food(Food(x=2, y=0, energy=5))
 
@@ -3732,16 +3734,16 @@ class TestUniverse(unittest.TestCase):
 
     def test_is_mud_bather_mutation(self):
         universe = Universe(width=10, height=10)
-        # Force a mutation using high intelligence to guarantee reproduction, and mock random
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10, lays_eggs=True)
+        universe.population_limit = 100
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10, lays_eggs=False, is_filter_feeder=True)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
-        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
-        self.assertTrue(len(eggs) > 0, "A child egg should have been born")
-        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_mud_bather', False), "Child should have mutated is_mud_bather to True")
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "A child should have been born")
+        self.assertTrue(getattr(children[0], "is_mud_bather", False), "Child should have mutated is_mud_bather to True")
 
     def test_has_blubber_mutation(self):
         universe = Universe(10, 10)
@@ -3762,20 +3764,13 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_is_infected(self):
-        universe = Universe(width=10, height=10)
-        # Prevent automatic spontaneous infections
+        universe = Universe(width=10, height=10, population_limit=0)
         universe.disease_chance = 0.0
-
-        # Disable stamina/sleep stuff
-        entity = Entity(name="E1", x=5, y=5, size=1, energy=50, is_infected=True, infection_time=0)
-        # Also need stamina logic disabled or initialized high to avoid sleep
+        universe.base_temperature = 20
+        entity = Entity(name="E1", x=5, y=5, size=1, energy=50, is_infected=True, infection_time=0, preferred_temperature=20, temperature_tolerance=10)
         entity.stamina = 50
         entity.max_stamina = 50
         universe.add_entity(entity)
-
-        # Normal base energy loss is 1 (size=1)
-        # Infected adds +1 energy loss
-        # So we expect 2 energy loss
         universe.tick()
         self.assertEqual(entity.energy, 48)
         self.assertEqual(entity.infection_time, 1)
@@ -4436,6 +4431,43 @@ class TestDetritivore(unittest.TestCase):
         self.assertEqual(sweaty.energy, 50 - 1)
         # Sweaty entity should lose 1 extra hydration from sweating (total 2).
         self.assertEqual(sweaty.hydration, 50 - 2)
+
+
+    def test_is_filter_feeder_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.population_limit = 100
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_filter_feeder=False, intelligence=10, lays_eggs=False, is_mud_bather=True)
+        universe.add_entity(parent)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "A child should have been born")
+        self.assertTrue(getattr(children[0], "is_filter_feeder", False), "Child should have mutated is_filter_feeder to True")
+
+    def test_is_filter_feeder_energy_gain(self):
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.disease_chance = 0.0
+
+        # Test on water
+        feeder = Entity("Feeder", x=5, y=5, size=1, energy=40, is_filter_feeder=True, is_aquatic=True)
+        feeder.stamina = 50
+        feeder.max_stamina = 50
+        feeder.preferred_temperature = 20
+        feeder.temperature_tolerance = 10
+        feeder.intelligence = 1
+        feeder.is_social = False
+        feeder.can_photosynthesize = False
+        universe.base_temperature = 20
+
+        universe.add_entity(feeder)
+        universe.add_terrain(Terrain(x=5, y=5, terrain_type='water'))
+
+        universe.tick()
+
+        self.assertEqual(feeder.energy, 41)
 
 if __name__ == '__main__':
 
@@ -5104,18 +5136,17 @@ class TestPackHunterFlanking(unittest.TestCase):
             return original_find_path(start_x, start_y, target_x, target_y, *args, **kwargs)
 
         universe.find_path = mocked_find_path
-        universe.tick()
+        try:
+            universe.tick()
 
-        # Hunter 2 should have targeted an empty adjacent spot of the prey (flanking), not the prey's exact coordinates.
-        # The prey is at (5,5), hunter1 is at (4,5) or has moved into (5,5) during tick to eat.
-        # Actually hunter1 might have eaten the prey or attacked it, let's see what target hunter2 used.
-        self.assertTrue(len(target_positions) > 0)
-        target_x, target_y = target_positions[0]
+            self.assertTrue(len(target_positions) > 0)
+            target_x, target_y = target_positions[0]
 
-        # Flanking logic makes target_x, target_y one of the adjacent spots of prey.
-        self.assertTrue((target_x, target_y) != (prey.x, prey.y))
-        dist_to_prey = abs(target_x - prey.x) + abs(target_y - prey.y)
-        self.assertEqual(dist_to_prey, 1)
+            self.assertTrue((target_x, target_y) != (prey.x, prey.y))
+            dist_to_prey = abs(target_x - prey.x) + abs(target_y - prey.y)
+            self.assertEqual(dist_to_prey, 1)
+        finally:
+            universe.find_path = original_find_path
 
 
     def test_dynamic_water_levels_drought_and_storm(self):

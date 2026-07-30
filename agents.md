@@ -29,6 +29,8 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+
+- [x] Implemented `is_filter_feeder` trait. Aquatic entities with this trait passively gain small amounts of energy while swimming in `water` or `deep-water` terrains, simulating filter feeding.
 - [x] Added missing genetic mutation unit tests for `is_infected` and `is_sleeping` traits in `tests/test_engine.py`.
 - [x] Implemented `is_mud_bather` trait. Entities with this trait recover hydration and stamina when on mud terrain.
 - [x] Added missing genetic mutation unit tests for 29 traits in `tests/test_engine.py`.
