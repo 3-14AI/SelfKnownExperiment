@@ -1,0 +1,78 @@
+'a' is used for is_aquatic.
+Let's use 'g' for `is_agile`? Wait, grep shows 'g' is used.
+What about '~' for agile? The visualizer uses alphabets mostly.
+Letters not in the list:
+- Y
+- J
+- T
+- f
+- h
+- i
+- m
+- o
+- r
+- s
+- z
+
+Let's use 'Y' for `is_agile`. Or 'J' (jump/agile). Let's use 'Y'.
+Wait, `is_agile` starts with a. We can use 'A' for agile? No, 'A' is used.
+Let's use 'Y' for agile.
+
+Wait, looking closely at `visualizer.py`:
+`char = 'Y'` is not there.
+
+Implementation details for `is_agile`:
+
+1. `src/universe/engine.py`
+Add `is_agile=False` to Entity `__init__`.
+```python
+is_agile=False
+self.is_agile = is_agile
+```
+In reproduction logic:
+```python
+child_is_agile = getattr(entity, 'is_agile', False)
+if random.random() < mutation_chance:
+    child_is_agile = not child_is_agile
+```
+Pass `is_agile=child_is_agile` to Entity instantiation.
+
+2. In `engine.py` combat logic:
+```python
+                        if getattr(prey_to_eat, 'is_agile', False) and random.random() < 0.25:
+                            escape_chance = 1.0
+```
+This is around line 1856 (carnivore) and 1928 (omnivore). But wait, does it apply to omnivore hunting as well? Omnivore hunting uses the same logic. I need to make sure I update both places or just check where escape_chance is computed.
+
+Actually, grep for `escape_chance = ` to find all locations.
+
+3. In `engine.py` stamina recovery (around line 1913 or so):
+```python
+                    recovery = 5 if entity.is_sleeping else 2
+                    if getattr(entity, 'is_agile', False):
+                        recovery += 3
+                    entity.stamina = min(getattr(entity, 'max_stamina', 50), getattr(entity, 'stamina', 50) + recovery)
+```
+
+4. `src/universe/visualizer.py`
+Add:
+```python
+elif getattr(entity, 'is_agile', False):
+    char = 'Y'
+```
+
+5. `tests/test_engine.py`
+Add:
+`test_is_agile_mutation`
+`test_is_agile_dodge`
+`test_is_agile_stamina_recovery`
+
+6. `tests/test_visualizer.py`
+Add:
+`test_render_is_agile`
+
+7. `agents.md`
+Add to `## Completed`:
+`- [x] Implemented \`is_agile\` trait. Entities with this trait have a 25% chance to completely dodge attacks regardless of combat stats, and they recover stamina much faster.`
+
+Let's check `escape_chance = ` in engine.py:
