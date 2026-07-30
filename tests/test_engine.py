@@ -5349,3 +5349,33 @@ class TestNocturnalPredator(unittest.TestCase):
         children = [e for e in universe.entities if e.generation == 1]
         if children:
             self.assertTrue(children[0].is_nocturnal_predator)
+
+class TestCannibal(unittest.TestCase):
+    def test_is_cannibalistic_mutation(self):
+        import unittest.mock
+        from universe.engine import Entity, Universe
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_cannibalistic=False, intelligence=10)
+        universe = Universe()
+        universe.add_entity(parent)
+        universe.population_limit = 100
+        universe.time = 0
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+        children = [e for e in universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], "is_cannibalistic", False))
+
+    def test_is_cannibalistic_eats_same_species(self):
+        from universe.engine import Entity, Universe
+        universe = Universe()
+        cannibal = Entity("Cannibal", x=5, y=5, size=1, energy=10, is_cannibalistic=True, diet='carnivore', species='Cannibal', max_stamina=100, stamina=100)
+        prey = Entity("Prey", x=5, y=6, size=1, energy=10, diet='carnivore', species='Cannibal', max_stamina=100, stamina=100)
+
+        universe.add_entity(cannibal)
+        universe.add_entity(prey)
+
+        nearest = universe.get_nearest_prey(5, 5, max_distance=10, entity=cannibal)
+        self.assertEqual(nearest, prey, "Cannibal should target its own species (even carnivore) when starving")
+
+        preys_at = universe.get_preys_at(5, 6, entity=cannibal)
+        self.assertIn(prey, preys_at, "Cannibal should consider its own species as prey when hungry")
