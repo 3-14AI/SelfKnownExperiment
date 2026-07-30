@@ -3741,9 +3741,11 @@ class TestUniverse(unittest.TestCase):
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', None) == 'egg']
         children = [e for e in universe.entities if e != parent]
-        self.assertTrue(len(children) > 0, "A child should have been born")
-        self.assertTrue(getattr(children[0], "is_mud_bather", False), "Child should have mutated is_mud_bather to True")
+        self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
+        child = children[0] if children else eggs[0].hatch_entity
+        self.assertTrue(getattr(child, "is_mud_bather", False), "Child should have mutated is_mud_bather to True")
 
     def test_has_blubber_mutation(self):
         universe = Universe(10, 10)
@@ -3839,6 +3841,9 @@ class TestMedicinalPlants(unittest.TestCase):
         self.universe.event_chance = 0.0
 
     def test_medicinal_cures_disease_and_poison(self):
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.population_limit = 0
         entity = Entity("sick_herbivore", x=1, y=1, diet='herbivore', energy=20)
         entity.is_infected = True
         entity.target_plants = ['generic', 'berry', 'leaf', 'flower', 'toxic_plant', 'medicinal']
@@ -4443,9 +4448,11 @@ class TestDetritivore(unittest.TestCase):
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', None) == 'egg']
         children = [e for e in universe.entities if e != parent]
-        self.assertTrue(len(children) > 0, "A child should have been born")
-        self.assertTrue(getattr(children[0], "is_filter_feeder", False), "Child should have mutated is_filter_feeder to True")
+        self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
+        child = children[0] if children else eggs[0].hatch_entity
+        self.assertTrue(getattr(child, "is_filter_feeder", False), "Child should have mutated is_filter_feeder to True")
 
     def test_is_filter_feeder_energy_gain(self):
         universe = Universe(width=10, height=10, population_limit=0)
@@ -4468,6 +4475,38 @@ class TestDetritivore(unittest.TestCase):
         universe.tick()
 
         self.assertEqual(feeder.energy, 41)
+
+
+    def test_is_gluttonous_overeat(self):
+        universe = Universe(width=10, height=10, population_limit=0)
+        e = Entity("Glutton", x=5, y=5, size=1, energy=50, max_stamina=100, stamina=100, is_gluttonous=True)
+        universe.add_entity(e)
+        from universe.engine import Food
+        universe.add_food(Food(x=5, y=5, energy=20))
+
+        start_energy = e.energy
+        universe.tick()
+
+        # Energy should be min(75, 50 - energy_loss + 20)
+        # base loss for size 1 is 1. gluttonous adds 1. so loss is 2.
+        # energy = 50 - 2 + 20 = 68
+        self.assertEqual(e.energy, 68)
+
+    def test_is_gluttonous_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.population_limit = 100
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_gluttonous=False, intelligence=10, lays_eggs=True, is_mud_bather=True)
+        universe.add_entity(parent)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', None) == 'egg']
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
+        child = children[0] if children else eggs[0].hatch_entity
+        self.assertTrue(getattr(child, "is_gluttonous", False), "Child should have mutated is_gluttonous to True")
 
 if __name__ == '__main__':
 
