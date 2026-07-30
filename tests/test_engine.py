@@ -3760,6 +3760,84 @@ class TestUniverse(unittest.TestCase):
         if children:
             self.assertTrue(children[0].has_blubber)
 
+
+    def test_is_infected(self):
+        universe = Universe(width=10, height=10)
+        # Prevent automatic spontaneous infections
+        universe.disease_chance = 0.0
+
+        # Disable stamina/sleep stuff
+        entity = Entity(name="E1", x=5, y=5, size=1, energy=50, is_infected=True, infection_time=0)
+        # Also need stamina logic disabled or initialized high to avoid sleep
+        entity.stamina = 50
+        entity.max_stamina = 50
+        universe.add_entity(entity)
+
+        # Normal base energy loss is 1 (size=1)
+        # Infected adds +1 energy loss
+        # So we expect 2 energy loss
+        universe.tick()
+        self.assertEqual(entity.energy, 48)
+        self.assertEqual(entity.infection_time, 1)
+        self.assertTrue(entity.is_infected)
+
+        # Test recovery (infection_time > 10 and random < 0.2)
+        entity.infection_time = 11
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.1): # < 0.2 forces recovery
+            universe.tick()
+
+        self.assertFalse(entity.is_infected)
+        self.assertEqual(entity.infection_time, 0)
+        self.assertTrue(entity.is_immune)
+
+        # Test spread
+        entity2 = Entity(name="E2", x=5, y=5, size=1, energy=50, is_infected=True)
+        entity3 = Entity(name="E3", x=6, y=6, size=1, energy=50, is_infected=False) # dist 2
+        entity4 = Entity(name="E4", x=8, y=8, size=1, energy=50, is_infected=False) # dist 6, too far
+
+        universe.entities = [entity2, entity3, entity4]
+        # Force spread chance (random < 0.1)
+        with unittest.mock.patch('random.random', return_value=0.05):
+            universe.tick()
+
+        self.assertTrue(entity3.is_infected)
+        self.assertFalse(entity4.is_infected)
+
+    def test_is_sleeping(self):
+        universe = Universe(width=10, height=10)
+        universe.time = 50  # Prevent tick 0 issues if any
+
+        # Base energy loss = 1, reduced by 3 when sleeping -> 0
+        entity = Entity(name="Sleeper", x=5, y=5, size=1, energy=20, max_stamina=50, stamina=10, is_sleeping=True)
+        # Make sure they don't move or lose energy from other means
+        entity.intelligence = 1
+        entity.can_spin_webs = False
+        universe.population_limit = 0 # No reproduction
+        universe.add_entity(entity)
+
+        # Add food nearby to normally trigger movement if not sleeping
+        from universe.engine import Food
+        universe.add_food(Food(x=6, y=5, energy=10))
+
+        start_x, start_y = entity.x, entity.y
+        start_energy = entity.energy
+
+        universe.tick()
+
+        # Should not move
+        self.assertEqual(entity.x, start_x)
+        self.assertEqual(entity.y, start_y)
+
+        # Should not lose base energy (base 1 - 3 sleeping = -2)
+        # However, there is a +1 base from size//2 in tests normally? No, energy_loss = entity.size.
+        # energy_loss = 1 - 3 = -2.
+        # entity.energy -= energy_loss -> entity.energy -= -2 -> +2
+        self.assertEqual(entity.energy, start_energy + 2)
+
+        # Stamina should recover by 5 instead of 2 since it's sleeping and stayed in place
+        self.assertEqual(entity.stamina, 15)
+
 class TestMedicinalPlants(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
@@ -4974,6 +5052,8 @@ class TestCarnivorousPlant(unittest.TestCase):
         self.assertTrue(large_entity.is_alive)
         self.assertEqual(plant.size, 3)
         self.assertEqual(plant.max_size, 3)
+
+
 
 
 class TestPackHunterFlanking(unittest.TestCase):
