@@ -126,6 +126,8 @@ class CLIVisualizer:
                         char = 'u'
                     elif getattr(entity, 'is_gluttonous', False):
                         char = 'x'
+                    elif getattr(entity, 'is_cannibalistic', False):
+                        char = 'J'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
