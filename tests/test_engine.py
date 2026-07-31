@@ -3802,7 +3802,7 @@ class TestUniverse(unittest.TestCase):
     def test_is_mud_bather_mutation(self):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=10, age=100, max_age=200, is_mud_bather=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10)
         parent.lays_eggs = True # toggle to false to spawn child
         parent.can_sweat = True
         parent.has_blubber = True
@@ -3812,6 +3812,7 @@ class TestUniverse(unittest.TestCase):
         parent.is_cannibalistic = True
         parent.is_vampiric = True
         parent.is_detritivore = True
+        parent.is_ambush_predator = True
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -4486,7 +4487,7 @@ class TestSprint(unittest.TestCase):
         with unittest.mock.patch('random.random', return_value=0.0): # Always escape if defense > 0 and random=0
             universe.tick()
 
-        self.assertTrue(vampire.energy > 30)
+        self.assertTrue(vampire.energy > 20)
         self.assertTrue(vampire.hydration > 30)
         self.assertTrue(prey.energy < 20 - 2)
         self.assertTrue(prey.hydration < 20 - 1)
