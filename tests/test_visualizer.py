@@ -346,6 +346,32 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('u', output)
 
 
+
+    def test_render_is_ambush_predator(self):
+        universe = Universe(10, 10)
+        e = Entity("Ambush", x=2, y=2, is_ambush_predator=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('h', output)
+
+    def test_render_is_solitary(self):
+        universe = Universe(10, 10)
+        e = Entity("Solitary", x=2, y=2, is_solitary=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('Y', output)
+
+
+    def test_render_can_sprint(self):
+        universe = Universe(10, 10)
+        e = Entity("Sprinter", x=2, y=2, can_sprint=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('r', output)
+
     def test_render_is_gluttonous(self):
         universe = Universe(10, 10)
         e = Entity("Glutton", x=2, y=2, is_gluttonous=True)
