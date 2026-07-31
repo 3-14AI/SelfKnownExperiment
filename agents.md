@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implement `is_desertic` trait. Entities with this trait suffer half hydration loss in hot climates and gain an energy efficiency bonus when traversing `sand` terrain.
 - [x] Implemented `is_ambush_predator` trait. Entities with this trait deal double damage during combat if they attack while having camouflage.
 - [x] Implemented `is_cannibalistic` trait. Entities with this trait will occasionally attack and eat entities of the same species if their energy is critically low.
 - [x] Implemented `is_solitary` trait. Entities with this trait gain an energy efficiency buff when alone, but suffer an energy penalty when near other entities of the same species.
@@ -50,7 +51,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Add dynamic water levels. `water` and `deep-water` biomes can dry out into `mud` during extreme droughts or expand during heavy storms, forcing amphibious/aquatic entities to migrate.
 - [x] Introduce a `disease_vector` trait for scavenger entities, causing them to spread disease more rapidly when interacting with corpses.
 - [x] Implemented `is_carnivorous_plant` trait. Plants with this trait can consume small entities that move onto their tile, gaining energy and growing larger.
-- [x] Implement `is_desertic` trait. Entities with this trait suffer half hydration loss in hot climates and gain an energy efficiency bonus when traversing `sand` terrain.
 - [x] Implemented `has_bioluminescence` trait. Entities with this trait bypass night vision penalties for themselves, but are easily spotted by predators at night.
 - [x] Implemented elevation and height map mechanics. Entities are affected by elevation changes (uphill costs more stamina, steep downhill causes slight damage), while flying entities ignore elevation.
 - [x] Implement a `can_climb` trait allowing entities to traverse 'wall' terrain blocks, simulating climbing over obstacles.
