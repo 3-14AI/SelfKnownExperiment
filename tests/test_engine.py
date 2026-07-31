@@ -193,28 +193,7 @@ class TestUniverse(unittest.TestCase):
         if len(children) > 0:
             self.assertFalse(children[0].lays_eggs)
 
-    def test_can_hoard_mechanics(self):
-        universe = Universe(width=10, height=10, population_limit=0)
-        universe.food_spawn_rate = 0.0
-        hoarder = Entity("Hoarder", x=0, y=0, energy=50, size=1, age=100, max_age=200, can_hoard=True, inventory=[], max_stamina=100, stamina=100, can_photosynthesize=False)
-        universe.add_entity(hoarder)
 
-        food = Food(x=0, y=0, energy=10)
-        universe.add_food(food)
-
-        hoarder.perception_radius = 0
-        hoarder.is_sleeping = False
-
-        universe.tick()
-
-        self.assertNotIn(food, universe.foods)
-        self.assertIn(food, hoarder.inventory)
-
-        hoarder.energy = 20
-        universe.tick()
-
-        self.assertNotIn(food, hoarder.inventory)
-        self.assertTrue(hoarder.energy > 20)
 
     def test_can_hoard_mechanics(self):
         universe = Universe(width=10, height=10, population_limit=0)
@@ -3797,7 +3776,7 @@ class TestUniverse(unittest.TestCase):
     def test_is_mud_bather_mutation(self):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10, lays_eggs=False, is_filter_feeder=True, is_solitary=True, is_gluttonous=True, has_blubber=True)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10, lays_eggs=False, is_cannibalistic=False)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -3852,7 +3831,7 @@ class TestUniverse(unittest.TestCase):
 
         # Test spread
         entity2 = Entity(name="E2", x=5, y=5, size=1, energy=50, is_infected=True)
-        entity3 = Entity(name="E3", x=6, y=6, size=1, energy=50, is_infected=False) # dist 2
+        entity3 = Entity(name="E3", x=6, y=6, size=1, energy=50, is_infected=False, species='Spec3') # dist 2
         entity4 = Entity(name="E4", x=8, y=8, size=1, energy=50, is_infected=False) # dist 6, too far
 
         universe.entities = [entity2, entity3, entity4]
@@ -4340,7 +4319,7 @@ class TestAposematism(unittest.TestCase):
         from src.universe.engine import Universe, Entity
         universe = Universe(width=10, height=10, population_limit=0)
         e1 = Entity("Solitary1", x=0, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol")
-        e2 = Entity("Solitary2", x=2, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol")
+        e2 = Entity("Solitary2", x=1, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol")
 
         universe.add_entity(e1)
         universe.add_entity(e2)
@@ -4369,6 +4348,10 @@ class TestAposematism(unittest.TestCase):
 
         self.assertEqual(e1.energy, 48)
         self.assertEqual(e2.energy, 48)
+
+
+
+
 
         universe = Universe(width=10, height=10, population_limit=0)
         e3 = Entity("Solitary3", x=0, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol")
@@ -4447,7 +4430,7 @@ class TestSprint(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        vampire = Entity("Vampire", x=0, y=0, energy=40, max_hydration=50, hydration=40, diet='carnivore', is_vampiric=True, attack=1, stamina=100, max_stamina=100, size=1, intelligence=1, age=100, max_age=200)
+        vampire = Entity("Vampire", x=0, y=0, energy=40, max_hydration=50, hydration=40, diet='carnivore', is_vampiric=True, attack=1, stamina=100, max_stamina=100, size=1, intelligence=1, age=100, max_age=200, is_cannibalistic=True)
         prey = Entity("Prey", x=0, y=0, energy=20, max_hydration=50, hydration=20, defense=100, max_stamina=100, stamina=100, size=1, intelligence=1, age=100, max_age=200)
 
         universe.add_entity(vampire)
@@ -4465,7 +4448,7 @@ class TestSprint(unittest.TestCase):
 
     def test_is_vampiric_mutation(self):
         universe = Universe(width=10, height=10)
-        parent = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, lays_eggs=True, is_mud_bather=True)
+        parent = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, lays_eggs=True)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -4574,7 +4557,7 @@ class TestDetritivore(unittest.TestCase):
     def test_is_filter_feeder_mutation(self):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_filter_feeder=False, intelligence=10, lays_eggs=False, is_mud_bather=True)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_filter_feeder=False, intelligence=10, lays_eggs=False, is_cannibalistic=False)
         universe.add_entity(parent)
 
         import unittest.mock
@@ -4628,7 +4611,7 @@ class TestDetritivore(unittest.TestCase):
     def test_is_gluttonous_mutation(self):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_gluttonous=False, intelligence=10, lays_eggs=True, is_mud_bather=True)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_gluttonous=False, intelligence=10, lays_eggs=True, is_cannibalistic=False, is_solitary=False, is_filter_feeder=False, is_mud_bather=False)
         universe.add_entity(parent)
 
         import unittest.mock

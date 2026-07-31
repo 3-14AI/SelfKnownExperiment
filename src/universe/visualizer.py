@@ -128,6 +128,8 @@ class CLIVisualizer:
                         char = 'x'
                     elif getattr(entity, 'can_hoard', False):
                         char = 'h'
+                    elif getattr(entity, 'can_hoard', False):
+                        char = 'h'
                     elif getattr(entity, 'is_cannibalistic', False):
                         char = 'J'
                     elif diet == 'carnivore':
