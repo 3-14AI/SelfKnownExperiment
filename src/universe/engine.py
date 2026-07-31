@@ -266,8 +266,6 @@ class Universe:
             stamina_cost = 1
             if getattr(entity, 'can_climb', False) and any(t.terrain_type == 'wall' for t in terrains_here):
                 stamina_cost = 2
-            if getattr(entity, 'is_desertic', False) and any(t.terrain_type == 'sand' for t in terrains_here):
-                stamina_cost = 0
 
             if not getattr(entity, 'is_flying', False):
                 if elevation_diff > 0:
@@ -923,7 +921,7 @@ class Universe:
                 hydration_loss = 1
                 if getattr(entity, 'has_scales', False) and self.time % 2 == 1:
                     hydration_loss = 0
-                if getattr(entity, 'is_desertic', False) and current_temp >= 25 and self.time % 2 == 1:
+                if getattr(entity, 'is_desertic', False) and current_temp > getattr(entity, 'preferred_temperature', 20) + getattr(entity, 'temperature_tolerance', 40) and self.time % 2 == 1:
                     hydration_loss = 0
                 if getattr(entity, 'can_sweat', False) and entity.hydration > 5 and current_temp > getattr(entity, 'preferred_temperature', 20) + getattr(entity, 'temperature_tolerance', 40):
                     hydration_loss += 1
@@ -966,6 +964,10 @@ class Universe:
 
                 if getattr(entity, 'is_volcanic', False) and any(t.terrain_type == 'ash' for t in self.get_terrains_at(entity.x, entity.y)):
                     energy_loss -= 3
+
+
+                if getattr(entity, 'is_desertic', False) and any(t.terrain_type == 'sand' for t in self.get_terrains_at(entity.x, entity.y)):
+                    energy_loss -= 1
 
                 if getattr(entity, 'is_filter_feeder', False) and getattr(entity, 'is_aquatic', False):
                     if any(t.terrain_type in ['water', 'deep-water'] for t in self.get_terrains_at(entity.x, entity.y)):
