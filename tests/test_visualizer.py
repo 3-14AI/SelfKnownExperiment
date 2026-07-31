@@ -354,6 +354,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('x', output)
 
+
+    def test_render_can_hoard(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestHoarder", x=1, y=1, can_hoard=True))
+        viz = CLIVisualizer(universe)
+        out = viz.render()
+        self.assertIn('h', out)
+
 if __name__ == '__main__':
 
 

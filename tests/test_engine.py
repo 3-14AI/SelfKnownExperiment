@@ -193,6 +193,52 @@ class TestUniverse(unittest.TestCase):
         if len(children) > 0:
             self.assertFalse(children[0].lays_eggs)
 
+    def test_can_hoard_mechanics(self):
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.food_spawn_rate = 0.0
+        hoarder = Entity("Hoarder", x=0, y=0, energy=50, size=1, age=100, max_age=200, can_hoard=True, inventory=[], max_stamina=100, stamina=100, can_photosynthesize=False)
+        universe.add_entity(hoarder)
+
+        food = Food(x=0, y=0, energy=10)
+        universe.add_food(food)
+
+        hoarder.perception_radius = 0
+        hoarder.is_sleeping = False
+
+        universe.tick()
+
+        self.assertNotIn(food, universe.foods)
+        self.assertIn(food, hoarder.inventory)
+
+        hoarder.energy = 20
+        universe.tick()
+
+        self.assertNotIn(food, hoarder.inventory)
+        self.assertTrue(hoarder.energy > 20)
+
+    def test_can_hoard_mechanics(self):
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.food_spawn_rate = 0.0
+        hoarder = Entity("Hoarder", x=0, y=0, energy=50, size=1, age=100, max_age=200, can_hoard=True, inventory=[], max_stamina=100, stamina=100, can_photosynthesize=False)
+        universe.add_entity(hoarder)
+
+        food = Food(x=0, y=0, energy=10)
+        universe.add_food(food)
+
+        hoarder.perception_radius = 0
+        hoarder.is_sleeping = False
+
+        universe.tick()
+
+        self.assertNotIn(food, universe.foods)
+        self.assertIn(food, hoarder.inventory)
+
+        hoarder.energy = 20
+        universe.tick()
+
+        self.assertNotIn(food, hoarder.inventory)
+        self.assertTrue(hoarder.energy > 20)
+
     def test_can_hoard_mutation(self):
         universe = Universe(width=10, height=10)
         import unittest.mock

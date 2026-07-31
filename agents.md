@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implement test coverage and visualizer rendering for the `can_hoard` trait.
 - [x] Implemented `is_cannibalistic` trait. Entities with this trait will occasionally attack and eat entities of the same species if their energy is critically low.
 - [x] Implemented `is_solitary` trait. Entities with this trait gain an energy efficiency buff when alone, but suffer an energy penalty when near other entities of the same species.
 - [x] Implemented `is_gluttonous` trait. Entities with this trait can overeat beyond their maximum energy capacity (up to 1.5x) but suffer increased passive energy drain.
