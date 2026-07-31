@@ -354,6 +354,37 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('u', output)
 
 
+
+    def test_render_is_solitary(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestSolitary", x=1, y=1, is_solitary=True))
+        output = CLIVisualizer(universe).render()
+        self.assertIn('h', output)
+
+    def test_render_is_cannibalistic(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestCannibal", x=1, y=1, is_cannibalistic=True))
+        output = CLIVisualizer(universe).render()
+        self.assertIn('J', output)
+
+    def test_render_is_mud_bather(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestMudBather", x=1, y=1, is_mud_bather=True))
+        output = CLIVisualizer(universe).render()
+        self.assertIn('n', output)
+
+    def test_render_can_sprint(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestSprinting", x=1, y=1, can_sprint=True))
+        output = CLIVisualizer(universe).render()
+        self.assertIn('r', output)
+
+    def test_render_is_carnivorous_plant(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestCarnPlant", x=1, y=1, is_carnivorous_plant=True))
+        output = CLIVisualizer(universe).render()
+        self.assertIn('c', output)
+
     def test_render_is_gluttonous(self):
         universe = Universe(10, 10)
         e = Entity("Glutton", x=2, y=2, is_gluttonous=True)
