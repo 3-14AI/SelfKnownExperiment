@@ -260,3 +260,11 @@ These changes highlight the agents' ability to layer interdependent mechanics, c
 ### Analysis 51: Sweating Trait
 - **Description**: Implemented `can_sweat` trait.
 - **Analysis**: Entities with this trait avoid heat-based energy penalties in hot environments but suffer increased hydration loss. This creates a tradeoff where survival in hot climates is possible but requires a constant supply of water.
+
+### Analysis 52: Ambush Predator Trait
+- **Description**: Implemented `is_ambush_predator` trait.
+- **Agent Action**:
+  - Added `is_ambush_predator` trait to `Entity.__init__` and its mutation/inheritance logic.
+  - Modified combat logic in `Universe.tick()` allowing ambush predators to deal 2x effective attack damage during combat if they have a camouflage value > 0.0.
+  - Added comprehensive unit tests to verify the trait's mechanics.
+- **Analysis**: The `is_ambush_predator` trait creates a strong synergy with the camouflage system. It enables entities to become highly lethal hunters by utilizing stealth, adding a layer of strategic positioning and rewarding evolutionary pathways that combine both stealth and predatory attributes.
