@@ -1705,6 +1705,7 @@ class Universe:
                                 effective_attack *= 1.5
                             if getattr(entity, 'is_ambush_predator', False) and getattr(entity, 'camouflage', 0.0) > 0.0:
                                 effective_attack *= 2.0
+                                entity.stamina = max(0, entity.stamina - 10)
                             if getattr(entity, 'stamina', 50) <= 10:
                                 effective_attack *= 0.5
                             effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)
@@ -1867,6 +1868,7 @@ class Universe:
                             effective_attack *= 1.5
                         if getattr(entity, 'is_ambush_predator', False) and getattr(entity, 'camouflage', 0.0) > 0.0:
                             effective_attack *= 2.0
+                            entity.stamina = max(0, entity.stamina - 10)
                         if getattr(entity, 'stamina', 50) <= 10:
                             effective_attack *= 0.5
                         effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)

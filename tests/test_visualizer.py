@@ -225,6 +225,14 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertEqual(visualizer.render(), expected_output)
 
 
+
+    def test_render_is_ambush_predator(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestAmbushPredator", x=1, y=1, is_ambush_predator=True))
+        output = CLIVisualizer(universe).render()
+        # Verify the character we assign in the visualizer for ambush predator (e.g., 'a') is present
+        self.assertIn('m', output)
+
     def test_render_is_social(self):
         from universe.engine import Universe, Entity
         from universe.visualizer import CLIVisualizer
