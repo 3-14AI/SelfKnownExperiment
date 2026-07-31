@@ -3764,10 +3764,54 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(entity.hydration, 41)
         self.assertTrue(entity.stamina > initial_stamina)
 
+
+    def test_is_ambush_predator_mutation(self):
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_ambush_predator=False, intelligence=10)
+        e.lays_eggs = True # toggle to false to spawn child
+
+        universe = Universe(width=10, height=10)
+        universe.time = 25
+        universe.population_limit = 100
+        universe.add_entity(e)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent.name == "Parent_child"]
+        if children:
+            self.assertTrue(children[0].is_ambush_predator)
+
+    def test_is_ambush_predator_combat(self):
+        universe = Universe(width=10, height=10)
+        # Using a very high defense prey that would normally win against attack=1
+        prey = Entity("Prey", x=1, y=1, defense=10, max_stamina=100, stamina=100, size=1)
+        # Ambush predator with attack=6. With camouflage > 0, it gets x2 attack = 12.
+        predator = Entity("AmbushPredator", x=1, y=1, attack=6, max_stamina=100, stamina=100, size=1, is_ambush_predator=True, camouflage=0.5, diet='carnivore', target_species=["Prey"], energy=5)
+
+        # Add prey first to list, then predator, so predator attacks during its turn
+        universe.add_entity(prey)
+        universe.add_entity(predator)
+
+        prey_health_before = prey.energy
+
+        with unittest.mock.patch('random.random', return_value=1.0): # mock random so prey doesn't run away immediately if there's any chance
+            universe.tick()
+
+        self.assertFalse(prey.is_alive)
+
     def test_is_mud_bather_mutation(self):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10, lays_eggs=True)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=10, age=100, max_age=200, is_mud_bather=False, intelligence=10)
+        parent.lays_eggs = True # toggle to false to spawn child
+        parent.can_sweat = True
+        parent.has_blubber = True
+        parent.is_filter_feeder = True
+        parent.is_gluttonous = True
+        parent.is_solitary = True
+        parent.is_cannibalistic = True
+        parent.is_vampiric = True
+        parent.is_detritivore = True
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -4339,7 +4383,7 @@ class TestAposematism(unittest.TestCase):
         e2.preferred_temperature = 20
         e1.temperature_tolerance = 40
         e2.temperature_tolerance = 40
-        universe.time = 50
+        universe.time = 25
 
         e1.perception_radius = 0
         e2.perception_radius = 0
@@ -4431,6 +4475,7 @@ class TestSprint(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
+        universe.time = 25
         vampire = Entity("Vampire", x=0, y=0, energy=40, max_hydration=50, hydration=40, diet='carnivore', is_vampiric=True, attack=1, stamina=100, max_stamina=100, size=1, intelligence=1, age=100, max_age=200, lays_eggs=False, is_mud_bather=False)
         prey = Entity("Prey", x=0, y=0, energy=20, max_hydration=50, hydration=20, defense=100, max_stamina=100, stamina=100, size=1, intelligence=1, age=100, max_age=200)
 
