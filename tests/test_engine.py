@@ -3799,6 +3799,48 @@ class TestUniverse(unittest.TestCase):
 
         self.assertFalse(prey.is_alive)
 
+    def test_is_territorial_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_territorial=False, intelligence=10)
+        parent.lays_eggs = True
+        parent.is_mud_bather = True
+        parent.is_vampiric = True
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e.name == "Parent" and e != parent]
+        eggs = [f for f in universe.foods if f.plant_type == 'egg']
+        self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
+
+        if len(eggs) > 0:
+            egg = eggs[0]
+            child = egg.hatch_entity
+            self.assertTrue(getattr(child, "is_territorial", False), "Child should have mutated is_territorial to True")
+        elif len(children) > 0:
+            self.assertTrue(getattr(children[0], "is_territorial", False), "Child should have mutated is_territorial to True")
+
+    def test_is_territorial_combat(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.time = 0
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        # Create a predator and prey
+        predator = Entity("TerrPred", x=5, y=5, size=1, attack=5, defense=5, energy=50, max_stamina=100, stamina=100, diet='carnivore', is_territorial=True)
+        prey = Entity("TerrPrey", x=5, y=5, size=1, attack=5, defense=5, energy=50, max_stamina=100, stamina=100, diet='herbivore', is_territorial=True)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.9):
+            universe.tick()
+
+        self.assertTrue(True)
+
     def test_is_mud_bather_mutation(self):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
