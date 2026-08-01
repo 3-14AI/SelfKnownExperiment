@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implemented `is_territorial` trait. Entities with this trait gain an attack and defense bonus during combat.
 - [x] Implement `is_desertic` trait. Entities with this trait suffer half hydration loss in hot climates and gain an energy efficiency bonus when traversing `sand` terrain.
 - [x] Implemented `is_ambush_predator` trait. Entities with this trait deal double damage during combat if they attack while having camouflage.
 - [x] Implemented `is_cannibalistic` trait. Entities with this trait will occasionally attack and eat entities of the same species if their energy is critically low.
