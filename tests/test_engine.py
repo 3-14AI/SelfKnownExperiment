@@ -4702,9 +4702,9 @@ class TestSprint(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
 
-        vampire = Entity("Vampire", x=5, y=5, energy=20, hydration=20, max_hydration=100, diet='carnivore', attack=10, is_vampiric=True, stamina=100, max_stamina=100, intelligence=1, perception_radius=0)
+        vampire = Entity("Vampire", x=5, y=5, size=1, energy=20, hydration=20, max_hydration=100, diet='carnivore', attack=10, is_vampiric=True, stamina=100, max_stamina=100, intelligence=1, perception_radius=0, can_spin_webs=False, is_migratory=False)
         # Give prey massive defense so it escapes
-        prey = Entity("Prey", x=5, y=5, energy=50, hydration=50, max_hydration=100, defense=10000, stamina=100, max_stamina=100, intelligence=1, perception_radius=0)
+        prey = Entity("Prey", x=5, y=5, size=1, energy=50, hydration=50, max_hydration=100, defense=10000, stamina=100, max_stamina=100, intelligence=1, perception_radius=0, is_migratory=False)
 
         universe.add_entity(vampire)
         universe.add_entity(prey)
