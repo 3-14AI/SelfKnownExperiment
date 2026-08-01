@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implemented `is_frugivore` trait. Entities with this trait get double energy from eating `fruit` food types.
 - [x] Implemented `is_cooperative` trait. Entities with this trait share energy with struggling nearby members of the same species.
 - [x] Implemented `is_nocturnal` trait. Entities with this trait sleep during the day and are active at night, reversing the standard sleep cycle.
 - [x] Implemented `has_horns` trait. Entities with this trait gain a +2 bonus to their effective attack and +1 to their effective defense during combat.
