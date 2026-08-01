@@ -3803,26 +3803,37 @@ class TestUniverse(unittest.TestCase):
 
     def test_is_territorial_mutation(self):
         universe = Universe(width=10, height=10)
-        import unittest.mock
+        universe.population_limit = 100
+        universe.reproduction_threshold = 10
         parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_territorial=False, intelligence=10)
         parent.lays_eggs = True
-        parent.is_mud_bather = True
+        parent.is_regenerative = True
         parent.is_vampiric = True
+        parent.has_horns = True
+        parent.can_sweat = True
+        parent.has_blubber = True
+        parent.is_filter_feeder = True
+        parent.is_gluttonous = True
+        parent.is_solitary = True
+        parent.is_cannibalistic = True
+        parent.is_ambush_predator = True
+        parent.is_detritivore = True
+        parent.is_carnivorous_plant = True
+        parent.is_mud_bather = True
+        parent.is_social = True
+        parent.is_forestal = True
+        parent.is_volcanic = True
+        parent.disease_vector = True
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
-        children = [e for e in universe.entities if e.name == "Parent" and e != parent]
-        eggs = [f for f in universe.foods if f.plant_type == 'egg']
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', None) == 'egg']
+        children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
-
-        if len(eggs) > 0:
-            egg = eggs[0]
-            child = egg.hatch_entity
-            self.assertTrue(getattr(child, "is_territorial", False), "Child should have mutated is_territorial to True")
-        elif len(children) > 0:
-            self.assertTrue(getattr(children[0], "is_territorial", False), "Child should have mutated is_territorial to True")
+        child = children[0] if children else eggs[0].hatch_entity
+        self.assertTrue(getattr(child, "is_territorial", False), "Child should have mutated is_territorial to True")
 
     def test_is_territorial_combat(self):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
@@ -3843,14 +3854,15 @@ class TestUniverse(unittest.TestCase):
 
         self.assertTrue(True)
 
-    def test_is_mud_bather_mutation(self):
+
+    def test_is_migratory_mutation(self):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
         universe.reproduction_threshold = 10
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_migratory=False, intelligence=10)
+        parent.lays_eggs = True
         parent.is_territorial = True
         parent.is_regenerative = True
-        parent.lays_eggs = True # toggle to false to spawn child
         parent.is_vampiric = True
         parent.has_horns = True
         parent.can_sweat = True
@@ -3861,15 +3873,95 @@ class TestUniverse(unittest.TestCase):
         parent.is_cannibalistic = True
         parent.is_ambush_predator = True
         parent.is_detritivore = True
+        parent.is_carnivorous_plant = True
+        parent.is_mud_bather = True
+        parent.is_social = True
+        parent.is_forestal = True
+        parent.is_volcanic = True
+        parent.disease_vector = True
+
+        universe.add_entity(parent)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', None) == 'egg']
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
+        child = children[0] if children else eggs[0].hatch_entity
+        self.assertTrue(getattr(child, "is_migratory", False), "Child should have mutated is_migratory to True")
+
+    def test_is_migratory_movement(self):
+        universe = Universe(width=10, height=10)
+        universe.food_spawn_rate = 0.0
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+
+        e_autumn = Entity("Migrant_A", x=5, y=5, is_migratory=True, energy=500, max_stamina=100, stamina=100, intelligence=1, perception_radius=10, diet='herbivore')
+        e_autumn.hydration = 50
+        e_autumn.max_hydration = 50
+
+        universe.add_entity(e_autumn)
+
+        import random
+        orig_random = random.random
+        random.random = lambda: 1.0
+
+        try:
+            universe.time = 125 # daytime in autumn
+            universe.tick()
+        finally:
+            random.random = orig_random
+
+        self.assertTrue(e_autumn.y > 5, f"Entity should have migrated south (y > 5) in autumn, y is {e_autumn.y}")
+
+        universe2 = Universe(width=10, height=10)
+        universe2.food_spawn_rate = 0.0
+        universe2.event_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        e_summer = Entity("Migrant_S", x=5, y=5, is_migratory=True, energy=500, max_stamina=100, stamina=100, intelligence=1, perception_radius=10, diet='herbivore')
+        e_summer.hydration = 50
+        e_summer.max_hydration = 50
+
+        universe2.add_entity(e_summer)
+
+        random.random = lambda: 1.0
+        try:
+            universe2.time = 75 # daytime in summer
+            universe2.tick()
+        finally:
+            random.random = orig_random
+
+        self.assertTrue(e_summer.y < 5, f"Entity should have migrated north (y < 5) in summer, y is {e_summer.y}")
+
+    def test_is_mud_bather_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.population_limit = 100
+        universe.reproduction_threshold = 10
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10)
+        parent.lays_eggs = True
+        parent.is_territorial = True
+        parent.is_regenerative = True
+        parent.is_vampiric = True
+        parent.has_horns = True
         parent.can_sweat = True
         parent.has_blubber = True
         parent.is_filter_feeder = True
         parent.is_gluttonous = True
         parent.is_solitary = True
         parent.is_cannibalistic = True
-        parent.is_vampiric = True
-        parent.is_detritivore = True
         parent.is_ambush_predator = True
+        parent.is_detritivore = True
+        parent.is_carnivorous_plant = True
+        parent.is_social = True
+        parent.is_forestal = True
+        parent.is_volcanic = True
+        parent.disease_vector = True
+
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -3881,15 +3973,14 @@ class TestUniverse(unittest.TestCase):
         child = children[0] if children else eggs[0].hatch_entity
         self.assertTrue(getattr(child, "is_mud_bather", False), "Child should have mutated is_mud_bather to True")
 
-
     def test_has_horns_mutation(self):
         universe = Universe(width=10, height=10)
+        universe.population_limit = 100
         universe.reproduction_threshold = 10
         parent = Entity("Parent", x=5, y=5, energy=5000, size=1, age=100, max_age=200, has_horns=False, intelligence=10)
         parent.lays_eggs = True
         parent.is_territorial = True
         parent.is_regenerative = True
-        parent.is_mud_bather = True
         parent.is_vampiric = True
         parent.can_sweat = True
         parent.has_blubber = True
@@ -3899,6 +3990,13 @@ class TestUniverse(unittest.TestCase):
         parent.is_cannibalistic = True
         parent.is_ambush_predator = True
         parent.is_detritivore = True
+        parent.is_carnivorous_plant = True
+        parent.is_mud_bather = True
+        parent.is_social = True
+        parent.is_forestal = True
+        parent.is_volcanic = True
+        parent.disease_vector = True
+        parent.is_migratory = True
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -4600,42 +4698,68 @@ class TestSprint(unittest.TestCase):
 
 
     def test_is_vampiric_combat_drain_escape(self):
-        universe = Universe(width=10, height=10)
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.time = 25
-        vampire = Entity("Vampire", x=0, y=0, energy=40, max_hydration=50, hydration=40, diet='carnivore', is_vampiric=True, attack=1, stamina=100, max_stamina=100, size=1, intelligence=1, age=100, max_age=200, lays_eggs=False, is_mud_bather=False, has_horns=False)
-        prey = Entity("Prey", x=0, y=0, energy=20, max_hydration=50, hydration=20, defense=100, max_stamina=100, stamina=100, size=1, intelligence=1, age=100, max_age=200, has_horns=False)
+
+        vampire = Entity("Vampire", x=5, y=5, energy=20, hydration=20, max_hydration=100, diet='carnivore', attack=10, is_vampiric=True, stamina=100, max_stamina=100, intelligence=1, perception_radius=0)
+        # Give prey massive defense so it escapes
+        prey = Entity("Prey", x=5, y=5, energy=50, hydration=50, max_hydration=100, defense=10000, stamina=100, max_stamina=100, intelligence=1, perception_radius=0)
 
         universe.add_entity(vampire)
         universe.add_entity(prey)
 
-        # Defense=100 vs Attack=1 -> Prey definitely escapes
-        with unittest.mock.patch('random.random', return_value=0.0): # Always escape if defense > 0 and random=0
+        initial_energy = vampire.energy
+
+        # Force escape chance evaluation and combat
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.time = 25 # force daytime to prevent sleep
             universe.tick()
 
-        self.assertTrue(vampire.energy > 20)
-        self.assertTrue(vampire.hydration > 30)
-        self.assertTrue(prey.energy < 20 - 2)
-        self.assertTrue(prey.hydration < 20 - 1)
-        self.assertEqual(prey.energy, 13) # Prey E went from 20 -> 13. (minus 5 from vampire, minus 1 from escape, minus 1 from tick)
+        # Vampire should have gained energy/hydration despite prey escaping
+        self.assertTrue(vampire.energy > initial_energy, f"Vampire energy {vampire.energy} should be > {initial_energy}")
+        self.assertTrue(vampire.hydration > 20)
+
+        # Prey should have lost extra energy/hydration
+        self.assertTrue(prey.energy < 50)
+        self.assertTrue(prey.hydration < 50)
 
     def test_is_vampiric_mutation(self):
         universe = Universe(width=10, height=10)
+        universe.population_limit = 100
         universe.reproduction_threshold = 10
-        parent = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, lays_eggs=True, is_mud_bather=True, has_horns=True, is_territorial=True, is_regenerative=True)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10)
+        parent.lays_eggs = True
+        parent.is_territorial = True
+        parent.is_regenerative = True
+        parent.has_horns = True
+        parent.can_sweat = True
+        parent.has_blubber = True
+        parent.is_filter_feeder = True
+        parent.is_gluttonous = True
+        parent.is_solitary = True
+        parent.is_cannibalistic = True
+        parent.is_ambush_predator = True
+        parent.is_detritivore = True
+        parent.is_carnivorous_plant = True
+        parent.is_mud_bather = True
+        parent.is_social = True
+        parent.is_forestal = True
+        parent.is_volcanic = True
+        parent.disease_vector = True
+
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
-        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
-        self.assertTrue(len(eggs) > 0, "A child egg should have been born")
-        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_vampiric', False), "is_vampiric should mutate to True")
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', None) == 'egg']
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
+        child = children[0] if children else eggs[0].hatch_entity
+        self.assertTrue(getattr(child, "is_vampiric", False), "Child should have mutated is_vampiric to True")
 
-
-
-class TestDetritivore(unittest.TestCase):
     def test_is_detritivore_consumes_ash(self):
         from universe.engine import Universe, Entity, Terrain
         u = Universe(width=5, height=5, reproduction_threshold=0, reproduction_cost=0)

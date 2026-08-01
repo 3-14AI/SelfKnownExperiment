@@ -139,3 +139,4 @@ Godspeed, Agent. The universe is in your hands.
 ## Next Steps
 
 
+- [ ] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.

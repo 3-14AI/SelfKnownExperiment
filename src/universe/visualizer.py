@@ -136,6 +136,8 @@ class CLIVisualizer:
                         char = 'h'
                     elif getattr(entity, 'can_sprint', False):
                         char = 'r'
+                    elif getattr(entity, 'is_migratory', False):
+                        char = 'z'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
