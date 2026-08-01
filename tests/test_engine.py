@@ -4169,6 +4169,74 @@ class TestUniverse(unittest.TestCase):
         # Stamina should recover by 5 instead of 2 since it's sleeping and stayed in place
         self.assertEqual(entity.stamina, 15)
 
+
+    def test_is_cooperative_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.population_limit = 100
+        universe.reproduction_threshold = 10
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_cooperative=False, intelligence=10)
+        parent.lays_eggs = True
+        parent.is_territorial = True
+        parent.is_regenerative = True
+        parent.is_vampiric = True
+        parent.has_horns = True
+        parent.can_sweat = True
+        parent.has_blubber = True
+        parent.is_filter_feeder = True
+        parent.is_gluttonous = True
+        parent.is_solitary = True
+        parent.is_cannibalistic = True
+        parent.is_ambush_predator = True
+        parent.is_detritivore = True
+        parent.is_carnivorous_plant = True
+        parent.is_mud_bather = True
+        parent.is_social = True
+        parent.is_forestal = True
+        parent.is_volcanic = True
+        parent.disease_vector = True
+        parent.is_migratory = True
+
+        universe.add_entity(parent)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', None) == 'egg']
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
+        child = children[0] if children else eggs[0].hatch_entity
+        self.assertTrue(getattr(child, "is_cooperative", False), "Child should have mutated is_cooperative to True")
+
+    def test_is_cooperative_sharing(self):
+        universe = Universe(width=10, height=10)
+        universe.food_spawn_rate = 0.0
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.population_limit = 0 # no reproduction
+
+        e1 = Entity("Helper", x=5, y=5, is_cooperative=True, energy=80, max_age=100, species="TestSpecies")
+        e2 = Entity("Receiver", x=6, y=5, is_cooperative=True, energy=10, max_age=100, species="TestSpecies")
+
+        # We assume e1 max_energy is > 80/0.6 (~133), base max_energy is size(1)*50 = 50.
+        # So we need to set max_energy logic implicitly by keeping energy values high enough.
+        e1.size = 2 # max_energy = 100
+        e1.energy = 80
+        e2.energy = 10 # < 50 * 0.3 = 15
+
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+
+        universe.tick()
+
+        # After tick, base energy loss is 1 per entity.
+        # e1 should have transferred 5 energy.
+        # e1 energy expected: 80 - 1 (base loss) - 5 (transfer) = 74
+        # e2 energy expected: 10 - 1 (base loss) + 5 (transfer) = 14
+        self.assertEqual(e1.energy, 73)
+        self.assertEqual(e2.energy, 14)
+
 class TestMedicinalPlants(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
