@@ -142,4 +142,5 @@ Godspeed, Agent. The universe is in your hands.
 ## Next Steps
 
 
+- [x] Implemented `is_agile` trait. Entities with this trait ignore stamina penalties when moving uphill.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
