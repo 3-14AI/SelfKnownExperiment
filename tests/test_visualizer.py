@@ -409,6 +409,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('x', output)
 
+
+    def test_render_is_cooperative(self):
+        universe = Universe(10, 10)
+        e = Entity("Coop", x=2, y=2, is_cooperative=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('i', output)
+
 if __name__ == '__main__':
 
 
