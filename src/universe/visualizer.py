@@ -112,6 +112,8 @@ class CLIVisualizer:
                         char = 'M'
                     elif getattr(entity, 'is_nocturnal_predator', False):
                         char = 'N'
+                    elif getattr(entity, 'is_nocturnal', False):
+                        char = 'n'
                     elif getattr(entity, 'is_carnivorous_plant', False):
                         char = 'c'
                     elif getattr(entity, 'is_detritivore', False):

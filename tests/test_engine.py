@@ -224,6 +224,32 @@ class TestUniverse(unittest.TestCase):
         if len(children) > 0:
             self.assertTrue(children[0].can_hoard)
 
+
+    def test_is_nocturnal_sleeps_during_day(self):
+        universe = Universe(width=10, height=10)
+        universe.time = 0 # Day
+        e = Entity("Noct", x=5, y=5, energy=50, max_stamina=100, stamina=100, is_nocturnal=True)
+        e.is_sleeping = False
+        universe.add_entity(e)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.1):
+            universe.tick()
+
+        self.assertTrue(e.is_sleeping, "Nocturnal entity should sleep during the day")
+
+    def test_is_nocturnal_awake_during_night(self):
+        universe = Universe(width=10, height=10)
+        universe.time = universe.day_length // 2 + 1 # Night
+        e = Entity("Noct", x=5, y=5, energy=50, max_stamina=100, stamina=100, is_nocturnal=True)
+        e.is_sleeping = True
+        universe.add_entity(e)
+
+        universe.tick()
+
+        self.assertFalse(e.is_sleeping, "Nocturnal entity should wake up during the night if stamina is high")
+
+
     def test_is_nocturnal_mutation(self):
         universe = Universe(width=10, height=10)
         import unittest.mock

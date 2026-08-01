@@ -298,6 +298,14 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.W.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+    def test_visualizer_is_nocturnal(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("Nocturnal", x=1, y=1, is_nocturnal=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('n', output)
+
     def test_visualizer_is_nocturnal_predator(self):
         universe = Universe(width=3, height=3)
         entity = Entity("NocturnalPred", x=1, y=1, is_nocturnal_predator=True)
