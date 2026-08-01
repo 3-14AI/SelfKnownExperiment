@@ -940,7 +940,7 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_can_climb_movement(self):
-        from universe.engine import Universe, Entity, Terrain
+
         universe = Universe(width=5, height=5)
         entity = Entity("Climber", x=0, y=0, can_climb=True, energy=200, size=2, age=100, max_age=200)
         universe.add_entity(entity)
@@ -974,7 +974,7 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_can_climb_movement(self):
-        from universe.engine import Universe, Entity, Terrain
+
         universe = Universe(width=5, height=5)
         entity = Entity("Climber", x=0, y=0, can_climb=True, energy=200, size=2, age=100, max_age=200)
         universe.add_entity(entity)
@@ -3320,7 +3320,7 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_elevation_uphill_stamina(self):
-        from universe.engine import Universe, Entity, Terrain
+
         universe = Universe(width=10, height=10)
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='sand', elevation=0))
         universe.add_terrain(Terrain(x=1, y=0, terrain_type='sand', elevation=2))
@@ -3332,7 +3332,7 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(entity.stamina, 7)
 
     def test_elevation_downhill(self):
-        from universe.engine import Universe, Entity, Terrain
+
         universe = Universe(width=10, height=10)
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='sand', elevation=5))
         universe.add_terrain(Terrain(x=1, y=0, terrain_type='sand', elevation=0))
@@ -3346,7 +3346,7 @@ class TestUniverse(unittest.TestCase):
 
 
     def test_is_volcanic_ash_regeneration(self):
-        from universe.engine import Universe, Entity, Terrain
+
         universe = Universe(width=5, height=5)
         entity = Entity("Volcanic", x=0, y=0, is_volcanic=True, size=1, age=100, max_age=200, energy=40)
         universe.add_entity(entity)
@@ -3367,7 +3367,7 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(entity.energy, 42)
 
     def test_is_volcanic_immune_to_fire(self):
-        from universe.engine import Universe, Entity, Terrain
+
         universe = Universe(width=5, height=5)
         entity = Entity("Volcanic", x=0, y=0, is_volcanic=True, energy=40)
         normal = Entity("Normal", x=1, y=1, is_volcanic=False, energy=40)
@@ -3388,7 +3388,7 @@ class TestUniverse(unittest.TestCase):
         self.assertTrue(not normal.is_alive or normal.energy <= 0)
 
     def test_elevation_flying_ignores(self):
-        from universe.engine import Universe, Entity, Terrain
+
         universe = Universe(width=10, height=10)
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='sand', elevation=0))
         universe.add_terrain(Terrain(x=1, y=0, terrain_type='sand', elevation=5))
@@ -4776,7 +4776,6 @@ class TestSprint(unittest.TestCase):
         self.assertTrue(entity.stamina < 50)
 
     def test_sprint_mutation(self):
-        from src.universe.engine import Universe, Entity
         import unittest.mock
         universe = Universe(width=10, height=10)
         parent = Entity("Parent", x=1, y=1, energy=100, can_sprint=False, intelligence=10)
@@ -4855,7 +4854,7 @@ class TestSprint(unittest.TestCase):
         self.assertTrue(getattr(child, "is_vampiric", False), "Child should have mutated is_vampiric to True")
 
     def test_is_detritivore_consumes_ash(self):
-        from universe.engine import Universe, Entity, Terrain
+
         u = Universe(width=5, height=5, reproduction_threshold=0, reproduction_cost=0)
         u.event_chance = 0.0
         u.disease_chance = 0.0
@@ -5945,3 +5944,41 @@ class TestFrugivore(unittest.TestCase):
             universe.tick()
 
         self.assertTrue(frugivore.energy >= 38)
+
+class TestAgile(unittest.TestCase):
+
+    def test_is_agile_mutation(self):
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        universe.population_limit = 100
+        universe.reproduction_threshold = 10
+
+        # Disable properties that cause parent to die due to starvation/energy loss during tests with 0.0 random mock
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=1, age=100, max_age=200, is_agile=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True)
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', None) == 'egg']
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0 or len(eggs) > 0, "No child or egg was born")
+        child = children[0] if children else eggs[0].hatch_entity
+        self.assertTrue(getattr(child, "is_agile", False))
+
+    def test_is_agile_movement(self):
+
+        universe = Universe(width=10, height=10)
+        universe.add_terrain(Terrain(x=0, y=0, terrain_type='sand', elevation=0))
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='sand', elevation=2))
+        e_normal = Entity("Normal", x=0, y=0, is_agile=False, stamina=50, energy=100)
+        e_agile = Entity("Agile", x=0, y=0, is_agile=True, stamina=50, energy=100)
+
+        universe.add_entity(e_normal)
+        universe.add_entity(e_agile)
+
+        universe.move_entity(e_normal, 1, 0)
+        universe.move_entity(e_agile, 1, 0)
+
+        self.assertEqual(e_normal.stamina, 47) # 50 - 1 (base) - 2 (elevation) = 47
+        self.assertEqual(e_agile.stamina, 49) # 50 - 1 (base) = 49
