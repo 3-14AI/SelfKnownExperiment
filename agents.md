@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implemented `is_nocturnal` trait. Entities with this trait sleep during the day and are active at night, reversing the standard sleep cycle.
 - [x] Implemented `has_horns` trait. Entities with this trait gain a +2 bonus to their effective attack and +1 to their effective defense during combat.
 - [x] Implemented `is_territorial` trait. Entities with this trait gain an attack and defense bonus during combat.
 - [x] Implement `is_desertic` trait. Entities with this trait suffer half hydration loss in hot climates and gain an energy efficiency bonus when traversing `sand` terrain.
