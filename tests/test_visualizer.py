@@ -203,6 +203,14 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.E.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+
+    def test_render_has_horns(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestHorns", x=1, y=1, has_horns=True))
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Y', output)
+
     def test_render_has_shell(self):
         universe = Universe(width=3, height=3)
         universe.add_entity(Entity("TestShell", x=1, y=1, has_shell=True))
