@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implemented `has_horns` trait. Entities with this trait gain a +2 bonus to their effective attack and +1 to their effective defense during combat.
 - [x] Implemented `is_territorial` trait. Entities with this trait gain an attack and defense bonus during combat.
 - [x] Implement `is_desertic` trait. Entities with this trait suffer half hydration loss in hot climates and gain an energy efficiency bonus when traversing `sand` terrain.
 - [x] Implemented `is_ambush_predator` trait. Entities with this trait deal double damage during combat if they attack while having camouflage.
@@ -134,6 +135,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_forestal` trait. Entities with this trait gain defense in forest/wooded terrain.
 - [x] Implemented `is_social` trait. Entities with this trait gain an energy efficiency buff when near other entities of the same species.
 
+- [x] Implemented `has_horns` trait. Entities with this trait gain a +2 bonus to their effective attack and +1 to their effective defense during combat.
 ## Next Steps
 
 

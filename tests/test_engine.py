@@ -2436,8 +2436,8 @@ class TestUniverse(unittest.TestCase):
         universe.time = 0
         universe.reproduction_threshold = 1000
 
-        small_entity = Entity("Small", x=2, y=2, energy=20, size=1)
-        large_entity = Entity("Large", x=8, y=8, energy=20, size=3, age=100) # age 100 to force adult size
+        small_entity = Entity("Small", x=2, y=2, energy=20, size=1, intelligence=1, perception_radius=0)
+        large_entity = Entity("Large", x=8, y=8, energy=20, size=3, age=100, intelligence=1, perception_radius=0) # age 100 to force adult size
         large_entity.size = 3 # force adult size
         # set preferred temperature to base so they don't lose extra energy
         small_entity.preferred_temperature = 20
@@ -2491,6 +2491,8 @@ class TestUniverse(unittest.TestCase):
         entity = Entity("Grower", x=5, y=5, energy=5000, size=6, age=0, max_age=100, hydration=5000, max_hydration=5000, can_photosynthesize=True, is_nocturnal=True)
 
         # Disable interference
+        entity.is_sleeping = False
+        entity.intelligence = 1
         entity.preferred_temperature = universe.base_temperature
         entity.temperature_tolerance = 40
         universe.disease_chance = 0.0
@@ -3844,8 +3846,21 @@ class TestUniverse(unittest.TestCase):
     def test_is_mud_bather_mutation(self):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
+        universe.reproduction_threshold = 10
         parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10)
+        parent.is_territorial = True
+        parent.is_regenerative = True
         parent.lays_eggs = True # toggle to false to spawn child
+        parent.is_vampiric = True
+        parent.has_horns = True
+        parent.can_sweat = True
+        parent.has_blubber = True
+        parent.is_filter_feeder = True
+        parent.is_gluttonous = True
+        parent.is_solitary = True
+        parent.is_cannibalistic = True
+        parent.is_ambush_predator = True
+        parent.is_detritivore = True
         parent.can_sweat = True
         parent.has_blubber = True
         parent.is_filter_feeder = True
@@ -3865,6 +3880,76 @@ class TestUniverse(unittest.TestCase):
         self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
         child = children[0] if children else eggs[0].hatch_entity
         self.assertTrue(getattr(child, "is_mud_bather", False), "Child should have mutated is_mud_bather to True")
+
+
+    def test_has_horns_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=1, age=100, max_age=200, has_horns=False, intelligence=10)
+        parent.lays_eggs = True
+        parent.is_territorial = True
+        parent.is_regenerative = True
+        parent.is_mud_bather = True
+        parent.is_vampiric = True
+        parent.can_sweat = True
+        parent.has_blubber = True
+        parent.is_filter_feeder = True
+        parent.is_gluttonous = True
+        parent.is_solitary = True
+        parent.is_cannibalistic = True
+        parent.is_ambush_predator = True
+        parent.is_detritivore = True
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', None) == 'egg']
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
+        child = children[0] if children else eggs[0].hatch_entity
+        self.assertTrue(getattr(child, "has_horns", False), "Child should have mutated has_horns to True")
+
+    def test_has_horns_combat(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.time = 0
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        # Without horns
+        predator_no_horns = Entity("Pred1", x=5, y=5, attack=5, defense=5, energy=50, max_stamina=100, stamina=100, diet='carnivore', has_horns=False, intelligence=1, perception_radius=0, size=1)
+        prey_no_horns = Entity("Prey1", x=5, y=5, attack=5, defense=50, energy=50, max_stamina=100, stamina=100, diet='herbivore', has_horns=False, intelligence=1, perception_radius=0, size=1)
+        predator_no_horns.is_sleeping = False
+        prey_no_horns.is_sleeping = False
+
+        universe.add_entity(predator_no_horns)
+        universe.add_entity(prey_no_horns)
+        with unittest.mock.patch('random.random', return_value=0.89):
+            universe.tick()
+
+        no_horns_survived = prey_no_horns.energy > 0
+
+        universe2 = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe2.time = 0
+        universe2.event_chance = 0.0
+        universe2.disease_chance = 0.0
+
+        # With horns
+        predator_horns = Entity("Pred2", x=5, y=5, attack=5, defense=5, energy=50, max_stamina=100, stamina=100, diet='carnivore', has_horns=True, intelligence=1, perception_radius=0, size=1)
+        prey_no_horns_2 = Entity("Prey2", x=5, y=5, attack=5, defense=50, energy=50, max_stamina=100, stamina=100, diet='herbivore', has_horns=False, intelligence=1, perception_radius=0, size=1)
+        predator_horns.is_sleeping = False
+        prey_no_horns_2.is_sleeping = False
+
+        universe2.add_entity(predator_horns)
+        universe2.add_entity(prey_no_horns_2)
+        with unittest.mock.patch('random.random', return_value=0.89):
+            universe2.tick()
+
+        horns_survived = prey_no_horns_2.energy > 0
+
+        self.assertTrue(no_horns_survived, "Prey should survive without predator horns")
+        self.assertFalse(horns_survived, "Prey should be eaten with predator horns")
+
 
     def test_has_blubber_mutation(self):
         universe = Universe(10, 10)
@@ -4519,8 +4604,8 @@ class TestSprint(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.time = 25
-        vampire = Entity("Vampire", x=0, y=0, energy=40, max_hydration=50, hydration=40, diet='carnivore', is_vampiric=True, attack=1, stamina=100, max_stamina=100, size=1, intelligence=1, age=100, max_age=200, lays_eggs=False, is_mud_bather=False)
-        prey = Entity("Prey", x=0, y=0, energy=20, max_hydration=50, hydration=20, defense=100, max_stamina=100, stamina=100, size=1, intelligence=1, age=100, max_age=200)
+        vampire = Entity("Vampire", x=0, y=0, energy=40, max_hydration=50, hydration=40, diet='carnivore', is_vampiric=True, attack=1, stamina=100, max_stamina=100, size=1, intelligence=1, age=100, max_age=200, lays_eggs=False, is_mud_bather=False, has_horns=False)
+        prey = Entity("Prey", x=0, y=0, energy=20, max_hydration=50, hydration=20, defense=100, max_stamina=100, stamina=100, size=1, intelligence=1, age=100, max_age=200, has_horns=False)
 
         universe.add_entity(vampire)
         universe.add_entity(prey)
@@ -4537,7 +4622,8 @@ class TestSprint(unittest.TestCase):
 
     def test_is_vampiric_mutation(self):
         universe = Universe(width=10, height=10)
-        parent = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, lays_eggs=True, is_mud_bather=True)
+        universe.reproduction_threshold = 10
+        parent = Entity("Parent", x=1, y=1, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, lays_eggs=True, is_mud_bather=True, has_horns=True, is_territorial=True, is_regenerative=True)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -4739,6 +4825,8 @@ class TestPhotosynthesis(unittest.TestCase):
         # So net change = +1
         entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1)
         # Disable interference
+        entity.is_sleeping = False
+        entity.intelligence = 1
         entity.preferred_temperature = universe.base_temperature
         entity.temperature_tolerance = 40
         entity.hydration = entity.max_hydration
@@ -4760,6 +4848,8 @@ class TestPhotosynthesis(unittest.TestCase):
 
         entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1, age=100)
         # Disable interference
+        entity.is_sleeping = False
+        entity.intelligence = 1
         entity.preferred_temperature = universe.base_temperature
         entity.temperature_tolerance = 40
         entity.hydration = entity.max_hydration
