@@ -5903,3 +5903,45 @@ class TestAmbushPredator(unittest.TestCase):
         self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
         child = children[0] if children else eggs[0].hatch_entity
         self.assertTrue(getattr(child, "is_ambush_predator", False), "Child should have mutated is_ambush_predator to True")
+
+class TestFrugivore(unittest.TestCase):
+    def test_is_frugivore_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.population_limit = 100
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_frugivore=False, intelligence=10, lays_eggs=False)
+        universe.add_entity(parent)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', None) == 'egg']
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0 or len(eggs) > 0, "A child or egg should have been born")
+        child = children[0] if children else eggs[0].hatch_entity
+        self.assertTrue(getattr(child, "is_frugivore", False), "Child should have mutated is_frugivore to True")
+
+    def test_is_frugivore_energy_gain(self):
+        from src.universe.engine import Universe, Entity, Food
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+
+        # Test normal energy gain
+        frugivore = Entity("Frugivore", x=5, y=5, is_frugivore=True, energy=10, max_age=200, size=1, target_plants=['fruit'])
+        frugivore.stamina = 50
+        frugivore.hydration = 50
+        universe.add_entity(frugivore)
+        fruit = Food(x=5, y=5, energy=15, plant_type='fruit', max_age=30)
+        universe.add_food(fruit)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertTrue(frugivore.energy >= 38)

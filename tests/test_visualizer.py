@@ -418,6 +418,17 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('i', output)
 
+
+    def test_render_is_frugivore(self):
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(10, 10)
+        e = Entity("Frug", x=2, y=2, is_frugivore=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('T', output)
+
 if __name__ == '__main__':
 
 
