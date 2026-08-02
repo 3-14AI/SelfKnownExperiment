@@ -145,6 +145,7 @@ Godspeed, Agent. The universe is in your hands.
 ## Next Steps
 
 
+- [x] Implemented `is_playful` trait. Entities with this trait gain 1 experience point per tick when standing adjacent to another entity of the same species.
 - [x] Implemented `is_fast_learner` trait. Entities with this trait gain double experience points from all activities.
 - [x] Implemented `is_hardy` trait. Entities with this trait halve their base energy loss rate when their energy falls below 25% of their maximum, representing extreme metabolic efficiency during starvation.
 - [x] Implemented `is_agile` trait. Entities with this trait ignore stamina penalties when moving uphill.

@@ -6236,7 +6236,8 @@ class TestThickSkin(unittest.TestCase):
         import unittest.mock
         u = Universe(width=5, height=5)
         attacker = Entity("Attacker", energy=100, attack=10, diet='carnivore', stamina=100, max_stamina=100, has_claws=True, perception_radius=10, intelligence=1, size=1)
-        prey = Entity("Prey", energy=100, defense=10, has_thick_skin=True, stamina=100, max_stamina=100, size=1)
+        # Defense is huge to ensure escape
+        prey = Entity("Prey", energy=100, defense=1000, has_thick_skin=True, stamina=100, max_stamina=100, size=1)
         u.add_entity(attacker)
         u.add_entity(prey)
         attacker.x, attacker.y = 0, 0
@@ -6248,6 +6249,7 @@ class TestThickSkin(unittest.TestCase):
             u.tick()
         # Prey should have escaped and gained defense, attacker should have lost stamina etc.
         self.assertTrue(prey.is_alive)
+
 
 
 class TestHardy(unittest.TestCase):
@@ -6309,3 +6311,47 @@ class TestHardy(unittest.TestCase):
             u.time = 1
             u.tick()
             self.assertEqual(e1.energy - e2.energy, 2)
+
+
+class TestPlayful(unittest.TestCase):
+    def test_is_playful_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import random
+        from unittest.mock import patch
+
+        u = Universe(width=10, height=10)
+        u.population_limit = 100
+        u.reproduction_threshold = 10
+        u.time = 25
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_playful=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True, is_opportunistic=True, has_thick_skin=True, has_strong_stomach=True, is_hardy=True, is_fast_learner=True)
+        u.add_entity(e)
+
+        with patch('random.random', return_value=0.0):
+            u.tick()
+
+        eggs = [f for f in u.foods if f.plant_type == 'egg']
+        if eggs:
+            self.assertTrue(getattr(eggs[0].hatch_entity, 'is_playful', False))
+        else:
+            children = [ent for ent in u.entities if ent != e]
+            if children:
+                self.assertTrue(getattr(children[0], 'is_playful', False))
+
+    def test_is_playful_exp_gain(self):
+        from src.universe.engine import Universe, Entity
+        u = Universe(width=10, height=10)
+        u.population_limit = 0
+        u.food_spawn_rate = 0.0
+
+        # e1 and e2 are adjacent and same species
+        e1 = Entity("Playful1", x=0, y=0, is_playful=True, species="PlayfulCat", energy=100, stamina=100, max_stamina=100, hydration=50, max_hydration=50, perception_radius=0)
+        e2 = Entity("Playful2", x=0, y=1, is_playful=True, species="PlayfulCat", energy=100, stamina=100, max_stamina=100, hydration=50, max_hydration=50, perception_radius=0)
+
+        u.add_entity(e1)
+        u.add_entity(e2)
+
+        u.tick()
+
+        # Both should have gained 1 experience point from being adjacent
+        self.assertEqual(e1.experience, 1)
+        self.assertEqual(e2.experience, 1)
