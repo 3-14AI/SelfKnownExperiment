@@ -429,6 +429,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('T', output)
 
+
+    def test_visualizer_has_strong_stomach(self):
+        universe = Universe(width=5, height=5)
+        e = Entity("Strong", x=1, y=1, has_strong_stomach=True, diet="herbivore")
+        universe.add_entity(e)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('s', output)
+
 if __name__ == '__main__':
 
 
