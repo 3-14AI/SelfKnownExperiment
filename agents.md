@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implemented `is_opportunistic` trait. Entities with this trait can bypass their strict diet restrictions to eat both plants and meat when their energy falls below 25% of their maximum capacity.
 - [x] Implemented `has_strong_stomach` trait. Entities with this trait are immune to toxicity from food and prey, and gain double energy when consuming meat.
 - [x] Implemented `is_frugivore` trait. Entities with this trait get double energy from eating `fruit` food types.
 - [x] Implemented `is_cooperative` trait. Entities with this trait share energy with struggling nearby members of the same species.
