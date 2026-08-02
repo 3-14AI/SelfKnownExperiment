@@ -5045,6 +5045,44 @@ class TestSprint(unittest.TestCase):
         child = children[0] if children else eggs[0].hatch_entity
         self.assertTrue(getattr(child, "is_gluttonous", False), "Child should have mutated is_gluttonous to True")
 
+class TestFastLearner(unittest.TestCase):
+    def test_fast_learner_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import random
+        from unittest.mock import patch
+
+        u = Universe(width=10, height=10)
+        u.population_limit = 100
+        u.reproduction_threshold = 10
+        u.time = 25
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_fast_learner=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True, is_opportunistic=True, has_thick_skin=True, has_strong_stomach=True, is_hardy=True)
+        u.add_entity(e)
+
+        with patch('random.random', return_value=0.0):
+            u.tick()
+
+        eggs = [f for f in u.foods if f.plant_type == 'egg']
+        if eggs:
+            self.assertTrue(getattr(eggs[0].hatch_entity, 'is_fast_learner', False))
+        else:
+            children = [ent for ent in u.entities if ent != e]
+            if children:
+                self.assertTrue(getattr(children[0], 'is_fast_learner', False))
+
+    def test_fast_learner_exp_bonus(self):
+        from src.universe.engine import Entity
+        e1 = Entity("FastLearner", is_fast_learner=True)
+        e2 = Entity("NormalLearner", is_fast_learner=False)
+
+        e1.add_experience(10)
+        e2.add_experience(10)
+
+        self.assertEqual(e1.experience, 10)
+        self.assertEqual(e1.level, 2)
+
+        self.assertEqual(e2.experience, 0)
+        self.assertEqual(e2.level, 2)
+
 if __name__ == '__main__':
 
     unittest.main()
