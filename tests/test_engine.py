@@ -4797,7 +4797,11 @@ class TestSprint(unittest.TestCase):
 
 
 
+
+
     def test_is_vampiric_combat_drain_escape(self):
+        from universe.engine import Universe, Entity
+        import unittest.mock
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
@@ -4805,7 +4809,6 @@ class TestSprint(unittest.TestCase):
         vampire = Entity("Vampire", x=5, y=5, size=1, energy=20, hydration=20, max_hydration=100, diet='carnivore', attack=10, is_vampiric=True, stamina=100, max_stamina=100, intelligence=1, perception_radius=0, can_spin_webs=False, is_migratory=False, lays_eggs=False, is_mud_bather=False, is_territorial=False, has_strong_stomach=False, is_agile=False)
         universe.population_limit = 0
         universe.reproduction_threshold = 100
-        # Give prey massive defense so it escapes
         prey = Entity("Prey", x=5, y=5, size=1, energy=50, hydration=50, max_hydration=100, defense=10000, stamina=100, max_stamina=100, intelligence=1, perception_radius=0, is_migratory=False, is_agile=False, has_strong_stomach=False)
 
         universe.add_entity(vampire)
@@ -4813,19 +4816,24 @@ class TestSprint(unittest.TestCase):
 
         initial_energy = vampire.energy
 
-        # Force escape chance evaluation and combat
-        import unittest.mock
+        # Explicitly turn off all potentially draining traits for both
+        for e in [vampire, prey]:
+            e.is_carnivorous_plant = False
+            e.is_hardy = False
+            e.is_fruiting = False
+            e.can_hoard = False
+
         with unittest.mock.patch('random.random', return_value=0.0):
-            universe.time = 25 # force daytime to prevent sleep
+            universe.time = 25
             universe.tick()
 
-        # Vampire should have gained energy/hydration despite prey escaping
         self.assertTrue(vampire.energy > initial_energy, f"Vampire energy {vampire.energy} should be > {initial_energy}")
         self.assertTrue(vampire.hydration > 20)
 
-        # Prey should have lost extra energy/hydration
         self.assertTrue(prey.energy < 50)
         self.assertTrue(prey.hydration < 50)
+
+
 
     def test_is_vampiric_mutation(self):
         universe = Universe(width=10, height=10)
@@ -6202,3 +6210,64 @@ class TestThickSkin(unittest.TestCase):
             u.tick()
         # Prey should have escaped and gained defense, attacker should have lost stamina etc.
         self.assertTrue(prey.is_alive)
+
+
+class TestHardy(unittest.TestCase):
+    def test_hardy_mutation(self):
+        from universe.engine import Universe, Entity
+        import unittest.mock
+        u = Universe(width=10, height=10)
+        u.population_limit = 100
+        u.food_spawn_rate = 0.0
+        u.mutation_chance = 1.0
+        u.reproduction_threshold = 10
+        u.time = 25
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_hardy=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True, is_opportunistic=True, has_thick_skin=True, has_strong_stomach=True)
+        u.add_entity(e)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.tick()
+
+        eggs = [f for f in u.foods if getattr(f, 'plant_type', None) == 'egg']
+        children = [ent for ent in u.entities if ent != e]
+        if eggs:
+            self.assertTrue(getattr(eggs[0].hatch_entity, 'is_hardy', False))
+        else:
+            self.assertTrue(getattr(children[0], 'is_hardy', False))
+
+    def test_hardy_efficiency(self):
+        from universe.engine import Universe, Entity
+        import unittest.mock
+        u = Universe(width=5, height=5)
+        u.population_limit = 0
+        u.food_spawn_rate = 0.0
+        u.event_chance = 0.0
+        u.disease_chance = 0.0
+        u.localized_event_chance = 0.0
+        u.base_temperature = 20
+
+        e1 = Entity("Hardy", energy=20, size=2, age=10, is_hardy=True, intelligence=1, perception_radius=0)
+        e2 = Entity("Normal", energy=20, size=2, age=10, is_hardy=False, intelligence=1, perception_radius=0)
+
+        # Disable all other drain sources
+        for e in [e1, e2]:
+            e.can_spin_webs = False
+            e.is_carnivorous_plant = False
+            e.is_parasitic = False
+            e.preferred_temperature = 20
+            e.temperature_tolerance = 40
+            e.hydration = 50
+            e.max_stamina = 100
+            e.stamina = 100
+
+        u.add_entity(e1)
+        u.add_entity(e2)
+
+        with unittest.mock.patch('random.random', return_value=0.5):
+            u.time = 0
+            u.tick()
+            self.assertEqual(e1.energy - e2.energy, 2)
+
+            u.time = 1
+            u.tick()
+            self.assertEqual(e1.energy - e2.energy, 2)
