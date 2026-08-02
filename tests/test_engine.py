@@ -6103,3 +6103,42 @@ class TestStrongStomach(unittest.TestCase):
         u2.tick()
 
         self.assertTrue(e1.energy > e2.energy)
+
+
+
+
+class TestOpportunistic(unittest.TestCase):
+    def test_opportunistic_herbivore_eats_meat(self):
+        from universe.engine import Universe, Entity, Food
+        u = Universe(width=5, height=5)
+        e = Entity("Opp", energy=10, size=2, diet='herbivore', is_opportunistic=True, perception_radius=10, max_stamina=100, stamina=100, intelligence=1, has_strong_stomach=True, attack=1000)
+        u.add_entity(e)
+        prey = Entity("Prey", energy=10, size=1, diet='herbivore', defense=0)
+        u.add_entity(prey)
+        e.x, e.y = 0, 0
+        prey.x, prey.y = 0, 0
+        u.time = 2
+        u.tick()
+        self.assertFalse(prey.is_alive)
+
+    def test_opportunistic_mutation(self):
+        from universe.engine import Universe, Entity
+        import unittest.mock
+        u = Universe(width=10, height=10)
+        u.population_limit = 100
+        u.food_spawn_rate = 0.0
+        u.mutation_chance = 1.0
+        u.reproduction_threshold = 10
+        u.time = 25
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_opportunistic=False, has_strong_stomach=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True)
+        u.add_entity(e)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.tick()
+
+        eggs = [f for f in u.foods if getattr(f, 'plant_type', None) == 'egg']
+        children = [ent for ent in u.entities if ent != e]
+        if eggs:
+            self.assertTrue(eggs[0].hatch_entity.is_opportunistic)
+        else:
+            self.assertTrue(children[0].is_opportunistic)
