@@ -11,6 +11,7 @@
 
 ## [Unreleased]
 ### Added
+- Added missing visualization rendering and unit tests for `is_sleeping`, `is_flying`, `can_hibernate`, `lays_eggs`, `can_hoard`, `can_burrow`, `is_territorial`, `is_agile`, `is_opportunistic`, and `has_thick_skin` traits.
 - Added missing genetic mutation unit tests for 29 traits in `tests/test_engine.py`.
 - Analyzed recent trait implementations (`is_carnivorous_plant`, `disease_vector`, `is_nocturnal_predator`) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Implemented `is_volcanic` trait. Entities with this trait thrive in extreme heat, gain energy when standing on `ash` terrain, and are immune to `fire` events.

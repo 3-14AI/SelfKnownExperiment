@@ -96,7 +96,7 @@ class TestCLIVisualizer(unittest.TestCase):
         entity.is_hibernating = True
         universe.add_entity(entity)
         visualizer = CLIVisualizer(universe)
-        expected_output = "...\n.c.\n..."
+        expected_output = "...\n.2.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
     def test_render_level(self):
@@ -438,8 +438,66 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('s', output)
 
+
+    def test_render_is_sleeping(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestSleeping", x=1, y=1, is_sleeping=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('0', vis.render())
+
+    def test_render_is_flying(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestFlying", x=1, y=1, is_flying=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('1', vis.render())
+
+    def test_render_can_hibernate(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestHibernate", x=1, y=1, can_hibernate=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('2', vis.render())
+
+    def test_render_lays_eggs(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestEggs", x=1, y=1, lays_eggs=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('3', vis.render())
+
+    def test_render_can_hoard(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestHoard", x=1, y=1, can_hoard=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('4', vis.render())
+
+    def test_render_can_burrow(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestBurrow", x=1, y=1, can_burrow=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('5', vis.render())
+
+    def test_render_is_territorial(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestTerritorial", x=1, y=1, is_territorial=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('6', vis.render())
+
+    def test_render_is_agile(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestAgile", x=1, y=1, is_agile=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('7', vis.render())
+
+    def test_render_is_opportunistic(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestOpportunistic", x=1, y=1, is_opportunistic=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('8', vis.render())
+
+    def test_render_has_thick_skin(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestThickSkin", x=1, y=1, has_thick_skin=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('9', vis.render())
+
 if __name__ == '__main__':
-
-
-
     unittest.main()

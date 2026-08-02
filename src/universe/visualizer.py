@@ -54,7 +54,27 @@ class CLIVisualizer:
                     else:
                         char = 'S'
                 else:
-                    if getattr(entity, 'is_aposematic', False):
+                    if getattr(entity, 'is_sleeping', False):
+                        char = '0'
+                    elif getattr(entity, 'is_flying', False):
+                        char = '1'
+                    elif getattr(entity, 'can_hibernate', False):
+                        char = '2'
+                    elif getattr(entity, 'lays_eggs', False):
+                        char = '3'
+                    elif getattr(entity, 'can_hoard', False):
+                        char = '4'
+                    elif getattr(entity, 'can_burrow', False):
+                        char = '5'
+                    elif getattr(entity, 'is_territorial', False):
+                        char = '6'
+                    elif getattr(entity, 'is_agile', False):
+                        char = '7'
+                    elif getattr(entity, 'is_opportunistic', False):
+                        char = '8'
+                    elif getattr(entity, 'has_thick_skin', False):
+                        char = '9'
+                    elif getattr(entity, 'is_aposematic', False):
                         char = 'A'
                     elif getattr(entity, 'can_photosynthesize', False):
                         char = 'P'
