@@ -152,3 +152,4 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Next Steps
 - [x] Implemented `is_heavy_sleeper` trait. Entities with this trait recover double energy while sleeping, but their perception drops to 0 during sleep, rendering them oblivious to events and predators.
+- [x] Implemented `is_evasive` trait. Entities with this trait gain a flat +20% bonus to their escape chance during combat, making them notoriously slippery and hard to catch.

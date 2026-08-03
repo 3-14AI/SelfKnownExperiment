@@ -5085,6 +5085,34 @@ class TestFastLearner(unittest.TestCase):
         self.assertEqual(e2.level, 2)
 
 
+
+class TestEvasive(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe, Entity
+        self.universe = Universe(width=10, height=10, day_length=50)
+        self.universe.base_temperature = 20
+        self.Entity = Entity
+
+    def test_is_evasive_mutation(self):
+        child = self.Entity("child", is_evasive=True)
+        self.assertTrue(child.is_evasive)
+
+    def test_is_evasive_combat_escape(self):
+        self.universe.time = 25
+        predator = self.Entity("pred", x=0, y=0, energy=50, attack=4, defense=1, diet='carnivore', intelligence=1, perception_radius=10, max_stamina=100, stamina=100, age=10, size=1)
+        prey = self.Entity("prey", x=0, y=0, energy=50, attack=1, defense=1, diet='herbivore', is_evasive=True, intelligence=1, max_stamina=100, stamina=100, age=10, size=1)
+
+        predator.can_spin_webs = False
+        prey.can_spin_webs = False
+
+        self.universe.entities = [predator, prey]
+
+        with unittest.mock.patch('random.random', return_value=0.3):
+            self.universe.tick()
+
+        self.assertTrue(prey.is_alive, "Prey should have escaped due to is_evasive trait")
+        self.assertFalse(getattr(prey, 'was_eaten', False), "Prey should not have been eaten")
+
 class TestEnduranceRunner(unittest.TestCase):
     def test_is_endurance_runner_mutation(self):
         from universe.engine import Universe, Entity
