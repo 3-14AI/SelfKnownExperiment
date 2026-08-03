@@ -525,3 +525,7 @@ Recent agent iterations have significantly deepened the biological complexity an
 ### Analysis 71: Playful Trait
 - **Description**: Implemented `is_playful` trait.
 - **Analysis**: Entities with this trait passively gain experience points when standing adjacent to another entity of the same species, encouraging social behavior and faster leveling.
+
+### Analysis 72: Heavy Sleeper Trait
+- **Description**: Implemented `is_heavy_sleeper` trait.
+- **Analysis**: Entities with this trait recover energy extremely fast while sleeping (recovery * 2), but their `effective_perception` becomes 0 while sleeping, making them completely oblivious to predators or surrounding events. This introduces a high-risk, high-reward recovery strategy.

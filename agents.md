@@ -142,11 +142,11 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_social` trait. Entities with this trait gain an energy efficiency buff when near other entities of the same species.
 
 - [x] Implemented `has_horns` trait. Entities with this trait gain a +2 bonus to their effective attack and +1 to their effective defense during combat.
-## Next Steps
-
-
 - [x] Implemented `is_playful` trait. Entities with this trait gain 1 experience point per tick when standing adjacent to another entity of the same species.
 - [x] Implemented `is_fast_learner` trait. Entities with this trait gain double experience points from all activities.
 - [x] Implemented `is_hardy` trait. Entities with this trait halve their base energy loss rate when their energy falls below 25% of their maximum, representing extreme metabolic efficiency during starvation.
 - [x] Implemented `is_agile` trait. Entities with this trait ignore stamina penalties when moving uphill.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
+
+## Next Steps
+- [x] Implemented `is_heavy_sleeper` trait. Entities with this trait recover double energy while sleeping, but their perception drops to 0 during sleep, rendering them oblivious to events and predators.

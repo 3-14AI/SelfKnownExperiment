@@ -5046,7 +5046,7 @@ class TestSprint(unittest.TestCase):
         self.assertTrue(getattr(child, "is_gluttonous", False), "Child should have mutated is_gluttonous to True")
 
 class TestFastLearner(unittest.TestCase):
-    def test_fast_learner_mutation(self):
+    def test_is_fast_learner_mutation(self):
         from src.universe.engine import Universe, Entity
         import random
         from unittest.mock import patch
@@ -5069,7 +5069,7 @@ class TestFastLearner(unittest.TestCase):
             if children:
                 self.assertTrue(getattr(children[0], 'is_fast_learner', False))
 
-    def test_fast_learner_exp_bonus(self):
+    def test_is_fast_learner_exp_bonus(self):
         from src.universe.engine import Entity
         e1 = Entity("FastLearner", is_fast_learner=True)
         e2 = Entity("NormalLearner", is_fast_learner=False)
@@ -6154,7 +6154,7 @@ class TestStrongStomach(unittest.TestCase):
 
 
 class TestOpportunistic(unittest.TestCase):
-    def test_opportunistic_herbivore_eats_meat(self):
+    def test_is_opportunistic_herbivore_eats_meat(self):
         from universe.engine import Universe, Entity, Food
         u = Universe(width=5, height=5)
         e = Entity("Opp", energy=10, size=2, diet='herbivore', is_opportunistic=True, perception_radius=10, max_stamina=100, stamina=100, intelligence=1, has_strong_stomach=True, attack=1000)
@@ -6167,7 +6167,7 @@ class TestOpportunistic(unittest.TestCase):
         u.tick()
         self.assertFalse(prey.is_alive)
 
-    def test_opportunistic_mutation(self):
+    def test_is_opportunistic_mutation(self):
         from universe.engine import Universe, Entity
         import unittest.mock
         u = Universe(width=10, height=10)
@@ -6191,7 +6191,7 @@ class TestOpportunistic(unittest.TestCase):
 
 
 class TestThickSkin(unittest.TestCase):
-    def test_thick_skin_mutation(self):
+    def test_has_thick_skin_mutation(self):
         from universe.engine import Universe, Entity
         import unittest.mock
         u = Universe(width=10, height=10)
@@ -6213,7 +6213,7 @@ class TestThickSkin(unittest.TestCase):
         else:
             self.assertTrue(getattr(children[0], 'has_thick_skin', False))
 
-    def test_thick_skin_combat_immunity(self):
+    def test_has_thick_skin_combat_immunity(self):
         from universe.engine import Universe, Entity
         u = Universe(width=5, height=5)
         attacker = Entity("Attacker", energy=100, attack=1000, diet='carnivore', stamina=100, max_stamina=100, has_thick_skin=True, size=10)
@@ -6229,7 +6229,7 @@ class TestThickSkin(unittest.TestCase):
         # So attacker energy = 100 - 1 = 99 + 5 (from eating prey) = 104.
         self.assertTrue(attacker.stamina > 90)
 
-    def test_thick_skin_claw_defense(self):
+    def test_has_thick_skin_claw_defense(self):
         # We test that defense bonus applies, meaning prey escapes more often.
         # Or we can just test that the code does not crash.
         from universe.engine import Universe, Entity
@@ -6237,7 +6237,7 @@ class TestThickSkin(unittest.TestCase):
         u = Universe(width=5, height=5)
         attacker = Entity("Attacker", energy=100, attack=10, diet='carnivore', stamina=100, max_stamina=100, has_claws=True, perception_radius=10, intelligence=1, size=1)
         # Defense is huge to ensure escape
-        prey = Entity("Prey", energy=100, defense=1000, has_thick_skin=True, stamina=100, max_stamina=100, size=1)
+        prey = Entity("Prey", energy=100, defense=1000, has_thick_skin=True, stamina=100, max_stamina=100, size=1, is_immune=True, disease_vector=False)
         u.add_entity(attacker)
         u.add_entity(prey)
         attacker.x, attacker.y = 0, 0
@@ -6253,7 +6253,7 @@ class TestThickSkin(unittest.TestCase):
 
 
 class TestHardy(unittest.TestCase):
-    def test_hardy_mutation(self):
+    def test_is_hardy_mutation(self):
         from universe.engine import Universe, Entity
         import unittest.mock
         u = Universe(width=10, height=10)
@@ -6275,7 +6275,7 @@ class TestHardy(unittest.TestCase):
         else:
             self.assertTrue(getattr(children[0], 'is_hardy', False))
 
-    def test_hardy_efficiency(self):
+    def test_is_hardy_efficiency(self):
         from universe.engine import Universe, Entity
         import unittest.mock
         u = Universe(width=5, height=5)
@@ -6355,3 +6355,99 @@ class TestPlayful(unittest.TestCase):
         # Both should have gained 1 experience point from being adjacent
         self.assertEqual(e1.experience, 1)
         self.assertEqual(e2.experience, 1)
+
+
+class TestIsHeavySleeper(unittest.TestCase):
+    def test_is_heavy_sleeper_mutation(self):
+        from universe.engine import Universe, Entity
+        import unittest.mock
+        u = Universe(width=10, height=10)
+        u.population_limit = 100
+        u.food_spawn_rate = 0.0
+        u.mutation_chance = 1.0
+        u.reproduction_threshold = 10
+        u.time = 25
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_heavy_sleeper=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True, is_opportunistic=True, has_thick_skin=True, has_strong_stomach=True, is_hardy=True, is_fast_learner=True, is_playful=True)
+        u.add_entity(e)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.tick()
+
+        children = [ent for ent in u.entities if ent.name == "Parent" and ent != e]
+        eggs = [f for f in u.foods if getattr(f, 'plant_type', '') == 'egg']
+
+        if eggs:
+            self.assertTrue(getattr(eggs[0].hatch_entity, 'is_heavy_sleeper', False))
+        elif children:
+            self.assertTrue(getattr(children[0], 'is_heavy_sleeper', False))
+
+    def test_is_heavy_sleeper_awake_behavior(self):
+        from universe.engine import Universe, Entity, Terrain
+        u = Universe(width=5, height=5)
+        u.base_temperature = 20
+
+        e = Entity("HeavySleeperAwake", x=0, y=0, perception_radius=5, is_heavy_sleeper=True, energy=50, size=2, age=10, intelligence=1)
+        e.is_sleeping = False
+        e.memory = set()
+        u.add_entity(e)
+
+        e.can_photosynthesize = False
+        e.is_regenerative = False
+        e.is_volcanic = False
+        e.is_desertic = False
+        e.is_filter_feeder = False
+        e.is_social = False
+        e.is_solitary = False
+        e.is_cold_blooded = False
+        e.preferred_temperature = -100
+        e.temperature_tolerance = 200
+
+        u.add_terrain(Terrain(x=1, y=0, terrain_type='wall'))
+        u.tick()
+
+        self.assertIn((1, 0), e.memory, "Heavy sleeper should perceive obstacles while awake")
+
+    def test_is_heavy_sleeper_perception_zero(self):
+        from universe.engine import Universe, Entity, Terrain
+        u = Universe(width=5, height=5)
+
+        e = Entity("HeavySleeper", x=0, y=0, perception_radius=5, is_heavy_sleeper=True, energy=50, size=2, age=10)
+        e.is_sleeping = True
+        e.stamina = 0
+        e.memory = set()
+        u.add_entity(e)
+
+        u.add_terrain(Terrain(x=1, y=0, terrain_type='wall'))
+        u.tick()
+
+        self.assertNotIn((1, 0), e.memory, "Heavy sleeper should not perceive obstacles while sleeping")
+
+    def test_is_heavy_sleeper_energy_recovery(self):
+        from universe.engine import Universe, Entity
+        u = Universe(width=5, height=5)
+        u.base_temperature = 20
+        e1 = Entity("HeavySleeper", energy=50, size=2, age=10, is_heavy_sleeper=True, intelligence=1, perception_radius=0)
+        e2 = Entity("NormalSleeper", energy=50, size=2, age=10, is_heavy_sleeper=False, intelligence=1, perception_radius=0)
+        e1.is_sleeping = True
+        e2.is_sleeping = True
+        e1.stamina = 0
+        e2.stamina = 0
+        u.add_entity(e1)
+        u.add_entity(e2)
+
+        for e in [e1, e2]:
+            e.can_photosynthesize = False
+            e.is_regenerative = False
+            e.is_volcanic = False
+            e.is_desertic = False
+            e.is_filter_feeder = False
+            e.is_social = False
+            e.is_solitary = False
+            e.is_cold_blooded = False
+            e.preferred_temperature = -100
+            e.temperature_tolerance = 200
+
+        u.tick()
+
+        self.assertEqual(e1.energy, 54)
+        self.assertEqual(e2.energy, 51)

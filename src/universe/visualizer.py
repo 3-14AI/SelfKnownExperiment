@@ -68,10 +68,16 @@ class CLIVisualizer:
                         char = '5'
                     elif getattr(entity, 'is_territorial', False):
                         char = '6'
+                    elif getattr(entity, 'is_playful', False):
+                        char = '-'
                     elif getattr(entity, 'is_agile', False):
                         char = '7'
+                    elif getattr(entity, 'is_fast_learner', False):
+                        char = '='
                     elif getattr(entity, 'is_opportunistic', False):
                         char = '8'
+                    elif getattr(entity, 'is_hardy', False):
+                        char = '|'
                     elif getattr(entity, 'has_thick_skin', False):
                         char = '9'
                     elif getattr(entity, 'is_aposematic', False):
