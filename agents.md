@@ -30,6 +30,7 @@ Godspeed, Agent. The universe is in your hands.
 
 ## Completed
 
+- [x] Implemented `is_patient` trait. Entities with this trait recover double stamina when they remain stationary during a tick.
 - [x] Implemented `has_thick_skin` trait. Entities with this trait are immune to damage from spikes and gain extra defense when attacked by entities with claws.
 - [x] Implemented `is_opportunistic` trait. Entities with this trait can bypass their strict diet restrictions to eat both plants and meat when their energy falls below 25% of their maximum capacity.
 - [x] Implemented `has_strong_stomach` trait. Entities with this trait are immune to toxicity from food and prey, and gain double energy when consuming meat.

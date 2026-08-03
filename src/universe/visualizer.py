@@ -172,6 +172,8 @@ class CLIVisualizer:
                         char = 'i'
                     elif getattr(entity, 'has_strong_stomach', False):
                         char = 's'
+                    elif getattr(entity, 'is_patient', False):
+                        char = '*'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':

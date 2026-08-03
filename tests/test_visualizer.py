@@ -499,5 +499,11 @@ class TestCLIVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         self.assertIn('9', vis.render())
 
+    def test_render_is_patient(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestPatient", x=1, y=1, is_patient=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('*', vis.render())
+
 if __name__ == '__main__':
     unittest.main()
