@@ -1482,7 +1482,7 @@ class Universe:
                             entity.energy = min(int(entity.max_energy * 1.5) if getattr(entity, "is_gluttonous", False) else entity.max_energy, entity.energy + prey.energy)
                             entity.size += 1
                             entity.max_size = max(getattr(entity, 'max_size', entity.size), entity.size)
-                            prey.energy = -9999
+                            prey.energy = 0
                             prey.was_eaten = True
                             break
 
@@ -1897,8 +1897,8 @@ class Universe:
                                 entity.hydration = min(entity.max_hydration, entity.hydration + 5)
                             if random.random() < escape_chance:
                                 # Prey escapes
-                                entity.energy -= 1
-                                prey_to_eat.energy -= 1
+                                entity.energy = max(0, entity.energy - 1)
+                                prey_to_eat.energy = max(0, prey_to_eat.energy - 1)
                                 prey_to_eat.defense += 0.5
                                 prey_to_eat.attack += 0.1
                                 entity.attack += 0.2
@@ -2076,8 +2076,8 @@ class Universe:
                             entity.hydration = min(entity.max_hydration, entity.hydration + 5)
                         if random.random() < escape_chance:
                             # Prey escapes
-                            entity.energy -= 1
-                            prey_to_eat.energy -= 1
+                            entity.energy = max(0, entity.energy - 1)
+                            prey_to_eat.energy = max(0, prey_to_eat.energy - 1)
 
                             # Prey gains experience from surviving
                             prey_to_eat.defense += 0.5
