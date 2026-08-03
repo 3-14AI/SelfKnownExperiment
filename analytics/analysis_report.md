@@ -529,3 +529,10 @@ Recent agent iterations have significantly deepened the biological complexity an
 ### Analysis 72: Heavy Sleeper Trait
 - **Description**: Implemented `is_heavy_sleeper` trait.
 - **Analysis**: Entities with this trait recover energy extremely fast while sleeping (recovery * 2), but their `effective_perception` becomes 0 while sleeping, making them completely oblivious to predators or surrounding events. This introduces a high-risk, high-reward recovery strategy.
+
+### Analysis 73: Patient Trait
+- Implemented `is_patient` trait.
+- Entities with this trait recover double stamina when they remain stationary during a tick.
+- Added visual representation with the `*` character.
+- Wrote tests for mutation and stamina recovery in `test_engine.py` and visual rendering in `test_visualizer.py`.
+- Updated agents.md with the newly completed task.

@@ -4822,6 +4822,7 @@ class TestSprint(unittest.TestCase):
             e.is_hardy = False
             e.is_fruiting = False
             e.can_hoard = False
+        vampire.energy = 20
 
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.time = 25
@@ -6451,3 +6452,52 @@ class TestIsHeavySleeper(unittest.TestCase):
 
         self.assertEqual(e1.energy, 54)
         self.assertEqual(e2.energy, 51)
+
+
+class TestIsPatient(unittest.TestCase):
+    def test_is_patient_mutation(self):
+        from universe.engine import Universe, Entity, Food
+        import unittest.mock
+        u = Universe(width=10, height=10)
+        u.population_limit = 100
+        u.reproduction_threshold = 10
+        u.reproduction_cost = 5
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_patient=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True, is_opportunistic=True, has_thick_skin=True, has_strong_stomach=True, is_hardy=True, is_fast_learner=True, is_playful=True, is_heavy_sleeper=True)
+        u.add_entity(e)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.tick()
+
+        eggs = [f for f in u.foods if f.plant_type == 'egg']
+        children = [ent for ent in u.entities if ent.name == "Parent" and ent != e]
+        if eggs:
+            self.assertTrue(getattr(eggs[0].hatch_entity, 'is_patient', False))
+        elif children:
+            self.assertTrue(getattr(children[0], 'is_patient', False))
+
+    def test_is_patient_stamina_recovery(self):
+        from universe.engine import Universe, Entity
+        u = Universe(width=5, height=5)
+        e1 = Entity("Patient", energy=50, size=2, age=10, is_patient=True, intelligence=1, max_stamina=50, stamina=10, perception_radius=0)
+        e2 = Entity("Normal", energy=50, size=2, age=10, is_patient=False, intelligence=1, max_stamina=50, stamina=10, perception_radius=0)
+        e1.is_sleeping = False
+        e2.is_sleeping = False
+        u.add_entity(e1)
+        u.add_entity(e2)
+
+        for e in [e1, e2]:
+            e.can_photosynthesize = False
+            e.is_regenerative = False
+            e.is_volcanic = False
+            e.is_desertic = False
+            e.is_filter_feeder = False
+            e.is_social = False
+            e.is_solitary = False
+            e.is_cold_blooded = False
+            e.preferred_temperature = -100
+            e.temperature_tolerance = 200
+
+        u.tick()
+
+        self.assertEqual(e1.stamina, 14)
+        self.assertEqual(e2.stamina, 12)
