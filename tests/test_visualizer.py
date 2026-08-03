@@ -505,5 +505,14 @@ class TestCLIVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         self.assertIn('*', vis.render())
 
+    def test_visualizer_is_endurance_runner(self):
+        from universe.engine import Entity, Universe
+        universe = Universe(width=5, height=5)
+        vis = CLIVisualizer(universe)
+        entity = Entity("EnduranceRunner", x=1, y=1, is_endurance_runner=True)
+        vis.universe.add_entity(entity)
+        output = vis.render()
+        self.assertIn('~', output)
+
 if __name__ == '__main__':
     unittest.main()
