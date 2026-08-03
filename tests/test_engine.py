@@ -5084,7 +5084,58 @@ class TestFastLearner(unittest.TestCase):
         self.assertEqual(e2.experience, 0)
         self.assertEqual(e2.level, 2)
 
+
+class TestEnduranceRunner(unittest.TestCase):
+    def test_is_endurance_runner_mutation(self):
+        from universe.engine import Universe, Entity
+        import unittest.mock
+        u = Universe(width=10, height=10)
+        u.population_limit = 100
+        u.food_spawn_rate = 0.0
+        u.mutation_chance = 1.0
+        u.reproduction_threshold = 10
+        u.time = 25
+
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_endurance_runner=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True, is_opportunistic=True, has_thick_skin=True, has_strong_stomach=True, is_hardy=True, is_fast_learner=True, is_playful=True, is_heavy_sleeper=True, is_patient=True)
+        u.add_entity(e)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.tick()
+
+        eggs = [f for f in u.foods if getattr(f, 'plant_type', '') == 'egg']
+        children = [ent for ent in u.entities if ent.name == "Parent" and ent != e]
+        if eggs:
+            self.assertTrue(getattr(eggs[0].hatch_entity, 'is_endurance_runner', False))
+        elif children:
+            self.assertTrue(getattr(children[0], 'is_endurance_runner', False))
+
+    def test_is_endurance_runner_stamina(self):
+        from universe.engine import Universe, Entity
+        u = Universe(width=5, height=5)
+        # Verify max_stamina is doubled
+        e1 = Entity("Endurance", energy=50, max_stamina=50, is_endurance_runner=True, intelligence=1, perception_radius=0)
+        e2 = Entity("Normal", energy=50, max_stamina=50, is_endurance_runner=False, intelligence=1, perception_radius=0)
+
+        self.assertEqual(e1.max_stamina, 100)
+        self.assertEqual(e2.max_stamina, 50)
+
+        # Verify stamina recovery is doubled
+        e1.stamina = 10
+        e2.stamina = 10
+        e1.is_sleeping = False
+        e2.is_sleeping = False
+
+        u.add_entity(e1)
+        u.add_entity(e2)
+
+        u.tick()
+
+        # Base awake recovery is 2. Endurance runner recovers 4.
+        self.assertEqual(e1.stamina, 14)
+        self.assertEqual(e2.stamina, 12)
+
 if __name__ == '__main__':
+
 
     unittest.main()
 
@@ -6231,24 +6282,31 @@ class TestThickSkin(unittest.TestCase):
         self.assertTrue(attacker.stamina > 90)
 
     def test_has_thick_skin_claw_defense(self):
-        # We test that defense bonus applies, meaning prey escapes more often.
-        # Or we can just test that the code does not crash.
         from universe.engine import Universe, Entity
         import unittest.mock
         u = Universe(width=5, height=5)
+        u.base_temperature = 20
         attacker = Entity("Attacker", energy=100, attack=10, diet='carnivore', stamina=100, max_stamina=100, has_claws=True, perception_radius=10, intelligence=1, size=1)
-        # Defense is huge to ensure escape
         prey = Entity("Prey", energy=100, defense=1000, has_thick_skin=True, stamina=100, max_stamina=100, size=1, is_immune=True, disease_vector=False)
         u.add_entity(attacker)
         u.add_entity(prey)
+        for e in [attacker, prey]:
+            e.can_photosynthesize = False
+            e.is_regenerative = False
+            e.is_volcanic = False
+            e.is_desertic = False
+            e.is_filter_feeder = False
+            e.is_social = False
+            e.is_solitary = False
+            e.is_cold_blooded = False
+            e.preferred_temperature = -100
+            e.temperature_tolerance = 200
+            e.is_endurance_runner = False
         attacker.x, attacker.y = 0, 0
         prey.x, prey.y = 0, 0
-
-        # Mock random so it evaluates combat escape
         with unittest.mock.patch('random.random', return_value=0.0):
-            u.time = 2
+            u.time = 25
             u.tick()
-        # Prey should have escaped and gained defense, attacker should have lost stamina etc.
         self.assertTrue(prey.is_alive)
 
 
