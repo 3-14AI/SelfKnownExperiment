@@ -3693,6 +3693,7 @@ class TestUniverse(unittest.TestCase):
 
         initial_energy = predator.energy
         initial_stamina = predator.stamina
+        universe.time = predator.size - 1
 
         universe.tick()
 
