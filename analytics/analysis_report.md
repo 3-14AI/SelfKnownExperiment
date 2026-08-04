@@ -601,3 +601,10 @@ Recent agent iterations have significantly deepened the biological complexity an
 -   **Test State Bleeding**: Adding new boolean traits with global `mock_random.return_value = 0.0` mutation tests forces *all* boolean traits to flip. If these tests use generic parent entities, it causes unrelated traits (e.g. `is_vampiric`, `lays_eggs`) to flip, breaking other tests. It is essential to initialize generic test entities by manually disabling or hardcoding these bleeding traits to prevent assertions from failing.
 -   **Property Mutability**: The `is_alive` attribute of an `Entity` is a read-only property and cannot be explicitly assigned in test setup scripts.
 -   **Visualizer Conditional Priority**: When adding rendering logic in `CLIVisualizer`, placing new trait checks after diet fallback checks (which almost all entities have) will mask the new character. Priority order is critical.
+
+### Analysis 82
+- Add `is_nomadic` trait where entities recover or save energy by moving each tick.
+- Update `Entity` class, reproduction, mutation logic in `engine.py`.
+- Apply `is_nomadic` recovery mechanic in `Universe.tick()`.
+- Add visualizer representation in `visualizer.py`.
+- Add unit tests.
