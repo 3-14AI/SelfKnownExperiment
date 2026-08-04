@@ -29,6 +29,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- [x] Implemented `is_nest_builder` trait. Entities with this trait can build `shelter` terrains regardless of their intelligence level, allowing them to create safe havens for themselves and their offspring.
 
 - [x] Implemented `is_endurance_runner` trait. Entities with this trait have double the maximum stamina and recover stamina at double the normal rate.
 - [x] Implemented `is_patient` trait. Entities with this trait recover double stamina when they remain stationary during a tick.
