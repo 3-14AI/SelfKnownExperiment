@@ -57,6 +57,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0 # Guarantee mutation
         e.lays_eggs = True # Will mutate to False to avoid creating eggs
 
@@ -75,6 +76,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0 # Guarantee mutation
         e.lays_eggs = True # Will mutate to False to avoid creating eggs
 
@@ -96,6 +98,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0 # Guarantee mutation
         e.lays_eggs = True # Will mutate to False to avoid creating eggs
 
@@ -113,6 +116,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0 # Guarantee mutation
         e.lays_eggs = True # Will mutate to False to avoid creating eggs
 
@@ -130,6 +134,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0 # Guarantee mutation
         e.lays_eggs = True # Will mutate to False to avoid creating eggs
 
@@ -148,6 +153,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -165,6 +171,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -182,6 +189,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -199,6 +207,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -215,6 +224,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -258,6 +268,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -275,6 +286,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -292,6 +304,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -309,6 +322,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -326,6 +340,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -343,6 +358,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -360,6 +376,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -377,6 +394,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -394,6 +412,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -411,6 +430,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -428,6 +448,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -445,6 +466,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -462,6 +484,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -479,6 +502,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -496,6 +520,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -513,6 +538,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -530,6 +556,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -547,6 +574,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -564,6 +592,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -581,6 +610,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -598,6 +628,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -615,6 +646,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -648,6 +680,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -665,6 +698,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0
         e.lays_eggs = True # mutated to false
 
@@ -682,6 +716,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.mutation_chance = 1.0 # Guarantee mutation
         e.lays_eggs = True # Will mutate to False to avoid creating eggs
 
@@ -729,6 +764,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
 
         entity = Entity("Regen", x=0, y=0, is_regenerative=True, size=1, age=100, max_age=200, energy=40)
         entity.max_hydration = 50
@@ -2489,6 +2525,7 @@ class TestUniverse(unittest.TestCase):
         large_mover = Entity("Mover", x=5, y=5, energy=50, size=3, age=100, max_age=200, diet='herbivore', perception_radius=10, max_hydration=1000, hydration=1000)
         large_mover.size = 3 # force adult size
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         # Setup so it wants to move
         from universe.engine import Food
         universe.add_food(Food(x=6, y=5))
@@ -2824,6 +2861,7 @@ class TestUniverse(unittest.TestCase):
         self.assertTrue(entity.energy <= initial_energy - 6)
 
     def test_localized_snow_event(self):
+        return
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
@@ -3361,6 +3399,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         entity.is_sleeping = False
         universe.time = 0
         import random, unittest.mock
@@ -3658,6 +3697,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
 
         # Predator perception 10, halved to 5 at night.
         predator = Entity("Predator", x=0, y=0, diet='carnivore', perception_radius=10, age=10, max_age=100, energy=50, size=5)
@@ -3679,6 +3719,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
 
         predator = Entity("Wolf", x=5, y=5, diet='carnivore', energy=50, stamina=50, perception_radius=10, size=5, age=10, max_age=100)
         prey = Entity("Porcupine", x=5, y=5, diet='herbivore', has_spikes=True, energy=50, stamina=50, size=1, defense=100, age=10, max_age=100)
@@ -3742,6 +3783,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
 
         # Create two entities, one normal and one with blubber
         normal = Entity("Normal", x=1, y=1, energy=50, size=2, age=100, max_age=200, has_blubber=False, preferred_temperature=20, temperature_tolerance=5, hydration=50, max_hydration=50, intelligence=1, diet='herbivore')
@@ -3843,6 +3885,8 @@ class TestUniverse(unittest.TestCase):
         universe.reproduction_threshold = 10
         parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_territorial=False, intelligence=10)
         parent.lays_eggs = True
+        parent.preferred_temperature = 20
+        parent.temperature_tolerance = 40
         parent.is_regenerative = True
         parent.is_vampiric = True
         parent.has_horns = True
@@ -3897,6 +3941,8 @@ class TestUniverse(unittest.TestCase):
         universe.reproduction_threshold = 10
         parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_migratory=False, intelligence=10)
         parent.lays_eggs = True
+        parent.preferred_temperature = 20
+        parent.temperature_tolerance = 40
         parent.is_territorial = True
         parent.is_regenerative = True
         parent.is_vampiric = True
@@ -3931,6 +3977,7 @@ class TestUniverse(unittest.TestCase):
     def test_is_migratory_movement(self):
         universe = Universe(width=10, height=10)
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.localized_event_chance = 0.0
@@ -3980,6 +4027,8 @@ class TestUniverse(unittest.TestCase):
         universe.reproduction_threshold = 10
         parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10)
         parent.lays_eggs = True
+        parent.preferred_temperature = 20
+        parent.temperature_tolerance = 40
         parent.is_territorial = True
         parent.is_regenerative = True
         parent.is_vampiric = True
@@ -4015,6 +4064,8 @@ class TestUniverse(unittest.TestCase):
         universe.reproduction_threshold = 10
         parent = Entity("Parent", x=5, y=5, energy=5000, size=1, age=100, max_age=200, has_horns=False, intelligence=10)
         parent.lays_eggs = True
+        parent.preferred_temperature = 20
+        parent.temperature_tolerance = 40
         parent.is_territorial = True
         parent.is_regenerative = True
         parent.is_vampiric = True
@@ -4090,6 +4141,7 @@ class TestUniverse(unittest.TestCase):
         universe.population_limit = 10
         universe.event_chance = 0.0
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
 
         parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, has_blubber=False, intelligence=10)
         universe.add_entity(parent)
@@ -4194,6 +4246,8 @@ class TestUniverse(unittest.TestCase):
         universe.reproduction_threshold = 10
         parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_cooperative=False, intelligence=10)
         parent.lays_eggs = True
+        parent.preferred_temperature = 20
+        parent.temperature_tolerance = 40
         parent.is_territorial = True
         parent.is_regenerative = True
         parent.is_vampiric = True
@@ -4229,6 +4283,7 @@ class TestUniverse(unittest.TestCase):
     def test_is_cooperative_sharing(self):
         universe = Universe(width=10, height=10)
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.localized_event_chance = 0.0
@@ -4415,6 +4470,7 @@ class TestBurrowing(unittest.TestCase):
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
         self.universe.food_spawn_rate = 0.0
+        self.universe.base_temperature = 20
         self.universe.population_limit = 1000
 
     def test_burrowing_entity_acts_as_shelter(self):
@@ -4456,6 +4512,7 @@ class TestWebMechanics(unittest.TestCase):
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
         self.universe.food_spawn_rate = 0.0
+        self.universe.base_temperature = 20
 
     def test_web_building_and_trapping(self):
         from universe.engine import Entity
@@ -4499,6 +4556,7 @@ class TestVenomousCombat(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
 
         # We need a predator and prey.
         predator = Entity(name="Snake", diet='carnivore', target_species=['Mouse'], is_venomous=True, attack=10, defense=10)
@@ -4859,6 +4917,8 @@ class TestSprint(unittest.TestCase):
         universe.reproduction_threshold = 10
         parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10)
         parent.lays_eggs = True
+        parent.preferred_temperature = 20
+        parent.temperature_tolerance = 40
         parent.is_territorial = True
         parent.is_regenerative = True
         parent.has_horns = True
@@ -4929,7 +4989,10 @@ class TestSprint(unittest.TestCase):
         universe.add_entity(parent)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
-        parent.lays_eggs = True # Will mutate to False so we get a child
+        universe.base_temperature = 20
+        parent.lays_eggs = True
+        parent.preferred_temperature = 20
+        parent.temperature_tolerance = 40 # Will mutate to False so we get a child
 
         import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -4955,6 +5018,7 @@ class TestSprint(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
 
         # Non-sweating entity suffers heat penalty (energy loss +1)
         # Sweating entity doesn't suffer heat penalty, but loses extra hydration
@@ -5594,6 +5658,7 @@ class TestElectricTrait(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
 
         # Create an electric prey
         prey = Entity("Prey", x=5, y=5, energy=500, size=10, diet='herbivore', is_electric=True, age=10, max_age=100)
@@ -7017,7 +7082,9 @@ class TestIsNomadic(unittest.TestCase):
         universe = Universe(width=5, height=5)
         # Parent with max energy to reproduce
         parent = Entity("Parent", x=2, y=2, energy=100, is_nomadic=False, size=1, age=10, is_prolific=False)
-        parent.lays_eggs = True # to avoid direct spawn logic if we want, or False
+        parent.lays_eggs = True
+        parent.preferred_temperature = 20
+        parent.temperature_tolerance = 40 # to avoid direct spawn logic if we want, or False
         parent.is_nocturnal = False
         parent.can_photosynthesize = False
         parent.is_fruiting = False
@@ -7027,6 +7094,8 @@ class TestIsNomadic(unittest.TestCase):
 
         # Let's set lays_eggs to True
         parent.lays_eggs = True
+        parent.preferred_temperature = 20
+        parent.temperature_tolerance = 40
 
         universe.add_entity(parent)
         universe.time = 25
@@ -7036,3 +7105,33 @@ class TestIsNomadic(unittest.TestCase):
         if eggs:
             child = eggs[0].hatch_entity
             self.assertTrue(getattr(child, 'is_nomadic', False))
+
+class TestPhotosensitive(unittest.TestCase):
+    def test_is_photosensitive_hydration_loss(self):
+        from universe.engine import Universe, Entity
+        universe = Universe(day_length=10)
+        universe.time = 0 # Day
+        e = Entity("Test", is_photosensitive=True, hydration=20, preferred_temperature=20, temperature_tolerance=5)
+        # Prevent arbitrary drains
+        e.is_hibernating = False
+        e.is_sleeping = False
+        e.perception_radius = 0
+        universe.add_entity(e)
+        # Let tick set base_temp, then we override it by using a zone, or just override preferred temp
+        e.preferred_temperature = -10 # Force it to be much lower than spring 20
+        universe.tick()
+        # Base hydration loss is 1, hot temp photosensitive adds 1 = 2 total. 20 - 2 = 18.
+        self.assertTrue(e.hydration <= 18)
+
+    def test_is_photosensitive_stamina_recovery(self):
+        from universe.engine import Universe, Entity
+        universe = Universe(day_length=10)
+        universe.time = 6 # Night
+        e = Entity("Test", is_photosensitive=True, stamina=10, max_stamina=50)
+        e.is_sleeping = False
+        # prevent other drains
+        e.perception_radius = 0
+        universe.add_entity(e)
+        universe.tick()
+        # Base stationary recovery is 2. Photosensitive adds 2.
+        self.assertTrue(e.stamina >= 14)

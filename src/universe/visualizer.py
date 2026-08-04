@@ -45,7 +45,9 @@ class CLIVisualizer:
                 is_hibernating = getattr(entity, 'is_hibernating', False)
 
                 if getattr(entity, 'is_infected', False):
-                    if diet == 'carnivore':
+                    if getattr(entity, 'is_photosensitive', False):
+                        char = '!'
+                    elif diet == 'carnivore':
                         char = 'X'
                     elif diet == 'scavenger':
                         char = 'W'
@@ -186,6 +188,8 @@ class CLIVisualizer:
                         char = '}'
                     elif getattr(entity, 'is_vocal', False):
                         char = 'o'
+                    elif getattr(entity, 'is_photosensitive', False):
+                        char = '!'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
