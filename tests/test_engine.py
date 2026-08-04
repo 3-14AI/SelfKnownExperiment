@@ -24,12 +24,12 @@ class TestUniverse(unittest.TestCase):
     def test_is_desertic_movement(self):
         universe = Universe(width=10, height=10)
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='sand'))
-        e = Entity("Desertic", x=0, y=0, energy=100, size=2, is_desertic=True, max_stamina=100, stamina=100)
+        e = Entity("Desertic", x=0, y=0, energy=100, size=2, is_desertic=True, max_stamina=100, stamina=100, is_prolific=False)
         e.is_sleeping = True # to avoid movement during tick
         universe.add_entity(e)
 
         # We test the energy loss in the tick rather than stamina in move_entity
-        e2 = Entity("Normal", x=1, y=1, energy=100, size=2, is_desertic=False, max_stamina=100, stamina=100)
+        e2 = Entity("Normal", x=1, y=1, energy=100, size=2, is_desertic=False, max_stamina=100, stamina=100, is_prolific=False)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='sand'))
         e2.is_sleeping = True # to avoid movement during tick
         universe.add_entity(e2)
@@ -2521,6 +2521,8 @@ class TestUniverse(unittest.TestCase):
         entity.is_sleeping = False
         entity.intelligence = 1
         entity.preferred_temperature = universe.base_temperature
+        entity.can_spin_webs = False
+        entity.is_migratory = False
         entity.temperature_tolerance = 40
         universe.disease_chance = 0.0
 
@@ -3309,6 +3311,8 @@ class TestUniverse(unittest.TestCase):
     def test_food_spoilage_normal(self):
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0 # disable random events to prevent breaking tests
+        universe.disease_chance = 0.0
+        universe.population_limit = 0
         universe.base_temperature = 20
         food = Food(x=5, y=5, age=0, max_age=5)
         universe.add_food(food)
@@ -4144,6 +4148,13 @@ class TestUniverse(unittest.TestCase):
 
         # Base energy loss = 1, reduced by 3 when sleeping -> 0
         entity = Entity(name="Sleeper", x=5, y=5, size=1, energy=20, max_stamina=50, stamina=10, is_sleeping=True)
+        entity.is_fruiting = False
+        entity.is_parasitic = False
+        entity.is_nocturnal = False
+        entity.is_prolific = False
+        entity.is_heavy_sleeper = False
+        entity.is_patient = False
+        entity.lays_eggs = False
         # Make sure they don't move or lose energy from other means
         entity.intelligence = 1
         entity.can_spin_webs = False
@@ -4806,10 +4817,10 @@ class TestSprint(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
 
-        vampire = Entity("Vampire", x=5, y=5, size=1, energy=20, hydration=20, max_hydration=100, diet='carnivore', attack=10, is_vampiric=True, stamina=100, max_stamina=100, intelligence=1, perception_radius=0, can_spin_webs=False, is_migratory=False, lays_eggs=False, is_mud_bather=False, is_territorial=False, has_strong_stomach=False, is_agile=False)
+        vampire = Entity("Vampire", x=5, y=5, size=1, energy=20, hydration=20, max_hydration=100, diet='carnivore', attack=10, is_vampiric=True, stamina=100, max_stamina=100, intelligence=1, perception_radius=0, can_spin_webs=False, is_migratory=False, lays_eggs=False, is_mud_bather=False, is_territorial=False, has_strong_stomach=False, is_agile=False, is_prolific=False)
         universe.population_limit = 0
         universe.reproduction_threshold = 100
-        prey = Entity("Prey", x=5, y=5, size=1, energy=50, hydration=50, max_hydration=100, defense=10000, stamina=100, max_stamina=100, intelligence=1, perception_radius=0, is_migratory=False, is_agile=False, has_strong_stomach=False)
+        prey = Entity("Prey", x=5, y=5, size=1, energy=50, hydration=50, max_hydration=100, defense=10000, stamina=100, max_stamina=100, intelligence=1, perception_radius=0, is_migratory=False, is_agile=False, has_strong_stomach=False, is_prolific=False, lays_eggs=False, can_spin_webs=False)
 
         universe.add_entity(vampire)
         universe.add_entity(prey)
@@ -4821,6 +4832,9 @@ class TestSprint(unittest.TestCase):
             e.is_carnivorous_plant = False
             e.is_hardy = False
             e.is_fruiting = False
+            e.is_parasitic = False
+            e.is_cold_blooded = False
+            e.is_volcanic = False
             e.can_hoard = False
         vampire.energy = 20
 
@@ -5162,6 +5176,63 @@ class TestEnduranceRunner(unittest.TestCase):
         self.assertEqual(e1.stamina, 14)
         self.assertEqual(e2.stamina, 12)
 
+    @unittest.mock.patch('random.random', return_value=0.0)
+    def test_is_prolific_mutation(self, mock_random):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=0)
+        universe.time = 0
+        universe.population_limit = 100
+        # Initialize traits so they flip correctly
+        e1 = Entity("Parent", energy=5000, is_prolific=False, lays_eggs=True, is_mud_bather=True, is_vampiric=True, is_territorial=True, has_strong_stomach=True, is_opportunistic=True, is_agile=True, is_evasive=True)
+        e1.is_fruiting = False
+        e1.is_parasitic = False
+        e1.can_photosynthesize = False
+        e1.is_nocturnal = False
+        e1.is_volcanic = False
+        e1.is_cold_blooded = False
+        e1.has_claws = False
+        universe.add_entity(e1)
+        universe.time = 25
+        universe.tick()
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertEqual(len(eggs), 1)
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_prolific', False))
+
+    @unittest.mock.patch('random.random', return_value=0.0)
+    def test_is_prolific_reproduction_requirements(self, mock_random):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.population_limit = 100
+        universe.reproduction_threshold = 20
+        universe.reproduction_cost = 10
+
+        # Prolific entity
+        e1 = Entity("Prolific", energy=15, is_prolific=True, lays_eggs=True, age=10, size=1)
+        e1.is_nocturnal = False
+        e1.can_photosynthesize = False
+        e1.is_fruiting = False
+        e1.is_parasitic = False
+        e1.is_territorial = False
+        e1.is_volcanic = False
+        e1.is_cold_blooded = False
+        e1.has_claws = False
+
+        universe.add_entity(e1)
+        universe.time = 25 # day time to avoid random sleeping
+        universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertEqual(len(eggs), 1)
+
+        # Normal entity
+        universe.foods.clear()
+        universe.entities.clear()
+        e2 = Entity("Normal", energy=15, is_prolific=False, lays_eggs=True, age=10, size=1)
+        universe.add_entity(e2)
+        universe.time = 25
+        universe.tick()
+
+        eggs2 = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertEqual(len(eggs2), 0)
+
 if __name__ == '__main__':
 
 
@@ -5175,7 +5246,7 @@ class TestPhotosynthesis(unittest.TestCase):
 
         # Base energy loss would be entity.size (1), but photosynthesis gives +2 during day
         # So net change = +1
-        entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1)
+        entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1, is_prolific=False, is_fruiting=False, is_parasitic=False, is_mud_bather=False, is_territorial=False, is_heavy_sleeper=False, is_patient=False)
         # Disable interference
         entity.is_sleeping = False
         entity.intelligence = 1
@@ -6314,12 +6385,19 @@ class TestThickSkin(unittest.TestCase):
         import unittest.mock
         u = Universe(width=5, height=5)
         u.base_temperature = 20
-        attacker = Entity("Attacker", energy=100, attack=10, diet='carnivore', stamina=100, max_stamina=100, has_claws=True, perception_radius=10, intelligence=1, size=1)
-        prey = Entity("Prey", energy=100, defense=1000, has_thick_skin=True, stamina=100, max_stamina=100, size=1, is_immune=True, disease_vector=False)
+        u.reproduction_threshold = 1000
+        attacker = Entity("Attacker", energy=100, attack=10, diet='carnivore', stamina=100, max_stamina=100, has_claws=True, perception_radius=10, intelligence=1, size=1, is_prolific=False, lays_eggs=False, can_spin_webs=False)
+        prey = Entity("Prey", energy=100, defense=1000, has_thick_skin=True, stamina=100, max_stamina=100, size=1, is_immune=True, disease_vector=False, is_prolific=False, lays_eggs=False, can_spin_webs=False)
         u.add_entity(attacker)
         u.add_entity(prey)
         for e in [attacker, prey]:
             e.can_photosynthesize = False
+            e.is_fruiting = False
+            e.is_parasitic = False
+            e.is_mud_bather = False
+            e.is_territorial = False
+            e.is_heavy_sleeper = False
+            e.is_patient = False
             e.is_regenerative = False
             e.is_volcanic = False
             e.is_desertic = False
@@ -6327,7 +6405,7 @@ class TestThickSkin(unittest.TestCase):
             e.is_social = False
             e.is_solitary = False
             e.is_cold_blooded = False
-            e.preferred_temperature = -100
+            e.preferred_temperature = 20
             e.temperature_tolerance = 200
             e.is_endurance_runner = False
         attacker.x, attacker.y = 0, 0

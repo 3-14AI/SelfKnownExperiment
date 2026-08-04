@@ -178,6 +178,8 @@ class CLIVisualizer:
                         char = '~'
                     elif getattr(entity, 'is_evasive', False):
                         char = '^'
+                    elif getattr(entity, 'is_prolific', False):
+                        char = '&'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
