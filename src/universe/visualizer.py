@@ -182,6 +182,8 @@ class CLIVisualizer:
                         char = '&'
                     elif getattr(entity, 'is_resourceful', False):
                         char = '$'
+                    elif getattr(entity, 'is_vocal', False):
+                        char = 'o'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':

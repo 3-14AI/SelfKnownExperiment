@@ -6847,3 +6847,62 @@ class TestIsPatient(unittest.TestCase):
 
         self.assertEqual(e1.stamina, 14)
         self.assertEqual(e2.stamina, 12)
+
+class TestIsVocal(unittest.TestCase):
+    def test_is_vocal_alert_radius(self):
+        universe = Universe(width=10, height=10)
+        e1 = Entity("Vocal", diet='herbivore', perception_radius=2, is_vocal=True, energy=100, x=0, y=0)
+        e2 = Entity("Quiet", diet='herbivore', perception_radius=2, is_vocal=False, energy=100, x=0, y=0)
+
+        # Test if it calls get_nearby_flockmates with the right distance
+        with unittest.mock.patch.object(universe, 'get_nearby_flockmates', return_value=[]) as mock_get:
+            # Add predator to trigger flee behavior
+            pred = Entity("Predator", x=0, y=1, diet='carnivore', attack=100)
+            universe.entities = [e1, pred]
+            universe.time = 25 # Daytime
+            universe.tick()
+            mock_get.assert_called_with(e1, 2 * 4) # effective perception 2 * 4 = 8
+
+            universe.entities = [e2, pred]
+            universe.time = 25 # Daytime
+            e2.energy, pred.energy = 1000, 1000
+
+            universe.tick()
+            mock_get.assert_called_with(e2, 2 * 2) # effective perception 2 * 2 = 4
+
+    @unittest.mock.patch('random.random')
+    def test_is_vocal_mutation(self, mock_random):
+        mock_random.return_value = 0.0
+        universe = Universe(width=10, height=10, population_limit=10, reproduction_threshold=20)
+        e = Entity("Parent", energy=1000, age=10, size=1, is_vocal=False, lays_eggs=True, is_prolific=True)
+        # Disable bleeding traits
+        e.is_mud_bather = True
+        e.is_vampiric = True
+        e.is_parasitic = False
+        e.is_fruiting = False
+        e.has_strong_stomach = True
+        e.is_territorial = True
+        e.is_endurance_runner = True
+        e.is_patient = True
+        e.is_heavy_sleeper = True
+        e.is_playful = True
+        e.is_fast_learner = True
+        e.is_hardy = True
+        e.has_thick_skin = True
+        e.is_opportunistic = True
+        e.is_agile = True
+        e.is_frugivore = True
+        e.is_cooperative = True
+        e.is_migratory = True
+        e.has_horns = True
+        e.is_resourceful = True
+        e.is_adaptable = True
+        e.is_evasive = True
+
+        universe.add_entity(e)
+        universe.time = 25
+        universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertTrue(len(eggs) > 0)
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_vocal', False))

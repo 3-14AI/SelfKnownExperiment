@@ -583,3 +583,21 @@ Recent agent iterations have significantly deepened the biological complexity an
 - **Agent Action**:
   - Implemented mutation logic tests for `is_infected`, `is_sleeping`, and 29 other previously un-tested traits in `tests/test_engine.py`.
 - **Analysis**: This action ensures that the evolutionary engine correctly passes down and mutates all available traits, maintaining the integrity of the genetic simulation and preventing regressions in species evolution.
+
+### Analysis 81: Implementing the `is_vocal` Trait
+
+**Context**: The user requested the implementation of the `is_vocal` trait from the "Next Steps" section of the agents.md file. This trait is designed to double an entity's communication radius when alerting flockmates of nearby predators.
+
+**Changes Made**:
+-   **Engine Modifications (`src/universe/engine.py`)**: Added `is_vocal` to the `Entity.__init__` arguments and attributes. Updated the `Entity` reproduction logic to inherit and mutate this new trait. Updated the flee behavior inside `Universe.tick` to dynamically multiply the effective communication radius for alerting flockmates if the entity is vocal.
+-   **Visualizer Modifications (`src/universe/visualizer.py`)**: Inserted logic into `CLIVisualizer.render` to map vocal entities to the character `'o'`. The conditional was correctly placed above the base diet fallbacks (`carnivore`, `scavenger`, `omnivore`) to ensure it actually triggers.
+-   **Test Additions (`tests/test_engine.py`, `tests/test_visualizer.py`)**:
+    -   Added `TestIsVocal` with `test_is_vocal_alert_radius` to test that `get_nearby_flockmates` is called with the correct doubled radius when a predator is nearby.
+    -   Added `test_is_vocal_mutation` to verify inheritance and mutation (using `unittest.mock.patch('random.random')`).
+    -   Added `test_visualizer_is_vocal` to check string representation mapping.
+-   **Agents/Status Update (`agents.md`)**: Replaced the empty "Next Steps" prompt with the completed `is_vocal` task item, setting the checkbox to true.
+
+**Key Learnings & Revisions**:
+-   **Test State Bleeding**: Adding new boolean traits with global `mock_random.return_value = 0.0` mutation tests forces *all* boolean traits to flip. If these tests use generic parent entities, it causes unrelated traits (e.g. `is_vampiric`, `lays_eggs`) to flip, breaking other tests. It is essential to initialize generic test entities by manually disabling or hardcoding these bleeding traits to prevent assertions from failing.
+-   **Property Mutability**: The `is_alive` attribute of an `Entity` is a read-only property and cannot be explicitly assigned in test setup scripts.
+-   **Visualizer Conditional Priority**: When adding rendering logic in `CLIVisualizer`, placing new trait checks after diet fallback checks (which almost all entities have) will mask the new character. Priority order is critical.

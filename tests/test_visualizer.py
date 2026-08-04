@@ -531,5 +531,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('$', output)
 
+
+    def test_visualizer_is_vocal(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("Vocal", x=1, y=1, is_vocal=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('o', output)
+
 if __name__ == '__main__':
     unittest.main()
