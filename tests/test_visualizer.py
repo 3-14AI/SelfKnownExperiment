@@ -514,5 +514,13 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('~', output)
 
+    def test_prolific_entity(self):
+        universe = Universe(width=5, height=5)
+        visualizer = CLIVisualizer(universe)
+        e = Entity("P", x=0, y=0, is_prolific=True)
+        universe.add_entity(e)
+        output = visualizer.render()
+        self.assertIn('&', output)
+
 if __name__ == '__main__':
     unittest.main()

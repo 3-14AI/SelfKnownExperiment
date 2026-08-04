@@ -151,5 +151,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
 
 ## Next Steps
+- [x] Implemented `is_prolific` trait. Entities with this trait have reduced energy thresholds and costs for reproduction, and reproduce more frequently.
 - [x] Implemented `is_heavy_sleeper` trait. Entities with this trait recover double energy while sleeping, but their perception drops to 0 during sleep, rendering them oblivious to events and predators.
 - [x] Implemented `is_evasive` trait. Entities with this trait gain a flat +20% bonus to their escape chance during combat, making them notoriously slippery and hard to catch.
