@@ -5233,7 +5233,58 @@ class TestEnduranceRunner(unittest.TestCase):
         eggs2 = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
         self.assertEqual(len(eggs2), 0)
 
+
+class TestIsAdaptable(unittest.TestCase):
+    def test_is_adaptable_adjusts_temperature(self):
+        universe = Universe(width=10, height=10)
+        universe.base_temperature = 0
+        universe.time = 50 # force summer, or adjust temperature directly
+        universe.temperature_zones = [] # clear zones to keep it predictable
+        universe.get_temperature_at = lambda x, y: 30 # force mock temperature to 30
+
+        # entity prefers 20
+        e1 = Entity("Adaptable", x=5, y=5, is_adaptable=True, preferred_temperature=20, hydration=10, max_hydration=10)
+        universe.add_entity(e1)
+        universe.tick()
+
+        # abs(30 - 20) > 5 -> preferred_temperature increases to 21, hydration drops to 8 (1 base + 1 adaptable)
+        self.assertEqual(e1.preferred_temperature, 21)
+        self.assertEqual(e1.hydration, 8)
+
+        # Non-adaptable entity
+        universe.entities.clear()
+        e2 = Entity("Normal", x=5, y=5, is_adaptable=False, preferred_temperature=20, hydration=10, max_hydration=10)
+        universe.add_entity(e2)
+        universe.tick()
+
+        self.assertEqual(e2.preferred_temperature, 20)
+        self.assertEqual(e2.hydration, 9) # 1 base
+
+    @unittest.mock.patch('random.random')
+    def test_is_adaptable_mutation(self, mock_random):
+        mock_random.return_value = 0.0 # Force mutations
+        universe = Universe(width=10, height=10, population_limit=10, reproduction_threshold=20, reproduction_cost=10)
+
+        e1 = Entity(name="Adaptable", energy=25, is_adaptable=True, lays_eggs=True, age=10, size=1)
+        # Avoid nocturnal bleed and other traits
+        e1.is_mud_bather = True
+        e1.has_strong_stomach = True
+        e1.is_vampiric = True
+        e1.is_territorial = True
+
+        universe.add_entity(e1)
+        universe.time = 25
+        universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertEqual(len(eggs), 1)
+        child = eggs[0].hatch_entity
+
+        # Mutation should toggle it to False
+        self.assertFalse(child.is_adaptable)
+
 if __name__ == '__main__':
+
 
 
     unittest.main()

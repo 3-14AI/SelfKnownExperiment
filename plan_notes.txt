@@ -423,3 +423,4 @@ Let's go with **`is_agile`**.
    - Wait, `a` is used? Let's check `src/universe/visualizer.py` for 'a' or 'A'.
 
 Let's check `visualizer.py` characters:
+Plan: Add is_adaptable trait
