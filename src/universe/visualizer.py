@@ -180,6 +180,8 @@ class CLIVisualizer:
                         char = '^'
                     elif getattr(entity, 'is_prolific', False):
                         char = '&'
+                    elif getattr(entity, 'is_resourceful', False):
+                        char = '$'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
