@@ -158,3 +158,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_heavy_sleeper` trait. Entities with this trait recover double energy while sleeping, but their perception drops to 0 during sleep, rendering them oblivious to events and predators.
 - [x] Implemented `is_evasive` trait. Entities with this trait gain a flat +20% bonus to their escape chance during combat, making them notoriously slippery and hard to catch.
 - [x] Implemented `is_adaptable` trait. Entities with this trait dynamically adjust their preferred temperature over time to survive in extreme climates, at the cost of increased hydration consumption.
+- [x] Implemented `is_nomadic` trait. Entities with this trait have reduced energy consumption when they are constantly moving.

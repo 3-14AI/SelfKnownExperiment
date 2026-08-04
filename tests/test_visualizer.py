@@ -540,5 +540,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('o', output)
 
+
+    def test_render_is_nomadic(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("Nomadic", x=1, y=1, is_nomadic=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('}', output)
+
 if __name__ == '__main__':
+
     unittest.main()

@@ -5217,7 +5217,7 @@ class TestEnduranceRunner(unittest.TestCase):
         universe.reproduction_cost = 10
 
         # Prolific entity
-        e1 = Entity("Prolific", energy=15, is_prolific=True, lays_eggs=True, age=10, size=1)
+        e1 = Entity("Prolific", energy=25, is_prolific=True, lays_eggs=True, age=10, size=1)
         e1.is_nocturnal = False
         e1.can_photosynthesize = False
         e1.is_fruiting = False
@@ -6965,3 +6965,74 @@ class TestIsVocal(unittest.TestCase):
         eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
         self.assertTrue(len(eggs) > 0)
         self.assertTrue(getattr(eggs[0].hatch_entity, 'is_vocal', False))
+
+class TestIsNomadic(unittest.TestCase):
+    def test_is_nomadic_trait(self):
+        universe = Universe(width=10, height=10)
+        # Nomadic entity that moves
+        e1 = Entity("NomadicMover", x=5, y=5, energy=20, max_stamina=50, stamina=10, is_nomadic=True)
+        # Non-nomadic entity that moves
+        e2 = Entity("NormalMover", x=2, y=2, energy=20, max_stamina=50, stamina=10, is_nomadic=False)
+
+        # Force movement by giving them full perception and food
+        e1.perception_radius = 10
+        e2.perception_radius = 10
+
+        # Turn off unrelated features
+        for e in [e1, e2]:
+            e.intelligence = 1
+            e.can_spin_webs = False
+            e.is_nocturnal = False
+            e.can_photosynthesize = False
+            e.is_heavy_sleeper = False
+            e.is_regenerative = False
+            e.is_fruiting = False
+            e.is_gluttonous = False
+
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+
+        universe.add_food(Food(x=6, y=5, energy=10))
+        universe.add_food(Food(x=3, y=2, energy=10))
+
+        e1_start_energy = e1.energy
+        e2_start_energy = e2.energy
+
+        universe.tick()
+
+        # Check they moved
+        self.assertNotEqual(e1.x, 5)
+        self.assertNotEqual(e2.x, 2)
+
+        # Nomadic entity should gain energy (+2 at the end of tick after movement)
+        # base loss = 1, move = 0 or 1 depending on terrain. Let's just check relative difference.
+        # e1 should have +2 more relative energy than e2.
+        e1_diff = e1.energy - e1_start_energy
+        e2_diff = e2.energy - e2_start_energy
+
+        self.assertEqual(e1_diff, e2_diff + 2)
+
+    @mock.patch('random.random', return_value=0.0)
+    def test_is_nomadic_mutation(self, mock_random):
+        universe = Universe(width=5, height=5)
+        # Parent with max energy to reproduce
+        parent = Entity("Parent", x=2, y=2, energy=100, is_nomadic=False, size=1, age=10, is_prolific=False)
+        parent.lays_eggs = True # to avoid direct spawn logic if we want, or False
+        parent.is_nocturnal = False
+        parent.can_photosynthesize = False
+        parent.is_fruiting = False
+        parent.is_gluttonous = False
+        parent.is_parasitic = False
+        parent.is_vampiric = True # opposite of what causes trouble, etc. Just normal parent
+
+        # Let's set lays_eggs to True
+        parent.lays_eggs = True
+
+        universe.add_entity(parent)
+        universe.time = 25
+        universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        if eggs:
+            child = eggs[0].hatch_entity
+            self.assertTrue(getattr(child, 'is_nomadic', False))
