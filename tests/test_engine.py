@@ -5410,6 +5410,64 @@ class TestIsAdaptable(unittest.TestCase):
             child = children[0]
             self.assertTrue(getattr(child, 'is_resourceful', False), "is_resourceful should mutate")
 
+
+class TestIsNestBuilder(unittest.TestCase):
+    def test_is_nest_builder_trait(self):
+        u = Universe(width=5, height=5)
+        u.event_chance = 0.0
+        u.localized_event_chance = 0.0
+        u.disease_chance = 0.0
+        e1 = Entity(name="E1", x=2, y=2, energy=50, intelligence=1, size=1)
+        u.add_entity(e1)
+
+        e2 = Entity(name="E2", x=3, y=3, energy=50, intelligence=1, size=1, is_nest_builder=True)
+        u.add_entity(e2)
+
+        with unittest.mock.patch('random.random', return_value=0.01):
+            u.tick()
+
+        terrains_e1 = u.get_terrains_at(2, 2)
+        terrains_e2 = u.get_terrains_at(3, 3)
+
+        self.assertFalse(any(t.terrain_type == 'shelter' for t in terrains_e1))
+        self.assertTrue(any(t.terrain_type == 'shelter' for t in terrains_e2))
+
+    @unittest.mock.patch('random.random')
+    def test_is_nest_builder_mutation(self, mock_random):
+        mock_random.return_value = 0.0
+        u = Universe()
+        e1 = Entity(name="P1", energy=1000, age=10, is_nest_builder=False, lays_eggs=True, is_prolific=True)
+        # Disable disruptive traits
+        e1.is_mud_bather = True
+        e1.is_vampiric = True
+        e1.is_parasitic = False
+        e1.is_fruiting = False
+        e1.has_strong_stomach = True
+        e1.is_territorial = True
+        e1.is_endurance_runner = True
+        e1.is_patient = True
+        e1.is_heavy_sleeper = True
+        e1.is_playful = True
+        e1.is_fast_learner = True
+        e1.is_hardy = True
+        e1.has_thick_skin = True
+        e1.is_opportunistic = True
+        e1.is_agile = True
+        e1.is_frugivore = True
+        e1.is_cooperative = True
+        e1.is_migratory = True
+        e1.has_horns = True
+        e1.is_resourceful = True
+        e1.is_adaptable = True
+        e1.is_evasive = True
+        e1.is_vocal = True
+        u.add_entity(e1)
+        u.time = 25
+        u.tick()
+        eggs = [f for f in u.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertTrue(len(eggs) > 0)
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_nest_builder', False))
+
 if __name__ == '__main__':
 
 
@@ -6558,7 +6616,8 @@ class TestThickSkin(unittest.TestCase):
         # So attacker energy = 100 - 1 = 99 + 5 (from eating prey) = 104.
         self.assertTrue(attacker.stamina > 90)
 
-    def test_has_thick_skin_claw_defense(self):
+    @unittest.mock.patch('random.random', return_value=0.0)
+    def test_has_thick_skin_claw_defense(self, mock_random):
         from universe.engine import Universe, Entity
         import unittest.mock
         u = Universe(width=5, height=5)
