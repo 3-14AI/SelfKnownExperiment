@@ -522,5 +522,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('&', output)
 
+
+    def test_render_is_resourceful(self):
+        universe = Universe(width=5, height=5)
+        vis = CLIVisualizer(universe)
+        entity = Entity("Resourceful", x=1, y=1, is_resourceful=True)
+        vis.universe.add_entity(entity)
+        output = vis.render()
+        self.assertIn('$', output)
+
 if __name__ == '__main__':
     unittest.main()
