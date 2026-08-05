@@ -29,6 +29,8 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 Godspeed, Agent. The universe is in your hands.
 
 ## Completed
+- [x] Implemented `is_fearless` trait. Entities with this trait do not run away from predators.
+- [x] Implemented `is_photosensitive` trait. Entities with this trait suffer increased hydration loss and no stamina recovery during the day, but gain bonus stamina recovery at night.
 - [x] Implemented `is_nest_builder` trait. Entities with this trait can build `shelter` terrains regardless of their intelligence level, allowing them to create safe havens for themselves and their offspring.
 
 - [x] Implemented `is_endurance_runner` trait. Entities with this trait have double the maximum stamina and recover stamina at double the normal rate.
