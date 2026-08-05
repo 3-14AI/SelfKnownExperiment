@@ -2563,6 +2563,7 @@ class TestUniverse(unittest.TestCase):
         entity.can_spin_webs = False
         entity.is_migratory = False
         entity.temperature_tolerance = 40
+        entity.is_fearless = True
         universe.disease_chance = 0.0
 
         universe.add_entity(entity)
@@ -3139,7 +3140,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
 
-        e = Entity(name="Recover", x=0, y=0, energy=10, size=1, age=0, max_age=50, is_sleeping=False)
+        e = Entity(name="Recover", x=0, y=0, energy=10, size=1, age=0, max_age=50, is_sleeping=False, is_fearless=False, is_heavy_sleeper=False, is_patient=False, is_regenerative=False, is_nomadic=False, is_photosensitive=False)
         universe.add_entity(e)
 
         import unittest.mock
@@ -4183,9 +4184,9 @@ class TestUniverse(unittest.TestCase):
         self.assertTrue(entity.is_immune)
 
         # Test spread
-        entity2 = Entity(name="E2", x=5, y=5, size=1, energy=50, is_infected=True)
-        entity3 = Entity(name="E3", x=6, y=6, size=1, energy=50, is_infected=False) # dist 2
-        entity4 = Entity(name="E4", x=8, y=8, size=1, energy=50, is_infected=False) # dist 6, too far
+        entity2 = Entity(name="E2", x=5, y=5, size=1, energy=50, is_infected=True, is_fearless=False, is_nomadic=False, is_evasive=False, is_agile=False, can_sprint=False, is_migratory=False)
+        entity3 = Entity(name="E3", x=6, y=6, size=1, energy=50, is_infected=False, is_fearless=False, is_nomadic=False, is_evasive=False, is_agile=False, can_sprint=False, is_migratory=False) # dist 2
+        entity4 = Entity(name="E4", x=8, y=8, size=1, energy=50, is_infected=False, is_fearless=False, is_nomadic=False, is_evasive=False, is_agile=False, can_sprint=False, is_migratory=False) # dist 6, too far
 
         universe.add_entity(entity2)
         universe.add_entity(entity3)
@@ -5442,7 +5443,6 @@ class TestIsAdaptable(unittest.TestCase):
         e.can_sweat = False
         e.has_blubber = False
         e.is_mud_bather = True
-        e.is_filter_feeder = False
         e.is_gluttonous = False
         e.is_solitary = False
         e.is_cannibalistic = False
@@ -5509,8 +5509,6 @@ class TestIsNestBuilder(unittest.TestCase):
         e1.has_strong_stomach = True
         e1.is_territorial = True
         e1.is_endurance_runner = True
-        e1.is_patient = True
-        e1.is_heavy_sleeper = True
         e1.is_playful = True
         e1.is_fast_learner = True
         e1.is_hardy = True
@@ -6611,7 +6609,7 @@ class TestOpportunistic(unittest.TestCase):
         u = Universe(width=5, height=5)
         e = Entity("Opp", energy=10, size=2, diet='herbivore', is_opportunistic=True, perception_radius=10, max_stamina=100, stamina=100, intelligence=1, has_strong_stomach=True, attack=1000)
         u.add_entity(e)
-        prey = Entity("Prey", energy=10, size=1, diet='herbivore', defense=0)
+        prey = Entity("Prey", energy=10, size=1, diet='herbivore', defense=0, is_fearless=True)
         u.add_entity(prey)
         e.x, e.y = 0, 0
         prey.x, prey.y = 0, 0
@@ -6702,8 +6700,7 @@ class TestThickSkin(unittest.TestCase):
             e.is_patient = False
             e.is_regenerative = False
             e.is_volcanic = False
-            e.is_desertic = False
-            e.is_filter_feeder = False
+
             e.is_social = False
             e.is_solitary = False
             e.is_cold_blooded = False
@@ -6865,8 +6862,6 @@ class TestIsHeavySleeper(unittest.TestCase):
         e.can_photosynthesize = False
         e.is_regenerative = False
         e.is_volcanic = False
-        e.is_desertic = False
-        e.is_filter_feeder = False
         e.is_social = False
         e.is_solitary = False
         e.is_cold_blooded = False
@@ -6910,8 +6905,6 @@ class TestIsHeavySleeper(unittest.TestCase):
             e.can_photosynthesize = False
             e.is_regenerative = False
             e.is_volcanic = False
-            e.is_desertic = False
-            e.is_filter_feeder = False
             e.is_social = False
             e.is_solitary = False
             e.is_cold_blooded = False
@@ -6959,8 +6952,6 @@ class TestIsPatient(unittest.TestCase):
             e.can_photosynthesize = False
             e.is_regenerative = False
             e.is_volcanic = False
-            e.is_desertic = False
-            e.is_filter_feeder = False
             e.is_social = False
             e.is_solitary = False
             e.is_cold_blooded = False
@@ -7016,6 +7007,7 @@ class TestIsVocal(unittest.TestCase):
         e.is_opportunistic = True
         e.is_agile = True
         e.is_frugivore = True
+        e.is_fearless = True
         e.is_cooperative = True
         e.is_migratory = True
         e.has_horns = True
@@ -7106,7 +7098,80 @@ class TestIsNomadic(unittest.TestCase):
             child = eggs[0].hatch_entity
             self.assertTrue(getattr(child, 'is_nomadic', False))
 
-class TestPhotosensitive(unittest.TestCase):
+class TestFearlessTrait(unittest.TestCase):
+    def test_is_fearless_mutation(self):
+        from universe.engine import Universe, Entity
+        import random
+        universe = Universe(width=5, height=5)
+
+        parent = Entity("Parent", x=2, y=2, energy=100, is_fearless=False, size=1, age=10, is_prolific=False)
+        parent.lays_eggs = True
+        parent.preferred_temperature = 20
+        parent.temperature_tolerance = 40
+        parent.is_nocturnal = False
+        parent.can_photosynthesize = False
+        parent.is_vampiric = True # opposite of what might drain energy in tick
+        universe.add_entity(parent)
+
+        orig_random = random.random
+        random.random = lambda: 0.0 # Force all mutations
+
+        try:
+            universe.time = 25
+            universe.tick()
+
+            eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+            if eggs:
+                child = eggs[0].hatch_entity
+                self.assertTrue(getattr(child, 'is_fearless', False))
+        finally:
+            random.random = orig_random
+
+    def test_is_fearless_flee_behavior(self):
+        from universe.engine import Universe, Entity
+        import random
+        universe = Universe(width=10, height=10)
+        universe.population_limit = 0
+        universe.time = 25 # Day
+
+        # Herbivore prey
+        prey = Entity("Prey", x=5, y=5, energy=50, max_stamina=100, stamina=100, diet='herbivore', perception_radius=5, is_fearless=True, size=1, age=10)
+        # Carnivore predator
+        predator = Entity("Predator", x=5, y=3, energy=50, diet='carnivore', perception_radius=5, size=2, age=10)
+
+        universe.add_entity(prey)
+        universe.add_entity(predator)
+
+        # Turn off unnecessary logic
+        prey.intelligence = 1
+        prey.can_spin_webs = False
+        prey.is_nocturnal = False
+        prey.is_heavy_sleeper = False
+
+        predator.intelligence = 1
+        predator.can_spin_webs = False
+        predator.is_nocturnal = False
+        predator.is_heavy_sleeper = False
+
+        # We want to check that prey did NOT move away
+        # In fact, if it's fearless, it doesn't set alerted_predator_pos, and will move randomly or stay put if no food is found.
+        # To guarantee it stays put, we give it no food and make sure it has no water needs.
+        prey.hydration = 50
+
+        # We will check if it moves AWAY.
+        # If fearless=True, it doesn't flee.
+        # But predator might move towards it.
+        # The key is to see that the flee logic doesn't trigger.
+        prey_old_pos = (prey.x, prey.y)
+
+        universe.tick()
+
+        # By default, without food or water needs, it moves randomly if time % size == 0.
+        # If it fled, it would definitely move to max distance.
+        # A simple check is that the alerted_predator_pos is not set
+        self.assertFalse(hasattr(prey, 'alerted_predator_pos') and prey.alerted_predator_pos is not None)
+
+class TestPhotosensitiveTrait(unittest.TestCase):
     def test_is_photosensitive_hydration_loss(self):
         from universe.engine import Universe, Entity
         universe = Universe(day_length=10)

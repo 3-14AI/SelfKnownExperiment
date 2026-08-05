@@ -608,3 +608,13 @@ Recent agent iterations have significantly deepened the biological complexity an
 - Apply `is_nomadic` recovery mechanic in `Universe.tick()`.
 - Add visualizer representation in `visualizer.py`.
 - Add unit tests.
+
+
+### Analysis 83: Photosensitive Trait
+- **Description**: Completed `is_photosensitive` trait mechanics.
+- **Analysis**: Entities with this trait suffer increased hydration loss and no stamina recovery during the day, but gain bonus stamina recovery at night. Added to agents.md.
+
+
+### Analysis 84: Fearless Trait
+- **Description**: Implemented `is_fearless` trait.
+- **Analysis**: Entities with this trait ignore their instinct to flee from predators. While this might seem counter-intuitive, it can be combined with strong defense or attack stats to create robust organisms that hold their ground and fight back rather than wasting energy running.

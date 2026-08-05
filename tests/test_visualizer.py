@@ -559,6 +559,16 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('!', output)
 
+    def test_visualize_fearless(self):
+        from universe.engine import Universe, Entity
+        from universe.visualizer import CLIVisualizer
+        universe = Universe(width=5, height=5)
+        e = Entity('Test', is_fearless=True)
+        universe.add_entity(e)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('f', output)
+
 if __name__ == '__main__':
 
     unittest.main()
