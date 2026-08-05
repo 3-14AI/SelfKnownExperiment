@@ -152,6 +152,8 @@ class CLIVisualizer:
                         char = 'g'
                     elif getattr(entity, 'is_scout', False):
                         char = '['
+                    elif getattr(entity, 'is_intimidating', False):
+                        char = ']'
                     elif getattr(entity, 'can_sweat', False):
                         char = 'q'
                     elif getattr(entity, 'has_blubber', False):
