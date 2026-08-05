@@ -122,6 +122,8 @@ class CLIVisualizer:
                         char = 'Y'
                     elif getattr(entity, 'is_fearless', False):
                         char = 'f'
+                    elif getattr(entity, 'is_scavenger', False):
+                        char = '?'
                     elif getattr(entity, 'is_vampiric', False):
                         char = 'y'
                     elif getattr(entity, 'is_venomous', False):
