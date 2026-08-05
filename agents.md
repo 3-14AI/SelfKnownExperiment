@@ -154,6 +154,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
 
 ## Next Steps
+- [x] Implemented `is_intimidating` trait. Entities with this trait reduce the effective attack or defense of their opponents during combat by 2, making them formidable foes or difficult targets.
 - [x] Implemented `is_vocal` trait. Entities with this trait alert nearby flockmates of predators at an increased distance (double their normal communication radius).
 - [x] Implemented `is_resourceful` trait. Entities with this trait extract hydration from food and prey, recovering hydration when they eat, which reduces their dependence on environmental water sources.
 - [x] Implemented `is_prolific` trait. Entities with this trait have reduced energy thresholds and costs for reproduction, and reproduce more frequently.

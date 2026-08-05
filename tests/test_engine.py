@@ -5561,6 +5561,43 @@ class TestIsNestBuilder(unittest.TestCase):
         self.assertTrue(len(eggs) > 0)
         self.assertTrue(getattr(eggs[0].hatch_entity, 'is_nest_builder', False))
 
+
+class TestIsIntimidating(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.base_temperature = 20
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_is_intimidating_mutation(self):
+        parent = Entity(name="parent", x=0, y=0, energy=50, age=10, size=3, is_intimidating=False, max_age=100)
+        parent.lays_eggs = False
+        parent.is_parasitic = False
+        parent.is_scout = False
+        self.universe.entities.append(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            parent.energy = 100
+            self.universe.population_limit = 100
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name == "parent_child"]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_intimidating', False))
+
+    def test_is_intimidating_combat(self):
+        attacker = Entity(name="attacker", x=0, y=0, energy=50, age=10, size=3, attack=1000, defense=0, diet='carnivore', target_species=['prey'], is_intimidating=True)
+        prey = Entity(name="prey", x=0, y=0, energy=50, age=10, size=3, attack=0, defense=0, species='prey', is_intimidating=True)
+
+        self.universe.entities.extend([attacker, prey])
+
+        # We need to just ensure combat doesn't error when we have intimidating prey/attacker
+        # The exact math happens locally in Universe.tick() but we can check if it runs without crashing
+        self.universe.tick()
+        self.assertFalse(prey.is_alive)
+
+
 if __name__ == '__main__':
 
 
