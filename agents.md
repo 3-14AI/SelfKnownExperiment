@@ -162,3 +162,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_adaptable` trait. Entities with this trait dynamically adjust their preferred temperature over time to survive in extreme climates, at the cost of increased hydration consumption.
 - [x] Implemented `is_nomadic` trait. Entities with this trait have reduced energy consumption when they are constantly moving.
 - [x] Implemented `is_scavenger` trait. Entities with this trait gain bonus energy when consuming meat.
+- [x] Implemented `is_scout` trait. Entities with this trait share their obstacle memory with nearby flockmates, improving collective pathfinding.

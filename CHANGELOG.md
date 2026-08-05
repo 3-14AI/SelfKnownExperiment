@@ -355,3 +355,6 @@ All notable changes to Project Genesis will be documented in this file.
 
 - Implemented dynamic terrain generation based on temperature and weather over time. Rain creates mud and washes away ash/sand. High temperatures and droughts create sand. Base temperatures now change dynamically with seasons. Water freezes to ice in cold temperatures and ice melts in warm temperatures.
 - Implemented species evolution system based on accumulated genetic mutations
+
+### Added
+- Implemented `is_scout` trait. Entities with this trait explore the terrain and share their memory of obstacles with nearby flockmates, simulating a scouting behavior that aids in collective pathfinding.
