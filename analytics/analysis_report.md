@@ -618,3 +618,12 @@ Recent agent iterations have significantly deepened the biological complexity an
 ### Analysis 84: Fearless Trait
 - **Description**: Implemented `is_fearless` trait.
 - **Analysis**: Entities with this trait ignore their instinct to flee from predators. While this might seem counter-intuitive, it can be combined with strong defense or attack stats to create robust organisms that hold their ground and fight back rather than wasting energy running.
+
+
+### Analysis 85: Nest Builder Trait
+- **Description**: Implemented `is_nest_builder` trait.
+- **Analysis**: Entities with this trait can construct shelter terrains, allowing them to create safe havens, improving their survival and protecting offspring.
+
+### Analysis 86: Scavenger Trait
+- **Description**: Implemented `is_scavenger` trait.
+- **Analysis**: Entities with this trait gain a bonus to energy gain when consuming meat, making them highly efficient at utilizing corpses and cleaning up the environment.
