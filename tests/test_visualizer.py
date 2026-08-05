@@ -4,8 +4,8 @@ from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
     def test_visualizer_disease_vector(self):
-        from universe.engine import Universe, Entity
-        from universe.visualizer import CLIVisualizer
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
         universe = Universe(width=5, height=5)
 
         entity = Entity("Vector", x=2, y=2, disease_vector=True, energy=100, max_age=100)
@@ -242,8 +242,8 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('m', output)
 
     def test_render_is_social(self):
-        from universe.engine import Universe, Entity
-        from universe.visualizer import CLIVisualizer
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
         universe = Universe(width=3, height=3)
         universe.add_entity(Entity("TestSocial", x=1, y=1, is_social=True))
         visualizer = CLIVisualizer(universe)
@@ -251,8 +251,8 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertEqual(visualizer.render(), expected_output)
 
     def test_render_is_forestal(self):
-        from universe.engine import Universe, Entity
-        from universe.visualizer import CLIVisualizer
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
         universe = Universe(width=3, height=3)
         universe.add_entity(Entity("TestForestal", x=1, y=1, is_forestal=True))
         visualizer = CLIVisualizer(universe)
@@ -260,8 +260,8 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertEqual(visualizer.render(), expected_output)
 
     def test_render_is_desertic(self):
-        from universe.engine import Universe, Entity
-        from universe.visualizer import CLIVisualizer
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
         universe = Universe(width=3, height=3)
         universe.add_entity(Entity("TestDesertic", x=1, y=1, is_desertic=True))
         visualizer = CLIVisualizer(universe)
@@ -269,8 +269,8 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertEqual(visualizer.render(), expected_output)
 
     def test_render_is_volcanic(self):
-        from universe.engine import Universe, Entity
-        from universe.visualizer import CLIVisualizer
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
         universe = Universe(width=3, height=3)
         universe.add_entity(Entity("TestVolcanic", x=1, y=1, is_volcanic=True))
         visualizer = CLIVisualizer(universe)
@@ -319,7 +319,7 @@ class TestCLIVisualizer(unittest.TestCase):
 
 
     def test_visualizer_is_scentless(self):
-        from universe.engine import Universe, Entity, Terrain
+        from src.universe.engine import Universe, Entity, Terrain
         universe = Universe(width=10, height=10)
         entity = Entity("Scentless", x=1, y=1, is_scentless=True)
         universe.add_entity(entity)
@@ -339,8 +339,8 @@ class TestCLIVisualizer(unittest.TestCase):
 
 
     def test_render_is_detritivore(self):
-        from universe.engine import Universe, Entity
-        from universe.visualizer import CLIVisualizer
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
         universe = Universe(width=5, height=5)
         universe.add_entity(Entity("TestDetritivore", x=1, y=1, is_detritivore=True))
         vis = CLIVisualizer(universe)
@@ -506,7 +506,7 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('*', vis.render())
 
     def test_visualizer_is_endurance_runner(self):
-        from universe.engine import Entity, Universe
+        from src.universe.engine import Entity, Universe
         universe = Universe(width=5, height=5)
         vis = CLIVisualizer(universe)
         entity = Entity("EnduranceRunner", x=1, y=1, is_endurance_runner=True)
@@ -550,8 +550,8 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('}', output)
 
     def test_visualize_photosensitive(self):
-        from universe.engine import Universe, Entity
-        from universe.visualizer import CLIVisualizer
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
         universe = Universe(width=5, height=5)
         e = Entity('Test', is_photosensitive=True)
         universe.add_entity(e)
@@ -560,14 +560,24 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('!', output)
 
     def test_visualize_fearless(self):
-        from universe.engine import Universe, Entity
-        from universe.visualizer import CLIVisualizer
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
         universe = Universe(width=5, height=5)
         e = Entity('Test', is_fearless=True)
         universe.add_entity(e)
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('f', output)
+
+    def test_visualize_is_scavenger(self):
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=10, height=10)
+        e = Entity("Scavenger", x=0, y=0, is_scavenger=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('?', output)
 
 if __name__ == '__main__':
 
