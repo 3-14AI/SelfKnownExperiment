@@ -17,6 +17,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 3. **SELF-CORRECTION:** If you encounter bugs or errors, you must diagnose and fix them yourself.
 4. **BE CREATIVE & UNPREDICTABLE:** The project scope is limitless. If you think the universe needs a new sub-project (like a web dashboard, an API, or a new simulated species), build it. Do not be afraid to create complex architectural patterns or introduce new languages/frameworks if appropriate.
 5. **RECORD KEEPING:** You must maintain a `CHANGELOG.md` or `HISTORY.md` documenting the universe's evolution and exactly what you contributed today.
+6. **CODE DECOMPOSITION & REFACTORING:** Each iteration, you must perform partial refactoring to decompose the codebase into smaller, more manageable pieces. Write new code only while strictly adhering to the project's established structure.
 
 ## Your Protocol:
 1. Review the existing codebase and the `CHANGELOG.md` (create it if it doesn't exist) to understand the current state.
