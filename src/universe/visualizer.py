@@ -200,6 +200,8 @@ class CLIVisualizer:
                         char = '}'
                     elif getattr(entity, 'is_vocal', False):
                         char = 'o'
+                    elif getattr(entity, 'is_sunbather', False):
+                        char = '#'
                     elif getattr(entity, 'is_photosensitive', False):
                         char = '!'
                     elif diet == 'carnivore':
