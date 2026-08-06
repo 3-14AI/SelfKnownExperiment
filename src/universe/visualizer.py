@@ -56,7 +56,9 @@ class CLIVisualizer:
                     else:
                         char = 'S'
                 else:
-                    if getattr(entity, 'is_sleeping', False):
+                    if getattr(entity, 'is_spiteful', False):
+                        char = '%'
+                    elif getattr(entity, 'is_sleeping', False):
                         char = '0'
                     elif getattr(entity, 'is_cleaner', False):
                         char = '+'

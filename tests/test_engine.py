@@ -865,6 +865,17 @@ class TestUniverse(unittest.TestCase):
         vuln_entity.is_infected = True
         immune_entity.x, immune_entity.y = 0, 0
         vuln_entity.x, vuln_entity.y = 0, 0
+        vuln_entity.is_fearless = True
+        vuln_entity.is_evasive = True
+        vuln_entity.is_nomadic = False
+        vuln_entity.is_agile = False
+        vuln_entity.is_migratory = False
+        immune_entity.is_fearless = True
+        immune_entity.is_evasive = True
+        immune_entity.is_nomadic = False
+        immune_entity.is_agile = False
+        immune_entity.is_migratory = False
+
         universe.tick()
         self.assertFalse(immune_entity.is_infected, "Immune entity should not be infected")
         self.assertTrue(vuln_entity.is_infected, "Vulnerable entity should stay infected")
@@ -4212,6 +4223,8 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(entity2)
         universe.add_entity(entity3)
         universe.add_entity(entity4)
+        entity2.is_cleaner = False
+        entity3.is_cleaner = False
         # Force spread chance (random < 0.1)
         with unittest.mock.patch('random.random', return_value=0.05):
             universe.tick()
@@ -5331,6 +5344,8 @@ class TestEnduranceRunner(unittest.TestCase):
         e1.is_fearless = True
         e1.is_photosensitive = False
         e1.is_scavenger = True
+        e1.is_nest_builder = False
+        e1.intelligence = 1
 
         universe.add_entity(e1)
         universe.time = 25 # day time to avoid random sleeping
@@ -7634,6 +7649,9 @@ class TestIsCleaner(unittest.TestCase):
         parent.has_strong_stomach = True
         parent.preferred_terrain = None
         parent.is_photosensitive = False
+        parent.is_nest_builder = False
+        parent.intelligence = 1
+        parent.is_spiteful = True
 
         u.add_entity(parent)
 
@@ -7644,3 +7662,64 @@ class TestIsCleaner(unittest.TestCase):
         eggs = [f for f in u.foods if getattr(f, 'hatch_entity', None) is not None]
         self.assertTrue(len(eggs) > 0)
         self.assertTrue(getattr(eggs[0].hatch_entity, 'is_cleaner', False))
+
+
+class TestIsSpiteful(unittest.TestCase):
+    def test_is_spiteful_combat_damage(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+
+        # Predator (size=2 max_energy=100)
+        predator = Entity("Predator", x=0, y=0, diet='carnivore', energy=50, attack=1000, defense=10, size=2, age=10)
+        predator.is_nocturnal_predator = False
+        predator.is_ambush_predator = False
+
+        # Spiteful prey
+        prey = Entity("Prey", x=0, y=0, diet='herbivore', energy=50, attack=0, defense=20, is_spiteful=True, size=1, age=10)
+        prey.is_evasive = False
+        prey.is_territorial = False
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Mock random so predator kills prey (no escape)
+        with unittest.mock.patch('random.random', return_value=1.0):
+            universe.tick()
+
+        # Predator max energy might cap this, let's check if energy reflects defense loss
+        # Initial: predator 50, prey 50. Base loss for size 2 is 2.
+        # Spiteful hits first: 50 - 2 (base loss) - 20 (defense) = 28
+        # Then eats: min(max_energy, 28 + 50) = 78
+        self.assertEqual(predator.energy, 78)
+        self.assertFalse(prey.is_alive)
+
+    def test_is_spiteful_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.population_limit = 100
+        u.reproduction_threshold = 10
+        u.mutation_chance = 1.0
+
+        parent = Entity("Parent", x=5, y=5, energy=1000, age=10, size=1, is_spiteful=False)
+        parent.lays_eggs = True
+        parent.is_vampiric = True
+        parent.is_mud_bather = True
+        parent.is_territorial = True
+        parent.has_strong_stomach = True
+        parent.preferred_terrain = None
+        parent.is_photosensitive = False
+        parent.is_nest_builder = False
+        parent.intelligence = 1
+
+        u.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.time = 25
+            u.tick()
+
+        eggs = [f for f in u.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertTrue(len(eggs) > 0)
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_spiteful', False))
