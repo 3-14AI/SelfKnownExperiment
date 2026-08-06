@@ -579,6 +579,16 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('?', output)
 
+    def test_visualize_is_cleaner(self):
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=10, height=10)
+        e = Entity("Cleaner", x=0, y=0, is_cleaner=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('+', output)
+
 if __name__ == '__main__':
 
     unittest.main()

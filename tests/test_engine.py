@@ -7547,3 +7547,90 @@ class TestIsScout(unittest.TestCase):
 
         # Scout should have shared memory with flockmate (distance between them is 2 <= effective_perception*2 = 6)
         self.assertIn((5, 5), flockmate.memory)
+
+
+class TestIsCleaner(unittest.TestCase):
+    def test_is_cleaner_cures_disease(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+
+        u = Universe(width=10, height=10)
+        u.event_chance = 0.0
+        u.disease_chance = 0.0
+
+        cleaner = Entity("Cleaner", x=5, y=5, is_cleaner=True, energy=20)
+        cleaner.preferred_terrain = None
+        patient = Entity("Patient", x=5, y=6, is_infected=True, infection_time=5, energy=20)
+        patient.preferred_terrain = None
+
+        u.add_entity(cleaner)
+        u.add_entity(patient)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.time = 25
+            u.tick()
+
+        self.assertFalse(patient.is_infected)
+        self.assertEqual(patient.infection_time, 0)
+        # Cleaner base loss is size (1). Recovery for curing is 5.
+        # So energy should be 20 - 1 + 5 = 24
+        self.assertEqual(cleaner.energy, 24)
+
+    def test_is_cleaner_removes_parasites(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+
+        u = Universe(width=10, height=10)
+        u.event_chance = 0.0
+        u.disease_chance = 0.0
+
+        cleaner = Entity("Cleaner", x=5, y=5, is_cleaner=True, energy=20)
+        cleaner.preferred_terrain = None
+        host = Entity("Host", x=5, y=6, energy=20)
+        host.preferred_terrain = None
+        parasite = Entity("Parasite", x=5, y=6, is_parasitic=True, energy=20)
+        parasite.preferred_terrain = None
+
+        host.attached_parasites = [parasite]
+        parasite.host = host
+
+        u.add_entity(cleaner)
+        u.add_entity(host)
+        u.add_entity(parasite)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.time = 25
+            u.tick()
+
+        self.assertEqual(len(host.attached_parasites), 0)
+        self.assertIsNone(parasite.host)
+        self.assertEqual(cleaner.energy, 24)
+
+    def test_is_cleaner_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+
+        u = Universe(width=10, height=10)
+        u.population_limit = 100
+        u.reproduction_threshold = 10
+        u.food_spawn_rate = 0.0
+        u.mutation_chance = 1.0
+
+        parent = Entity("Parent", x=5, y=5, energy=1000, age=10, size=1, is_cleaner=False)
+        parent.lays_eggs = True
+        parent.is_vampiric = True
+        parent.is_mud_bather = True
+        parent.is_territorial = True
+        parent.has_strong_stomach = True
+        parent.preferred_terrain = None
+        parent.is_photosensitive = False
+
+        u.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.time = 25
+            u.tick()
+
+        eggs = [f for f in u.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertTrue(len(eggs) > 0)
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_cleaner', False))
