@@ -4764,7 +4764,7 @@ class TestAposematism(unittest.TestCase):
 
     def test_starving_predator_hunts_aposematic_prey(self):
         from src.universe.engine import Entity
-        predator = Entity("Predator", x=5, y=5, energy=20, size=2, age=100, max_age=200, diet='carnivore', target_species=['Frog'], hydration=1000, max_hydration=1000)
+        predator = Entity("Predator", x=5, y=5, energy=20, size=2, age=100, max_age=200, diet='carnivore', target_species=['Frog'], hydration=1000, max_hydration=1000, intelligence=1, is_prolific=False, can_spin_webs=False, is_nomadic=False, is_migratory=False, is_agile=False, is_cold_blooded=False, is_volcanic=False, is_parasitic=False)
         prey = Entity("Frog", x=6, y=5, energy=50, size=1, age=100, max_age=200, species='Frog', is_aposematic=True, hydration=1000, max_hydration=1000)
         self.universe.add_entity(predator)
         self.universe.add_entity(prey)
@@ -4936,12 +4936,23 @@ class TestSprint(unittest.TestCase):
         # Explicitly turn off all potentially draining traits for both
         for e in [vampire, prey]:
             e.is_carnivorous_plant = False
+            e.is_photosensitive = False
+            e.can_sweat = False
+            e.is_desertic = False
+            e.has_fur = False
+            e.has_blubber = False
+            e.has_scales = False
             e.is_hardy = False
             e.is_fruiting = False
             e.is_parasitic = False
             e.is_cold_blooded = False
             e.is_volcanic = False
             e.can_hoard = False
+            e.is_scout = False
+            e.is_cleaner = False
+            e.is_spiteful = False
+            e.is_intimidating = False
+            e.is_nocturnal = False
         vampire.energy = 20
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -5337,7 +5348,10 @@ class TestEnduranceRunner(unittest.TestCase):
         universe.reproduction_cost = 10
 
         # Prolific entity
-        e1 = Entity("Prolific", energy=25, is_prolific=True, lays_eggs=True, age=10, size=1)
+        e1 = Entity("Prolific", energy=100, is_prolific=True, lays_eggs=True, age=10, size=1)
+        e1.is_intimidating = False
+        e1.is_cleaner = False
+        e1.is_spiteful = False
         e1.is_nocturnal = False
         e1.can_photosynthesize = False
         e1.is_fruiting = False
@@ -5411,7 +5425,10 @@ class TestIsAdaptable(unittest.TestCase):
         mock_random.return_value = 0.0 # Force mutations
         universe = Universe(width=10, height=10, population_limit=10, reproduction_threshold=20, reproduction_cost=10)
 
-        e1 = Entity(name="Adaptable", energy=25, is_adaptable=True, lays_eggs=True, age=10, size=1)
+        e1 = Entity(name="Adaptable", energy=1000, is_adaptable=True, lays_eggs=True, age=10, size=1)
+        e1.is_intimidating = False
+        e1.is_cleaner = False
+        e1.is_spiteful = False
         # Avoid nocturnal bleed and other traits
         e1.is_mud_bather = True
         e1.has_strong_stomach = True
@@ -6872,6 +6889,12 @@ class TestHardy(unittest.TestCase):
         for e in [e1, e2]:
             e.can_spin_webs = False
             e.is_carnivorous_plant = False
+            e.is_photosensitive = False
+            e.can_sweat = False
+            e.is_desertic = False
+            e.has_fur = False
+            e.has_blubber = False
+            e.has_scales = False
             e.is_parasitic = False
             e.preferred_temperature = 20
             e.temperature_tolerance = 40
@@ -7127,6 +7150,9 @@ class TestIsVocal(unittest.TestCase):
         e.is_scout = True
         e.is_adaptable = True
         e.is_evasive = True
+        e.is_intimidating = False
+        e.is_cleaner = False
+        e.is_spiteful = False
 
         e.is_sunbather = True
         e.lays_eggs = True
@@ -7668,6 +7694,17 @@ class TestIsCleaner(unittest.TestCase):
         u.mutation_chance = 1.0
 
         parent = Entity("Parent", x=5, y=5, energy=1000, age=10, size=1, is_cleaner=False)
+        parent.is_scout = False
+        parent.is_intimidating = False
+        parent.is_spiteful = False
+        parent.is_fruiting = False
+        parent.is_parasitic = False
+        parent.is_gluttonous = False
+        parent.is_fearless = False
+        parent.is_nomadic = False
+        parent.can_sweat = False
+        parent.is_hardy = False
+        parent.is_vampiric = False
         parent.lays_eggs = True
         parent.is_vampiric = True
         parent.is_mud_bather = True
@@ -7742,6 +7779,9 @@ class TestIsSpiteful(unittest.TestCase):
         parent.is_photosensitive = False
         parent.is_nest_builder = False
         parent.intelligence = 1
+        parent.is_scout = False
+        parent.is_intimidating = False
+        parent.is_cleaner = False
 
         parent.is_sunbather = False
         parent.lays_eggs = True
