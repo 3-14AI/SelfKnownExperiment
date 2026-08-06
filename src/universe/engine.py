@@ -849,6 +849,31 @@ class Universe:
 
 
 
+            # is_cleaner mechanic: remove parasites and cure diseases from nearby entities
+            if getattr(entity, 'is_cleaner', False) and entity.is_alive:
+                for other in self.entities:
+                    if other != entity and other.is_alive:
+                        dist = abs(other.x - entity.x) + abs(other.y - entity.y)
+                        if dist <= 2:
+                            cured_something = False
+                            # Remove parasites
+                            if hasattr(other, 'attached_parasites') and len(other.attached_parasites) > 0:
+                                for parasite in list(other.attached_parasites):
+                                    parasite.host = None
+                                other.attached_parasites = []
+                                cured_something = True
+                                entity.energy += 5
+                            # Cure disease
+                            if getattr(other, 'is_infected', False):
+                                other.is_infected = False
+                                other.infection_time = 0
+                                cured_something = True
+                                entity.energy += 5
+
+                            if cured_something:
+                                cap = int(entity.max_energy * 1.5) if getattr(entity, 'is_gluttonous', False) else entity.max_energy
+                                entity.energy = min(cap, entity.energy)
+
             # Consume energy per tick
             if getattr(entity, 'is_hibernating', False):
                 if self.time % 10 == 0:
@@ -2248,31 +2273,6 @@ class Universe:
 
 
 
-                # is_cleaner mechanic: remove parasites and cure diseases from nearby entities
-        for entity in self.entities:
-            if entity.is_alive and getattr(entity, 'is_cleaner', False):
-                for other in self.entities:
-                    if other != entity and other.is_alive:
-                        dist = abs(other.x - entity.x) + abs(other.y - entity.y)
-                        if dist <= 2:
-                            cured_something = False
-                            # Remove parasites
-                            if hasattr(other, 'attached_parasites') and len(other.attached_parasites) > 0:
-                                for parasite in other.attached_parasites:
-                                    parasite.host = None
-                                other.attached_parasites = []
-                                cured_something = True
-                                entity.energy += 5
-                            # Cure disease
-                            if other.is_infected:
-                                other.is_infected = False
-                                other.infection_time = 0
-                                cured_something = True
-                                entity.energy += 5
-
-                            if cured_something:
-                                cap = int(entity.max_energy * 1.5) if getattr(entity, 'is_gluttonous', False) else entity.max_energy
-                                entity.energy = min(cap, entity.energy)
 
         dead_entities = [e for e in self.entities if not e.is_alive]
         for dead in dead_entities:
