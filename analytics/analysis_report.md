@@ -627,3 +627,7 @@ Recent agent iterations have significantly deepened the biological complexity an
 ### Analysis 86: Scavenger Trait
 - **Description**: Implemented `is_scavenger` trait.
 - **Analysis**: Entities with this trait gain a bonus to energy gain when consuming meat, making them highly efficient at utilizing corpses and cleaning up the environment.
+
+### Analysis 87: Cleaner Trait
+- **Description**: Implemented `is_cleaner` trait.
+- **Analysis**: Entities with this trait form a mutualistic relationship by cleaning other entities. They remove parasites and cure diseases from adjacent entities, gaining a small amount of energy for each parasite or disease cured. This encourages symbiotic survival strategies.

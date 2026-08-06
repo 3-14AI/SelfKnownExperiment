@@ -58,6 +58,8 @@ class CLIVisualizer:
                 else:
                     if getattr(entity, 'is_sleeping', False):
                         char = '0'
+                    elif getattr(entity, 'is_cleaner', False):
+                        char = '+'
                     elif getattr(entity, 'is_flying', False):
                         char = '1'
                     elif getattr(entity, 'can_hibernate', False):
