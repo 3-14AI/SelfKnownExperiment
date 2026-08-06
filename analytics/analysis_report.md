@@ -631,3 +631,6 @@ Recent agent iterations have significantly deepened the biological complexity an
 ### Analysis 87: Cleaner Trait
 - **Description**: Implemented `is_cleaner` trait.
 - **Analysis**: Entities with this trait form a mutualistic relationship by cleaning other entities. They remove parasites and cure diseases from adjacent entities, gaining a small amount of energy for each parasite or disease cured. This encourages symbiotic survival strategies.
+### Analysis 88: Spiteful Trait
+- **Description**: Implemented `is_spiteful` trait.
+- **Analysis**: Entities with this trait deal their defense as energy damage to a predator when successfully hunted, making them dangerous prey and naturally discouraging predators over time.
