@@ -615,3 +615,19 @@ Recent agent iterations have significantly deepened the biological complexity an
 
 ### Analysis 90: Intimidating Trait test addition
 - **Description**: Added visualization test for `is_intimidating` trait.
+
+### Analysis 91: Reckless Trait
+- **Description**: Implemented `is_reckless` trait.
+- **Agent Action**:
+  - Added `is_reckless` to `Entity.__init__` and mutation logic.
+  - Modified combat logic in `Universe.tick()` so that entities with this trait deal double damage (effective attack * 2) but their effective defense is reduced to 0 during combat.
+- **Analysis**: The reckless trait introduces a "glass cannon" archetype to the simulation. Entities with this trait will be extremely lethal in combat but highly vulnerable to being killed, prioritizing offense at the complete expense of defense.
+
+### Analysis 92: Thief Trait
+- **Description**: Implemented `is_thief` trait.
+- **Agent Action**:
+  - Added `is_thief` trait to `Entity.__init__` and inheritance/mutation logic.
+  - Entities with `is_thief=True` and `can_hoard=True` can steal food from adjacent hoarders if their own energy falls below 75%.
+  - Assigned visual character `_` for `is_thief` entities.
+  - Added unit tests testing thief mechanics and mutations.
+- **Analysis**: The thief trait introduces a new parasitic behavior where entities can steal stored resources from others, bypassing the need to hunt or forage directly. This adds complex interactions between hoarding species and opportunistic thieves.
