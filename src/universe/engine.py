@@ -17,7 +17,7 @@ class Entity:
         base = self.size * 50
         return int(base * 1.5) if getattr(self, "has_blubber", False) else base
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False, is_volcanic=False, is_forestal=False, is_desertic=False, is_social=False, is_carnivorous_plant=False, disease_vector=False, is_nocturnal_predator=False, is_scentless=False, can_sprint=False, is_vampiric=False, is_detritivore=False, can_sweat=False, has_blubber=False, is_mud_bather=False, is_filter_feeder=False, is_gluttonous=False, is_solitary=False, is_cannibalistic=False, is_ambush_predator=False, is_territorial=False, has_horns=False, is_migratory=False, is_cooperative=False, is_frugivore=False, is_agile=False, has_strong_stomach=False, is_opportunistic=False, has_thick_skin=False, is_hardy=False, is_fast_learner=False, is_playful=False, is_heavy_sleeper=False, is_patient=False, is_endurance_runner=False, is_evasive=False, is_prolific=False, is_adaptable=False, is_resourceful=False, is_vocal=False, is_nest_builder=False, is_nomadic=False, is_photosensitive=False, is_fearless=False, is_scavenger=False, is_scout=False, is_intimidating=False, is_cleaner=False, is_spiteful=False, is_sunbather=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False, is_volcanic=False, is_forestal=False, is_desertic=False, is_social=False, is_carnivorous_plant=False, disease_vector=False, is_nocturnal_predator=False, is_scentless=False, can_sprint=False, is_vampiric=False, is_detritivore=False, can_sweat=False, has_blubber=False, is_mud_bather=False, is_filter_feeder=False, is_gluttonous=False, is_solitary=False, is_cannibalistic=False, is_ambush_predator=False, is_territorial=False, has_horns=False, is_migratory=False, is_cooperative=False, is_frugivore=False, is_agile=False, has_strong_stomach=False, is_opportunistic=False, has_thick_skin=False, is_hardy=False, is_fast_learner=False, is_playful=False, is_heavy_sleeper=False, is_patient=False, is_endurance_runner=False, is_evasive=False, is_prolific=False, is_adaptable=False, is_resourceful=False, is_vocal=False, is_nest_builder=False, is_nomadic=False, is_photosensitive=False, is_fearless=False, is_scavenger=False, is_scout=False, is_intimidating=False, is_cleaner=False, is_spiteful=False, is_sunbather=False, is_pack_mule=False):
         self.has_blubber = has_blubber
         self.is_mud_bather = is_mud_bather
         self.is_filter_feeder = is_filter_feeder
@@ -97,6 +97,7 @@ class Entity:
         self.lays_eggs = lays_eggs
         self.is_nocturnal = is_nocturnal
         self.can_hoard = can_hoard
+        self.is_pack_mule = is_pack_mule
         self.target_species = target_species
         self.target_plants = target_plants
         self.is_sleeping = is_sleeping
@@ -1306,6 +1307,7 @@ class Universe:
                         mutation_occurred = True
 
                     child_pack_hunter = getattr(entity, 'pack_hunter', False)
+                    child_is_pack_mule = getattr(entity, 'is_pack_mule', False)
                     child_is_volcanic = getattr(entity, 'is_volcanic', False)
                     child_is_forestal = getattr(entity, 'is_forestal', False)
                     child_is_desertic = getattr(entity, 'is_desertic', False)
@@ -1523,6 +1525,10 @@ class Universe:
                     else:
                         child_is_sunbather = getattr(entity, 'is_sunbather', False)
 
+                    if random.random() < mutation_chance:
+                        child_is_pack_mule = not child_is_pack_mule
+                        mutation_occurred = True
+
                     if mutation_occurred:
                         child_mutations_count += 1
                         if child_mutations_count >= 5:
@@ -1545,7 +1551,7 @@ class Universe:
                                    max_age=child_max_age, perception_radius=child_perception_radius, diet=child_diet,
                                    preferred_temperature=child_preferred_temperature, temperature_tolerance=child_temperature_tolerance,
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
-                                   attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size,
+                                   attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size, is_pack_mule=child_is_pack_mule,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
                                    generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb, pack_hunter=child_pack_hunter, has_bioluminescence=child_has_bioluminescence, is_volcanic=child_is_volcanic, is_forestal=child_is_forestal, is_desertic=child_is_desertic, is_social=child_is_social, is_carnivorous_plant=child_is_carnivorous_plant, disease_vector=child_disease_vector, is_nocturnal_predator=child_is_nocturnal_predator, is_scentless=child_is_scentless, can_sprint=child_can_sprint, is_vampiric=child_is_vampiric, is_detritivore=child_is_detritivore, can_sweat=child_can_sweat, has_blubber=child_has_blubber, is_mud_bather=child_is_mud_bather, is_filter_feeder=child_is_filter_feeder, is_gluttonous=child_is_gluttonous, is_solitary=child_is_solitary, is_cannibalistic=child_is_cannibalistic, is_ambush_predator=child_is_ambush_predator, is_territorial=child_is_territorial, has_horns=child_has_horns, is_migratory=child_is_migratory, is_cooperative=child_is_cooperative, is_frugivore=child_is_frugivore, is_agile=child_is_agile, has_strong_stomach=child_has_strong_stomach, is_opportunistic=child_is_opportunistic, has_thick_skin=child_has_thick_skin, is_hardy=child_is_hardy, is_fast_learner=child_is_fast_learner, is_playful=child_is_playful, is_heavy_sleeper=child_is_heavy_sleeper, is_patient=child_is_patient, is_endurance_runner=child_is_endurance_runner, is_evasive=child_is_evasive, is_prolific=child_is_prolific, is_adaptable=child_is_adaptable, is_resourceful=child_is_resourceful, is_vocal=child_is_vocal, is_nest_builder=child_is_nest_builder, is_nomadic=child_is_nomadic, is_photosensitive=child_is_photosensitive, is_fearless=child_is_fearless, is_scavenger=child_is_scavenger, is_scout=child_is_scout, is_intimidating=child_is_intimidating, is_cleaner=child_is_cleaner, is_spiteful=child_is_spiteful, is_sunbather=child_is_sunbather)
                     if getattr(entity, 'lays_eggs', False):
@@ -1778,7 +1784,7 @@ class Universe:
                     foods_here = self.get_foods_at(entity.x, entity.y, entity=entity)
                     if foods_here:
                         food_to_eat = foods_here[0]
-                        if getattr(entity, 'can_hoard', False) and entity.energy >= entity.max_energy - 20 and len([item for item in entity.inventory if isinstance(item, Food)]) < entity.size * 2:
+                        if getattr(entity, 'can_hoard', False) and entity.energy >= entity.max_energy - 20 and len([item for item in entity.inventory if isinstance(item, Food)]) < (entity.size * 4 if getattr(entity, 'is_pack_mule', False) else entity.size * 2):
                             entity.inventory.append(food_to_eat)
                             self.foods.remove(food_to_eat)
                         else:
@@ -1954,7 +1960,7 @@ class Universe:
                     foods_here = self.get_foods_at(entity.x, entity.y, entity=entity)
                     if foods_here:
                         food_to_eat = foods_here[0]
-                        if getattr(entity, 'can_hoard', False) and entity.energy >= entity.max_energy - 20 and len([item for item in entity.inventory if isinstance(item, Food)]) < entity.size * 2:
+                        if getattr(entity, 'can_hoard', False) and entity.energy >= entity.max_energy - 20 and len([item for item in entity.inventory if isinstance(item, Food)]) < (entity.size * 4 if getattr(entity, 'is_pack_mule', False) else entity.size * 2):
                             entity.inventory.append(food_to_eat)
                             self.foods.remove(food_to_eat)
                         else:
