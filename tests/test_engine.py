@@ -221,6 +221,54 @@ class TestUniverse(unittest.TestCase):
         if len(children) > 0:
             self.assertFalse(children[0].lays_eggs)
 
+    def test_is_pack_mule_capacity(self):
+        universe = Universe(width=10, height=10)
+        e = Entity("Mule", x=5, y=5, energy=90, size=2, max_age=100, hydration=50, stamina=50, can_hoard=True, is_pack_mule=True, intelligence=1, is_scout=False)
+        e.is_nest_builder = False
+        e.is_fearless = True
+        e.is_sleeping = False
+        e.is_vocal = False
+        e.is_cleaner = False
+        e.inventory = []
+        e.target_plants = ['fruit']
+        e.age = 10
+        e.size = 2 # size * 4 = 8 limit
+        e.energy = 90
+        e.is_fruiting = False
+        universe.add_entity(e)
+
+        for i in range(10):
+            universe.add_food(Food(x=5, y=5, energy=10, plant_type="fruit"))
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=1.0):
+            for i in range(10):
+                universe.time = 24
+                e.energy = 90
+                universe.tick()
+
+        self.assertEqual(len(e.inventory), 8)
+
+    def test_is_pack_mule_mutation(self):
+        universe = Universe(width=10, height=10)
+        import unittest.mock
+        e = Entity("Parent", x=0, y=0, energy=1000, size=1, age=100, max_age=200, is_pack_mule=False, intelligence=10)
+        e.lays_eggs = True # mutated to false
+        e.is_fruiting = False
+        e.is_nest_builder = False
+        universe.add_entity(e)
+        universe.population_limit = 100
+        universe.food_spawn_rate = 0.0
+        universe.base_temperature = 20
+        universe.mutation_chance = 1.0
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent != e]
+        if len(children) > 0:
+            self.assertTrue(children[0].is_pack_mule)
+
     def test_can_hoard_mutation(self):
         universe = Universe(width=10, height=10)
         import unittest.mock
@@ -4953,6 +5001,7 @@ class TestSprint(unittest.TestCase):
             e.is_spiteful = False
             e.is_intimidating = False
             e.is_nocturnal = False
+            e.is_pack_mule = False
         vampire.energy = 20
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -7182,6 +7231,7 @@ class TestIsNomadic(unittest.TestCase):
             e.intelligence = 1
             e.can_spin_webs = False
             e.is_nocturnal = False
+            e.is_pack_mule = False
             e.can_photosynthesize = False
             e.is_heavy_sleeper = False
             e.is_regenerative = False
