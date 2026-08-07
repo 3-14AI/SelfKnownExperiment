@@ -790,6 +790,8 @@ class TestUniverse(unittest.TestCase):
         # Test defense bonus in forest
         prey_forestal = Entity("PreyForestal", x=2, y=2, energy=10, defense=0, is_forestal=True, max_stamina=100, stamina=100)
         predator = Entity("Predator", x=2, y=2, energy=10, diet='carnivore', attack=100)
+        predator.can_spin_webs = False
+        predator.is_nest_builder = False
 
         # Manually invoke combat calculation to assert effective_defense
         effective_defense = prey_forestal.defense
@@ -952,6 +954,8 @@ class TestUniverse(unittest.TestCase):
 
         # Aposematic prey
         prey = Entity("Prey", x=5, y=5, diet='herbivore', is_aposematic=True)
+        prey.can_spin_webs = False
+        prey.is_nest_builder = False
         universe.add_entity(prey)
 
         # Starving predator
@@ -2619,6 +2623,8 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         # Age 0, size 6 entity. Should start at size max(1, 6//3) = 2
         entity = Entity("Grower", x=5, y=5, energy=5000, size=6, age=0, max_age=100, hydration=5000, max_hydration=5000, can_photosynthesize=True, is_nocturnal=True)
+        entity.can_spin_webs = False
+        entity.is_nest_builder = False
 
         # Disable interference
         entity.is_sleeping = False
@@ -2632,6 +2638,7 @@ class TestUniverse(unittest.TestCase):
         entity.is_agile = False
         entity.can_spin_webs = False
         entity.is_fearless = True
+        entity.can_spin_webs = False
         universe.disease_chance = 0.0
 
         universe.add_entity(entity)
@@ -5357,6 +5364,8 @@ class TestEnduranceRunner(unittest.TestCase):
         universe.population_limit = 100
         # Initialize traits so they flip correctly
         e1 = Entity("Parent", energy=5000, age=10, is_prolific=False, lays_eggs=True, is_mud_bather=True, is_vampiric=True, is_territorial=True, has_strong_stomach=True, is_opportunistic=True, is_agile=True, is_evasive=True)
+        e1.is_reckless = True
+        e1.is_thief = True
         e1.is_fruiting = False
         e1.is_parasitic = False
         e1.can_photosynthesize = False
@@ -5400,6 +5409,10 @@ class TestEnduranceRunner(unittest.TestCase):
 
         # Prolific entity
         e1 = Entity("Prolific", energy=100, is_prolific=True, lays_eggs=True, age=10, size=1)
+        e1.is_reckless = True
+        e1.is_thief = True
+        e1.can_spin_webs = False
+        e1.is_nest_builder = False
         e1.is_intimidating = False
         e1.is_cleaner = False
         e1.is_spiteful = False
@@ -5477,6 +5490,8 @@ class TestIsAdaptable(unittest.TestCase):
         universe = Universe(width=10, height=10, population_limit=10, reproduction_threshold=20, reproduction_cost=10)
 
         e1 = Entity(name="Adaptable", energy=1000, is_adaptable=True, lays_eggs=True, age=10, size=1)
+        e1.is_reckless = True
+        e1.is_thief = True
         e1.is_intimidating = False
         e1.is_cleaner = False
         e1.is_spiteful = False
@@ -5673,6 +5688,8 @@ class TestIsIntimidating(unittest.TestCase):
 
     def test_is_intimidating_mutation(self):
         parent = Entity(name="parent", x=0, y=0, energy=50, age=10, size=3, is_intimidating=False, max_age=100)
+        parent.is_reckless = True
+        parent.is_thief = True
         parent.lays_eggs = False
         parent.is_parasitic = False
         parent.is_scout = False
@@ -7212,6 +7229,13 @@ class TestIsVocal(unittest.TestCase):
         mock_random.return_value = 0.0
         universe = Universe(width=10, height=10, population_limit=10, reproduction_threshold=20)
         e = Entity("Parent", energy=1000, age=10, size=1, is_vocal=False, lays_eggs=True, is_prolific=True)
+        e.is_reckless = True
+        e.is_thief = True
+        e.is_cleaner = True
+        e.is_sunbather = True
+        e.is_spiteful = True
+        e.is_reckless = False
+        e.is_thief = False
         # Disable bleeding traits
         e.is_mud_bather = True
         e.is_vampiric = True
@@ -7309,6 +7333,8 @@ class TestIsNomadic(unittest.TestCase):
         universe = Universe(width=5, height=5)
         # Parent with max energy to reproduce
         parent = Entity("Parent", x=2, y=2, energy=100, is_nomadic=False, size=1, age=10, is_prolific=False)
+        parent.is_reckless = True
+        parent.is_thief = True
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40 # to avoid direct spawn logic if we want, or False
@@ -7412,6 +7438,8 @@ class TestPhotosensitiveTrait(unittest.TestCase):
         universe = Universe(day_length=10)
         universe.time = 0 # Day
         e = Entity("Test", is_photosensitive=True, hydration=20, preferred_temperature=20, temperature_tolerance=5)
+        e.is_reckless = False
+        e.is_thief = False
         # Prevent arbitrary drains
         e.is_hibernating = False
         e.is_sleeping = False
@@ -7471,6 +7499,8 @@ class TestIsScavenger(unittest.TestCase):
         universe = Universe(width=5, height=5)
 
         parent = Entity("Parent", x=2, y=2, energy=100, hydration=50, max_hydration=50, is_scavenger=False, size=1, age=10, is_prolific=False)
+        parent.is_reckless = True
+        parent.is_thief = True
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40
@@ -7783,6 +7813,8 @@ class TestIsCleaner(unittest.TestCase):
         u.mutation_chance = 1.0
 
         parent = Entity("Parent", x=5, y=5, energy=1000, age=10, size=1, is_cleaner=False)
+        parent.is_reckless = True
+        parent.is_thief = True
         parent.is_scout = False
         parent.is_intimidating = False
         parent.is_spiteful = False
@@ -7859,6 +7891,32 @@ class TestIsSpiteful(unittest.TestCase):
         u.mutation_chance = 1.0
 
         parent = Entity("Parent", x=5, y=5, energy=1000, age=10, size=1, is_spiteful=False)
+        parent.is_reckless = False
+        parent.is_thief = False
+        parent.is_cleaner = False
+        parent.is_sunbather = False
+        parent.is_reckless = True
+        parent.is_thief = True
+        parent.is_cleaner = False
+        parent.is_sunbather = False
+        parent.is_reckless = False
+        parent.is_thief = False
+        parent.is_cleaner = False
+        parent.is_sunbather = False
+        parent.is_reckless = False
+        parent.is_thief = False
+        parent.is_sunbather = False
+        parent.is_cleaner = False
+        parent.is_reckless = False
+        parent.is_thief = False
+        parent.is_cleaner = False
+        parent.is_sunbather = False
+        parent.is_cleaner = False
+        parent.is_sunbather = False
+        parent.is_reckless = True
+        parent.is_thief = True
+        parent.is_reckless = True
+        parent.is_thief = True
         parent.lays_eggs = True
         parent.is_vampiric = True
         parent.is_mud_bather = True
@@ -7871,6 +7929,12 @@ class TestIsSpiteful(unittest.TestCase):
         parent.is_scout = False
         parent.is_intimidating = False
         parent.is_cleaner = False
+        parent.is_reckless = False
+        parent.is_thief = False
+        parent.is_reckless = False
+        parent.is_thief = False
+        parent.is_reckless = False
+        parent.is_thief = False
 
         parent.is_sunbather = False
         parent.lays_eggs = True
@@ -7894,6 +7958,8 @@ class TestIsSunbather(unittest.TestCase):
         universe.time = 0
         universe.population_limit = 100
         parent = Entity("Parent", energy=5000, age=10, is_sunbather=False, lays_eggs=True, intelligence=1, is_nest_builder=False)
+        parent.is_reckless = True
+        parent.is_thief = True
         # Disable bleeding traits
         parent.is_mud_bather = True
         parent.is_vampiric = True
@@ -7922,6 +7988,14 @@ class TestIsSunbather(unittest.TestCase):
         parent.is_spiteful = True
         parent.is_nomadic = True
         parent.is_scavenger = True
+        parent.is_reckless = True
+        parent.is_thief = True
+        parent.is_cleaner = True
+        parent.is_spiteful = True
+        parent.is_reckless = True
+        parent.is_thief = True
+        parent.is_cleaner = True
+        parent.is_spiteful = True
         parent.lays_eggs = True
         universe.add_entity(parent)
 
