@@ -7985,3 +7985,65 @@ class TestRecklessTrait(unittest.TestCase):
         # Note: actually we should just test if effective attack / defense logic can be inferred by survival or not, but
         # wait we can patch a mock or just test if defender got eaten (since escape chance is based on total_stats)
         # It's better to add the tests to `tests/test_engine.py` directly.
+
+class TestIsThief(unittest.TestCase):
+    def test_is_thief_steals_food(self):
+        from src.universe.engine import Universe, Entity, Food
+        universe = Universe(width=10, height=10)
+
+        # Victim
+        victim = Entity("Victim", x=5, y=5, energy=100, age=10, max_age=100, size=2, can_hoard=True, inventory=[], intelligence=1, is_nest_builder=False)
+        victim_food = Food(x=5, y=5, energy=20, plant_type='berry')
+        victim.inventory.append(victim_food)
+
+        # Thief
+        thief = Entity("Thief", x=5, y=5, energy=10, age=10, max_age=100, size=2, can_hoard=True, is_thief=True, inventory=[], intelligence=1, is_nest_builder=False)
+
+        universe.add_entity(victim)
+        universe.add_entity(thief)
+
+        # Thief logic evaluates in tick loop when entity iterates. We need `time = 0` to let tick() increment to 1 (since thief size is 2, time % 2 == 1, wait, no, time % size is for ACTION, not for thief steal logic! Thief logic is at start of tick.
+        # Wait, the problem might be that the distance between (5,5) and (5,5) is 0 which is <= 1.
+        # Let's check `is_alive`. Energy > 0 and hydration > 0. Victim has energy=100. Hydration default is 50.
+        # Let's print why it fails.
+        # Execute the steal logic directly or isolate exactly why tick() fails.
+        # Let's disable random events that might kill them.
+        universe.current_event = None
+        universe.time = 0
+        universe.base_temperature = 20
+        thief.energy = 50 # 50 < 75% of 100
+        victim.energy = 100
+        universe.tick()
+
+        # Thief should have stolen the food (and possibly eaten it, so we check victim's inventory is empty)
+        self.assertEqual(len(victim.inventory), 0)
+        # Thief's energy might have increased if they ate it.
+        # But we just want to ensure it was stolen from the victim.
+        # Check that it's no longer in the victim's inventory.
+
+    @unittest.mock.patch('random.random', return_value=0.0)
+    def test_is_thief_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity, Food
+        universe = Universe(width=10, height=10)
+
+
+        # Init parent opposite to avoid other side effects
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=5, age=10, max_age=100, is_thief=False, lays_eggs=True, intelligence=1, is_nest_builder=False, is_vampiric=True, is_territorial=True, is_mud_bather=True, has_strong_stomach=True, is_pack_mule=True, is_reckless=True, is_spiteful=True, is_sunbather=True)
+        universe.add_entity(parent)
+
+        # Ensure time does not prevent acting
+        universe.time = 0
+        universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        # Maybe it laid an egg? If it did, it mutated to True? No, we set lays_eggs=True, so it should mutate to False.
+        # But what if some OTHER trait killed it or made it do something else (e.g. build a shelter, or die?)
+        if len(children) == 0:
+             # Just in case, it laid an egg! Let's check eggs.
+             eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None)]
+             if len(eggs) > 0:
+                 self.assertTrue(getattr(eggs[0].hatch_entity, 'is_thief', False))
+                 return
+
+        self.assertGreater(len(children), 0)
+        self.assertTrue(children[0].is_thief)
