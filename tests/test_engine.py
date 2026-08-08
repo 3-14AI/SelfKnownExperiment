@@ -903,11 +903,11 @@ class TestUniverse(unittest.TestCase):
 
     def test_immunity_prevents_infection(self):
         from src.universe.engine import Universe, Entity
+        import random
         universe = Universe(width=10, height=10, disease_chance=1.0)
-        universe.event_chance = 0.0
-        immune_entity = Entity("Immune", energy=100, is_immune=True)
+        immune_entity = Entity("Immune", energy=100, is_immune=True, is_cleaner=False, is_spiteful=False, is_sunbather=False, is_adaptable=False, is_playful=False, is_nest_builder=False)
         universe.add_entity(immune_entity)
-        vuln_entity = Entity("Vuln", energy=100, is_immune=False)
+        vuln_entity = Entity("Vuln", energy=100, is_immune=False, is_cleaner=False, is_spiteful=False, is_sunbather=False, is_adaptable=False, is_playful=False, is_nest_builder=False)
         universe.add_entity(vuln_entity)
         universe.tick()
         universe.disease_chance = 0.0
@@ -2397,6 +2397,7 @@ class TestUniverse(unittest.TestCase):
         u.tick()
 
         # Water should become ice because local temp <= 0
+        u.event_chance = 0.0
         t_2_2 = u.get_terrains_at(2, 2)[0]
         self.assertEqual(t_2_2.terrain_type, 'ice')
 
@@ -2623,20 +2624,19 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         # Age 0, size 6 entity. Should start at size max(1, 6//3) = 2
         entity = Entity("Grower", x=5, y=5, energy=5000, size=6, age=0, max_age=100, hydration=5000, max_hydration=5000, can_photosynthesize=True, is_nocturnal=True)
-        entity.can_spin_webs = False
         entity.is_nest_builder = False
+        entity.is_playful = False
+        entity.is_adaptable = False
 
         # Disable interference
         entity.is_sleeping = False
         entity.intelligence = 1
         entity.preferred_temperature = universe.base_temperature
-        entity.can_spin_webs = False
         entity.is_migratory = False
         entity.temperature_tolerance = 40
         entity.is_evasive = False
         entity.can_sprint = False
         entity.is_agile = False
-        entity.can_spin_webs = False
         entity.is_fearless = True
         entity.can_spin_webs = False
         universe.disease_chance = 0.0
@@ -4308,7 +4308,6 @@ class TestUniverse(unittest.TestCase):
         entity.lays_eggs = False
         # Make sure they don't move or lose energy from other means
         entity.intelligence = 1
-        entity.can_spin_webs = False
         universe.population_limit = 0
         universe.reproduction_threshold = 100 # No reproduction
         universe.add_entity(entity)
@@ -5362,38 +5361,16 @@ class TestEnduranceRunner(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=0)
         universe.time = 0
         universe.population_limit = 100
-        # Initialize traits so they flip correctly
-        e1 = Entity("Parent", energy=5000, age=10, is_prolific=False, lays_eggs=True, is_mud_bather=True, is_vampiric=True, is_territorial=True, has_strong_stomach=True, is_opportunistic=True, is_agile=True, is_evasive=True)
-        e1.is_reckless = True
-        e1.is_thief = True
-        e1.is_fruiting = False
-        e1.is_parasitic = False
-        e1.can_photosynthesize = False
-        e1.is_nocturnal = False
-        e1.is_volcanic = False
-        e1.is_cold_blooded = False
-        e1.has_claws = False
-        e1.is_mud_bather = True
-        e1.is_vampiric = True
-        e1.has_strong_stomach = True
-        e1.is_resourceful = True
-        e1.is_scout = True
-        e1.is_territorial = True
-        e1.is_mud_bather = True
-        e1.is_nomadic = True
-        e1.is_fearless = True
-        e1.is_photosensitive = False
-        e1.is_scavenger = True
-        e1.is_photosensitive = False
-        e1.is_nomadic = True
-        e1.is_fearless = True
-        e1.is_territorial = True
-        e1.is_nest_builder = True
-        e1.is_scavenger = True
-        e1.is_sunbather = True
-        e1.lays_eggs = True
-        e1.is_fearless = True
-        e1.is_absorbent = True
+        e1 = Entity("Parent", energy=5000, age=10, size=5, is_prolific=False, lays_eggs=True,
+                    is_nest_builder=False, is_playful=False, is_adaptable=False, is_pack_mule=False,
+                    is_cleaner=False, is_fearless=True, is_sunbather=False, is_thief=False,
+                    is_scavenger=False, is_opportunistic=False, is_vampiric=False, is_mud_bather=False,
+                    is_territorial=False, has_strong_stomach=False, is_evasive=False, is_agile=False,
+                    is_nomadic=False, is_migratory=False, is_spiteful=False, is_endurance_runner=False,
+                    is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
+                    is_cooperative=False, is_solitary=False, is_parasitic=False, can_spin_webs=False,
+                    is_fruiting=False)
+
         universe.add_entity(e1)
         universe.time = 25
         universe.tick()
@@ -6470,6 +6447,7 @@ class TestPackHunterFlanking(unittest.TestCase):
 
             u.tick()
 
+            u.event_chance = 0.0
             t_2_2 = u.get_terrains_at(2, 2)[0]
             self.assertIn(t_2_2.terrain_type, ['water', 'deep-water'])
 
@@ -6480,6 +6458,7 @@ class TestPackHunterFlanking(unittest.TestCase):
             call_count = 0
             u.tick()
 
+            u.event_chance = 0.0
             t_2_2 = u.get_terrains_at(2, 2)[0]
             self.assertIn(t_2_2.terrain_type, ['water', 'deep-water'])
 
@@ -7807,47 +7786,25 @@ class TestIsCleaner(unittest.TestCase):
         from src.universe.engine import Universe, Entity
         import unittest.mock
 
-        u = Universe(width=10, height=10)
-        u.population_limit = 100
-        u.reproduction_threshold = 10
-        u.food_spawn_rate = 0.0
-        u.mutation_chance = 1.0
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=0)
+        universe.time = 0
+        universe.population_limit = 100
 
-        parent = Entity("Parent", x=5, y=5, energy=1000, age=10, size=1, is_cleaner=False)
-        parent.is_reckless = True
-        parent.is_thief = True
-        parent.is_scout = False
-        parent.is_intimidating = False
-        parent.is_spiteful = False
-        parent.is_fruiting = False
-        parent.is_parasitic = False
-        parent.is_gluttonous = False
-        parent.is_fearless = False
-        parent.is_nomadic = False
-        parent.can_sweat = False
-        parent.is_hardy = False
-        parent.is_vampiric = False
-        parent.lays_eggs = True
-        parent.is_vampiric = True
-        parent.is_mud_bather = True
-        parent.is_territorial = True
-        parent.has_strong_stomach = True
-        parent.preferred_terrain = None
-        parent.is_photosensitive = False
-        parent.is_nest_builder = False
-        parent.intelligence = 1
-        parent.is_spiteful = True
+        parent = Entity("CleanerParent", x=5, y=5, energy=5000, size=5, is_cleaner=False, lays_eggs=True, age=10,
+                        is_adaptable=False, is_spiteful=False, is_sunbather=False, is_playful=False,
+                        is_nest_builder=False, is_pack_mule=False, can_spin_webs=False, is_vampiric=False,
+                        is_mud_bather=False, is_territorial=False, has_strong_stomach=False, is_thief=False,
+                        is_scavenger=False, is_opportunistic=False, is_evasive=False, is_agile=False,
+                        is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
+                        is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
+                        is_cooperative=False, is_solitary=False, is_parasitic=False, is_fruiting=False)
+        universe.add_entity(parent)
 
-        parent.is_sunbather = True
-        parent.lays_eggs = True
-        parent.is_fearless = True
-        u.add_entity(parent)
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.time = 25
+            universe.tick()
 
-        with unittest.mock.patch('random.random', return_value=0.01):
-            u.time = 25
-            u.tick()
-
-        eggs = [f for f in u.foods if getattr(f, 'hatch_entity', None) is not None]
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
         self.assertTrue(len(eggs) > 0)
         self.assertTrue(getattr(eggs[0].hatch_entity, 'is_cleaner', False))
 
@@ -7891,58 +7848,18 @@ class TestIsSpiteful(unittest.TestCase):
         u.reproduction_threshold = 10
         u.mutation_chance = 1.0
 
-        parent = Entity("Parent", x=5, y=5, energy=1000, age=10, size=1, is_spiteful=False)
-        parent.is_reckless = False
-        parent.is_thief = False
-        parent.is_cleaner = False
-        parent.is_sunbather = False
-        parent.is_reckless = True
-        parent.is_thief = True
-        parent.is_cleaner = False
-        parent.is_sunbather = False
-        parent.is_reckless = False
-        parent.is_thief = False
-        parent.is_cleaner = False
-        parent.is_sunbather = False
-        parent.is_reckless = False
-        parent.is_thief = False
-        parent.is_sunbather = False
-        parent.is_cleaner = False
-        parent.is_reckless = False
-        parent.is_thief = False
-        parent.is_cleaner = False
-        parent.is_sunbather = False
-        parent.is_cleaner = False
-        parent.is_sunbather = False
-        parent.is_reckless = True
-        parent.is_thief = True
-        parent.is_reckless = True
-        parent.is_thief = True
-        parent.lays_eggs = True
-        parent.is_vampiric = True
-        parent.is_mud_bather = True
-        parent.is_territorial = True
-        parent.has_strong_stomach = True
-        parent.preferred_terrain = None
-        parent.is_photosensitive = False
-        parent.is_nest_builder = False
-        parent.intelligence = 1
-        parent.is_scout = False
-        parent.is_intimidating = False
-        parent.is_cleaner = False
-        parent.is_reckless = False
-        parent.is_thief = False
-        parent.is_reckless = False
-        parent.is_thief = False
-        parent.is_reckless = False
-        parent.is_thief = False
-
-        parent.is_sunbather = False
-        parent.lays_eggs = True
-        parent.lays_eggs = True
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_spiteful=False, lays_eggs=True,
+                        is_nest_builder=False, is_playful=False, is_adaptable=False, is_pack_mule=False,
+                        is_cleaner=False, is_fearless=True, is_sunbather=False, is_thief=False,
+                        is_scavenger=False, is_opportunistic=False, is_vampiric=False, is_mud_bather=False,
+                        is_territorial=False, has_strong_stomach=False, is_evasive=False, is_agile=False,
+                        is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
+                        is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
+                        is_cooperative=False, is_solitary=False, is_parasitic=False, can_spin_webs=False,
+                        is_fruiting=False)
         u.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.01):
+        with unittest.mock.patch('random.random', return_value=0.0):
             u.time = 25
             u.tick()
 
@@ -8103,7 +8020,7 @@ class TestIsThief(unittest.TestCase):
 
 
         # Init parent opposite to avoid other side effects
-        parent = Entity("Parent", x=5, y=5, energy=5000, size=5, age=10, max_age=100, is_thief=False, lays_eggs=True, intelligence=1, is_nest_builder=False, is_vampiric=True, is_territorial=True, is_mud_bather=True, has_strong_stomach=True, is_pack_mule=True, is_reckless=True, is_spiteful=True, is_sunbather=True)
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=5, age=10, max_age=100, is_thief=False, lays_eggs=True, intelligence=1, is_nest_builder=False, is_vampiric=False, is_territorial=False, is_mud_bather=False, has_strong_stomach=False, is_pack_mule=False, is_reckless=False, is_spiteful=False, is_sunbather=False, is_adaptable=False, is_playful=False)
         universe.add_entity(parent)
 
         # Ensure time does not prevent acting
