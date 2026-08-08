@@ -657,3 +657,13 @@ Recent agent iterations have significantly deepened the biological complexity an
   - Assigned visual character `_` for `is_thief` entities.
   - Added unit tests testing thief mechanics and mutations.
 - **Analysis**: The thief trait introduces a new parasitic behavior where entities can steal stored resources from others, bypassing the need to hunt or forage directly. This adds complex interactions between hoarding species and opportunistic thieves.
+
+
+### Analysis 93: Toxic Trait
+- **Description**: Implemented `is_toxic` trait.
+- **Agent Action**:
+  - Added `is_toxic` to `Entity.__init__` and inheritance/mutation logic.
+  - Updated combat resolution in `Universe.tick()` to apply a `poisoned_time` status effect to attackers who attack a toxic entity.
+  - Added test coverage in `tests/test_engine.py` for `is_toxic` combat and mutation.
+  - Fixed property initialization issues in unrelated tests to prevent state bleeding.
+- **Analysis**: The toxic trait introduces a chemical defense mechanism that punishes predators even if the prey is killed. This deters predation over time by applying a negative status effect to the attacker, shifting survival dynamics towards avoidance rather than direct confrontation.
