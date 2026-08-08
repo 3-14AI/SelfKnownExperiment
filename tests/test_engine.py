@@ -2998,10 +2998,10 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
 
         # Keep running until it adapts or fail after 100 ticks
-        parent = Entity("Predator", diet='carnivore', species="PredSpecies", x=5, y=5, energy=2500, target_species=["OldPrey"])
+        parent = Entity("Predator", diet='carnivore', species="PredSpecies", x=5, y=5, energy=2500, target_species=["OldPrey"], intelligence=1, is_nest_builder=False)
         universe.add_entity(parent)
 
-        prey = Entity("Prey", species="NewPreySpecies", x=10, y=10, energy=5000)
+        prey = Entity("Prey", species="NewPreySpecies", x=10, y=10, energy=5000, intelligence=1, is_nest_builder=False)
         universe.add_entity(prey)
 
         adapted = False
@@ -5363,7 +5363,7 @@ class TestEnduranceRunner(unittest.TestCase):
         universe.population_limit = 100
         e1 = Entity("Parent", energy=5000, age=10, size=5, is_prolific=False, lays_eggs=True,
                     is_nest_builder=False, is_playful=False, is_adaptable=False, is_pack_mule=False,
-                    is_cleaner=False, is_fearless=True, is_sunbather=False, is_thief=False,
+                    is_cleaner=False, is_fearless=True, is_thief=False,
                     is_scavenger=False, is_opportunistic=False, is_vampiric=False, is_mud_bather=False,
                     is_territorial=False, has_strong_stomach=False, is_evasive=False, is_agile=False,
                     is_nomadic=False, is_migratory=False, is_spiteful=False, is_endurance_runner=False,
@@ -5467,7 +5467,7 @@ class TestIsAdaptable(unittest.TestCase):
         mock_random.return_value = 0.0 # Force mutations
         universe = Universe(width=10, height=10, population_limit=10, reproduction_threshold=20, reproduction_cost=10)
 
-        e1 = Entity(name="Adaptable", energy=1000, is_adaptable=True, lays_eggs=True, age=10, size=1)
+        e1 = Entity(name="Adaptable", energy=1000, is_adaptable=True, lays_eggs=True, age=10, size=1, is_nest_builder=False, intelligence=1)
         e1.is_reckless = True
         e1.is_thief = True
         e1.is_intimidating = False
@@ -5729,6 +5729,62 @@ class TestRecklessTrait(unittest.TestCase):
             self.assertEqual(len(eggs), 1)
             child = eggs[0].hatch_entity
             self.assertFalse(child.is_reckless)
+
+
+class TestIsToxic(unittest.TestCase):
+    def test_is_toxic_combat(self):
+        from src.universe.engine import Universe, Entity
+
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.population_limit = 100
+
+        predator = Entity("Predator", x=5, y=5, energy=50, diet='carnivore', target_species=["PreySpecies"])
+        predator.attack = 100
+        predator.defense = 5
+        predator.size = 2
+
+        prey = Entity("Prey", x=5, y=5, energy=50, species="PreySpecies", is_toxic=True)
+        prey.attack = 0
+        prey.defense = 0
+        prey.size = 1
+
+        u.add_entity(predator)
+        u.add_entity(prey)
+
+        u.tick()
+
+        # Predator should kill prey and get poisoned
+        self.assertFalse(prey.is_alive)
+        self.assertTrue(predator.is_alive)
+        self.assertEqual(predator.poisoned_time, 10)
+
+    def test_is_toxic_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.population_limit = 100
+        u.reproduction_threshold = 10
+        u.mutation_chance = 1.0
+
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_toxic=False, lays_eggs=True,
+                        is_nest_builder=False, is_playful=False, is_adaptable=False, is_pack_mule=False,
+                        is_cleaner=False, is_fearless=True, is_thief=False,
+                        is_scavenger=False, is_opportunistic=False, is_vampiric=False, is_mud_bather=False,
+                        is_territorial=False, has_strong_stomach=False, is_evasive=False, is_agile=False,
+                        is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
+                        is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
+                        is_cooperative=False, is_solitary=False, is_parasitic=False, can_spin_webs=False,
+                        is_fruiting=False)
+        u.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.time = 25
+            u.tick()
+
+        eggs = [f for f in u.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertTrue(len(eggs) > 0)
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_toxic', False))
 
 if __name__ == '__main__':
 
@@ -7848,9 +7904,9 @@ class TestIsSpiteful(unittest.TestCase):
         u.reproduction_threshold = 10
         u.mutation_chance = 1.0
 
-        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_spiteful=False, lays_eggs=True,
-                        is_nest_builder=False, is_playful=False, is_adaptable=False, is_pack_mule=False,
-                        is_cleaner=False, is_fearless=True, is_sunbather=False, is_thief=False,
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_spiteful=False, lays_eggs=True, intelligence=1,
+                        is_nest_builder=False, is_playful=False, is_adaptable=False, is_pack_mule=False, is_sunbather=False,
+                        is_cleaner=False, is_fearless=True, is_thief=False,
                         is_scavenger=False, is_opportunistic=False, is_vampiric=False, is_mud_bather=False,
                         is_territorial=False, has_strong_stomach=False, is_evasive=False, is_agile=False,
                         is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
