@@ -642,6 +642,16 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('_', output)
 
+    def test_render_is_absorbent(self):
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=10, height=10)
+        e = Entity("Absorbent", x=0, y=0, is_absorbent=True, intelligence=1, is_nest_builder=False)
+        universe.add_entity(e)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('/', output)
+
 if __name__ == '__main__':
 
     unittest.main()
