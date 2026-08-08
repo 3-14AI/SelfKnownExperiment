@@ -5393,6 +5393,7 @@ class TestEnduranceRunner(unittest.TestCase):
         e1.is_sunbather = True
         e1.lays_eggs = True
         e1.is_fearless = True
+        e1.is_absorbent = True
         universe.add_entity(e1)
         universe.time = 25
         universe.tick()
@@ -8121,3 +8122,46 @@ class TestIsThief(unittest.TestCase):
 
         self.assertGreater(len(children), 0)
         self.assertTrue(children[0].is_thief)
+
+class TestIsAbsorbent(unittest.TestCase):
+    def test_is_absorbent_storm_recovery(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe()
+        universe.current_event = 'storm'
+        universe.event_remaining_time = 5
+        universe.time = 1
+        entity = Entity("E", hydration=20, max_hydration=50, is_absorbent=True, intelligence=1, is_nest_builder=False, can_sweat=False, is_photosensitive=False)
+        entity2 = Entity("E2", hydration=20, max_hydration=50, is_absorbent=False, intelligence=1, is_nest_builder=False, can_sweat=False, is_photosensitive=False)
+        universe.add_entity(entity)
+        universe.add_entity(entity2)
+        entity.hydration = 20
+        entity2.hydration = 20
+        universe.tick()
+        self.assertTrue(entity.hydration > entity2.hydration)
+
+    def test_is_absorbent_water_terrain_recovery(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe()
+        universe.current_event = None
+        universe.time = 1
+        universe.add_terrain(Terrain(x=0, y=0, terrain_type='mud'))
+        entity = Entity("E", x=0, y=0, hydration=20, max_hydration=50, is_absorbent=True, intelligence=1, is_nest_builder=False, is_photosensitive=False)
+        entity2 = Entity("E2", x=0, y=0, hydration=20, max_hydration=50, is_absorbent=False, intelligence=1, is_nest_builder=False, is_photosensitive=False)
+        entity.hydration = 20
+        entity2.hydration = 20
+        universe.add_entity(entity)
+        universe.add_entity(entity2)
+        universe.tick()
+        self.assertTrue(entity.hydration > entity2.hydration)
+
+    def test_is_absorbent_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe()
+        parent = Entity(name="P", is_absorbent=True, lays_eggs=True, energy=50, is_mud_bather=True, is_vampiric=True, is_territorial=True, has_strong_stomach=True, is_pack_mule=True, is_reckless=True, is_spiteful=True, is_sunbather=True)
+        universe.add_entity(parent)
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+            eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None)]
+            self.assertEqual(len(eggs), 1)
+            child = eggs[0].hatch_entity
+            self.assertFalse(child.is_absorbent)

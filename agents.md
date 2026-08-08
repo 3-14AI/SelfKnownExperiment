@@ -170,3 +170,4 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_reckless` trait. Entities with this trait deal double damage (effective attack * 2) but their effective defense is reduced to 0 during combat, making them glass cannons.
 - [x] Implemented `is_thief` trait. Entities with this trait and the ability to hoard can steal food from the inventory of adjacent entities when their own energy is low.
+- [x] Implemented `is_absorbent` trait. Entities with this trait regain hydration when it is raining (storm event) or they are standing on water/mud/deep-water terrain.
