@@ -5362,7 +5362,7 @@ class TestEnduranceRunner(unittest.TestCase):
         universe.time = 0
         universe.population_limit = 100
         e1 = Entity("Parent", energy=5000, age=10, size=5, is_prolific=False, lays_eggs=True,
-                    is_nest_builder=False, is_playful=False, is_adaptable=False, is_pack_mule=False,
+                    is_nest_builder=False, is_fierce=False, is_playful=False, is_adaptable=False, is_pack_mule=False,
                     is_cleaner=False, is_fearless=True, is_thief=False,
                     is_scavenger=False, is_opportunistic=False, is_vampiric=False, is_mud_bather=False,
                     is_territorial=False, has_strong_stomach=False, is_evasive=False, is_agile=False,
@@ -5467,7 +5467,7 @@ class TestIsAdaptable(unittest.TestCase):
         mock_random.return_value = 0.0 # Force mutations
         universe = Universe(width=10, height=10, population_limit=10, reproduction_threshold=20, reproduction_cost=10)
 
-        e1 = Entity(name="Adaptable", energy=1000, is_adaptable=True, lays_eggs=True, age=10, size=1, is_nest_builder=False, intelligence=1)
+        e1 = Entity(name="Adaptable", energy=1000, is_adaptable=True, lays_eggs=True, age=10, size=1, is_nest_builder=False, is_fierce=False, intelligence=1)
         e1.is_reckless = True
         e1.is_thief = True
         e1.is_intimidating = False
@@ -5768,7 +5768,7 @@ class TestIsToxic(unittest.TestCase):
         u.mutation_chance = 1.0
 
         parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_toxic=False, lays_eggs=True, intelligence=10,
-                        is_nest_builder=False, is_playful=False, is_adaptable=False, is_pack_mule=False,
+                        is_nest_builder=False, is_fierce=False, is_playful=False, is_adaptable=False, is_pack_mule=False,
                         is_cleaner=False, is_fearless=True, is_thief=False,
                         is_scavenger=False, is_opportunistic=False, is_vampiric=False, is_mud_bather=False,
                         is_territorial=False, has_strong_stomach=False, is_evasive=False, is_agile=False,
@@ -5878,13 +5878,15 @@ class TestIsArctic(unittest.TestCase):
 
     def test_is_arctic_blizzard_immunity(self):
         from src.universe.engine import Entity
-        e1 = Entity("Normal", x=5, y=5, energy=50, size=2, age=10, max_age=100, is_arctic=False, is_nest_builder=False, intelligence=1)
-        e2 = Entity("Arctic", x=6, y=6, energy=50, size=2, age=10, max_age=100, is_arctic=True, is_nest_builder=False, intelligence=1)
+        e1 = Entity("Normal", x=5, y=5, energy=50, size=2, age=10, max_age=100, is_arctic=False, is_nest_builder=False, is_fierce=False, intelligence=1)
+        e2 = Entity("Arctic", x=6, y=6, energy=50, size=2, age=10, max_age=100, is_arctic=True, is_nest_builder=False, is_fierce=False, intelligence=1)
         self.universe.entities = [e1, e2]
         self.universe.current_event = 'blizzard'
         self.universe.event_remaining_time = 5
         self.universe.time = self.universe.season_length * 3 + 1 # winter
 
+        self.universe.get_temperature_at = lambda x, y: -10
+        self.universe.event_chance = 0.0
         old_e1 = e1.energy
         old_e2 = e2.energy
         self.universe.tick()
@@ -5893,12 +5895,14 @@ class TestIsArctic(unittest.TestCase):
 
     def test_is_arctic_snow_energy(self):
         from src.universe.engine import Entity, Terrain
-        e1 = Entity("Normal", x=5, y=5, energy=40, size=2, age=10, max_age=100, is_arctic=False, intelligence=1, is_nest_builder=False)
-        e2 = Entity("Arctic", x=6, y=6, energy=40, size=2, age=10, max_age=100, is_arctic=True, intelligence=1, is_nest_builder=False)
+        e1 = Entity("Normal", x=5, y=5, energy=40, size=2, age=10, max_age=100, is_arctic=False, intelligence=1, is_nest_builder=False, is_fierce=False)
+        e2 = Entity("Arctic", x=6, y=6, energy=40, size=2, age=10, max_age=100, is_arctic=True, intelligence=1, is_nest_builder=False, is_fierce=False)
         self.universe.entities = [e1, e2]
         self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='snow'))
         self.universe.add_terrain(Terrain(x=6, y=6, terrain_type='snow'))
 
+        self.universe.get_temperature_at = lambda x, y: -10
+        self.universe.event_chance = 0.0
         old_e1 = e1.energy
         old_e2 = e2.energy
         self.universe.tick()
@@ -5909,7 +5913,7 @@ class TestIsArctic(unittest.TestCase):
 
     def test_is_arctic_mutation(self):
         from src.universe.engine import Entity
-        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_arctic=False, lays_eggs=True, intelligence=10, is_nest_builder=False, is_vampiric=False, is_territorial=False, is_mud_bather=False, has_strong_stomach=False, is_pack_mule=False, is_reckless=False, is_spiteful=False, is_sunbather=False, is_adaptable=False, is_playful=False, is_scavenger=False, is_cleaner=False, is_parasitic=False, is_fruiting=False, can_spin_webs=False, is_opportunistic=False, is_evasive=False, is_agile=False, is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False, is_gluttonous=False, is_resourceful=False, is_intimidating=False, is_cooperative=False, is_solitary=False, is_toxic=False, is_vibrant=False)
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, lays_eggs=True, intelligence=1, is_nest_builder=False, is_toxic=False, is_vibrant=False, is_arctic=False, is_fierce=False)
         self.universe.entities = [parent]
 
         import unittest.mock as mock
@@ -7982,7 +7986,7 @@ class TestIsCleaner(unittest.TestCase):
 
         parent = Entity("CleanerParent", x=5, y=5, energy=5000, size=5, is_cleaner=False, lays_eggs=True, age=10, intelligence=10,
                         is_adaptable=False, is_spiteful=False, is_sunbather=False, is_playful=False,
-                        is_nest_builder=False, is_pack_mule=False, can_spin_webs=False, is_vampiric=False,
+                        is_nest_builder=False, is_fierce=False, is_pack_mule=False, can_spin_webs=False, is_vampiric=False,
                         is_mud_bather=False, is_territorial=False, has_strong_stomach=False, is_thief=False,
                         is_scavenger=False, is_opportunistic=False, is_evasive=False, is_agile=False,
                         is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
@@ -8039,7 +8043,7 @@ class TestIsSpiteful(unittest.TestCase):
         u.mutation_chance = 1.0
 
         parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_spiteful=False, lays_eggs=True, intelligence=10,
-                        is_nest_builder=False, is_playful=False, is_adaptable=False, is_pack_mule=False, is_sunbather=False,
+                        is_nest_builder=False, is_fierce=False, is_playful=False, is_adaptable=False, is_pack_mule=False, is_sunbather=False,
                         is_cleaner=False, is_fearless=True, is_thief=False,
                         is_scavenger=False, is_opportunistic=False, is_vampiric=False, is_mud_bather=False,
                         is_territorial=False, has_strong_stomach=False, is_evasive=False, is_agile=False,
@@ -8065,7 +8069,7 @@ class TestIsSunbather(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=0)
         universe.time = 0
         universe.population_limit = 100
-        parent = Entity("Parent", energy=5000, age=10, is_sunbather=False, lays_eggs=True, intelligence=1, is_nest_builder=False)
+        parent = Entity("Parent", energy=5000, age=10, is_sunbather=False, lays_eggs=True, intelligence=1, is_nest_builder=False, is_fierce=False)
         parent.is_reckless = True
         parent.is_thief = True
         # Disable bleeding traits
@@ -8210,7 +8214,7 @@ class TestIsThief(unittest.TestCase):
 
 
         # Init parent opposite to avoid other side effects
-        parent = Entity("Parent", x=5, y=5, energy=5000, size=5, age=10, max_age=100, is_thief=False, lays_eggs=True, intelligence=10, is_nest_builder=False, is_vampiric=False, is_territorial=False, is_mud_bather=False, has_strong_stomach=False, is_pack_mule=False, is_reckless=False, is_spiteful=False, is_sunbather=False, is_adaptable=False, is_playful=False, is_scavenger=False, is_cleaner=False, is_parasitic=False, is_fruiting=False, can_spin_webs=False, is_opportunistic=False, is_evasive=False, is_agile=False, is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False, is_gluttonous=False, is_resourceful=False, is_intimidating=False, is_cooperative=False, is_solitary=False)
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=5, age=10, max_age=100, is_thief=False, lays_eggs=True, intelligence=10, is_nest_builder=False, is_fierce=False, is_vampiric=False, is_territorial=False, is_mud_bather=False, has_strong_stomach=False, is_pack_mule=False, is_reckless=False, is_spiteful=False, is_sunbather=False, is_adaptable=False, is_playful=False, is_scavenger=False, is_cleaner=False, is_parasitic=False, is_fruiting=False, can_spin_webs=False, is_opportunistic=False, is_evasive=False, is_agile=False, is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False, is_gluttonous=False, is_resourceful=False, is_intimidating=False, is_cooperative=False, is_solitary=False)
         universe.add_entity(parent)
 
         # Ensure time does not prevent acting
@@ -8252,8 +8256,8 @@ class TestIsAbsorbent(unittest.TestCase):
         universe.current_event = None
         universe.time = 1
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='mud'))
-        entity = Entity("E", x=0, y=0, hydration=20, max_hydration=50, is_absorbent=True, intelligence=1, is_nest_builder=False, is_photosensitive=False)
-        entity2 = Entity("E2", x=0, y=0, hydration=20, max_hydration=50, is_absorbent=False, intelligence=1, is_nest_builder=False, is_photosensitive=False)
+        entity = Entity("E", x=0, y=0, hydration=20, max_hydration=50, is_absorbent=True, intelligence=1, is_nest_builder=False, is_fierce=False, is_photosensitive=False)
+        entity2 = Entity("E2", x=0, y=0, hydration=20, max_hydration=50, is_absorbent=False, intelligence=1, is_nest_builder=False, is_fierce=False, is_photosensitive=False)
         entity.hydration = 20
         entity2.hydration = 20
         universe.add_entity(entity)
@@ -8272,3 +8276,25 @@ class TestIsAbsorbent(unittest.TestCase):
             self.assertEqual(len(eggs), 1)
             child = eggs[0].hatch_entity
             self.assertFalse(child.is_absorbent)
+
+class TestIsFierce(unittest.TestCase):
+    def test_is_fierce_combat(self):
+        from src.universe.engine import Entity
+        e1 = Entity("Fierce", attack=5, is_fierce=True)
+        self.assertTrue(e1.is_fierce)
+
+    def test_is_fierce_mutation(self):
+        from src.universe.engine import Universe, Entity
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_fierce=False, lays_eggs=True, intelligence=1, is_nest_builder=False)
+        universe = Universe(width=10, height=10)
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.event_chance = 0.0
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', side_effect=[0.0]*1000):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertGreaterEqual(len(eggs), 1)
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_fierce', False))
