@@ -5869,6 +5869,57 @@ class TestIsVibrant(unittest.TestCase):
         self.assertGreaterEqual(len(eggs), 1)
         self.assertTrue(getattr(eggs[0].hatch_entity, 'is_vibrant', False))
 
+
+
+class TestIsArctic(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=20, height=20, season_length=10)
+
+    def test_is_arctic_blizzard_immunity(self):
+        from src.universe.engine import Entity
+        e1 = Entity("Normal", x=5, y=5, energy=50, size=2, age=10, max_age=100, is_arctic=False, is_nest_builder=False, intelligence=1)
+        e2 = Entity("Arctic", x=6, y=6, energy=50, size=2, age=10, max_age=100, is_arctic=True, is_nest_builder=False, intelligence=1)
+        self.universe.entities = [e1, e2]
+        self.universe.current_event = 'blizzard'
+        self.universe.event_remaining_time = 5
+        self.universe.time = self.universe.season_length * 3 + 1 # winter
+
+        old_e1 = e1.energy
+        old_e2 = e2.energy
+        self.universe.tick()
+        # e2 should lose less energy than e1 due to blizzard immunity
+        self.assertTrue(old_e1 - e1.energy > old_e2 - e2.energy)
+
+    def test_is_arctic_snow_energy(self):
+        from src.universe.engine import Entity, Terrain
+        e1 = Entity("Normal", x=5, y=5, energy=40, size=2, age=10, max_age=100, is_arctic=False, intelligence=1, is_nest_builder=False)
+        e2 = Entity("Arctic", x=6, y=6, energy=40, size=2, age=10, max_age=100, is_arctic=True, intelligence=1, is_nest_builder=False)
+        self.universe.entities = [e1, e2]
+        self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='snow'))
+        self.universe.add_terrain(Terrain(x=6, y=6, terrain_type='snow'))
+
+        old_e1 = e1.energy
+        old_e2 = e2.energy
+        self.universe.tick()
+
+        # e2 gains 1 from snow, e1 doesn't.
+        # so e2's net loss should be less than e1's net loss.
+        self.assertTrue(old_e1 - e1.energy > old_e2 - e2.energy)
+
+    def test_is_arctic_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_arctic=False, lays_eggs=True, intelligence=10, is_nest_builder=False, is_vampiric=False, is_territorial=False, is_mud_bather=False, has_strong_stomach=False, is_pack_mule=False, is_reckless=False, is_spiteful=False, is_sunbather=False, is_adaptable=False, is_playful=False, is_scavenger=False, is_cleaner=False, is_parasitic=False, is_fruiting=False, can_spin_webs=False, is_opportunistic=False, is_evasive=False, is_agile=False, is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False, is_gluttonous=False, is_resourceful=False, is_intimidating=False, is_cooperative=False, is_solitary=False, is_toxic=False, is_vibrant=False)
+        self.universe.entities = [parent]
+
+        import unittest.mock as mock
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        eggs = [f for f in self.universe.foods if getattr(f, 'hatch_entity', None)]
+        self.assertTrue(len(eggs) > 0)
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_arctic', False))
+
 if __name__ == '__main__':
 
 
