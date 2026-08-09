@@ -5369,7 +5369,7 @@ class TestEnduranceRunner(unittest.TestCase):
                     is_nomadic=False, is_migratory=False, is_spiteful=False, is_endurance_runner=False,
                     is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
                     is_cooperative=False, is_solitary=False, is_parasitic=False, can_spin_webs=False,
-                    is_fruiting=False)
+                    is_fruiting=False, is_lucky=False)
 
         universe.add_entity(e1)
         universe.time = 25
@@ -5775,7 +5775,7 @@ class TestIsToxic(unittest.TestCase):
                         is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
                         is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
                         is_cooperative=False, is_solitary=False, is_parasitic=False, can_spin_webs=False,
-                        is_fruiting=False)
+                        is_fruiting=False, is_lucky=False)
         u.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -5924,7 +5924,47 @@ class TestIsArctic(unittest.TestCase):
         self.assertTrue(len(eggs) > 0)
         self.assertTrue(getattr(eggs[0].hatch_entity, 'is_arctic', False))
 
+
+class TestIsLucky(unittest.TestCase):
+    def test_is_lucky_combat(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+
+        # Predator will always attack, but we want to check escape chance logic
+        predator = Entity("Predator", x=0, y=0, diet='carnivore', energy=100, attack=50, defense=50, size=5, age=10, perception_radius=10, intelligence=1, is_nest_builder=False)
+        prey = Entity("Prey", x=0, y=0, diet='herbivore', energy=50, attack=50, defense=50, size=1, age=10, is_lucky=True, is_nest_builder=False)
+
+        # Escape chance base = 50 / 100 = 0.5
+        # With is_lucky = 0.5 + 0.1 = 0.6
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        import unittest.mock
+        # Mock random so escape chance check (< 0.6) passes (0.55 < 0.6 = True -> escapes)
+        # Without is_lucky, 0.55 < 0.5 would be False (eaten)
+        with unittest.mock.patch('random.random', return_value=0.55):
+            universe.tick()
+
+        # Prey should escape
+        self.assertTrue(prey.is_alive)
+        self.assertFalse(getattr(prey, 'was_eaten', False))
+
+    def test_is_lucky_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="P", is_lucky=False, lays_eggs=True, energy=50, is_mud_bather=True, is_vampiric=True, is_territorial=True, has_strong_stomach=True, is_pack_mule=True, is_reckless=True, is_spiteful=True, is_sunbather=True)
+        universe.add_entity(parent)
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+            eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None)]
+            self.assertEqual(len(eggs), 1)
+            child = eggs[0].hatch_entity
+            self.assertTrue(child.is_lucky)
+
 if __name__ == '__main__':
+
 
 
 
@@ -7991,7 +8031,7 @@ class TestIsCleaner(unittest.TestCase):
                         is_scavenger=False, is_opportunistic=False, is_evasive=False, is_agile=False,
                         is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
                         is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
-                        is_cooperative=False, is_solitary=False, is_parasitic=False, is_fruiting=False)
+                        is_cooperative=False, is_solitary=False, is_parasitic=False, is_fruiting=False, is_lucky=False)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -8050,7 +8090,7 @@ class TestIsSpiteful(unittest.TestCase):
                         is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
                         is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
                         is_cooperative=False, is_solitary=False, is_parasitic=False, can_spin_webs=False,
-                        is_fruiting=False)
+                        is_fruiting=False, is_lucky=False)
         u.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):

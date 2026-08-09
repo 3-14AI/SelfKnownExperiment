@@ -210,6 +210,8 @@ class CLIVisualizer:
                         char = '_'
                     elif getattr(entity, 'is_absorbent', False):
                         char = '/'
+                    elif getattr(entity, 'is_lucky', False):
+                        char = ','
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
