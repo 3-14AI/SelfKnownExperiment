@@ -31,7 +31,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
 
         # We test the energy loss in the tick rather than stamina in move_entity
-        e2 = Entity("Normal", x=1, y=1, energy=100, size=2, is_desertic=False, max_stamina=100, stamina=100, is_prolific=False)
+        e2 = Entity("Normal", x=1, y=1, energy=100, size=2, is_desertic=False, max_stamina=100, stamina=100, is_prolific=False, is_telepathic=False)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='sand'))
         e2.is_sleeping = True # to avoid movement during tick
         e2.max_hydration = 100
@@ -1191,8 +1191,8 @@ class TestUniverse(unittest.TestCase):
 
     def test_get_entities_at(self):
         universe = Universe()
-        e1 = Entity("E1", x=10, y=10)
-        e2 = Entity("E2", x=10, y=10)
+        e1 = Entity("E1", x=10, y=10, is_telepathic=False)
+        e2 = Entity("E2", x=10, y=10, is_telepathic=False)
         e3 = Entity("E3", x=10, y=11)
         universe.add_entity(e1)
         universe.add_entity(e2)
@@ -1542,7 +1542,7 @@ class TestUniverse(unittest.TestCase):
             # Force max_age to increase by 5, perception_radius by 2
             random.randint = lambda a, b: b
 
-            parent = Entity("Parent", x=5, y=5, energy=25, max_age=50, perception_radius=10)
+            parent = Entity("Parent", x=5, y=5, energy=25, max_age=50, perception_radius=10, is_telepathic=False)
             universe.add_entity(parent)
 
             universe.tick()
@@ -1571,7 +1571,7 @@ class TestUniverse(unittest.TestCase):
             # Force mutation to NOT happen
             random.random = lambda: 0.5 # Greater than 0.1 mutation chance
 
-            parent = Entity("Parent", x=5, y=5, energy=25, max_age=50, perception_radius=10)
+            parent = Entity("Parent", x=5, y=5, energy=25, max_age=50, perception_radius=10, is_telepathic=False)
             universe.add_entity(parent)
 
             universe.tick()
@@ -2028,8 +2028,8 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0)
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
-        e1 = Entity("E1", x=2, y=2, diet='herbivore')
-        e2 = Entity("E2", x=2, y=4, diet='herbivore')
+        e1 = Entity("E1", x=2, y=2, diet='herbivore', is_telepathic=False)
+        e2 = Entity("E2", x=2, y=4, diet='herbivore', is_telepathic=False)
         universe.add_entity(e1)
         universe.add_entity(e2)
 
@@ -2201,9 +2201,9 @@ class TestUniverse(unittest.TestCase):
         u.localized_event_chance = 0.0
 
         # Entity 1 is infected
-        e1 = Entity("Sick", x=5, y=5, energy=20, is_infected=True)
+        e1 = Entity("Sick", x=5, y=5, energy=20, is_infected=True, is_telepathic=False)
         # Entity 2 is nearby and should get infected
-        e2 = Entity("Near", x=6, y=6, energy=20, is_infected=False)
+        e2 = Entity("Near", x=6, y=6, energy=20, is_infected=False, is_telepathic=False)
         # Entity 3 is far and should not get infected
         e3 = Entity("Far", x=0, y=0, energy=20, is_infected=False)
 
@@ -2976,7 +2976,7 @@ class TestUniverse(unittest.TestCase):
             random.random = lambda: 0.05
             random.randint = lambda a, b: b
 
-            parent = Entity("Parent", species="OriginalSpecies", x=5, y=5, energy=25, generation=0, mutations=4)
+            parent = Entity("Parent", species="OriginalSpecies", x=5, y=5, energy=25, generation=0, mutations=4, is_telepathic=False)
             universe.add_entity(parent)
 
             universe.tick()
@@ -2998,7 +2998,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
 
         # Keep running until it adapts or fail after 100 ticks
-        parent = Entity("Predator", diet='carnivore', species="PredSpecies", x=5, y=5, energy=2500, target_species=["OldPrey"], intelligence=1, is_nest_builder=False)
+        parent = Entity("Predator", diet='carnivore', species="PredSpecies", x=5, y=5, energy=2500, target_species=["OldPrey"], intelligence=1, is_nest_builder=False, is_telepathic=False)
         universe.add_entity(parent)
 
         prey = Entity("Prey", species="NewPreySpecies", x=10, y=10, energy=5000, intelligence=1, is_nest_builder=False)
@@ -3078,12 +3078,12 @@ class TestUniverse(unittest.TestCase):
 
         # Test 1: Weather penalty negation
         # We need an entity in a shelter during a storm
-        e1 = Entity("E1", x=0, y=0, size=2, energy=50)
+        e1 = Entity("E1", x=0, y=0, size=2, energy=50, is_telepathic=False)
         e1.size = 2
         universe.add_entity(e1)
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='shelter'))
 
-        e2 = Entity("E2", x=1, y=1, size=2, energy=50)
+        e2 = Entity("E2", x=1, y=1, size=2, energy=50, is_telepathic=False)
         e2.size = 2
         universe.add_entity(e2)
 
@@ -3648,7 +3648,7 @@ class TestUniverse(unittest.TestCase):
         universe.localized_event_chance = 0.0
 
         # Entity with lays_eggs = True and sufficient energy
-        parent = Entity(name="EggLayer", x=0, y=0, energy=40, lays_eggs=True, intelligence=10)
+        parent = Entity(name="EggLayer", x=0, y=0, energy=40, lays_eggs=True, intelligence=10, is_telepathic=False)
         universe.add_entity(parent)
 
         import unittest.mock
@@ -3977,7 +3977,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
         universe.reproduction_threshold = 10
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_territorial=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_territorial=False, intelligence=10, is_telepathic=False)
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40
@@ -4033,7 +4033,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
         universe.reproduction_threshold = 10
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_migratory=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_migratory=False, intelligence=10, is_telepathic=False)
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40
@@ -4119,7 +4119,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
         universe.reproduction_threshold = 10
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_mud_bather=False, intelligence=10, is_telepathic=False)
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40
@@ -4156,7 +4156,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
         universe.reproduction_threshold = 10
-        parent = Entity("Parent", x=5, y=5, energy=5000, size=1, age=100, max_age=200, has_horns=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=1, age=100, max_age=200, has_horns=False, intelligence=10, is_telepathic=False)
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40
@@ -4237,7 +4237,7 @@ class TestUniverse(unittest.TestCase):
         universe.food_spawn_rate = 0.0
         universe.base_temperature = 20
 
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, has_blubber=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, has_blubber=False, intelligence=10, is_telepathic=False)
         universe.add_entity(parent)
 
         import unittest.mock
@@ -4339,7 +4339,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
         universe.reproduction_threshold = 10
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_cooperative=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_cooperative=False, intelligence=10, is_telepathic=False)
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40
@@ -4385,8 +4385,8 @@ class TestUniverse(unittest.TestCase):
         universe.population_limit = 0
         universe.reproduction_threshold = 100 # no reproduction
 
-        e1 = Entity("Helper", x=5, y=5, is_cooperative=True, energy=80, max_age=100, species="TestSpecies")
-        e2 = Entity("Receiver", x=6, y=5, is_cooperative=True, energy=10, max_age=100, species="TestSpecies")
+        e1 = Entity("Helper", x=5, y=5, is_cooperative=True, energy=80, max_age=100, species="TestSpecies", is_telepathic=False)
+        e2 = Entity("Receiver", x=6, y=5, is_cooperative=True, energy=10, max_age=100, species="TestSpecies", is_telepathic=False)
 
         # We assume e1 max_energy is > 80/0.6 (~133), base max_energy is size(1)*50 = 50.
         # So we need to set max_energy logic implicitly by keeping energy values high enough.
@@ -4859,8 +4859,8 @@ class TestAposematism(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.localized_event_chance = 0.0
-        e1 = Entity("Solitary1", x=0, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol")
-        e2 = Entity("Solitary2", x=2, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol")
+        e1 = Entity("Solitary1", x=0, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol", is_telepathic=False)
+        e2 = Entity("Solitary2", x=2, y=0, energy=50, size=1, age=100, max_age=200, is_solitary=True, species="Sol", is_telepathic=False)
 
         universe.add_entity(e1)
         universe.add_entity(e2)
@@ -4923,7 +4923,7 @@ class TestAposematism(unittest.TestCase):
         for (x, y), val in universe.scent_trails.items():
             self.assertTrue(False, "is_scentless entity should not leave a scent trail")
 
-        e2 = Entity("Normal", x=6, y=6, is_scentless=False)
+        e2 = Entity("Normal", x=6, y=6, is_scentless=False, is_telepathic=False)
         universe.add_entity(e2)
         universe.tick()
         if e2.is_alive and e2.diet in ['herbivore', 'scavenger', 'omnivore']:
@@ -4956,7 +4956,7 @@ class TestSprint(unittest.TestCase):
     def test_sprint_mutation(self):
         import unittest.mock
         universe = Universe(width=10, height=10)
-        parent = Entity("Parent", x=1, y=1, energy=100, can_sprint=False, intelligence=10)
+        parent = Entity("Parent", x=1, y=1, energy=100, can_sprint=False, intelligence=10, is_telepathic=False)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.01):
@@ -5028,7 +5028,7 @@ class TestSprint(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
         universe.reproduction_threshold = 10
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_vampiric=False, intelligence=10, is_telepathic=False)
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40
@@ -5098,7 +5098,7 @@ class TestSprint(unittest.TestCase):
 
     def test_can_sweat_mutation(self):
         universe = Universe(width=10, height=10)
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, can_sweat=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, can_sweat=False, intelligence=10, is_telepathic=False)
         universe.add_entity(parent)
         universe.population_limit = 100
         universe.food_spawn_rate = 0.0
@@ -5164,7 +5164,7 @@ class TestSprint(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.localized_event_chance = 0.0
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_filter_feeder=False, intelligence=10, lays_eggs=False)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_filter_feeder=False, intelligence=10, lays_eggs=False, is_telepathic=False)
         universe.add_entity(parent)
 
         import unittest.mock
@@ -5227,7 +5227,7 @@ class TestSprint(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.localized_event_chance = 0.0
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_gluttonous=False, intelligence=10, lays_eggs=True)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_gluttonous=False, intelligence=10, lays_eggs=True, is_telepathic=False)
         universe.add_entity(parent)
 
         import unittest.mock
@@ -5266,8 +5266,8 @@ class TestFastLearner(unittest.TestCase):
 
     def test_is_fast_learner_exp_bonus(self):
         from src.universe.engine import Entity
-        e1 = Entity("FastLearner", is_fast_learner=True)
-        e2 = Entity("NormalLearner", is_fast_learner=False)
+        e1 = Entity("FastLearner", is_fast_learner=True, is_telepathic=False)
+        e2 = Entity("NormalLearner", is_fast_learner=False, is_telepathic=False)
 
         e1.add_experience(10)
         e2.add_experience(10)
@@ -5335,8 +5335,8 @@ class TestEnduranceRunner(unittest.TestCase):
         from src.universe.engine import Universe, Entity
         u = Universe(width=5, height=5)
         # Verify max_stamina is doubled
-        e1 = Entity("Endurance", energy=50, max_stamina=50, is_endurance_runner=True, intelligence=1, perception_radius=0)
-        e2 = Entity("Normal", energy=50, max_stamina=50, is_endurance_runner=False, intelligence=1, perception_radius=0)
+        e1 = Entity("Endurance", energy=50, max_stamina=50, is_endurance_runner=True, intelligence=1, perception_radius=0, is_telepathic=False)
+        e2 = Entity("Normal", energy=50, max_stamina=50, is_endurance_runner=False, intelligence=1, perception_radius=0, is_telepathic=False)
 
         self.assertEqual(e1.max_stamina, 100)
         self.assertEqual(e2.max_stamina, 50)
@@ -5386,7 +5386,7 @@ class TestEnduranceRunner(unittest.TestCase):
         universe.reproduction_cost = 10
 
         # Prolific entity
-        e1 = Entity("Prolific", energy=100, is_prolific=True, lays_eggs=True, age=10, size=1)
+        e1 = Entity("Prolific", energy=100, is_prolific=True, lays_eggs=True, age=10, size=1, is_telepathic=False)
         e1.is_reckless = True
         e1.is_thief = True
         e1.can_spin_webs = False
@@ -5427,7 +5427,7 @@ class TestEnduranceRunner(unittest.TestCase):
         # Normal entity
         universe.foods.clear()
         universe.entities.clear()
-        e2 = Entity("Normal", energy=15, is_prolific=False, lays_eggs=True, age=10, size=1)
+        e2 = Entity("Normal", energy=15, is_prolific=False, lays_eggs=True, age=10, size=1, is_telepathic=False)
         universe.add_entity(e2)
         universe.time = 25
         universe.tick()
@@ -5445,7 +5445,7 @@ class TestIsAdaptable(unittest.TestCase):
         universe.get_temperature_at = lambda x, y: 30 # force mock temperature to 30
 
         # entity prefers 20
-        e1 = Entity("Adaptable", x=5, y=5, is_adaptable=True, preferred_temperature=20, hydration=10, max_hydration=10)
+        e1 = Entity("Adaptable", x=5, y=5, is_adaptable=True, preferred_temperature=20, hydration=10, max_hydration=10, is_telepathic=False)
         universe.add_entity(e1)
         universe.tick()
 
@@ -5455,7 +5455,7 @@ class TestIsAdaptable(unittest.TestCase):
 
         # Non-adaptable entity
         universe.entities.clear()
-        e2 = Entity("Normal", x=5, y=5, is_adaptable=False, preferred_temperature=20, hydration=10, max_hydration=10)
+        e2 = Entity("Normal", x=5, y=5, is_adaptable=False, preferred_temperature=20, hydration=10, max_hydration=10, is_telepathic=False)
         universe.add_entity(e2)
         universe.tick()
 
@@ -5467,7 +5467,7 @@ class TestIsAdaptable(unittest.TestCase):
         mock_random.return_value = 0.0 # Force mutations
         universe = Universe(width=10, height=10, population_limit=10, reproduction_threshold=20, reproduction_cost=10)
 
-        e1 = Entity(name="Adaptable", energy=1000, is_adaptable=True, lays_eggs=True, age=10, size=1, is_nest_builder=False, is_fierce=False, intelligence=1)
+        e1 = Entity(name="Adaptable", energy=1000, is_adaptable=True, lays_eggs=True, age=10, size=1, is_nest_builder=False, is_fierce=False, intelligence=1, is_telepathic=False)
         e1.is_reckless = True
         e1.is_thief = True
         e1.is_intimidating = False
@@ -5605,10 +5605,10 @@ class TestIsNestBuilder(unittest.TestCase):
         u.event_chance = 0.0
         u.localized_event_chance = 0.0
         u.disease_chance = 0.0
-        e1 = Entity(name="E1", x=2, y=2, energy=50, intelligence=1, size=1)
+        e1 = Entity(name="E1", x=2, y=2, energy=50, intelligence=1, size=1, is_telepathic=False)
         u.add_entity(e1)
 
-        e2 = Entity(name="E2", x=3, y=3, energy=50, intelligence=1, size=1, is_nest_builder=True)
+        e2 = Entity(name="E2", x=3, y=3, energy=50, intelligence=1, size=1, is_nest_builder=True, is_telepathic=False)
         u.add_entity(e2)
 
         with unittest.mock.patch('random.random', return_value=0.01):
@@ -5624,7 +5624,7 @@ class TestIsNestBuilder(unittest.TestCase):
     def test_is_nest_builder_mutation(self, mock_random):
         mock_random.return_value = 0.0
         u = Universe()
-        e1 = Entity(name="P1", energy=1000, age=10, is_nest_builder=False, lays_eggs=True, is_prolific=True)
+        e1 = Entity(name="P1", energy=1000, age=10, is_nest_builder=False, lays_eggs=True, is_prolific=True, is_telepathic=False)
         # Disable disruptive traits
         e1.is_mud_bather = True
         e1.is_vampiric = True
@@ -5665,7 +5665,7 @@ class TestIsIntimidating(unittest.TestCase):
         self.universe.localized_event_chance = 0.0
 
     def test_is_intimidating_mutation(self):
-        parent = Entity(name="parent", x=0, y=0, energy=50, age=10, size=3, is_intimidating=False, max_age=100)
+        parent = Entity(name="parent", x=0, y=0, energy=50, age=10, size=3, is_intimidating=False, max_age=100, is_telepathic=False)
         parent.is_reckless = True
         parent.is_thief = True
         parent.lays_eggs = False
@@ -5715,7 +5715,7 @@ class TestRecklessTrait(unittest.TestCase):
 
     def test_is_reckless_mutation(self):
         universe = Universe()
-        parent = Entity(name="P", is_reckless=True, lays_eggs=False, size=1)
+        parent = Entity(name="P", is_reckless=True, lays_eggs=False, size=1, is_telepathic=False)
         parent.lays_eggs = True
         parent.is_mud_bather = True
         parent.is_vampiric = True
@@ -5796,7 +5796,7 @@ class TestIsVibrant(unittest.TestCase):
         universe.time = 0
         universe.population_limit = 100
 
-        parent = Entity("Vibrant", energy=1000, age=10, size=5, lays_eggs=True, intelligence=1, is_vibrant=True)
+        parent = Entity("Vibrant", energy=1000, age=10, size=5, lays_eggs=True, intelligence=1, is_vibrant=True, is_telepathic=False)
         # Disable bleeding traits
         parent.is_sunbather = False
         parent.is_playful = False
@@ -5829,7 +5829,7 @@ class TestIsVibrant(unittest.TestCase):
         universe.time = 0
         universe.population_limit = 100
 
-        parent = Entity("Normal", energy=5000, age=10, size=5, lays_eggs=True, intelligence=10, is_vibrant=False)
+        parent = Entity("Normal", energy=5000, age=10, size=5, lays_eggs=True, intelligence=10, is_vibrant=False, is_telepathic=False)
         parent.is_sunbather = False
         parent.is_playful = False
         parent.is_scavenger = False
@@ -5878,8 +5878,22 @@ class TestIsArctic(unittest.TestCase):
 
     def test_is_arctic_blizzard_immunity(self):
         from src.universe.engine import Entity
-        e1 = Entity("Normal", x=5, y=5, energy=50, size=2, age=10, max_age=100, is_arctic=False, is_nest_builder=False, is_fierce=False, intelligence=1)
-        e2 = Entity("Arctic", x=6, y=6, energy=50, size=2, age=10, max_age=100, is_arctic=True, is_nest_builder=False, is_fierce=False, intelligence=1)
+        e1 = Entity("Normal", x=5, y=5, energy=50, size=2, age=10, max_age=100, is_arctic=False, is_nest_builder=False, is_fierce=False, intelligence=1, is_telepathic=False)
+        e2 = Entity("Arctic", x=6, y=6, energy=50, size=2, age=10, max_age=100, is_arctic=True, is_nest_builder=False, is_fierce=False, intelligence=1, is_telepathic=False)
+        e1.is_telepathic = False
+        e2.is_telepathic = False
+        e1.is_detritivore = False
+        e2.is_detritivore = False
+        e1.is_carnivorous_plant = False
+        e2.is_carnivorous_plant = False
+        e1.is_prolific = False
+        e2.is_prolific = False
+        e1.is_agile = False
+        e2.is_agile = False
+        e1.is_lucky = False
+        e2.is_lucky = False
+        e1.is_telepathic = False
+        e2.is_telepathic = False
         self.universe.entities = [e1, e2]
         self.universe.current_event = 'blizzard'
         self.universe.event_remaining_time = 5
@@ -5895,8 +5909,22 @@ class TestIsArctic(unittest.TestCase):
 
     def test_is_arctic_snow_energy(self):
         from src.universe.engine import Entity, Terrain
-        e1 = Entity("Normal", x=5, y=5, energy=40, size=2, age=10, max_age=100, is_arctic=False, intelligence=1, is_nest_builder=False, is_fierce=False)
-        e2 = Entity("Arctic", x=6, y=6, energy=40, size=2, age=10, max_age=100, is_arctic=True, intelligence=1, is_nest_builder=False, is_fierce=False)
+        e1 = Entity("Normal", x=5, y=5, energy=40, size=2, age=10, max_age=100, is_arctic=False, intelligence=1, is_nest_builder=False, is_fierce=False, is_telepathic=False)
+        e2 = Entity("Arctic", x=6, y=6, energy=40, size=2, age=10, max_age=100, is_arctic=True, intelligence=1, is_nest_builder=False, is_fierce=False, is_telepathic=False)
+        e1.is_telepathic = False
+        e2.is_telepathic = False
+        e1.is_detritivore = False
+        e2.is_detritivore = False
+        e1.is_carnivorous_plant = False
+        e2.is_carnivorous_plant = False
+        e1.is_prolific = False
+        e2.is_prolific = False
+        e1.is_agile = False
+        e2.is_agile = False
+        e1.is_lucky = False
+        e2.is_lucky = False
+        e1.is_telepathic = False
+        e2.is_telepathic = False
         self.universe.entities = [e1, e2]
         self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='snow'))
         self.universe.add_terrain(Terrain(x=6, y=6, terrain_type='snow'))
@@ -5913,7 +5941,7 @@ class TestIsArctic(unittest.TestCase):
 
     def test_is_arctic_mutation(self):
         from src.universe.engine import Entity
-        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, lays_eggs=True, intelligence=1, is_nest_builder=False, is_toxic=False, is_vibrant=False, is_arctic=False, is_fierce=False)
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, lays_eggs=True, intelligence=1, is_nest_builder=False, is_toxic=False, is_vibrant=False, is_arctic=False, is_fierce=False, is_telepathic=False)
         self.universe.entities = [parent]
 
         import unittest.mock as mock
@@ -5953,7 +5981,7 @@ class TestIsLucky(unittest.TestCase):
     def test_is_lucky_mutation(self):
         from src.universe.engine import Universe, Entity
         universe = Universe(width=10, height=10)
-        parent = Entity(name="P", is_lucky=False, lays_eggs=True, energy=50, is_mud_bather=True, is_vampiric=True, is_territorial=True, has_strong_stomach=True, is_pack_mule=True, is_reckless=True, is_spiteful=True, is_sunbather=True)
+        parent = Entity(name="P", is_lucky=False, lays_eggs=True, energy=5000, is_mud_bather=True, is_vampiric=True, is_territorial=True, has_strong_stomach=True, is_pack_mule=True, is_reckless=True, is_spiteful=True, is_sunbather=True, is_telepathic=False)
         universe.add_entity(parent)
         import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -5963,7 +5991,254 @@ class TestIsLucky(unittest.TestCase):
             child = eggs[0].hatch_entity
             self.assertTrue(child.is_lucky)
 
+
+class TestTelepathic(unittest.TestCase):
+    def test_is_telepathic_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="P", lays_eggs=True, energy=5000, age=10, size=5, is_telepathic=False, intelligence=10)
+        # Avoid bleeding mechanics
+        parent.is_lucky = False
+        parent.is_agile = False
+        parent.is_detritivore = False
+        parent.is_carnivorous_plant = False
+        parent.is_vampiric = True
+        parent.is_mud_bather = True
+        parent.is_territorial = True
+        parent.has_strong_stomach = True
+        parent.is_pack_mule = True
+        parent.is_reckless = True
+        parent.is_spiteful = True
+        parent.is_sunbather = True
+        parent.is_toxic = False
+        parent.is_prolific = False
+        parent.is_nest_builder = False
+        universe.add_entity(parent)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.01):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None)]
+        children = [e for e in universe.entities if e != parent]
+        child = eggs[0].hatch_entity if eggs else children[0]
+        self.assertTrue(child.is_telepathic)
+
+    def test_is_telepathic_alert(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=20, height=20, food_spawn_rate=0.0, reproduction_threshold=1000)
+
+        h1 = Entity("H1", x=0, y=0, diet='herbivore', species="PreySpecies", energy=100, perception_radius=5, is_telepathic=True)
+        h2 = Entity("H2", x=19, y=19, diet='herbivore', species="PreySpecies", energy=100, perception_radius=1, is_telepathic=False)
+        p = Entity("Predator", x=2, y=2, diet='carnivore', energy=100, attack=50)
+
+        h1.is_lucky = False
+        h2.is_lucky = False
+        p.is_lucky = False
+
+        universe.add_entity(h1)
+        universe.add_entity(h2)
+        universe.add_entity(p)
+
+        import unittest.mock
+        original_get = universe.get_nearest_predator
+        def custom_get(x, y, max_distance, entity=None):
+            if entity == h1:
+                return p
+            return None
+
+        with unittest.mock.patch.object(universe, 'get_nearest_predator', side_effect=custom_get):
+            with unittest.mock.patch.object(universe, 'move_entity') as mock_move:
+                universe.tick()
+                mock_move.assert_any_call(h2, unittest.mock.ANY, unittest.mock.ANY)
+
+
+class TestTelepathic(unittest.TestCase):
+    def test_is_telepathic_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="P", lays_eggs=True, energy=5000, age=10, size=5, is_telepathic=False, intelligence=10)
+        # Avoid bleeding mechanics
+        parent.is_lucky = False
+        parent.is_agile = False
+        parent.is_detritivore = False
+        parent.is_carnivorous_plant = False
+        parent.is_vampiric = True
+        parent.is_mud_bather = True
+        parent.is_territorial = True
+        parent.has_strong_stomach = True
+        parent.is_pack_mule = True
+        parent.is_reckless = True
+        parent.is_spiteful = True
+        parent.is_sunbather = True
+        parent.is_toxic = False
+        parent.is_prolific = False
+        parent.is_nest_builder = False
+        universe.add_entity(parent)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.01):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None)]
+        children = [e for e in universe.entities if e != parent]
+        child = eggs[0].hatch_entity if eggs else children[0]
+        self.assertTrue(child.is_telepathic)
+
+    def test_is_telepathic_alert(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=20, height=20, food_spawn_rate=0.0, reproduction_threshold=1000)
+
+        h1 = Entity("H1", x=0, y=0, diet='herbivore', species="PreySpecies", energy=100, perception_radius=5, is_telepathic=True)
+        h2 = Entity("H2", x=19, y=19, diet='herbivore', species="PreySpecies", energy=100, perception_radius=1, is_telepathic=False)
+        p = Entity("Predator", x=2, y=2, diet='carnivore', energy=100, attack=50)
+
+        h1.is_lucky = False
+        h2.is_lucky = False
+        p.is_lucky = False
+
+        universe.add_entity(h1)
+        universe.add_entity(h2)
+        universe.add_entity(p)
+
+        import unittest.mock
+        original_get = universe.get_nearest_predator
+        def custom_get(x, y, max_distance, entity=None):
+            if entity == h1:
+                return p
+            return None
+
+        with unittest.mock.patch.object(universe, 'get_nearest_predator', side_effect=custom_get):
+            with unittest.mock.patch.object(universe, 'move_entity') as mock_move:
+                universe.tick()
+                mock_move.assert_any_call(h2, unittest.mock.ANY, unittest.mock.ANY)
+
+
+class TestTelepathic(unittest.TestCase):
+    def test_is_telepathic_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="P", lays_eggs=True, energy=5000, age=10, size=5, is_telepathic=False, intelligence=10)
+        # Avoid bleeding mechanics
+        parent.is_lucky = False
+        parent.is_agile = False
+        parent.is_detritivore = False
+        parent.is_carnivorous_plant = False
+        parent.is_vampiric = True
+        parent.is_mud_bather = True
+        parent.is_territorial = True
+        parent.has_strong_stomach = True
+        parent.is_pack_mule = True
+        parent.is_reckless = True
+        parent.is_spiteful = True
+        parent.is_sunbather = True
+        parent.is_toxic = False
+        parent.is_prolific = False
+        parent.is_nest_builder = False
+        universe.add_entity(parent)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.01):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None)]
+        children = [e for e in universe.entities if e != parent]
+        child = eggs[0].hatch_entity if eggs else children[0]
+        self.assertTrue(child.is_telepathic)
+
+    def test_is_telepathic_alert(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=20, height=20, food_spawn_rate=0.0, reproduction_threshold=1000)
+
+        h1 = Entity("H1", x=0, y=0, diet='herbivore', species="PreySpecies", energy=100, perception_radius=5, is_telepathic=True)
+        h2 = Entity("H2", x=19, y=19, diet='herbivore', species="PreySpecies", energy=100, perception_radius=1, is_telepathic=False)
+        p = Entity("Predator", x=2, y=2, diet='carnivore', energy=100, attack=50)
+
+        h1.is_lucky = False
+        h2.is_lucky = False
+        p.is_lucky = False
+
+        universe.add_entity(h1)
+        universe.add_entity(h2)
+        universe.add_entity(p)
+
+        import unittest.mock
+        original_get = universe.get_nearest_predator
+        def custom_get(x, y, max_distance, entity=None):
+            if entity == h1:
+                return p
+            return None
+
+        with unittest.mock.patch.object(universe, 'get_nearest_predator', side_effect=custom_get):
+            with unittest.mock.patch.object(universe, 'move_entity') as mock_move:
+                universe.tick()
+                mock_move.assert_any_call(h2, unittest.mock.ANY, unittest.mock.ANY)
+
+
+class TestTelepathic(unittest.TestCase):
+    def test_is_telepathic_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="P", lays_eggs=True, energy=5000, age=10, size=5, is_telepathic=False, intelligence=10)
+        # Avoid bleeding mechanics
+        parent.is_lucky = False
+        parent.is_agile = False
+        parent.is_detritivore = False
+        parent.is_carnivorous_plant = False
+        parent.is_vampiric = True
+        parent.is_mud_bather = True
+        parent.is_territorial = True
+        parent.has_strong_stomach = True
+        parent.is_pack_mule = True
+        parent.is_reckless = True
+        parent.is_spiteful = True
+        parent.is_sunbather = True
+        parent.is_toxic = False
+        parent.is_prolific = False
+        parent.is_nest_builder = False
+        universe.add_entity(parent)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.01):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None)]
+        children = [e for e in universe.entities if e != parent]
+        child = eggs[0].hatch_entity if eggs else children[0]
+        self.assertTrue(child.is_telepathic)
+
+    def test_is_telepathic_alert(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=20, height=20, food_spawn_rate=0.0, reproduction_threshold=1000)
+
+        h1 = Entity("H1", x=0, y=0, diet='herbivore', species="PreySpecies", energy=100, perception_radius=5, is_telepathic=True)
+        h2 = Entity("H2", x=19, y=19, diet='herbivore', species="PreySpecies", energy=100, perception_radius=1, is_telepathic=False)
+        p = Entity("Predator", x=2, y=2, diet='carnivore', energy=100, attack=50)
+
+        h1.is_lucky = False
+        h2.is_lucky = False
+        p.is_lucky = False
+
+        universe.add_entity(h1)
+        universe.add_entity(h2)
+        universe.add_entity(p)
+
+        import unittest.mock
+        original_get = universe.get_nearest_predator
+        def custom_get(x, y, max_distance, entity=None):
+            if entity == h1:
+                return p
+            return None
+
+        with unittest.mock.patch.object(universe, 'get_nearest_predator', side_effect=custom_get):
+            with unittest.mock.patch.object(universe, 'move_entity') as mock_move:
+                universe.tick()
+                mock_move.assert_any_call(h2, unittest.mock.ANY, unittest.mock.ANY)
+
 if __name__ == '__main__':
+
+
+
 
 
 
@@ -6344,7 +6619,7 @@ class TestParasitism(unittest.TestCase):
             random.random = lambda: 0.05 # high mutation chance (< 0.1)
             random.randint = lambda a, b: b
 
-            parent = Entity("Parent", x=5, y=5, energy=25, is_parasitic=True)
+            parent = Entity("Parent", x=5, y=5, energy=25, is_parasitic=True, is_telepathic=False)
             self.universe.add_entity(parent)
 
             self.universe.tick()
@@ -6532,8 +6807,8 @@ class TestSocial(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
 
-        e1 = Entity("Social1", x=0, y=0, energy=100, size=2, age=100, max_age=200, is_social=True, species="Soc")
-        e2 = Entity("Social2", x=1, y=0, energy=100, size=2, age=100, max_age=200, is_social=True, species="Soc")
+        e1 = Entity("Social1", x=0, y=0, energy=100, size=2, age=100, max_age=200, is_social=True, species="Soc", is_telepathic=False)
+        e2 = Entity("Social2", x=1, y=0, energy=100, size=2, age=100, max_age=200, is_social=True, species="Soc", is_telepathic=False)
 
         universe.add_entity(e1)
         universe.add_entity(e2)
@@ -6722,7 +6997,7 @@ class TestNocturnalPredator(unittest.TestCase):
 
     def test_nocturnal_predator_mutation(self):
         universe = Universe(width=10, height=10)
-        parent = Entity("Parent", x=1, y=1, energy=100, is_nocturnal_predator=False, intelligence=10)
+        parent = Entity("Parent", x=1, y=1, energy=100, is_nocturnal_predator=False, intelligence=10, is_telepathic=False)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.01):
@@ -6736,7 +7011,7 @@ class TestCannibal(unittest.TestCase):
     def test_is_cannibalistic_mutation(self):
         import unittest.mock
         from src.universe.engine import Entity, Universe
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_cannibalistic=False, intelligence=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_cannibalistic=False, intelligence=10, is_telepathic=False)
         universe = Universe()
         universe.add_entity(parent)
         universe.population_limit = 100
@@ -6836,7 +7111,7 @@ class TestAmbushPredator(unittest.TestCase):
         universe.disease_chance = 0.0
         universe.localized_event_chance = 0.0
         universe.population_limit = 100
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_ambush_predator=False, intelligence=10, lays_eggs=False)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_ambush_predator=False, intelligence=10, lays_eggs=False, is_telepathic=False)
         universe.add_entity(parent)
 
         import unittest.mock
@@ -6857,7 +7132,7 @@ class TestFrugivore(unittest.TestCase):
         universe.disease_chance = 0.0
         universe.localized_event_chance = 0.0
         universe.population_limit = 100
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_frugivore=False, intelligence=10, lays_eggs=False)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_frugivore=False, intelligence=10, lays_eggs=False, is_telepathic=False)
         universe.add_entity(parent)
 
         import unittest.mock
@@ -6900,7 +7175,7 @@ class TestAgile(unittest.TestCase):
         universe.reproduction_threshold = 10
 
         # Disable properties that cause parent to die due to starvation/energy loss during tests with 0.0 random mock
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_agile=False, intelligence=10, lays_eggs=True)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_agile=False, intelligence=10, lays_eggs=True, is_telepathic=False)
         # Flip all boolean traits that cause issues during random=0
         parent.is_vampiric = True
         parent.is_mud_bather = True
@@ -6963,7 +7238,7 @@ class TestStrongStomach(unittest.TestCase):
         universe.reproduction_threshold = 10
         universe.time = 25
         # Set all properties to avoid immediate parent death when random() is mocked to 0
-        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, has_strong_stomach=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, has_strong_stomach=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True, is_telepathic=False)
         universe.add_entity(parent)
 
         from unittest.mock import patch
@@ -6977,8 +7252,8 @@ class TestStrongStomach(unittest.TestCase):
         self.assertTrue(getattr(child, "has_strong_stomach", False))
 
     def test_has_strong_stomach_immunity(self):
-        e1 = Entity("Strong", energy=100, has_strong_stomach=True, poison_resistance=0)
-        e2 = Entity("Weak", energy=100, has_strong_stomach=False, poison_resistance=0)
+        e1 = Entity("Strong", energy=100, has_strong_stomach=True, poison_resistance=0, is_telepathic=False)
+        e2 = Entity("Weak", energy=100, has_strong_stomach=False, poison_resistance=0, is_telepathic=False)
         toxic_food = Food(x=0, y=0, energy=10, plant_type='toxic_plant', toxicity=10)
 
         # Test on e1
@@ -7000,8 +7275,8 @@ class TestStrongStomach(unittest.TestCase):
         self.assertGreater(e2.poisoned_time, 0, "Entity without strong stomach should be poisoned")
 
     def test_has_strong_stomach_meat_energy(self):
-        e1 = Entity("Strong", energy=50, size=10, age=10, has_strong_stomach=True, diet="scavenger", target_plants=['meat'], max_stamina=100, stamina=100, perception_radius=10, max_hydration=100, hydration=100)
-        e2 = Entity("Weak", energy=50, size=10, age=10, has_strong_stomach=False, diet="scavenger", target_plants=['meat'], max_stamina=100, stamina=100, perception_radius=10, max_hydration=100, hydration=100)
+        e1 = Entity("Strong", energy=50, size=10, age=10, has_strong_stomach=True, diet="scavenger", target_plants=['meat'], max_stamina=100, stamina=100, perception_radius=10, max_hydration=100, hydration=100, is_telepathic=False)
+        e2 = Entity("Weak", energy=50, size=10, age=10, has_strong_stomach=False, diet="scavenger", target_plants=['meat'], max_stamina=100, stamina=100, perception_radius=10, max_hydration=100, hydration=100, is_telepathic=False)
 
         u1 = Universe(width=5, height=5)
         u1.time = 50
@@ -7199,8 +7474,8 @@ class TestHardy(unittest.TestCase):
         u.localized_event_chance = 0.0
         u.base_temperature = 20
 
-        e1 = Entity("Hardy", energy=20, size=2, age=10, is_hardy=True, intelligence=1, perception_radius=0)
-        e2 = Entity("Normal", energy=20, size=2, age=10, is_hardy=False, intelligence=1, perception_radius=0)
+        e1 = Entity("Hardy", energy=20, size=2, age=10, is_hardy=True, intelligence=1, perception_radius=0, is_telepathic=False)
+        e2 = Entity("Normal", energy=20, size=2, age=10, is_hardy=False, intelligence=1, perception_radius=0, is_telepathic=False)
 
         # Disable all other drain sources
         for e in [e1, e2]:
@@ -7265,8 +7540,8 @@ class TestPlayful(unittest.TestCase):
         u.food_spawn_rate = 0.0
 
         # e1 and e2 are adjacent and same species
-        e1 = Entity("Playful1", x=0, y=0, is_playful=True, species="PlayfulCat", energy=100, stamina=100, max_stamina=100, hydration=50, max_hydration=50, perception_radius=0)
-        e2 = Entity("Playful2", x=0, y=1, is_playful=True, species="PlayfulCat", energy=100, stamina=100, max_stamina=100, hydration=50, max_hydration=50, perception_radius=0)
+        e1 = Entity("Playful1", x=0, y=0, is_playful=True, species="PlayfulCat", energy=100, stamina=100, max_stamina=100, hydration=50, max_hydration=50, perception_radius=0, is_telepathic=False)
+        e2 = Entity("Playful2", x=0, y=1, is_playful=True, species="PlayfulCat", energy=100, stamina=100, max_stamina=100, hydration=50, max_hydration=50, perception_radius=0, is_telepathic=False)
 
         u.add_entity(e1)
         u.add_entity(e2)
@@ -7345,8 +7620,8 @@ class TestIsHeavySleeper(unittest.TestCase):
         from src.universe.engine import Universe, Entity
         u = Universe(width=5, height=5)
         u.base_temperature = 20
-        e1 = Entity("HeavySleeper", energy=50, size=1, age=10, is_heavy_sleeper=True, intelligence=1, perception_radius=0)
-        e2 = Entity("NormalSleeper", energy=50, size=1, age=10, is_heavy_sleeper=False, intelligence=1, perception_radius=0)
+        e1 = Entity("HeavySleeper", energy=50, size=1, age=10, is_heavy_sleeper=True, intelligence=1, perception_radius=0, is_telepathic=False)
+        e2 = Entity("NormalSleeper", energy=50, size=1, age=10, is_heavy_sleeper=False, intelligence=1, perception_radius=0, is_telepathic=False)
         e1.is_sleeping = True
         e2.is_sleeping = True
         e1.stamina = 0
@@ -7394,8 +7669,8 @@ class TestIsPatient(unittest.TestCase):
     def test_is_patient_stamina_recovery(self):
         from src.universe.engine import Universe, Entity
         u = Universe(width=5, height=5)
-        e1 = Entity("Patient", energy=50, size=1, age=10, is_patient=True, intelligence=1, max_stamina=50, stamina=10, perception_radius=0)
-        e2 = Entity("Normal", energy=50, size=1, age=10, is_patient=False, intelligence=1, max_stamina=50, stamina=10, perception_radius=0)
+        e1 = Entity("Patient", energy=50, size=1, age=10, is_patient=True, intelligence=1, max_stamina=50, stamina=10, perception_radius=0, is_telepathic=False)
+        e2 = Entity("Normal", energy=50, size=1, age=10, is_patient=False, intelligence=1, max_stamina=50, stamina=10, perception_radius=0, is_telepathic=False)
         e1.is_sleeping = False
         e2.is_sleeping = False
         u.add_entity(e1)
@@ -7419,8 +7694,8 @@ class TestIsPatient(unittest.TestCase):
 class TestIsVocal(unittest.TestCase):
     def test_is_vocal_alert_radius(self):
         universe = Universe(width=10, height=10)
-        e1 = Entity("Vocal", diet='herbivore', perception_radius=2, is_vocal=True, energy=100, x=0, y=0)
-        e2 = Entity("Quiet", diet='herbivore', perception_radius=2, is_vocal=False, energy=100, x=0, y=0)
+        e1 = Entity("Vocal", diet='herbivore', perception_radius=2, is_vocal=True, energy=100, x=0, y=0, is_telepathic=False)
+        e2 = Entity("Quiet", diet='herbivore', perception_radius=2, is_vocal=False, energy=100, x=0, y=0, is_telepathic=False)
 
         # Test if it calls get_nearby_flockmates with the right distance
         with unittest.mock.patch.object(universe, 'get_nearby_flockmates', return_value=[]) as mock_get:
@@ -7444,6 +7719,12 @@ class TestIsVocal(unittest.TestCase):
         universe = Universe(width=10, height=10, population_limit=10, reproduction_threshold=20)
         e = Entity("Parent", energy=1000, age=10, size=1, is_vocal=False, lays_eggs=True, is_prolific=True)
         e.is_reckless = True
+        e.is_telepathic = False
+        e.is_agile = False
+        e.is_lucky = False
+        e.is_detritivore = False
+        e.is_carnivorous_plant = False
+        e.is_prolific = False
         e.is_thief = True
         e.is_cleaner = True
         e.is_sunbather = True
@@ -7495,9 +7776,9 @@ class TestIsNomadic(unittest.TestCase):
     def test_is_nomadic_trait(self):
         universe = Universe(width=10, height=10)
         # Nomadic entity that moves
-        e1 = Entity("NomadicMover", x=5, y=5, energy=20, max_stamina=50, stamina=10, is_nomadic=True)
+        e1 = Entity("NomadicMover", x=5, y=5, energy=20, max_stamina=50, stamina=10, is_nomadic=True, is_telepathic=False)
         # Non-nomadic entity that moves
-        e2 = Entity("NormalMover", x=2, y=2, energy=20, max_stamina=50, stamina=10, is_nomadic=False)
+        e2 = Entity("NormalMover", x=2, y=2, energy=20, max_stamina=50, stamina=10, is_nomadic=False, is_telepathic=False)
 
         # Force movement by giving them full perception and food
         e1.perception_radius = 10
@@ -7546,7 +7827,7 @@ class TestIsNomadic(unittest.TestCase):
     def test_is_nomadic_mutation(self, mock_random):
         universe = Universe(width=5, height=5)
         # Parent with max energy to reproduce
-        parent = Entity("Parent", x=2, y=2, energy=100, is_nomadic=False, size=1, age=10, is_prolific=False)
+        parent = Entity("Parent", x=2, y=2, energy=100, is_nomadic=False, size=1, age=10, is_prolific=False, is_telepathic=False)
         parent.is_reckless = True
         parent.is_thief = True
         parent.lays_eggs = True
@@ -7579,7 +7860,7 @@ class TestFearlessTrait(unittest.TestCase):
         import random
         universe = Universe(width=5, height=5)
 
-        parent = Entity("Parent", x=2, y=2, energy=100, is_fearless=False, size=1, age=10, is_prolific=False)
+        parent = Entity("Parent", x=2, y=2, energy=100, is_fearless=False, size=1, age=10, is_prolific=False, is_telepathic=False)
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40
@@ -7712,7 +7993,7 @@ class TestIsScavenger(unittest.TestCase):
         from unittest.mock import patch
         universe = Universe(width=5, height=5)
 
-        parent = Entity("Parent", x=2, y=2, energy=100, hydration=50, max_hydration=50, is_scavenger=False, size=1, age=10, is_prolific=False)
+        parent = Entity("Parent", x=2, y=2, energy=100, hydration=50, max_hydration=50, is_scavenger=False, size=1, age=10, is_prolific=False, is_telepathic=False)
         parent.is_reckless = True
         parent.is_thief = True
         parent.lays_eggs = True
@@ -7786,7 +8067,7 @@ class TestIsScavenger(unittest.TestCase):
         from unittest.mock import patch
         universe = Universe(width=5, height=5)
 
-        parent = Entity("Parent", x=2, y=2, energy=100, hydration=50, max_hydration=50, is_scavenger=False, size=1, age=10, is_prolific=False)
+        parent = Entity("Parent", x=2, y=2, energy=100, hydration=50, max_hydration=50, is_scavenger=False, size=1, age=10, is_prolific=False, is_telepathic=False)
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40
@@ -7847,7 +8128,7 @@ class TestIsScavenger(unittest.TestCase):
         from unittest.mock import patch
         universe = Universe(width=5, height=5)
 
-        parent = Entity("Parent", x=2, y=2, energy=100, hydration=50, max_hydration=50, is_scavenger=False, size=1, age=10, is_prolific=False)
+        parent = Entity("Parent", x=2, y=2, energy=100, hydration=50, max_hydration=50, is_scavenger=False, size=1, age=10, is_prolific=False, is_telepathic=False)
         parent.lays_eggs = True
         parent.preferred_temperature = 20
         parent.temperature_tolerance = 40
@@ -7882,7 +8163,7 @@ class TestIsScout(unittest.TestCase):
         import random
         from unittest.mock import patch
         universe = Universe(width=5, height=5, population_limit=10, reproduction_threshold=20)
-        parent = Entity("Parent", x=2, y=2, energy=100, is_scout=False, size=1, age=10, is_prolific=True)
+        parent = Entity("Parent", x=2, y=2, energy=100, is_scout=False, size=1, age=10, is_prolific=True, is_telepathic=False)
         # Disable bleeding traits
         parent.lays_eggs = True
         parent.is_mud_bather = True
@@ -8109,7 +8390,8 @@ class TestIsSunbather(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=0)
         universe.time = 0
         universe.population_limit = 100
-        parent = Entity("Parent", energy=5000, age=10, is_sunbather=False, lays_eggs=True, intelligence=1, is_nest_builder=False, is_fierce=False)
+        parent = Entity("Parent", energy=5000, age=10, is_sunbather=False, lays_eggs=True, intelligence=1, is_nest_builder=False, is_fierce=False, is_telepathic=False)
+        parent.is_telepathic = False
         parent.is_reckless = True
         parent.is_thief = True
         # Disable bleeding traits
@@ -8254,7 +8536,7 @@ class TestIsThief(unittest.TestCase):
 
 
         # Init parent opposite to avoid other side effects
-        parent = Entity("Parent", x=5, y=5, energy=5000, size=5, age=10, max_age=100, is_thief=False, lays_eggs=True, intelligence=10, is_nest_builder=False, is_fierce=False, is_vampiric=False, is_territorial=False, is_mud_bather=False, has_strong_stomach=False, is_pack_mule=False, is_reckless=False, is_spiteful=False, is_sunbather=False, is_adaptable=False, is_playful=False, is_scavenger=False, is_cleaner=False, is_parasitic=False, is_fruiting=False, can_spin_webs=False, is_opportunistic=False, is_evasive=False, is_agile=False, is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False, is_gluttonous=False, is_resourceful=False, is_intimidating=False, is_cooperative=False, is_solitary=False)
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=5, age=10, max_age=100, is_thief=False, lays_eggs=True, intelligence=10, is_nest_builder=False, is_fierce=False, is_vampiric=False, is_territorial=False, is_mud_bather=False, has_strong_stomach=False, is_pack_mule=False, is_reckless=False, is_spiteful=False, is_sunbather=False, is_adaptable=False, is_playful=False, is_scavenger=False, is_cleaner=False, is_parasitic=False, is_fruiting=False, can_spin_webs=False, is_opportunistic=False, is_evasive=False, is_agile=False, is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False, is_gluttonous=False, is_resourceful=False, is_intimidating=False, is_cooperative=False, is_solitary=False, is_telepathic=False)
         universe.add_entity(parent)
 
         # Ensure time does not prevent acting
@@ -8308,7 +8590,7 @@ class TestIsAbsorbent(unittest.TestCase):
     def test_is_absorbent_mutation(self):
         from src.universe.engine import Universe, Entity
         universe = Universe()
-        parent = Entity(name="P", is_absorbent=True, lays_eggs=True, energy=50, is_mud_bather=True, is_vampiric=True, is_territorial=True, has_strong_stomach=True, is_pack_mule=True, is_reckless=True, is_spiteful=True, is_sunbather=True)
+        parent = Entity(name="P", is_absorbent=True, lays_eggs=True, energy=50, is_mud_bather=True, is_vampiric=True, is_territorial=True, has_strong_stomach=True, is_pack_mule=True, is_reckless=True, is_spiteful=True, is_sunbather=True, is_telepathic=False)
         universe.add_entity(parent)
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
@@ -8320,12 +8602,12 @@ class TestIsAbsorbent(unittest.TestCase):
 class TestIsFierce(unittest.TestCase):
     def test_is_fierce_combat(self):
         from src.universe.engine import Entity
-        e1 = Entity("Fierce", attack=5, is_fierce=True)
+        e1 = Entity("Fierce", attack=5, is_fierce=True, is_telepathic=False)
         self.assertTrue(e1.is_fierce)
 
     def test_is_fierce_mutation(self):
         from src.universe.engine import Universe, Entity
-        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_fierce=False, lays_eggs=True, intelligence=1, is_nest_builder=False)
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_fierce=False, lays_eggs=True, intelligence=1, is_nest_builder=False, is_telepathic=False)
         universe = Universe(width=10, height=10)
         universe.add_entity(parent)
         universe.time = 0
