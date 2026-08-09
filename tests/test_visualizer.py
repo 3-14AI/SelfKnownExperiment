@@ -652,7 +652,19 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('/', output)
 
+
+    def test_render_is_lucky(self):
+        from src.universe.engine import Entity, Universe
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=1, height=1)
+        entity = Entity("Lucky", x=0, y=0, is_lucky=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn(',', output)
+
 if __name__ == '__main__':
+
 
     unittest.main()
     def test_render_is_intimidating(self):

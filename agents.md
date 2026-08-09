@@ -176,3 +176,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_pack_mule` trait. Entities with this trait can store up to 4x their size in food in their inventory instead of the standard 2x.
 
 - [x] Implemented `is_toxic` trait. Entities with this trait inflict poison on attackers during combat, causing them to suffer poisoned_time.
+- [x] Implemented `is_lucky` trait. Entities with this trait have a 10% higher chance to completely avoid being eaten or attacked and successfully escape combat.
