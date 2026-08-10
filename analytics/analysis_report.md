@@ -671,3 +671,33 @@ Recent agent iterations have significantly deepened the biological complexity an
 ### Analysis 94: Vibrant Trait
 **Overview:** Implemented the `is_vibrant` trait for entities.
 **Details:** Entities with this trait have their reproduction chance boosted by 25%. However, this comes at the cost of rendering any camouflage completely ineffective.
+
+
+### Analysis 95: Fierce Trait
+**Overview:** Implemented the `fierce` trait for entities.
+**Details:** Entities with this trait gain a flat +3 bonus to effective attack in combat.
+
+
+### Analysis 96: Scout Trait
+**Overview:** Implemented the `scout` trait for entities.
+**Details:** Entities with this trait share their obstacle memory with nearby flockmates, improving collective pathfinding.
+
+
+### Analysis 97: Absorbent Trait
+**Overview:** Implemented the `absorbent` trait for entities.
+**Details:** Entities with this trait regain hydration when it is raining (storm event) or they are standing on water/mud/deep-water terrain.
+
+
+### Analysis 98: Pack Mule Trait
+**Overview:** Implemented the `pack_mule` trait for entities.
+**Details:** Entities with this trait can store up to 4x their size in food in their inventory instead of the standard 2x.
+
+
+### Analysis 99: Lucky Trait
+**Overview:** Implemented the `lucky` trait for entities.
+**Details:** Entities with this trait have a 10% higher chance to completely avoid being eaten or attacked and successfully escape combat.
+
+
+### Analysis 100: Telepathic Trait
+**Overview:** Implemented the `telepathic` trait for entities.
+**Details:** Entities with this trait can broadcast predator alerts globally to all species members, bypassing normal communication radius limits.
