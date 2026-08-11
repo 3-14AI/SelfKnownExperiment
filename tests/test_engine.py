@@ -4356,6 +4356,7 @@ class TestUniverse(unittest.TestCase):
         entity.is_heavy_sleeper = False
         entity.is_patient = False
         entity.lays_eggs = False
+        entity.is_restless = False
         # Make sure they don't move or lose energy from other means
         entity.intelligence = 1
         universe.population_limit = 0
@@ -4455,6 +4456,46 @@ class TestUniverse(unittest.TestCase):
         # e2 energy expected: 10 - 1 (base loss) + 5 (transfer) = 14
         self.assertEqual(e1.energy, 73)
         self.assertEqual(e2.energy, 14)
+
+
+    def test_is_restless(self):
+        universe = Universe(width=10, height=10)
+        # test restless entity never sleeps even with 0 stamina
+        e1 = Entity("Restless", energy=100, stamina=0, max_stamina=100, is_restless=True, intelligence=1, perception_radius=0)
+        # normal entity goes to sleep with 0 stamina
+        e2 = Entity("Normal", energy=100, stamina=0, max_stamina=100, is_restless=False, intelligence=1, perception_radius=0)
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+
+        # force conditions that normally cause sleep
+        universe.time = 0 # spring
+        e1.is_sleeping = False
+        e2.is_sleeping = False
+
+        universe.tick()
+
+        self.assertFalse(e1.is_sleeping)
+        self.assertTrue(e2.is_sleeping)
+
+    def test_is_restless_mutation(self):
+        universe = Universe(width=10, height=10)
+        # Set parent to have very high energy and ready to reproduce
+        parent = Entity(name="P", lays_eggs=True, energy=5000, age=10, size=5, is_restless=False, intelligence=1, is_nest_builder=False)
+        universe.add_entity(parent)
+
+        # Force mutation chance to 1.0 for testing
+        original_random = __import__('random').random
+        __import__('random').random = lambda: 0.0
+
+        try:
+            universe.tick()
+            eggs = [f for f in universe.foods if f.plant_type == 'egg']
+            self.assertTrue(len(eggs) > 0)
+            child = eggs[0].hatch_entity
+            # Since parent was False, and random < mutation_chance is always true, child should be True
+            self.assertTrue(child.is_restless)
+        finally:
+            __import__('random').random = original_random
 
 class TestMedicinalPlants(unittest.TestCase):
     def setUp(self):
@@ -5420,7 +5461,7 @@ class TestEnduranceRunner(unittest.TestCase):
                     is_nomadic=False, is_migratory=False, is_spiteful=False, is_endurance_runner=False,
                     is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
                     is_cooperative=False, is_solitary=False, is_parasitic=False, can_spin_webs=False,
-                    is_fruiting=False, is_lucky=False)
+                    is_fruiting=False, is_lucky=False, is_restless=False, is_cautious=False)
 
         universe.add_entity(e1)
         universe.time = 25
@@ -5458,6 +5499,9 @@ class TestEnduranceRunner(unittest.TestCase):
         e1.has_strong_stomach = True
         e1.is_resourceful = True
         e1.is_scout = True
+        e1.is_restless = False
+        e1.is_heavy_sleeper = False
+        e1.is_cautious = False
         e1.is_territorial = True
         e1.is_mud_bather = True
         e1.is_nomadic = True
@@ -5531,6 +5575,9 @@ class TestIsAdaptable(unittest.TestCase):
         e1.is_territorial = True
         e1.is_resourceful = True
         e1.is_scout = True
+        e1.is_restless = False
+        e1.is_heavy_sleeper = False
+        e1.is_cautious = False
 
         e1.is_sunbather = True
         e1.lays_eggs = True
@@ -5696,6 +5743,9 @@ class TestIsNestBuilder(unittest.TestCase):
         e1.has_horns = True
         e1.is_resourceful = True
         e1.is_scout = True
+        e1.is_restless = False
+        e1.is_heavy_sleeper = False
+        e1.is_cautious = False
         e1.is_adaptable = True
         e1.is_evasive = True
         e1.is_vocal = True
@@ -5831,7 +5881,7 @@ class TestIsToxic(unittest.TestCase):
                         is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
                         is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
                         is_cooperative=False, is_solitary=False, is_parasitic=False, can_spin_webs=False,
-                        is_fruiting=False, is_lucky=False)
+                        is_fruiting=False, is_lucky=False, is_restless=False, is_cautious=False)
         u.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -8444,7 +8494,7 @@ class TestIsCleaner(unittest.TestCase):
                         is_scavenger=False, is_opportunistic=False, is_evasive=False, is_agile=False,
                         is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
                         is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
-                        is_cooperative=False, is_solitary=False, is_parasitic=False, is_fruiting=False, is_lucky=False)
+                        is_cooperative=False, is_solitary=False, is_parasitic=False, is_fruiting=False, is_lucky=False, is_restless=False, is_cautious=False)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -8508,7 +8558,7 @@ class TestIsSpiteful(unittest.TestCase):
                         is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False,
                         is_gluttonous=False, is_resourceful=False, is_reckless=False, is_intimidating=False,
                         is_cooperative=False, is_solitary=False, is_parasitic=False, can_spin_webs=False,
-                        is_fruiting=False, is_lucky=False)
+                        is_fruiting=False, is_lucky=False, is_restless=False, is_cautious=False)
         u.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
