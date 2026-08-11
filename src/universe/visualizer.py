@@ -184,6 +184,8 @@ class CLIVisualizer:
                         char = 'z'
                     elif getattr(entity, 'is_frugivore', False):
                         char = 'T'
+                    elif getattr(entity, 'is_restless', False):
+                        char = ':'
                     elif getattr(entity, 'is_cooperative', False):
                         char = 'i'
                     elif getattr(entity, 'has_strong_stomach', False):
