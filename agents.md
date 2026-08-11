@@ -177,3 +177,5 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_toxic` trait. Entities with this trait inflict poison on attackers during combat, causing them to suffer poisoned_time.
 - [x] Implemented `is_lucky` trait. Entities with this trait have a 10% higher chance to completely avoid being eaten or attacked and successfully escape combat.
+
+- [x] Implemented `is_cautious` trait. Entities with this trait double their effective perception radius when detecting and fleeing from predators, making them harder to ambush.
