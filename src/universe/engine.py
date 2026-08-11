@@ -1313,7 +1313,7 @@ class Universe:
                         mutation_occurred = True
 
                     if random.random() < mutation_chance:
-                        child_is_immune = True
+                        child_is_immune = not child_is_immune
                         mutation_occurred = True
 
                     if random.random() < mutation_chance:
