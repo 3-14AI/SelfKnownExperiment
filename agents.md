@@ -155,6 +155,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
 
 ## Next Steps
+- [x] Implemented `is_vengeful` trait. Entities with this trait gain permanent attack power when successfully escaping from a predator.
 - [x] Implemented `is_fierce` trait. Entities with this trait gain a flat +3 bonus to effective attack in combat.
 - [x] Implemented `is_vibrant` trait. Entities with this trait have an increased reproduction chance but cannot use camouflage.
 - [x] Implemented `is_spiteful` trait. Entities with this trait deal their defense as energy damage to their predator when killed.
