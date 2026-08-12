@@ -180,3 +180,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_lucky` trait. Entities with this trait have a 10% higher chance to completely avoid being eaten or attacked and successfully escape combat.
 
 - [x] Implemented `is_cautious` trait. Entities with this trait double their effective perception radius when detecting and fleeing from predators, making them harder to ambush.
+- [x] Implemented `is_defensive` trait. Entities with this trait gain a flat +3 bonus to effective defense in combat.

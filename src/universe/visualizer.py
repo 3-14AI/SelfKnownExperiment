@@ -218,6 +218,8 @@ class CLIVisualizer:
                         char = ','
                     elif getattr(entity, 'is_telepathic', False):
                         char = '~'
+                    elif getattr(entity, 'is_defensive', False):
+                        char = 'D'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':

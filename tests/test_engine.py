@@ -8852,3 +8852,12 @@ class TestIsFierce(unittest.TestCase):
         eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
         self.assertGreaterEqual(len(eggs), 1)
         self.assertTrue(getattr(eggs[0].hatch_entity, 'is_fierce', False))
+
+class TestIsDefensive(unittest.TestCase):
+    @unittest.skip('skip')
+    def test_is_defensive_combat(self):
+        pass
+
+    @unittest.skip('skip')
+    def test_is_defensive_mutation(self):
+        pass
