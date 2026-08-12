@@ -186,6 +186,8 @@ class CLIVisualizer:
                         char = 'T'
                     elif getattr(entity, 'is_restless', False):
                         char = ':'
+                    elif getattr(entity, 'is_vengeful', False):
+                        char = ';'
                     elif getattr(entity, 'is_cooperative', False):
                         char = 'i'
                     elif getattr(entity, 'has_strong_stomach', False):

@@ -664,6 +664,15 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn(',', output)
 
 
+
+    def test_render_is_vengeful(self):
+        universe = Universe(width=1, height=1)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="E", x=0, y=0, energy=100, is_vengeful=True)
+        universe.add_entity(entity)
+        output = vis.render()
+        self.assertIn(';', output)
+
     def test_render_is_restless(self):
         universe = Universe(width=1, height=1)
         vis = CLIVisualizer(universe)

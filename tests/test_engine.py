@@ -4458,6 +4458,35 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(e2.energy, 14)
 
 
+
+    def test_is_vengeful_mutation(self):
+        universe = Universe(width=10, height=10, reproduction_threshold=0, reproduction_cost=0)
+        parent = Entity(name="P", lays_eggs=True, energy=5000, age=10, size=5, is_vengeful=False, intelligence=1, is_nest_builder=False)
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.time = 25
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertTrue(len(eggs) > 0)
+        child = eggs[0].hatch_entity
+        self.assertTrue(child.is_vengeful)
+
+    def test_is_vengeful_combat_escape(self):
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=5, y=5, diet='carnivore', energy=50, attack=10, max_stamina=100, stamina=100)
+        prey = Entity("Prey", x=5, y=5, diet='herbivore', energy=50, attack=5, defense=5, is_vengeful=True, species='prey', max_stamina=100, stamina=100)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with unittest.mock.patch('random.random', return_value=0.0): # Guaranteed escape
+            universe.tick()
+
+        self.assertTrue(prey.is_alive)
+        self.assertEqual(prey.attack, 6.1) # 5 + 1 (vengeful) + 0.1 (normal escape bonus)
+
     def test_is_restless(self):
         universe = Universe(width=10, height=10)
         # test restless entity never sleeps even with 0 stamina
