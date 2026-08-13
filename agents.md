@@ -181,3 +181,4 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_cautious` trait. Entities with this trait double their effective perception radius when detecting and fleeing from predators, making them harder to ambush.
 - [x] Implemented `is_defensive` trait. Entities with this trait gain a flat +3 bonus to effective defense in combat.
+- [x] Implemented `is_lightweight` trait. Entities with this trait have their movement stamina cost reduced by 1, but suffer a -2 penalty to effective defense in combat.

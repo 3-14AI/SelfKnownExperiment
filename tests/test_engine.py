@@ -8861,3 +8861,34 @@ class TestIsDefensive(unittest.TestCase):
     @unittest.skip('skip')
     def test_is_defensive_mutation(self):
         pass
+
+    def test_is_lightweight_movement(self):
+        universe = Universe(width=10, height=10)
+        e1 = Entity("Lightweight", x=0, y=0, max_stamina=100, stamina=100, energy=100, is_lightweight=True)
+        e2 = Entity("Normal", x=0, y=1, max_stamina=100, stamina=100, energy=100, is_lightweight=False)
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+
+        # Manually trigger movement to a flat terrain (costs 1 stamina normally)
+        universe.move_entity(e1, 1, 0)
+        universe.move_entity(e2, 1, 0)
+
+        # Lightweight should cost 0, normal should cost 1
+        self.assertEqual(e1.stamina, 100)
+        self.assertEqual(e2.stamina, 99)
+
+    def test_is_lightweight_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_lightweight=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True, is_opportunistic=True, has_thick_skin=True, has_strong_stomach=True, is_hardy=True, is_fast_learner=True, is_playful=True, is_heavy_sleeper=True, is_patient=True, is_endurance_runner=True, is_evasive=True, is_prolific=True, is_adaptable=True, is_resourceful=True, is_vocal=True, is_nest_builder=True, is_nomadic=True, is_photosensitive=True, is_fearless=True, is_scavenger=True, is_scout=True, is_intimidating=True, is_cleaner=True, is_spiteful=True, is_sunbather=True, is_pack_mule=True, is_reckless=True, is_thief=True, is_absorbent=True, is_toxic=True, is_vibrant=True, is_arctic=True, is_fierce=True, is_lucky=True, is_telepathic=True, is_cautious=True, is_restless=True, is_vengeful=True, is_defensive=True)
+        universe.add_entity(parent)
+
+        import unittest.mock as mock
+        with mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', '') == 'egg']
+        self.assertGreater(len(eggs), 0)
+        egg = eggs[0]
+        child = egg.hatch_entity
+
+        self.assertTrue(getattr(child, "is_lightweight", False), "Child should have mutated is_lightweight to True")
