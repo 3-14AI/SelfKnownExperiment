@@ -192,3 +192,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_heavy` trait. Entities with this trait gain a flat +2 defense bonus but suffer increased stamina consumption during movement.
 - [x] Implemented `is_lightweight` trait. Entities with this trait consume less stamina during movement but suffer a flat -2 penalty to effective defense.
 - [x] Implemented `is_stealthy` trait. Entities with this trait halve the effective perception radius of predators and prey trying to detect them.
+- [x] Implemented `is_mimic` trait. Entities with this trait appear harmless at a distance and are ignored by prey unless within 2 tiles.
