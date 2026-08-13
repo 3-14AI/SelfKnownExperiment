@@ -182,3 +182,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_cautious` trait. Entities with this trait double their effective perception radius when detecting and fleeing from predators, making them harder to ambush.
 - [x] Implemented `is_defensive` trait. Entities with this trait gain a flat +3 bonus to effective defense in combat.
 - [x] Implemented `is_sturdy` trait. Entities with this trait are immune to being stunned during combat.
+
+- [x] Implemented `is_arctic` trait. Entities with this trait gain energy in snow/ice and lose 0 energy during blizzards.
+- [x] Implemented `is_telepathic` trait. Entities with this trait alert all living flockmates of predators regardless of distance.
+- [x] Implemented `is_restless` trait. Entities with this trait never fall asleep, even when stamina is depleted.

@@ -2636,7 +2636,7 @@ class TestUniverse(unittest.TestCase):
 
         # Test Movement Speed
         # A size 3 entity should only move every 3 ticks
-        large_mover = Entity("Mover", x=5, y=5, energy=50, size=3, age=100, max_age=200, diet='herbivore', perception_radius=10, max_hydration=1000, hydration=1000)
+        large_mover = Entity("Mover", x=5, y=5, energy=50, size=3, age=100, max_age=200, diet='herbivore', perception_radius=10, max_hydration=1000, hydration=1000, is_nest_builder=False)
         large_mover.size = 3 # force adult size
         universe.food_spawn_rate = 0.0
         universe.base_temperature = 20
@@ -3855,8 +3855,8 @@ class TestUniverse(unittest.TestCase):
         universe.food_spawn_rate = 0.0
         universe.base_temperature = 20
 
-        predator = Entity("Wolf", x=5, y=5, diet='carnivore', energy=50, stamina=50, perception_radius=10, size=5, age=10, max_age=100)
-        prey = Entity("Porcupine", x=5, y=5, diet='herbivore', has_spikes=True, energy=50, stamina=50, size=1, defense=100, age=10, max_age=100)
+        predator = Entity("Wolf", x=5, y=5, diet='carnivore', energy=50, stamina=50, perception_radius=10, size=5, age=10, max_age=100, is_restless=True, is_nest_builder=False)
+        prey = Entity("Porcupine", x=5, y=5, diet='herbivore', has_spikes=True, energy=50, stamina=50, size=1, defense=100, age=10, max_age=100, is_nest_builder=False)
         predator.target_species = [prey.species]
 
         # Avoid early death from age 0 size calculations, wait size doesn't matter here if we set age.
@@ -4462,7 +4462,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_is_vengeful_mutation(self):
         universe = Universe(width=10, height=10, reproduction_threshold=0, reproduction_cost=0)
-        parent = Entity(name="P", lays_eggs=True, energy=5000, age=10, size=5, is_vengeful=False, intelligence=1, is_nest_builder=False)
+        parent = Entity(name="P", lays_eggs=True, energy=5000, age=10, size=5, is_vengeful=False, intelligence=1, is_nest_builder=False, preferred_temperature=20, temperature_tolerance=40, max_hydration=5000, hydration=5000)
         universe.add_entity(parent)
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -4476,8 +4476,8 @@ class TestUniverse(unittest.TestCase):
 
     def test_is_vengeful_combat_escape(self):
         universe = Universe(width=10, height=10)
-        predator = Entity("Predator", x=5, y=5, diet='carnivore', energy=50, attack=10, max_stamina=100, stamina=100)
-        prey = Entity("Prey", x=5, y=5, diet='herbivore', energy=50, attack=5, defense=5, is_vengeful=True, species='prey', max_stamina=100, stamina=100)
+        predator = Entity("Predator", x=5, y=5, diet='carnivore', energy=50, attack=10, max_stamina=100, stamina=100, is_nest_builder=False, preferred_temperature=20, temperature_tolerance=40, max_hydration=100, hydration=100, intelligence=1, size=1)
+        prey = Entity("Prey", x=5, y=5, diet='herbivore', energy=50, attack=5, defense=5, is_vengeful=True, species='prey', max_stamina=100, stamina=100, is_nest_builder=False, preferred_temperature=20, temperature_tolerance=40, max_hydration=100, hydration=100, intelligence=1, size=1)
 
         universe.add_entity(predator)
         universe.add_entity(prey)
@@ -6586,7 +6586,7 @@ class TestPhotosynthesis(unittest.TestCase):
 
         # Base energy loss would be entity.size (1), but photosynthesis gives +2 during day
         # So net change = +1
-        entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1, is_prolific=False, is_fruiting=False, is_parasitic=False, is_mud_bather=False, is_territorial=False, is_heavy_sleeper=False, is_patient=False)
+        entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1, is_prolific=False, is_fruiting=False, is_parasitic=False, is_mud_bather=False, is_territorial=False, is_heavy_sleeper=False, is_patient=False, is_nest_builder=False)
         # Disable interference
         entity.is_sleeping = False
         entity.intelligence = 1
@@ -6611,7 +6611,7 @@ class TestPhotosynthesis(unittest.TestCase):
         universe = Universe(width=10, height=10, day_length=20)
         universe.time = 15 # It's night (time % 20 > 10)
 
-        entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1, age=100)
+        entity = Entity("Planty", x=5, y=5, energy=20, can_photosynthesize=True, size=1, age=100, is_nest_builder=False)
         # Disable interference
         entity.is_sleeping = False
         entity.intelligence = 1
