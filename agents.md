@@ -187,3 +187,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_telepathic` trait. Entities with this trait alert all living flockmates of predators regardless of distance.
 - [x] Implemented `is_restless` trait. Entities with this trait never fall asleep, even when stamina is depleted.
 - [x] Implemented `is_slippery` trait. Entities with this trait have a 50% chance to escape stamina drain from webs and avoid being eaten by carnivorous plants.
+- [x] Implemented `can_leap` trait. Entities with this trait can jump over single-tile obstacles at the cost of extra stamina.
+
+- [x] Implemented `is_heavy` trait. Entities with this trait gain a flat +2 defense bonus but suffer increased stamina consumption during movement.

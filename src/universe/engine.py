@@ -17,7 +17,7 @@ class Entity:
         base = self.size * 50
         return int(base * 1.5) if getattr(self, "has_blubber", False) else base
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False, is_volcanic=False, is_forestal=False, is_desertic=False, is_social=False, is_carnivorous_plant=False, disease_vector=False, is_nocturnal_predator=False, is_scentless=False, can_sprint=False, is_vampiric=False, is_detritivore=False, can_sweat=False, has_blubber=False, is_mud_bather=False, is_filter_feeder=False, is_gluttonous=False, is_solitary=False, is_cannibalistic=False, is_ambush_predator=False, is_territorial=False, has_horns=False, is_migratory=False, is_cooperative=False, is_frugivore=False, is_agile=False, has_strong_stomach=False, is_opportunistic=False, has_thick_skin=False, is_hardy=False, is_fast_learner=False, is_playful=False, is_heavy_sleeper=False, is_patient=False, is_endurance_runner=False, is_evasive=False, is_prolific=False, is_adaptable=False, is_resourceful=False, is_vocal=False, is_nest_builder=False, is_nomadic=False, is_photosensitive=False, is_fearless=False, is_scavenger=False, is_scout=False, is_intimidating=False, is_cleaner=False, is_spiteful=False, is_sunbather=False, is_pack_mule=False, is_reckless=False, is_thief=False, is_absorbent=False, is_toxic=False, is_vibrant=False, is_arctic=False, is_fierce=False, is_lucky=False, is_telepathic=False, is_cautious=False, is_restless=False, is_vengeful=False, is_defensive=False, is_sturdy=False, is_slippery=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False, is_volcanic=False, is_forestal=False, is_desertic=False, is_social=False, is_carnivorous_plant=False, disease_vector=False, is_nocturnal_predator=False, is_scentless=False, can_sprint=False, is_vampiric=False, is_detritivore=False, can_sweat=False, has_blubber=False, is_mud_bather=False, is_filter_feeder=False, is_gluttonous=False, is_solitary=False, is_cannibalistic=False, is_ambush_predator=False, is_territorial=False, has_horns=False, is_migratory=False, is_cooperative=False, is_frugivore=False, is_agile=False, has_strong_stomach=False, is_opportunistic=False, has_thick_skin=False, is_hardy=False, is_fast_learner=False, is_playful=False, is_heavy_sleeper=False, is_patient=False, is_endurance_runner=False, is_evasive=False, is_prolific=False, is_adaptable=False, is_resourceful=False, is_vocal=False, is_nest_builder=False, is_nomadic=False, is_photosensitive=False, is_fearless=False, is_scavenger=False, is_scout=False, is_intimidating=False, is_cleaner=False, is_spiteful=False, is_sunbather=False, is_pack_mule=False, is_reckless=False, is_thief=False, is_absorbent=False, is_toxic=False, is_vibrant=False, is_arctic=False, is_fierce=False, is_lucky=False, is_telepathic=False, is_cautious=False, is_restless=False, is_vengeful=False, is_defensive=False, is_sturdy=False, is_slippery=False, can_leap=False, is_heavy=False):
         self.has_blubber = has_blubber
         self.is_mud_bather = is_mud_bather
         self.is_filter_feeder = is_filter_feeder
@@ -64,6 +64,8 @@ class Entity:
         self.disease_vector = disease_vector
         self.is_carnivorous_plant = is_carnivorous_plant
         self.is_slippery = is_slippery
+        self.can_leap = can_leap
+        self.is_heavy = is_heavy
         self.is_amphibious = is_amphibious
         self.is_volcanic = is_volcanic
         self.is_forestal = is_forestal
@@ -299,8 +301,21 @@ class Universe:
         if not (0 <= new_x < self.width and 0 <= new_y < self.height):
             raise ValueError(f"Movement out of bounds: ({new_x}, {new_y})")
 
+        leaping = False
         if not self.is_passable(new_x, new_y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
-            raise ValueError(f"Movement blocked by terrain at ({new_x}, {new_y})")
+            if getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5:
+                # Try leaping over
+                leap_x, leap_y = new_x + dx, new_y + dy
+                if 0 <= leap_x < self.width and 0 <= leap_y < self.height:
+                    if self.is_passable(leap_x, leap_y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
+                        new_x, new_y = leap_x, leap_y
+                        leaping = True
+                    else:
+                        raise ValueError(f"Movement blocked by terrain at ({new_x}, {new_y}) and leap target ({leap_x}, {leap_y}) is blocked")
+                else:
+                    raise ValueError(f"Movement blocked by terrain at ({new_x}, {new_y}) and leap target out of bounds")
+            else:
+                raise ValueError(f"Movement blocked by terrain at ({new_x}, {new_y})")
 
         target_elevation = self.get_elevation_at(new_x, new_y)
         elevation_diff = target_elevation - current_elevation
@@ -323,6 +338,10 @@ class Universe:
                     stamina_cost = max(0, stamina_cost - 1)
                     entity.energy = max(0, entity.energy - 1) # Fall damage risk
 
+            if leaping:
+                stamina_cost += 4 # Extra 4 cost for leaping (base 1 + 4 = 5)
+            if getattr(entity, 'is_heavy', False):
+                stamina_cost += 1
             entity.stamina = max(0, entity.stamina - stamina_cost)
 
         if any(t.terrain_type == 'web' for t in terrains_here) and not getattr(entity, 'can_spin_webs', False):
@@ -351,11 +370,13 @@ class Universe:
             return not is_water
 
     def add_terrain(self, terrain):
+        if terrain.x < 0 or terrain.x >= self.width or terrain.y < 0 or terrain.y >= self.height:
+            return
         if not (0 <= terrain.x < self.width and 0 <= terrain.y < self.height):
             raise ValueError(f"Terrain out of bounds: ({terrain.x}, {terrain.y})")
         self.terrains.append(terrain)
 
-    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False):
+    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False, can_leap=False):
         from collections import deque
         queue = deque([(start_x, start_y, [])])
         visited = {(start_x, start_y)}
@@ -386,6 +407,15 @@ class Universe:
                             if self.is_passable(new_x, new_y, is_aquatic, is_flying, is_amphibious, is_climbing):
                                 visited.add((new_x, new_y))
                                 queue.append((new_x, new_y, path + [(dx, dy)]))
+                            elif can_leap:
+                                leap_x, leap_y = new_x + dx, new_y + dy
+                                if (leap_x, leap_y) not in visited and 0 <= leap_x < self.width and 0 <= leap_y < self.height:
+                                    if self.is_passable(leap_x, leap_y, is_aquatic, is_flying, is_amphibious, is_climbing):
+                                        visited.add((leap_x, leap_y))
+                                        # Only add the leap destination. If the path reaches target, it will return path
+                                        # but the movement system currently processes 1 step dx, dy.
+                                        # Actually, we need to return dx, dy. If we return (dx*2, dy*2) the move_entity function can handle it since it uses dx, dy directly.
+                                        queue.append((leap_x, leap_y, path + [(dx * 2, dy * 2)]))
 
         return None  # No path found
 
@@ -1421,6 +1451,8 @@ class Universe:
                     child_is_spiteful = getattr(entity, 'is_spiteful', False)
                     child_is_carnivorous_plant = getattr(entity, 'is_carnivorous_plant', False)
                     child_is_slippery = getattr(entity, 'is_slippery', False)
+                    child_can_leap = getattr(entity, 'can_leap', False)
+                    child_is_heavy = getattr(entity, 'is_heavy', False)
                     child_is_nocturnal_predator = getattr(entity, 'is_nocturnal_predator', False)
                     child_is_scentless = getattr(entity, 'is_scentless', False)
                     child_disease_vector = getattr(entity, 'disease_vector', False)
@@ -1477,6 +1509,12 @@ class Universe:
                         mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_is_slippery = not child_is_slippery
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_can_leap = not child_can_leap
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_heavy = not child_is_heavy
                         mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_is_scentless = not child_is_scentless
@@ -1672,7 +1710,7 @@ class Universe:
                                    species=child_species, symbiotic_with=entity.symbiotic_with.copy(),
                                    attack=child_attack, defense=child_defense, preferred_terrain=entity.preferred_terrain, size=child_size, is_pack_mule=child_is_pack_mule,
                                    intelligence=child_intelligence, target_species=child_target_species, target_plants=child_target_plants,
-                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb, pack_hunter=child_pack_hunter, has_bioluminescence=child_has_bioluminescence, is_volcanic=child_is_volcanic, is_forestal=child_is_forestal, is_desertic=child_is_desertic, is_social=child_is_social, is_carnivorous_plant=child_is_carnivorous_plant, disease_vector=child_disease_vector, is_nocturnal_predator=child_is_nocturnal_predator, is_scentless=child_is_scentless, can_sprint=child_can_sprint, is_vampiric=child_is_vampiric, is_detritivore=child_is_detritivore, can_sweat=child_can_sweat, has_blubber=child_has_blubber, is_mud_bather=child_is_mud_bather, is_filter_feeder=child_is_filter_feeder, is_gluttonous=child_is_gluttonous, is_solitary=child_is_solitary, is_cannibalistic=child_is_cannibalistic, is_ambush_predator=child_is_ambush_predator, is_territorial=child_is_territorial, has_horns=child_has_horns, is_migratory=child_is_migratory, is_cooperative=child_is_cooperative, is_frugivore=child_is_frugivore, is_agile=child_is_agile, has_strong_stomach=child_has_strong_stomach, is_opportunistic=child_is_opportunistic, has_thick_skin=child_has_thick_skin, is_hardy=child_is_hardy, is_fast_learner=child_is_fast_learner, is_playful=child_is_playful, is_heavy_sleeper=child_is_heavy_sleeper, is_patient=child_is_patient, is_endurance_runner=child_is_endurance_runner, is_evasive=child_is_evasive, is_prolific=child_is_prolific, is_adaptable=child_is_adaptable, is_resourceful=child_is_resourceful, is_vocal=child_is_vocal, is_nest_builder=child_is_nest_builder, is_nomadic=child_is_nomadic, is_photosensitive=child_is_photosensitive, is_fearless=child_is_fearless, is_scavenger=child_is_scavenger, is_scout=child_is_scout, is_intimidating=child_is_intimidating, is_cleaner=child_is_cleaner, is_spiteful=child_is_spiteful, is_sunbather=child_is_sunbather, is_reckless=child_is_reckless, is_thief=child_is_thief, is_absorbent=child_is_absorbent, is_toxic=child_is_toxic, is_vibrant=child_is_vibrant, is_arctic=child_is_arctic, is_fierce=child_is_fierce, is_lucky=child_is_lucky, is_telepathic=child_is_telepathic, is_cautious=child_is_cautious, is_restless=child_is_restless, is_vengeful=child_is_vengeful, is_defensive=child_is_defensive, is_sturdy=child_is_sturdy, is_slippery=child_is_slippery)
+                                   generation=child_generation, mutations=child_mutations_count, max_hydration=child_max_hydration, hydration=child_max_hydration, is_sleeping=False, toxicity=child_toxicity, poison_resistance=child_poison_resistance, camouflage=child_camouflage, vision_type=child_vision_type, is_flying=child_is_flying, can_hibernate=child_can_hibernate, lays_eggs=child_lays_eggs, level=1, experience=0, can_hoard=child_can_hoard, max_stamina=child_max_stamina, stamina=child_max_stamina, is_nocturnal=child_is_nocturnal, can_burrow=child_can_burrow, has_spikes=child_has_spikes, can_spin_webs=child_can_spin_webs, is_venomous=child_is_venomous, can_photosynthesize=child_can_photosynthesize, is_amphibious=child_is_amphibious, has_shell=child_has_shell, has_echolocation=child_has_echolocation, is_aposematic=child_is_aposematic, is_fruiting=child_is_fruiting, is_immune=child_is_immune, is_cold_blooded=child_is_cold_blooded, is_electric=child_is_electric, is_regenerative=child_is_regenerative, has_claws=child_has_claws, is_parasitic=child_is_parasitic, has_scales=child_has_scales, has_fur=child_has_fur, can_climb=child_can_climb, pack_hunter=child_pack_hunter, has_bioluminescence=child_has_bioluminescence, is_volcanic=child_is_volcanic, is_forestal=child_is_forestal, is_desertic=child_is_desertic, is_social=child_is_social, is_carnivorous_plant=child_is_carnivorous_plant, disease_vector=child_disease_vector, is_nocturnal_predator=child_is_nocturnal_predator, is_scentless=child_is_scentless, can_sprint=child_can_sprint, is_vampiric=child_is_vampiric, is_detritivore=child_is_detritivore, can_sweat=child_can_sweat, has_blubber=child_has_blubber, is_mud_bather=child_is_mud_bather, is_filter_feeder=child_is_filter_feeder, is_gluttonous=child_is_gluttonous, is_solitary=child_is_solitary, is_cannibalistic=child_is_cannibalistic, is_ambush_predator=child_is_ambush_predator, is_territorial=child_is_territorial, has_horns=child_has_horns, is_migratory=child_is_migratory, is_cooperative=child_is_cooperative, is_frugivore=child_is_frugivore, is_agile=child_is_agile, has_strong_stomach=child_has_strong_stomach, is_opportunistic=child_is_opportunistic, has_thick_skin=child_has_thick_skin, is_hardy=child_is_hardy, is_fast_learner=child_is_fast_learner, is_playful=child_is_playful, is_heavy_sleeper=child_is_heavy_sleeper, is_patient=child_is_patient, is_endurance_runner=child_is_endurance_runner, is_evasive=child_is_evasive, is_prolific=child_is_prolific, is_adaptable=child_is_adaptable, is_resourceful=child_is_resourceful, is_vocal=child_is_vocal, is_nest_builder=child_is_nest_builder, is_nomadic=child_is_nomadic, is_photosensitive=child_is_photosensitive, is_fearless=child_is_fearless, is_scavenger=child_is_scavenger, is_scout=child_is_scout, is_intimidating=child_is_intimidating, is_cleaner=child_is_cleaner, is_spiteful=child_is_spiteful, is_sunbather=child_is_sunbather, is_reckless=child_is_reckless, is_thief=child_is_thief, is_absorbent=child_is_absorbent, is_toxic=child_is_toxic, is_vibrant=child_is_vibrant, is_arctic=child_is_arctic, is_fierce=child_is_fierce, is_lucky=child_is_lucky, is_telepathic=child_is_telepathic, is_cautious=child_is_cautious, is_restless=child_is_restless, is_vengeful=child_is_vengeful, is_defensive=child_is_defensive, is_sturdy=child_is_sturdy, is_slippery=child_is_slippery, can_leap=child_can_leap, is_heavy=child_is_heavy)
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=child_x, y=child_y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)
@@ -1766,6 +1804,9 @@ class Universe:
                 if getattr(entity, 'is_cold_blooded', False) and current_temp <= 5:
                     if self.time % (entity.size * 2) != 0:
                         can_move = False
+                if getattr(entity, 'is_heavy', False):
+                    if self.time % (entity.size * 2) != 0:
+                        can_move = False
 
                 # sprinting lets entity move more frequently (e.g. bypass the size check partially)
                 # but it requires a stamina cost if moving faster than size allows
@@ -1841,7 +1882,7 @@ class Universe:
                                 try:
                                     # Basic bounds/terrain check before moving
                                     if 0 <= nx < self.width and 0 <= ny < self.height:
-                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + dx * 2, entity.y + dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))):
                                             dist_to_predator = abs(nx - px) + abs(ny - py)
                                             if dist_to_predator > max_dist:
                                                 max_dist = dist_to_predator
@@ -1957,7 +1998,7 @@ class Universe:
                                 nx, ny = entity.x + dx, entity.y + dy
                                 try:
                                     if 0 <= nx < self.width and 0 <= ny < self.height:
-                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + dx * 2, entity.y + dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))):
                                             dist_to_predator = abs(nx - px) + abs(ny - py)
                                             if dist_to_predator > max_dist:
                                                 max_dist = dist_to_predator
@@ -2051,7 +2092,7 @@ class Universe:
                                     for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
                                         nx, ny = entity.x + dx, entity.y + dy
                                         if (nx, ny) in self.scent_trails and self.scent_trails[(nx, ny)] > best_scent:
-                                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
+                                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + dx * 2, entity.y + dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))):
                                                 best_scent = self.scent_trails[(nx, ny)]
                                                 best_pos = (dx, dy)
                                     if best_pos:
@@ -2148,6 +2189,8 @@ class Universe:
                             if getattr(prey_to_eat, 'has_horns', False):
                                 effective_defense += 1
                             if getattr(prey_to_eat, 'has_scales', False):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_heavy', False):
                                 effective_defense += 2
                             if getattr(prey_to_eat, 'has_thick_skin', False) and getattr(entity, 'has_claws', False):
                                 effective_defense += 3
@@ -2287,7 +2330,7 @@ class Universe:
                                 for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
                                     nx, ny = entity.x + dx, entity.y + dy
                                     if (nx, ny) in self.scent_trails and self.scent_trails[(nx, ny)] > best_scent:
-                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + dx * 2, entity.y + dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))):
                                             best_scent = self.scent_trails[(nx, ny)]
                                             best_pos = (dx, dy)
                                 if best_pos:
@@ -2353,6 +2396,8 @@ class Universe:
                         if getattr(prey_to_eat, 'has_horns', False):
                             effective_defense += 1
                         if getattr(prey_to_eat, 'has_scales', False):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_heavy', False):
                             effective_defense += 2
                         if getattr(prey_to_eat, 'stamina', 50) <= 10:
                             effective_defense *= 0.5

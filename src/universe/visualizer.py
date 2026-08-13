@@ -194,6 +194,10 @@ class CLIVisualizer:
                         char = 's'
                     elif getattr(entity, 'is_patient', False):
                         char = '*'
+                    elif getattr(entity, 'is_heavy', False):
+                        char = 'H'
+                    elif getattr(entity, 'can_leap', False):
+                        char = 'J'
                     elif getattr(entity, 'is_endurance_runner', False):
                         char = '~'
                     elif getattr(entity, 'is_evasive', False):
