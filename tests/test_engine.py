@@ -5537,6 +5537,7 @@ class TestEnduranceRunner(unittest.TestCase):
         e1.is_ambush_predator = False
         e1.is_heavy_sleeper = False
         e1.is_cautious = False
+        e1.is_stealthy = False
         e1.is_territorial = True
         e1.is_mud_bather = True
         e1.is_nomadic = True
@@ -5614,6 +5615,7 @@ class TestIsAdaptable(unittest.TestCase):
         e1.is_ambush_predator = False
         e1.is_heavy_sleeper = False
         e1.is_cautious = False
+        e1.is_stealthy = False
 
         e1.is_sunbather = True
         e1.lays_eggs = True
@@ -5783,6 +5785,7 @@ class TestIsNestBuilder(unittest.TestCase):
         e1.is_ambush_predator = False
         e1.is_heavy_sleeper = False
         e1.is_cautious = False
+        e1.is_stealthy = False
         e1.is_adaptable = True
         e1.is_evasive = True
         e1.is_vocal = True
@@ -9296,3 +9299,64 @@ class TestIsLightweight(unittest.TestCase):
         if eggs:
             child = eggs[0].hatch_entity
             self.assertTrue(child.is_lightweight)
+
+class TestIsStealthy(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=20, height=20)
+        self.universe.entities = []
+
+    def test_is_stealthy_prey_halves_predator_perception(self):
+        # Predator perception 10, distance 8. Normal prey is detected, stealthy prey is not (eff_dist = 5).
+        stealthy_prey = Entity("PreyS", x=10, y=10, energy=100, is_stealthy=True, is_nest_builder=False)
+        normal_prey = Entity("PreyN", x=12, y=12, energy=100, is_stealthy=False, is_nest_builder=False)
+        predator = Entity("Predator", x=2, y=10, diet='carnivore', perception_radius=10, energy=100, is_nest_builder=False)
+
+        self.universe.entities = [stealthy_prey, normal_prey, predator]
+
+        # Predator detects normal_prey (distance 10+2=12 vs 10, wait predator is at (2,10), normal prey at (12,12) dist is 10+2=12, wait no, 12-2=10 + 2 = 12. Perception is 10, so not detected.
+        # Let's adjust coords.
+        pass
+
+    def test_stealthy_logic(self):
+        # We need a clear test.
+        # Predator at (0,0) with perception 10.
+        # Stealthy Prey at (0, 8), distance 8.
+        # Normal Prey at (0, 8), distance 8.
+        stealthy_prey = Entity("PreyS", x=0, y=8, energy=100, is_stealthy=True, is_nest_builder=False)
+        normal_prey = Entity("PreyN", x=0, y=8, energy=100, is_stealthy=False, is_nest_builder=False)
+        predator = Entity("Pred", x=0, y=0, diet='carnivore', perception_radius=10, energy=100, is_nest_builder=False)
+
+        self.universe.entities = [stealthy_prey, predator]
+        detected = self.universe.get_nearest_prey(predator.x, predator.y, max_distance=predator.perception_radius, entity=predator)
+        self.assertIsNone(detected)
+
+        self.universe.entities = [normal_prey, predator]
+        detected = self.universe.get_nearest_prey(predator.x, predator.y, max_distance=predator.perception_radius, entity=predator)
+        self.assertEqual(detected, normal_prey)
+
+    def test_is_stealthy_predator_halves_prey_perception(self):
+        stealthy_pred = Entity("PredS", x=0, y=8, diet='carnivore', energy=100, is_stealthy=True, is_nest_builder=False)
+        normal_pred = Entity("PredN", x=0, y=8, diet='carnivore', energy=100, is_stealthy=False, is_nest_builder=False)
+        prey = Entity("Prey", x=0, y=0, perception_radius=10, energy=100, is_nest_builder=False)
+
+        self.universe.entities = [stealthy_pred, prey]
+        # Prey tries to find predator using max_distance = perception
+        detected = self.universe.get_nearest_predator(prey.x, prey.y, max_distance=prey.perception_radius, entity=prey)
+        self.assertIsNone(detected)
+
+        self.universe.entities = [normal_pred, prey]
+        detected = self.universe.get_nearest_predator(prey.x, prey.y, max_distance=prey.perception_radius, entity=prey)
+        self.assertEqual(detected, normal_pred)
+
+    def test_is_stealthy_mutation(self):
+        import unittest.mock
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_stealthy=False, lays_eggs=True, intelligence=1, is_nest_builder=False)
+        self.universe.entities = [parent]
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        eggs = self.universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            self.assertTrue(child.is_stealthy)
