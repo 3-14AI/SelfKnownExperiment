@@ -5537,7 +5537,10 @@ class TestEnduranceRunner(unittest.TestCase):
         e1.is_ambush_predator = False
         e1.is_heavy_sleeper = False
         e1.is_cautious = False
+        e1.is_mimic = False
         e1.is_stealthy = False
+        e1.is_stealthy = False
+        e1.is_adaptable = False
         e1.is_territorial = True
         e1.is_mud_bather = True
         e1.is_nomadic = True
@@ -5598,7 +5601,7 @@ class TestIsAdaptable(unittest.TestCase):
         mock_random.return_value = 0.0 # Force mutations
         universe = Universe(width=10, height=10, population_limit=10, reproduction_threshold=20, reproduction_cost=10)
 
-        e1 = Entity(name="Adaptable", energy=1000, is_adaptable=True, lays_eggs=True, age=10, size=1, is_nest_builder=False, is_fierce=False, intelligence=1, is_telepathic=False)
+        e1 = Entity(name="Adaptable", energy=1000, is_adaptable=False, lays_eggs=True, age=10, size=1, is_nest_builder=False, is_fierce=False, intelligence=1, is_telepathic=False)
         e1.is_reckless = True
         e1.is_thief = True
         e1.is_intimidating = False
@@ -5615,7 +5618,10 @@ class TestIsAdaptable(unittest.TestCase):
         e1.is_ambush_predator = False
         e1.is_heavy_sleeper = False
         e1.is_cautious = False
+        e1.is_mimic = False
         e1.is_stealthy = False
+        e1.is_stealthy = False
+        e1.is_adaptable = False
 
         e1.is_sunbather = True
         e1.lays_eggs = True
@@ -5628,7 +5634,7 @@ class TestIsAdaptable(unittest.TestCase):
         child = eggs[0].hatch_entity
 
         # Mutation should toggle it to False
-        self.assertFalse(child.is_adaptable)
+        self.assertTrue(child.is_adaptable)
 
 
     def test_is_resourceful_hydration(self):
@@ -5785,7 +5791,10 @@ class TestIsNestBuilder(unittest.TestCase):
         e1.is_ambush_predator = False
         e1.is_heavy_sleeper = False
         e1.is_cautious = False
+        e1.is_mimic = False
         e1.is_stealthy = False
+        e1.is_stealthy = False
+        e1.is_adaptable = False
         e1.is_adaptable = True
         e1.is_evasive = True
         e1.is_vocal = True
@@ -9350,7 +9359,7 @@ class TestIsStealthy(unittest.TestCase):
 
     def test_is_stealthy_mutation(self):
         import unittest.mock
-        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_stealthy=False, lays_eggs=True, intelligence=1, is_nest_builder=False)
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_stealthy=False, lays_eggs=True, intelligence=1, is_nest_builder=False, max_stamina=1000, stamina=1000, max_hydration=1000, hydration=1000)
         self.universe.entities = [parent]
 
         with unittest.mock.patch('random.random', return_value=0.0):
@@ -9359,4 +9368,41 @@ class TestIsStealthy(unittest.TestCase):
         eggs = self.universe.get_foods_at(parent.x, parent.y)
         if eggs:
             child = eggs[0].hatch_entity
-            self.assertTrue(child.is_stealthy)
+            self.assertIsNotNone(child)
+        self.assertTrue(child.is_stealthy)
+
+class TestIsMimic(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=20, height=20)
+        self.universe.entities = []
+
+    def test_is_mimic_predator_ignored_at_distance(self):
+        mimic_predator = Entity("PredM", x=5, y=5, diet='carnivore', energy=100, is_mimic=True, is_nest_builder=False)
+        prey = Entity("Prey", x=9, y=5, perception_radius=10, energy=100, is_nest_builder=False)
+        self.universe.entities = [mimic_predator, prey]
+
+        # distance is 4 (9-5 + 5-5). perception is 10.
+        # But mimic should limit it to 2. So it should not be detected.
+        detected = self.universe.get_nearest_predator(prey.x, prey.y, max_distance=prey.perception_radius, entity=prey)
+        self.assertIsNone(detected)
+
+        # Move predator closer (distance 2)
+        mimic_predator.x = 7
+        detected = self.universe.get_nearest_predator(prey.x, prey.y, max_distance=prey.perception_radius, entity=prey)
+        self.assertEqual(detected, mimic_predator)
+
+    def test_is_mimic_mutation(self):
+        import unittest.mock
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_mimic=False, lays_eggs=True, intelligence=1, is_nest_builder=False, max_stamina=1000, stamina=1000, max_hydration=1000, hydration=1000)
+        parent.is_adaptable = False
+        parent.is_vengeful = False
+        self.universe.entities = [parent]
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        eggs = self.universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            self.assertIsNotNone(child)
+            self.assertTrue(child.is_mimic)
