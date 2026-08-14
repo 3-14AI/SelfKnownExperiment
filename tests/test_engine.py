@@ -6526,6 +6526,51 @@ class TestCautious(unittest.TestCase):
             # Since random is 0.0, it's always less than mutation_chance (0.1), so it mutates to True
             self.assertTrue(child.is_sturdy)
 
+
+class TestIsResilient(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_resilient_poison_recovery(self):
+        from src.universe.engine import Entity
+        entity = Entity("Test", x=5, y=5, energy=50, poisoned_time=10, is_resilient=True)
+        self.universe.entities = [entity]
+
+        self.assertEqual(entity.poisoned_time, 10)
+        self.universe.tick()
+        # Decreases by 2
+        self.assertEqual(entity.poisoned_time, 8)
+
+    def test_is_not_resilient_poison_recovery(self):
+        from src.universe.engine import Entity
+        entity = Entity("Test", x=5, y=5, energy=50, poisoned_time=10, is_resilient=False)
+        self.universe.entities = [entity]
+
+        self.assertEqual(entity.poisoned_time, 10)
+        self.universe.tick()
+        # Decreases by 1
+        self.assertEqual(entity.poisoned_time, 9)
+
+    def test_is_resilient_stun_recovery(self):
+        from src.universe.engine import Entity
+        entity = Entity("Test", x=5, y=5, energy=50, stunned_time=10, is_resilient=True, is_nest_builder=False)
+        self.universe.entities = [entity]
+
+        self.assertEqual(entity.stunned_time, 10)
+        self.universe.tick()
+        # Decreases by 2
+        self.assertEqual(entity.stunned_time, 8)
+
+    def test_is_not_resilient_stun_recovery(self):
+        from src.universe.engine import Entity
+        entity = Entity("Test", x=5, y=5, energy=50, stunned_time=10, is_resilient=False, is_nest_builder=False)
+        self.universe.entities = [entity]
+
+        self.assertEqual(entity.stunned_time, 10)
+        self.universe.tick()
+        # Decreases by 1
+        self.assertEqual(entity.stunned_time, 9)
+
 if __name__ == '__main__':
 
 

@@ -236,6 +236,8 @@ class CLIVisualizer:
                         char = 'C'
                     elif diet == 'scavenger':
                         char = 'V'
+                    elif getattr(entity, 'is_resilient', False):
+                        char = '{'
                     elif diet == 'omnivore':
                         char = 'O'
                     else:
