@@ -202,6 +202,8 @@ class CLIVisualizer:
                         char = '}'
                     elif getattr(entity, 'is_mimic', False):
                         char = '\\'
+                    elif getattr(entity, 'has_sharp_teeth', False):
+                        char = ')'
                     elif getattr(entity, 'can_leap', False):
                         char = 'J'
                     elif getattr(entity, 'is_endurance_runner', False):
