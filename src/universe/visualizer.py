@@ -236,6 +236,9 @@ class CLIVisualizer:
                         char = 'C'
                     elif diet == 'scavenger':
                         char = 'V'
+                    elif getattr(entity, 'is_smelly', False):
+                        char = ';'
+                        color = '\033[38;5;130m'
                     elif getattr(entity, 'is_resilient', False):
                         char = '{'
                     elif diet == 'omnivore':
