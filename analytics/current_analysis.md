@@ -29,3 +29,32 @@
 ### Analysis 107: Slippery Trait
 **Overview:** Implemented the `is_slippery` trait for entities.
 **Details:** Entities with this trait have a 50% chance to escape stamina drain from webs and avoid being eaten by carnivorous plants, offering unique defensive capabilities against environmental traps.
+
+
+### Analysis 108: Leap Trait
+**Overview:** Implemented the `can_leap` trait for entities.
+**Details:** Entities with this trait can jump over single-tile obstacles at the cost of extra stamina, enhancing their mobility in cluttered environments.
+
+### Analysis 109: Heavy Trait
+**Overview:** Implemented the `is_heavy` trait for entities.
+**Details:** Entities with this trait gain a flat +2 defense bonus but suffer increased stamina consumption during movement, trading mobility for durability.
+
+### Analysis 110: Lightweight Trait
+**Overview:** Implemented the `is_lightweight` trait for entities.
+**Details:** Entities with this trait consume less stamina during movement but suffer a flat -2 penalty to effective defense, favoring agility over resilience.
+
+### Analysis 111: Stealthy Trait
+**Overview:** Implemented the `is_stealthy` trait for entities.
+**Details:** Entities with this trait halve the effective perception radius of predators and prey trying to detect them, making them excellent ambush predators or elusive prey.
+
+### Analysis 112: Mimic Trait
+**Overview:** Implemented the `is_mimic` trait for entities.
+**Details:** Entities with this trait appear harmless at a distance and are ignored by prey unless within 2 tiles, giving them an advantage when approaching targets.
+
+### Analysis 113: Sharp Teeth Trait
+**Overview:** Implemented the `has_sharp_teeth` trait for entities.
+**Details:** Entities with this trait bypass the flat defense bonuses granted by `has_shell` and `has_scales` during combat, making them specialized hunters against armored prey.
+
+### Analysis 114: Resilient Trait
+**Overview:** Implemented the `is_resilient` trait for entities.
+**Details:** Entities with this trait recover faster from poison and stun, improving their survivability against specialized combat effects.
