@@ -6635,6 +6635,38 @@ class TestIsSmelly(unittest.TestCase):
         child = eggs[0].hatch_entity
         self.assertTrue(child.is_smelly)
 
+
+class TestIsRelentlessTrait(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_relentless_damage_on_escape(self):
+        predator = Entity("Predator", x=5, y=5, energy=30, age=0, max_age=50, size=2,
+                          attack=10, defense=1, diet='carnivore', is_relentless=True,
+                          stamina=50, max_stamina=50, lays_eggs=False, is_nest_builder=False,
+                          intelligence=1, can_sweat=False, is_photosensitive=False, is_stealthy=False)
+
+        prey = Entity("Prey", x=5, y=5, energy=100, age=0, max_age=50, size=1,
+                      attack=1, defense=100, diet='herbivore',
+                      stamina=50, max_stamina=50, lays_eggs=False, is_nest_builder=False,
+                      intelligence=1, can_sweat=False, is_photosensitive=False, is_stealthy=False)
+
+        self.universe.entities = [predator, prey]
+
+        import random
+        old_random = random.random
+        random.random = lambda: 0.0
+
+        try:
+            self.universe.tick()
+        finally:
+            random.random = old_random
+
+        self.assertTrue(prey.is_alive)
+        self.assertFalse(getattr(prey, 'was_eaten', False))
+        self.assertLessEqual(prey.energy, 95)
+        self.assertGreater(prey.energy, 0)
+
 if __name__ == '__main__':
 
 
