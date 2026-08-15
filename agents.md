@@ -200,3 +200,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_smelly` trait. Entities with this trait leave a stronger scent trail but inflict an attack penalty on their predators.
 - [x] Implemented `is_ruthless` trait. Entities with this trait gain a flat +3 bonus to effective attack during combat if the prey's energy is below half of its maximum.
 - [x] Implemented `is_protective` trait. Entities with this trait grant a flat +2 defense bonus to adjacent herd members during combat.
+- [x] Implemented `is_forager` trait. Entities with this trait gain an extra 5 energy when consuming plants or fruit.

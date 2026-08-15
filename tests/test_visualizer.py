@@ -723,5 +723,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('"', output)
 
+    def test_render_is_forager(self):
+        from src.universe.engine import Entity, Universe
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=1, height=1, food_spawn_rate=0.0)
+        entity = Entity("Test", x=0, y=0, is_forager=True)
+        universe.entities.append(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("'", output)
+
 if __name__ == '__main__':
     unittest.main()

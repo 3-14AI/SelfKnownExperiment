@@ -6878,7 +6878,68 @@ class TestIsProtective(unittest.TestCase):
         self.assertFalse(getattr(prey, 'was_eaten', False))
 
 
+
+
+from unittest.mock import patch
+
+class TestIsForager(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    @patch('random.random', return_value=0.0)
+    def test_is_forager_eating_plant(self, mock_random):
+        from src.universe.engine import Entity, Food
+
+        e1 = Entity("Forager", x=0, y=0, is_forager=True, size=1, age=0, max_age=100, stamina=0, max_stamina=0)
+        e1.energy = 10
+        self.universe.entities.append(e1)
+
+        e2 = Entity("NotForager", x=1, y=0, is_forager=False, size=1, age=0, max_age=100, stamina=0, max_stamina=0)
+        e2.energy = 10
+        self.universe.entities.append(e2)
+
+        plant_food1 = Food(x=0, y=0, energy=10, plant_type='generic')
+        plant_food2 = Food(x=1, y=0, energy=10, plant_type='generic')
+        self.universe.add_food(plant_food1)
+        self.universe.add_food(plant_food2)
+
+        self.universe.tick()
+
+        # e1 should have 5 more energy than e2
+        self.assertEqual(e1.energy, e2.energy + 5)
+
+    @patch('random.random', return_value=0.0)
+    def test_is_forager_eating_meat(self, mock_random):
+        from src.universe.engine import Entity, Food
+
+        e1 = Entity("ForagerCarnivore", x=0, y=0, is_forager=True, diet='carnivore', size=1, age=0, max_age=100, stamina=0, max_stamina=0)
+        e1.energy = 10
+        self.universe.entities.append(e1)
+
+        e2 = Entity("NotForagerCarnivore", x=1, y=0, is_forager=False, diet='carnivore', size=1, age=0, max_age=100, stamina=0, max_stamina=0)
+        e2.energy = 10
+        self.universe.entities.append(e2)
+
+        meat1 = Food(x=0, y=0, energy=10, plant_type='meat')
+        meat2 = Food(x=1, y=0, energy=10, plant_type='meat')
+        self.universe.add_food(meat1)
+        self.universe.add_food(meat2)
+
+        self.universe.tick()
+
+        # e1 should NOT have the +5 bonus when eating meat.
+        self.assertEqual(e1.energy, e2.energy)
+
 if __name__ == '__main__':
+
+
+
+
+
+
 
 
 
