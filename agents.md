@@ -204,3 +204,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_forager` trait. Entities with this trait gain an extra 5 energy when consuming plants or fruit.
 
 - [x] Implemented `is_vigilant` trait. Entities with this trait are highly alert and immune to the ambush predator attack modifier.
+- [x] Implemented `is_pacifist` trait. Entities with this trait never initiate combat, even when hungry.
