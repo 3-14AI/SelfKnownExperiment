@@ -243,6 +243,8 @@ class CLIVisualizer:
                         char = '>'
                     elif getattr(entity, 'is_resilient', False):
                         char = '{'
+                    elif getattr(entity, 'is_parasite_resistant', False):
+                        char = '"'
                     elif diet == 'omnivore':
                         char = 'O'
                     else:
