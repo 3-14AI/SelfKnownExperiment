@@ -9906,3 +9906,62 @@ class TestHasSharpTeeth(unittest.TestCase):
 
         self.assertFalse(defender.is_alive)
         self.assertTrue(getattr(defender, 'was_eaten', False))
+
+
+class TestIsVigilant(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+
+    @unittest.mock.patch('random.random')
+    def test_is_vigilant_mutation(self, mock_random):
+        from src.universe.engine import Entity
+        mock_random.return_value = 0.0
+
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=5, age=10, max_age=100, is_vigilant=False, lays_eggs=True, intelligence=10)
+        parent.hydration = 50
+        parent.stamina = 50
+
+        self.universe.entities.append(parent)
+        self.universe.tick()
+
+        eggs = [f for f in self.universe.foods if f.plant_type == 'egg']
+        self.assertTrue(len(eggs) > 0)
+
+        child = eggs[0].hatch_entity
+        self.assertTrue(getattr(child, 'is_vigilant', False))
+
+    def test_is_vigilant_combat(self):
+        from src.universe.engine import Entity
+
+        # Ambush predator setup: effective attack without bonus = 4
+        # Since it is an ambush predator with camouflage, normal attack multiplier = * 2 = 8
+        predator_normal = Entity("PredatorN", x=5, y=5, diet='carnivore', energy=50, attack=4, defense=1, is_ambush_predator=True, camouflage=0.5)
+
+        # Prey non-vigilant setup: defense = 4
+        # predator total attack = 8. Escape chance = 4 / (8+4) = 4/12 = 0.333
+        prey_normal = Entity("PreyN", x=5, y=5, energy=50, attack=1, defense=4, is_vigilant=False)
+
+        predator_vigilant = Entity("PredatorV", x=5, y=5, diet='carnivore', energy=50, attack=4, defense=1, is_ambush_predator=True, camouflage=0.5)
+
+        # Prey vigilant setup: defense = 4
+        # predator total attack = 4 (multiplier negated). Escape chance = 4 / (4+4) = 4/8 = 0.5
+        prey_vigilant = Entity("PreyV", x=5, y=5, energy=50, attack=1, defense=4, is_vigilant=True)
+
+        # For survival, let's fix random.random to 0.4.
+        # Normal prey (escape = 0.333 < 0.4) -> fails escape, dies
+        # Vigilant prey (escape = 0.5 >= 0.4) -> succeeds escape, survives
+
+        # Run test for normal
+        self.universe.entities = [predator_normal, prey_normal]
+        with unittest.mock.patch('random.random', return_value=0.4):
+            self.universe.tick()
+        self.assertFalse(prey_normal.is_alive)
+        self.assertTrue(getattr(prey_normal, 'was_eaten', False))
+
+        # Run test for vigilant
+        self.universe.entities = [predator_vigilant, prey_vigilant]
+        with unittest.mock.patch('random.random', return_value=0.4):
+            self.universe.tick()
+        self.assertTrue(prey_vigilant.is_alive)
+        self.assertFalse(getattr(prey_vigilant, 'was_eaten', False))
