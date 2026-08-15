@@ -155,6 +155,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
 
 ## Next Steps
+- [x] Implemented `is_tireless` trait. Entities with this trait do not consume stamina when moving.
 - [x] Implemented `is_parasite_resistant` trait. Entities with this trait are immune to parasitic attachment, rendering them safe from energy and hydration drain by parasites.
 - [x] Implemented `is_relentless` trait. Entities with this trait deal half their effective attack as energy damage to their prey even if the prey successfully escapes combat.
 - [x] Implemented `is_vengeful` trait. Entities with this trait gain permanent attack power when successfully escaping from a predator.

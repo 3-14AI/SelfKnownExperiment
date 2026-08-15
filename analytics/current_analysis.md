@@ -322,3 +322,7 @@
 ### Analysis 180: Forager Trait
 **Overview:** Implemented the `is_forager` trait for entities.
 **Details:** Entities with this trait gain an extra 5 energy when consuming plants or fruit.
+
+### Analysis 181: Tireless Trait
+**Overview:** Implemented the `is_tireless` trait for entities.
+**Details:** Entities with this trait do not consume stamina when moving.
