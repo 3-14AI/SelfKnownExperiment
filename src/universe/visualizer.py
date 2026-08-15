@@ -74,6 +74,8 @@ class CLIVisualizer:
                         char = '5'
                     elif getattr(entity, 'is_territorial', False):
                         char = '6'
+                    elif getattr(entity, 'is_protective', False):
+                        char = '('
                     elif getattr(entity, 'is_playful', False):
                         char = '-'
                     elif getattr(entity, 'is_agile', False):

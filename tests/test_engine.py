@@ -6833,6 +6833,51 @@ class TestIsRuthless(unittest.TestCase):
             child = eggs[0].hatch_entity
             self.assertTrue(child.is_ruthless)
 
+
+
+class TestIsProtective(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_is_protective_defense_bonus(self):
+        from src.universe.engine import Entity
+
+        # Prey being attacked (stamina=0 halves defense from 20 -> 10)
+        prey = Entity("Sheep", x=0, y=0, species="Sheep", defense=20, max_age=100, age=50, size=2, stamina=0, max_stamina=0, energy=100)
+
+        # Protector of the same species (defense from 10 -> 5 when herd_bonus calculates 0.5 * defense)
+        protector = Entity("ProtectorSheep", x=1, y=0, species="Sheep", defense=10, max_age=100, age=50, size=2, is_protective=True, stamina=0, max_stamina=0, energy=100)
+
+        # Predator attacking prey (stamina=0 halves attack from 30 -> 15)
+        predator = Entity("Wolf", x=0, y=1, species="Wolf", diet='carnivore', target_species=["Sheep"], attack=30, max_age=100, age=50, size=2, stamina=0, max_stamina=0, energy=100)
+
+        self.universe.add_entity(prey)
+        self.universe.add_entity(protector)
+        self.universe.add_entity(predator)
+
+        import random
+        orig_random = random.random
+        # Always fail escape check if bonus is not applied
+        # effective attack = 15, base defense = 10, protector defense (halved for herd_bonus) = 2.5
+        # base escape chance without protective bonus: (10 + 2.5) / (15 + 10 + 2.5) = 12.5 / 27.5 = 0.4545
+        # with protective bonus (+2): (12.5 + 2) / (15 + 12.5 + 2) = 14.5 / 29.5 = 0.4915
+
+        # Let's set random.random to 0.48. If protective bonus applies, escape_chance > 0.48 so prey survives.
+        # If protective bonus fails, escape_chance < 0.48 so prey dies.
+
+        random.random = lambda: 0.48
+        try:
+            self.universe.tick()
+        finally:
+            random.random = orig_random
+
+        # If protective works, prey escapes and survives
+        self.assertTrue(prey.is_alive)
+        self.assertFalse(getattr(prey, 'was_eaten', False))
+
+
 if __name__ == '__main__':
 
 
