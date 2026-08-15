@@ -733,5 +733,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn("'", output)
 
+
+    def test_draw_pacifist_entity(self):
+        universe = Universe(10, 10)
+        entity = Entity("Pacifist", x=5, y=5, is_pacifist=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('¥', output)
+
 if __name__ == '__main__':
     unittest.main()

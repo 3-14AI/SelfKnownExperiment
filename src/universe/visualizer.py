@@ -60,6 +60,8 @@ class CLIVisualizer:
                         char = '%'
                     elif getattr(entity, 'is_sleeping', False):
                         char = '0'
+                    elif getattr(entity, 'is_pacifist', False):
+                        char = '¥'
                     elif getattr(entity, 'is_cleaner', False):
                         char = '+'
                     elif getattr(entity, 'is_flying', False):

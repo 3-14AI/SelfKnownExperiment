@@ -6970,6 +6970,39 @@ class TestIsForager(unittest.TestCase):
         self.assertTrue(len(eggs) > 0)
         self.assertTrue(getattr(eggs[0].hatch_entity, 'is_tireless', False))
 
+
+class TestIsPacifist(unittest.TestCase):
+    def test_pacifist_tracking(self):
+        # A pacifist carnivore should not track prey
+        universe = Universe(width=10, height=10)
+        pacifist = Entity(name="Pacifist", x=5, y=5, energy=5, diet='carnivore', attack=10, perception_radius=10, is_pacifist=True)
+        prey = Entity(name="Prey", x=5, y=6, energy=50, diet='herbivore', defense=0)
+
+        universe.add_entity(pacifist)
+        universe.add_entity(prey)
+
+        universe.tick()
+
+        # Pacifist shouldn't move towards prey and attack
+        self.assertTrue(prey.is_alive)
+        self.assertFalse(getattr(prey, 'was_eaten', False))
+
+    def test_pacifist_collision(self):
+        # A pacifist carnivore overlapping with prey should not attack it
+        universe = Universe(width=10, height=10)
+        pacifist = Entity(name="Pacifist", x=5, y=5, energy=5, diet='carnivore', attack=10, is_pacifist=True, stamina=0)
+        prey = Entity(name="Prey", x=5, y=5, energy=50, diet='herbivore', defense=0, stamina=0)
+
+        universe.add_entity(pacifist)
+        universe.add_entity(prey)
+
+        universe.tick()
+
+        self.assertTrue(prey.is_alive)
+        # Check that energy only dropped slightly due to tick, but not due to an attack
+        self.assertTrue(prey.energy >= 49)
+        self.assertFalse(getattr(prey, 'was_eaten', False))
+
 if __name__ == '__main__':
 
 
