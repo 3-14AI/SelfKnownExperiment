@@ -326,3 +326,7 @@
 ### Analysis 181: Tireless Trait
 **Overview:** Implemented the `is_tireless` trait for entities.
 **Details:** Entities with this trait do not consume stamina when moving.
+
+### Analysis: `is_vigilant` Trait
+**Overview:** Entities with this trait are highly alert and cannot be ambushed.
+**Details:** When an ambush predator attacks an entity with `is_vigilant=True`, the predator does not receive its normal 2x attack multiplier from being camouflaged.
