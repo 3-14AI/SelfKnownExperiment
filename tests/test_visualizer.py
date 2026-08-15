@@ -712,5 +712,16 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn(')', output)
 
+
+    def test_render_is_parasite_resistant(self):
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=10, height=10)
+        e = Entity("Resistant", x=0, y=0, is_parasite_resistant=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('"', output)
+
 if __name__ == '__main__':
     unittest.main()
