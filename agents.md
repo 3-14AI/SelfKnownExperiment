@@ -198,3 +198,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `has_sharp_teeth` trait. Entities with this trait bypass the flat defense bonuses granted by `has_shell` and `has_scales` during combat.
 - [x] Implemented `is_resilient` trait. Entities with this trait recover faster from poison and stun.
 - [x] Implemented `is_smelly` trait. Entities with this trait leave a stronger scent trail but inflict an attack penalty on their predators.
+- [x] Implemented `is_ruthless` trait. Entities with this trait gain a flat +3 bonus to effective attack during combat if the prey's energy is below half of its maximum.
