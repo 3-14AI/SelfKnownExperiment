@@ -245,6 +245,8 @@ class CLIVisualizer:
                         char = '{'
                     elif getattr(entity, 'is_parasite_resistant', False):
                         char = '"'
+                    elif getattr(entity, 'is_ruthless', False):
+                        char = '.'
                     elif diet == 'omnivore':
                         char = 'O'
                     else:
