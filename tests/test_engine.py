@@ -6933,6 +6933,43 @@ class TestIsForager(unittest.TestCase):
         # e1 should NOT have the +5 bonus when eating meat.
         self.assertEqual(e1.energy, e2.energy)
 
+
+    def test_is_tireless_movement(self):
+        from src.universe.engine import Entity
+
+        # Entity with is_tireless
+        e_tireless = Entity("Tireless", x=5, y=5, energy=50, max_age=100, hydration=50, stamina=50, max_stamina=50, is_tireless=True, intelligence=1, is_nest_builder=False)
+        self.universe.entities.append(e_tireless)
+
+        # Entity without is_tireless
+        e_normal = Entity("Normal", x=6, y=6, energy=50, max_age=100, hydration=50, stamina=50, max_stamina=50, is_tireless=False, intelligence=1, is_nest_builder=False)
+        self.universe.entities.append(e_normal)
+
+        # Move both
+        self.universe.move_entity(e_tireless, 1, 0)
+        self.universe.move_entity(e_normal, 1, 0)
+
+        self.assertEqual(e_tireless.stamina, 50)
+        self.assertLess(e_normal.stamina, 50)
+
+    @unittest.mock.patch('random.random')
+    def test_is_tireless_mutation(self, mock_random):
+        from src.universe.engine import Entity, Food
+
+        # Force mutation to occur
+        mock_random.return_value = 0.0
+
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=5, age=10, max_age=100, is_tireless=False, lays_eggs=True, intelligence=10, is_nest_builder=False, is_fierce=False, is_vampiric=False, is_territorial=False, is_mud_bather=False, has_strong_stomach=False, is_pack_mule=False, is_reckless=False, is_spiteful=False, is_sunbather=False, is_adaptable=False, is_playful=False, is_scavenger=False, is_cleaner=False, is_parasitic=False, is_fruiting=False, can_spin_webs=False, is_opportunistic=False, is_evasive=False, is_agile=False, is_nomadic=False, is_migratory=False, is_prolific=False, is_endurance_runner=False, is_gluttonous=False, is_resourceful=False, is_intimidating=False, is_cooperative=False, is_solitary=False, is_telepathic=False)
+        parent.hydration = 50
+        parent.stamina = 50
+        self.universe.entities.append(parent)
+
+        self.universe.tick()
+
+        eggs = [f for f in self.universe.foods if f.plant_type == 'egg']
+        self.assertTrue(len(eggs) > 0)
+        self.assertTrue(getattr(eggs[0].hatch_entity, 'is_tireless', False))
+
 if __name__ == '__main__':
 
 
