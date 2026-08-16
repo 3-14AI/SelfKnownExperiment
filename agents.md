@@ -205,3 +205,4 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_vigilant` trait. Entities with this trait are highly alert and immune to the ambush predator attack modifier.
 - [x] Implemented `is_pacifist` trait. Entities with this trait never initiate combat, even when hungry.
+- [x] Implemented `is_farsighted` trait. Entities with this trait have their effective perception radius doubled, but suffer a -2 penalty to effective attack in combat.

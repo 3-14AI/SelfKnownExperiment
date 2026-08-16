@@ -742,5 +742,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('¥', output)
 
+
+    def test_render_farsighted(self):
+        universe = Universe(10, 10)
+        entity = Entity("Farsighted", x=5, y=5, is_farsighted=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('€', output)
+
 if __name__ == '__main__':
     unittest.main()

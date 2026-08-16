@@ -330,3 +330,11 @@
 ### Analysis: `is_vigilant` Trait
 **Overview:** Entities with this trait are highly alert and cannot be ambushed.
 **Details:** When an ambush predator attacks an entity with `is_vigilant=True`, the predator does not receive its normal 2x attack multiplier from being camouflaged.
+
+### Analysis 182: Pacifist Trait
+**Overview:** Implemented the `is_pacifist` trait for entities.
+**Details:** Entities with this trait never initiate combat, even when hungry.
+
+### Analysis 183: Farsighted Trait
+**Overview:** Implemented the `is_farsighted` trait for entities.
+**Details:** Entities with this trait have their effective perception radius doubled, which allows them to spot food, prey, and predators from farther away, but they suffer a -2 penalty to their effective attack during combat due to their lack of close-range focus.
