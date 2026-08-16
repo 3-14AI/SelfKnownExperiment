@@ -415,3 +415,6 @@
 ### Analysis 203: Chameleon Trait
 **Overview:** Implemented the `is_chameleon` trait for entities.
 **Details:** Entities with this trait gain a massive camouflage bonus (+0.5) when they remain stationary during a tick, making them practically invisible to predators and prey, but they lose this bonus when they move.
+### Analysis 204: Unappetizing Trait
+**Overview:** Implemented the `is_unappetizing` trait for entities.
+**Details:** Entities with this trait grant only half their normal energy to predators upon being eaten, providing a slight evolutionary disadvantage to their predators without necessarily preventing their own death.

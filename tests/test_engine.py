@@ -7154,6 +7154,38 @@ class TestIsFarsighted(unittest.TestCase):
         self.assertTrue(getattr(children[0], 'is_chameleon', False))
 
 
+
+class TestIsUnappetizing(unittest.TestCase):
+    def test_is_unappetizing_combat_energy_value(self):
+        universe = Universe()
+        universe.time = 0
+
+        # size=2 -> max_energy=100
+        predator = Entity("Predator", x=0, y=0, diet="carnivore", attack=10, defense=1, energy=20, size=2, stamina=100, max_stamina=100)
+        prey = Entity("Prey", x=1, y=0, diet="herbivore", attack=0, defense=0, energy=20, size=1, is_unappetizing=True)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with unittest.mock.patch('random.random', return_value=1.0):
+            universe.tick()
+
+        self.assertFalse(prey.is_alive)
+        self.assertTrue(25 <= predator.energy <= 30)
+
+    def test_is_unappetizing_mutation(self):
+        universe = Universe()
+        parent = Entity(name="P", x=0, y=0, is_unappetizing=False, lays_eggs=False, size=1, energy=50)
+        parent.energy = 50
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e.name == "P_child"]
+        self.assertEqual(len(children), 1)
+        self.assertTrue(getattr(children[0], 'is_unappetizing', False))
+
 if __name__ == '__main__':
 
 
