@@ -267,6 +267,8 @@ class CLIVisualizer:
                         char = '£'
                     elif getattr(entity, 'is_unappetizing', False):
                         char = '§'
+                    elif getattr(entity, 'is_introspective', False):
+                        char = 'Ω'
                     else:
                         char = 'E'
 
