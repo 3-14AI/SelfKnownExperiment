@@ -10233,3 +10233,40 @@ class TestIsBloodthirsty(unittest.TestCase):
         self.assertEqual(prey.energy, 0)
         self.assertTrue(prey.was_eaten)
         self.assertEqual(predator.stamina, 25)
+
+
+
+class TestIsIntrospective(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=20, height=20, day_length=10)
+
+    def test_is_introspective_stationary_xp(self):
+        self.universe.time = 1
+        zen_entity = Entity(name="Zen", x=5, y=5, is_introspective=True, stamina=0, max_stamina=0)
+        norm_entity = Entity(name="Norm", x=8, y=8, stamina=0, max_stamina=0)
+
+        self.universe.entities = [zen_entity, norm_entity]
+        self.universe.tick()
+
+        self.assertEqual(zen_entity.experience, 2)
+        self.assertEqual(norm_entity.experience, 0)
+
+
+    def test_is_introspective_mutation(self):
+        parent = Entity(name="Parent", energy=100, max_age=50, age=10, size=2, is_introspective=False)
+        self.universe.entities = [parent]
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0
+
+            # Since random is 0.0, it will mutate the boolean trait from False to True.
+            self.universe.tick()
+
+            children = [e for e in self.universe.entities if e != parent]
+            if children:
+                child = children[0]
+                self.assertTrue(getattr(child, 'is_introspective', False))
+        finally:
+            random.random = original_random
