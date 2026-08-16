@@ -327,14 +327,91 @@
 **Overview:** Implemented the `is_tireless` trait for entities.
 **Details:** Entities with this trait do not consume stamina when moving.
 
-### Analysis: `is_vigilant` Trait
+### Analysis 182: Vigilant Trait
 **Overview:** Entities with this trait are highly alert and cannot be ambushed.
 **Details:** When an ambush predator attacks an entity with `is_vigilant=True`, the predator does not receive its normal 2x attack multiplier from being camouflaged.
 
-### Analysis 182: Pacifist Trait
+### Analysis 183: Pacifist Trait
 **Overview:** Implemented the `is_pacifist` trait for entities.
 **Details:** Entities with this trait never initiate combat, even when hungry.
 
-### Analysis 183: Farsighted Trait
+### Analysis 184: Farsighted Trait
 **Overview:** Implemented the `is_farsighted` trait for entities.
 **Details:** Entities with this trait have their effective perception radius doubled, which allows them to spot food, prey, and predators from farther away, but they suffer a -2 penalty to their effective attack during combat due to their lack of close-range focus.
+
+
+### Analysis 185: Vampiric Trait
+**Overview:** Implemented the `is_vampiric` trait for entities.
+**Details:** Vampiric trait (`is_vampiric`). Entities with this trait drain energy and hydration from their prey during combat, even if the prey escapes.
+
+### Analysis 186: Aquatic Trait
+**Overview:** Implemented the `is_aquatic` trait for entities.
+**Details:** deep-water biome and aquatic entities. Entities with `is_aquatic` can navigate deep-water while others cannot, adding more varied terrain traversal.
+
+### Analysis 187: Electric Trait
+**Overview:** Implemented the `is_electric` trait for entities.
+**Details:** Electric trait (`is_electric`) and stunned mechanics. Entities with this trait stun their attackers during combat, rendering them unable to move or act for several ticks.
+
+### Analysis 188: Fruiting Trait
+**Overview:** Implemented the `is_fruiting` trait for entities.
+**Details:** Fruiting trait (`is_fruiting`). Entities with this trait can passively drop food (fruit) when well-fed, allowing them to support symbiotic species or act as anglerfish-like predators that bait herbivores.
+
+### Analysis 189: Aposematic Trait
+**Overview:** Implemented the `is_aposematic` trait for entities.
+**Details:** Aposematism trait (`is_aposematic`) which makes predators ignore the entity unless they are starving.
+
+### Analysis 190: Echolocation Trait
+**Overview:** Implemented the `has_echolocation` trait for entities.
+**Details:** echolocation trait (`has_echolocation`). Entities with this trait bypass camouflage and night-time vision penalties.
+
+### Analysis 191: Photosynthesize Trait
+**Overview:** Implemented the `can_photosynthesize` trait for entities.
+**Details:** Photosynthesis trait (`can_photosynthesize`). Entities with this trait gain energy during the daytime, simulating plant-like behavior.
+
+### Analysis 192: Venomous Trait
+**Overview:** Implemented the `is_venomous` trait for entities.
+**Details:** venomous trait (`is_venomous`) where entities have a chance to poison their opponent during combat.
+
+### Analysis 193: Spin Webs Trait
+**Overview:** Implemented the `can_spin_webs` trait for entities.
+**Details:** web building mechanics allowing entities with `can_spin_webs` to place stamina-draining traps.
+
+### Analysis 194: Spikes Trait
+**Overview:** Implemented the `has_spikes` trait for entities.
+**Details:** defensive spikes/thorns trait. Entities with `has_spikes` damage their attackers during combat.
+
+### Analysis 195: Lays Eggs Trait
+**Overview:** Implemented the `lays_eggs` trait for entities.
+**Details:** Oviparity/Egg-Laying mechanics. Entities with `lays_eggs` lay an egg object instead of spawning children directly.
+
+### Analysis 196: Hibernate Trait
+**Overview:** Implemented the `can_hibernate` trait for entities.
+**Details:** hibernation mechanics allowing entities to preserve energy and hydration during winter if they possess the `can_hibernate` trait.
+
+### Analysis 197: Mutate Trait
+**Overview:** Implemented the `mutate` trait for entities.
+**Details:** Entity Genetics and Mutations allowing child entities to inherit and slightly mutate traits (max_age, perception_radius).
+
+### Analysis 198: Camouflage Trait
+**Overview:** Implemented the `camouflage` trait for entities.
+**Details:** a camouflage trait for entities allowing them to avoid detection by reducing the effective perception range of others.
+
+### Analysis 199: Flying Trait
+**Overview:** Implemented the `is_flying` trait for entities.
+**Details:** flight mechanics. Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water during movement and pathfinding.
+
+### Analysis 200: Amphibious Trait
+**Overview:** Implemented the `is_amphibious` trait for entities.
+**Details:** amphibious trait (`is_amphibious`) allowing entities to freely traverse both land and water tiles.
+
+### Analysis 201: Parasitic Trait
+**Overview:** Implemented the `is_parasitic` trait for entities.
+**Details:** Parasitism (`is_parasitic`) trait. Parasites actively seek out and attach to larger hosts, continually draining their energy and hydration to sustain themselves.
+
+### Analysis 202: Vibrant Trait
+**Overview:** Implemented the `is_vibrant` trait for entities.
+**Details:** Entities with this trait have an increased reproduction chance but cannot use camouflage.
+
+### Analysis 203: Chameleon Trait
+**Overview:** Implemented the `is_chameleon` trait for entities.
+**Details:** Entities with this trait gain a massive camouflage bonus (+0.5) when they remain stationary during a tick, making them practically invisible to predators and prey, but they lose this bonus when they move.
