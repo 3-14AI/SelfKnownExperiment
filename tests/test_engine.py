@@ -10149,3 +10149,55 @@ class TestIsVigilant(unittest.TestCase):
             self.universe.tick()
         self.assertTrue(prey_vigilant.is_alive)
         self.assertFalse(getattr(prey_vigilant, 'was_eaten', False))
+
+
+class TestIsBloodthirsty(unittest.TestCase):
+    def test_is_bloodthirsty_mutation(self):
+        from src.universe.engine import Universe, Entity, Food
+        import unittest.mock
+        u = Universe(width=10, height=10)
+        u.population_limit = 100
+        u.reproduction_threshold = 10
+        u.reproduction_cost = 5
+        e = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_bloodthirsty=False, intelligence=10, lays_eggs=True, is_vampiric=True, is_mud_bather=True, is_territorial=True, has_horns=True, is_migratory=True, is_cooperative=True, is_frugivore=True, is_detritivore=True, is_social=True, is_volcanic=True, is_forestal=True, is_desertic=True, is_scentless=True, disease_vector=True, can_sprint=True, can_sweat=True, has_blubber=True, is_filter_feeder=True, is_gluttonous=True, is_solitary=True, is_cannibalistic=True, is_ambush_predator=True, is_regenerative=True, is_immune=True, is_agile=True, is_opportunistic=True, has_thick_skin=True, has_strong_stomach=True, is_hardy=True, is_fast_learner=True, is_playful=True, is_heavy_sleeper=True, is_patient=True)
+        u.add_entity(e)
+
+        with unittest.mock.patch('random.random', return_value=0.01):
+            u.tick()
+
+        eggs = [f for f in u.foods if f.plant_type == 'egg']
+        children = [ent for ent in u.entities if ent.name == "Parent" and ent != e]
+        if eggs:
+            self.assertTrue(getattr(eggs[0].hatch_entity, 'is_bloodthirsty', False))
+        elif children:
+            self.assertTrue(getattr(children[0], 'is_bloodthirsty', False))
+
+    def test_is_bloodthirsty_combat_recovery(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=5, y=5, energy=500, size=2, diet='carnivore',
+                          attack=100, defense=100,
+                          stamina=0, max_stamina=50, is_bloodthirsty=True,
+                          intelligence=10)
+        # Disable interference
+        predator.is_sleeping = False
+        predator.is_parasitic = False
+        predator.has_strong_stomach = True
+
+        prey = Entity("Prey", x=5, y=5, energy=100, size=1, diet='herbivore',
+                      attack=1, defense=1,
+                      stamina=50, max_stamina=50,
+                      intelligence=1)
+        prey.is_sleeping = False
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Mock random to ensure prey fails to escape
+        with unittest.mock.patch('random.random', return_value=1.0):
+            universe.tick()
+
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+        self.assertEqual(predator.stamina, 25)
