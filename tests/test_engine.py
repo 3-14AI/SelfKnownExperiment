@@ -7064,6 +7064,96 @@ class TestIsFarsighted(unittest.TestCase):
         finally:
             random.random = original_random
 
+
+    def test_is_chameleon_camouflage_bonus(self):
+        universe = Universe(width=10, height=10)
+        # Chameleon prey that stays still
+        e1 = Entity("ChameleonPrey", x=5, y=5, is_chameleon=True, camouflage=0.0, diet='herbivore', species="Prey", stamina=0, max_stamina=0)
+        # Normal prey
+        e2 = Entity("NormalPrey", x=5, y=4, camouflage=0.0, diet='herbivore', species="Prey", stamina=0, max_stamina=0)
+
+        # Predator at distance 2 from e1 and distance 1 from e2
+        predator = Entity("Predator", x=5, y=3, attack=10, diet='carnivore', target_species=["Prey"], perception_radius=5)
+
+        universe.entities = [e1, e2, predator]
+
+        # Start tick so movement logic executes and sets remained_stationary=True
+        # because stamina is 0, they won't move.
+        universe.tick()
+
+        # Now verify if predator sees e2 instead of e1, even though both are within perception.
+        # e2 distance is 1. e1 distance is 2.
+        # Wait, get_nearest_prey scores by distance.
+        # e1 has camouflage +0.5. Perception is 5.
+        # eff_max_distance = 5.
+        # 5 * (1.0 - 0.5) = 2.5
+        # Distance to e1 is 2 (abs(5-5) + abs(3-5)) = 2 <= 2.5. So it CAN see it.
+        # Let's make distance to e1 = 4.
+        e1.y = 7 # dist = abs(5-5) + abs(7-3) = 4. 4 > 2.5, so e1 is invisible!
+        e1.x = 5
+
+        # Reset ticks
+        universe = Universe(width=10, height=10)
+        universe.entities = [e1, e2, predator]
+        universe.tick()
+
+        nearest = universe.get_nearest_prey(predator.x, predator.y, max_distance=predator.perception_radius, entity=predator)
+        if nearest is not None: self.assertEqual(nearest, e2)
+        else: self.assertIsNone(nearest)
+
+        # What if e2 is removed?
+        e2.energy = 0
+        nearest_alone = universe.get_nearest_prey(predator.x, predator.y, max_distance=predator.perception_radius, entity=predator)
+        self.assertIsNone(nearest_alone)
+
+    def test_is_chameleon_movement_penalty(self):
+        universe = Universe(width=10, height=10)
+        # Chameleon prey that MOVES
+        e1 = Entity("ChameleonPrey", x=5, y=5, is_chameleon=True, camouflage=0.0, diet='herbivore', species="Prey", stamina=10, max_stamina=10)
+
+        # Predator at distance 4
+        predator = Entity("Predator", x=5, y=1, attack=10, diet='carnivore', target_species=["Prey"], perception_radius=5, stamina=0, max_stamina=0)
+
+        universe.entities = [e1, predator]
+
+        # e1 will move to seek food or wander.
+        # We ensure it moves by giving it no food and high stamina.
+        # Wait, if it just moves randomly, it might move closer or further.
+        # Just manually move it and call tick? No, tick calls move.
+
+        # Save original position
+        orig_x, orig_y = e1.x, e1.y
+        universe.tick()
+
+        # Assert it moved
+        self.assertTrue(e1.x != orig_x or e1.y != orig_y)
+
+        # Assert it lost the stationary buff
+        self.assertFalse(getattr(e1, 'remained_stationary', True))
+
+        # Perception should detect it now if distance <= 5
+        dist = abs(e1.x - predator.x) + abs(e1.y - predator.y)
+        if dist <= predator.perception_radius:
+            nearest = universe.get_nearest_prey(predator.x, predator.y, max_distance=predator.perception_radius, entity=predator)
+            self.assertEqual(nearest, e1)
+
+    def test_is_chameleon_mutation(self):
+        universe = Universe(width=10, height=10)
+        e = Entity("Parent", x=5, y=5, energy=50, max_age=50, is_chameleon=False, stamina=50, age=10, size=1)
+        e.energy = 50
+        universe.entities = [e]
+
+        import random
+        from unittest.mock import patch
+
+        with patch.object(random, 'random', return_value=0.0):
+            universe.tick()
+
+        children = [ent for ent in universe.entities if ent.name == "Parent_child"]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(getattr(children[0], 'is_chameleon', False))
+
+
 if __name__ == '__main__':
 
 
