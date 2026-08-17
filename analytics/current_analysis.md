@@ -451,3 +451,14 @@ Implemented the `is_hypnotic` trait. Entities with this trait halve the effectiv
 - Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to halve the `effective_attack` of the attacker if the defending entity possesses `is_hypnotic`.
 - Assigned the visual character `•` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
 - Added tests `test_is_hypnotic_combat` and `test_is_hypnotic_mutation` to `tests/test_engine.py` to ensure correct behavior.
+
+### Analysis 208: Tracker Trait
+**Overview:**
+Implemented the `is_tracker` trait. Entities with this trait can follow scent trails from up to 2 tiles away, making them superior hunters capable of tracking prey without being immediately adjacent to the scent trail.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_tracker` flag.
+- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
+- Updated the scent tracking logic in `Universe.tick()` to expand the search radius for entities with `is_tracker`, allowing them to detect the strongest scent within a 2-tile Manhattan distance and step toward it.
+- Assigned the visual character `↬` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added tests `test_is_tracker_scent_detection` and `test_is_tracker_mutation` to `tests/test_engine.py` to ensure correct behavior.
