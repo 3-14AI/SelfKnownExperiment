@@ -275,6 +275,8 @@ class CLIVisualizer:
                         char = '¤'
                     elif getattr(entity, 'is_hypnotic', False):
                         char = '•'
+                    elif getattr(entity, 'is_tracker', False):
+                        char = '↬'
                     else:
                         char = 'E'
 
