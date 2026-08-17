@@ -7260,6 +7260,37 @@ class TestIsSunTracker(unittest.TestCase):
         # e_tracker should have retained more energy than e_normal because of the reduced energy_loss
         self.assertTrue(e_tracker.energy > e_normal.energy, f"Tracker energy {e_tracker.energy} should be > Normal energy {e_normal.energy}")
 
+class TestIsHypnotic(unittest.TestCase):
+    @patch('random.random')
+    def test_is_hypnotic_mutation(self, mock_random):
+        mock_random.return_value = 0.0
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=5, y=5, energy=50, age=5, size=1, is_hypnotic=False)
+        parent._Entity__max_energy = 50
+        universe.add_entity(parent)
+
+        universe.tick()
+
+        children = [e for e in universe.entities if e.generation == 1]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_hypnotic', False))
+
+    @patch('random.random')
+    def test_is_hypnotic_combat(self, mock_random):
+        mock_random.return_value = 0.4
+        universe = Universe(width=10, height=10)
+
+        attacker = Entity("Attacker", x=5, y=5, energy=50, attack=10, diet='carnivore', target_species=["Prey"], perception_radius=2, stamina=50)
+        prey = Entity("Prey", x=5, y=5, energy=50, defense=5, species="Prey", is_hypnotic=True, diet='herbivore', stamina=50)
+
+        universe.add_entity(attacker)
+        universe.add_entity(prey)
+
+        universe.tick()
+
+        self.assertTrue(prey.is_alive)
+        self.assertFalse(getattr(prey, 'was_eaten', False))
+
 if __name__ == '__main__':
 
 
