@@ -269,6 +269,8 @@ class CLIVisualizer:
                         char = '§'
                     elif getattr(entity, 'is_introspective', False):
                         char = 'Ω'
+                    elif getattr(entity, 'is_frenzied', False):
+                        char = 'ç'
                     else:
                         char = 'E'
 

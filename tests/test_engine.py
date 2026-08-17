@@ -7139,8 +7139,8 @@ class TestIsFarsighted(unittest.TestCase):
 
     def test_is_chameleon_mutation(self):
         universe = Universe(width=10, height=10)
-        e = Entity("Parent", x=5, y=5, energy=50, max_age=50, is_chameleon=False, stamina=50, age=10, size=1)
-        e.energy = 50
+        e = Entity("Parent", x=5, y=5, energy=50, max_age=50, is_chameleon=False, stamina=50, age=10, size=2)
+        e.energy = 100
         universe.entities = [e]
 
         import random
@@ -7185,6 +7185,47 @@ class TestIsUnappetizing(unittest.TestCase):
         children = [e for e in universe.entities if e.name == "P_child"]
         self.assertEqual(len(children), 1)
         self.assertTrue(getattr(children[0], 'is_unappetizing', False))
+
+
+class TestIsFrenzied(unittest.TestCase):
+    def test_is_frenzied_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_frenzied=False, lays_eggs=False)
+        universe.add_entity(parent)
+
+        # Force mutation
+        import random
+        random.seed(42) # A seed that hopefully hits the mutation chance, or we just mock random.random
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e.name == "Parent_child"]
+        if children:
+            child = children[0]
+            self.assertTrue(getattr(child, "is_frenzied", False), "Child should have mutated is_frenzied to True")
+
+    def test_is_frenzied_combat(self):
+        universe = Universe(width=10, height=10)
+        # Create a predator that is frenzied
+        predator = Entity("FrenziedPred", size=2, x=5, y=5, diet='carnivore', attack=5, is_frenzied=True)
+        predator.energy = 100
+        # Create a sturdy prey so the predator doesn't one-shot it and combat triggers properly
+        prey = Entity("Prey", size=2, x=5, y=5, diet='herbivore', defense=5)
+        prey.energy = 100
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        self.assertTrue(predator.is_alive)
+        self.assertTrue(prey.is_alive)
+
+        # Verify energy was reduced by at least the frenzy cost (5)
+        self.assertLessEqual(predator.energy, 100 - 5)
+
 
 if __name__ == '__main__':
 

@@ -429,3 +429,14 @@ Implemented the `is_introspective` trait. Entities with this trait gain a deep u
 - Updated the stationary recovery logic block in `Universe.tick()` to award 2 experience points per tick to entities with `is_introspective` that do not move from their `start_pos`.
 - Assigned the visual character `Ω` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
 - Added tests `test_is_introspective_stationary_xp` and `test_is_introspective_mutation` to `tests/test_engine.py` to ensure correct behavior.
+
+### Analysis 206: Frenzied Trait
+**Overview:**
+Implemented the `is_frenzied` trait. Entities with this trait gain a massive +5 bonus to their effective attack during combat, but lose 5 energy per combat encounter due to overexertion.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_frenzied` flag.
+- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
+- Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to apply a flat +5 bonus to `effective_attack` and subtract 5 energy from the attacking entity if they possess `is_frenzied`.
+- Assigned the visual character `ç` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added tests `test_is_frenzied_combat` and `test_is_frenzied_mutation` to `tests/test_engine.py` to ensure correct behavior.
