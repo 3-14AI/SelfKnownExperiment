@@ -273,6 +273,8 @@ class CLIVisualizer:
                         char = 'ç'
                     elif getattr(entity, 'is_sun_tracker', False):
                         char = '¤'
+                    elif getattr(entity, 'is_empathic', False):
+                        char = '±'
                     elif getattr(entity, 'is_hypnotic', False):
                         char = '•'
                     elif getattr(entity, 'is_tracker', False):

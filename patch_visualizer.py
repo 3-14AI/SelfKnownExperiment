@@ -1,17 +1,14 @@
-import re
-
-with open('src/universe/visualizer.py', 'r') as f:
+with open("src/universe/visualizer.py", "r") as f:
     content = f.read()
 
-replacement = """                    elif getattr(entity, 'is_hypnotic', False):
-                        return '•'
-                    elif getattr(entity, 'is_tracker', False):
-                        return '↬'"""
+target_search = """                    elif getattr(entity, 'is_sun_tracker', False):
+                        char = '¤'"""
+target_replace = """                    elif getattr(entity, 'is_sun_tracker', False):
+                        char = '¤'
+                    elif getattr(entity, 'is_empathic', False):
+                        char = '±'"""
+content = content.replace(target_search, target_replace)
 
-content = re.sub(r'elif getattr\(entity, \'is_hypnotic\', False\):\n                        return \'•\'', replacement, content)
-
-with open('src/universe/visualizer.py', 'w') as f:
+with open("src/universe/visualizer.py", "w") as f:
     f.write(content)
 
-with open('used_chars.txt', 'a') as f:
-    f.write('\n↬')
