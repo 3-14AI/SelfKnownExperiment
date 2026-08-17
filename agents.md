@@ -210,3 +210,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_chameleon` trait. Entities with this trait gain a massive camouflage bonus (+0.5) when they remain stationary during a tick, making them practically invisible to predators and prey, but they lose this bonus when they move.
 - [x] Implemented `is_bloodthirsty` trait. Entities with this trait recover 20 stamina whenever they successfully hunt and eat a prey.
 - [x] Implemented `is_introspective` trait. Entities with this trait gain 2 experience points every tick they remain stationary.
+- [x] Implemented `is_frenzied` trait. Entities with this trait gain a flat +5 bonus to effective attack during combat, but lose 5 energy per combat encounter due to overexertion.
