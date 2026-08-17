@@ -440,3 +440,14 @@ Implemented the `is_frenzied` trait. Entities with this trait gain a massive +5 
 - Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to apply a flat +5 bonus to `effective_attack` and subtract 5 energy from the attacking entity if they possess `is_frenzied`.
 - Assigned the visual character `ç` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
 - Added tests `test_is_frenzied_combat` and `test_is_frenzied_mutation` to `tests/test_engine.py` to ensure correct behavior.
+
+### Analysis 207: Hypnotic Trait
+**Overview:**
+Implemented the `is_hypnotic` trait. Entities with this trait halve the effective attack of their predators during combat.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_hypnotic` flag.
+- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
+- Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to halve the `effective_attack` of the attacker if the defending entity possesses `is_hypnotic`.
+- Assigned the visual character `•` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added tests `test_is_hypnotic_combat` and `test_is_hypnotic_mutation` to `tests/test_engine.py` to ensure correct behavior.
