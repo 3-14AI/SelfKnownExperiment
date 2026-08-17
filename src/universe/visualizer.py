@@ -271,6 +271,8 @@ class CLIVisualizer:
                         char = 'Ω'
                     elif getattr(entity, 'is_frenzied', False):
                         char = 'ç'
+                    elif getattr(entity, 'is_sun_tracker', False):
+                        char = '¤'
                     else:
                         char = 'E'
 
