@@ -214,3 +214,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_frenzied` trait. Entities with this trait gain a flat +5 bonus to effective attack during combat, but lose 5 energy per combat encounter due to overexertion.
 - [x] Implemented `is_sun_tracker` trait. Entities with this trait gain an energy bonus during the day if they are standing on clear terrain (not a shelter or ash), allowing them to passively absorb sunlight.
 - [x] Implemented `is_hypnotic` trait. Entities with this trait halve the effective attack of their predators during combat.
+- [x] Implemented `is_empathic` trait. Entities with this trait transfer 2 energy to an adjacent flockmate if the flockmate's energy is below 30% of its maximum and the empathic entity has more than 50% of its maximum energy.

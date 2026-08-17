@@ -1,79 +1,42 @@
-import re
-
-with open('src/universe/engine.py', 'r') as f:
+with open("src/universe/engine.py") as f:
     content = f.read()
 
-# 1. Add is_tracker to __init__
-content = re.sub(
-    r'(is_hypnotic=False):',
-    r'\1, is_tracker=False):',
-    content, count=1
-)
+# 1. Add is_empathic to Entity.__init__
+target_init_search = ", is_hypnotic=False, is_tracker=False):"
+target_init_replace = ", is_hypnotic=False, is_tracker=False, is_empathic=False):"
+content = content.replace(target_init_search, target_init_replace)
 
-content = re.sub(
-    r'(self.is_hypnotic = is_hypnotic)',
-    r'\1\n        self.is_tracker = is_tracker',
-    content, count=1
-)
+target_assign_search = "        self.is_tracker = is_tracker"
+target_assign_replace = "        self.is_tracker = is_tracker\n        self.is_empathic = is_empathic"
+content = content.replace(target_assign_search, target_assign_replace)
 
-# 2. Add to Universe.tick() mutations
-content = re.sub(
-    r'(child_is_hypnotic = getattr\(entity, \'is_hypnotic\', False\))',
-    r'\1\n                    child_is_tracker = getattr(entity, \'is_tracker\', False)',
-    content, count=1
-)
+# 2. child_is_empathic initialization
+target_child_init_search = "                    child_is_tracker = getattr(entity, 'is_tracker', False)"
+target_child_init_replace = "                    child_is_tracker = getattr(entity, 'is_tracker', False)\n                    child_is_empathic = getattr(entity, 'is_empathic', False)"
+content = content.replace(target_child_init_search, target_child_init_replace)
 
-content = re.sub(
-    r'(child_is_hypnotic = not child_is_hypnotic)',
-    r'\1\n                    if random.random() < mutation_chance:\n                        child_is_tracker = not child_is_tracker',
-    content, count=1
-)
+# 3. child_is_empathic mutation
+target_child_mut_search = "                    if random.random() < mutation_chance:\n                        child_is_tracker = not child_is_tracker\n                        mutation_occurred = True"
+target_child_mut_replace = "                    if random.random() < mutation_chance:\n                        child_is_tracker = not child_is_tracker\n                        mutation_occurred = True\n\n                    if random.random() < mutation_chance:\n                        child_is_empathic = not child_is_empathic\n                        mutation_occurred = True"
+content = content.replace(target_child_mut_search, target_child_mut_replace)
 
-content = re.sub(
-    r'(is_hypnotic=child_is_hypnotic\))',
-    r'is_hypnotic=child_is_hypnotic, is_tracker=child_is_tracker)',
-    content, count=1
-)
+# 4. pass is_empathic in new Entity
+target_child_pass_search = "is_tracker=child_is_tracker)"
+target_child_pass_replace = "is_tracker=child_is_tracker, is_empathic=child_is_empathic)"
+content = content.replace(target_child_pass_search, target_child_pass_replace)
 
-# 3. Scent tracking behavior
-old_scent_loop = """                                    # Scent tracking behavior
-                                    best_scent = 0
-                                    best_pos = None
-                                    for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
-                                        nx, ny = entity.x + dx, entity.y + dy
-                                        if (nx, ny) in self.scent_trails and self.scent_trails[(nx, ny)] > best_scent:
-                                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + dx * 2, entity.y + dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))):
-                                                best_scent = self.scent_trails[(nx, ny)]
-                                                best_pos = (dx, dy)
-                                    if best_pos:"""
+# 5. implement is_empathic behavior in Universe.tick main entity loop
+target_behavior_search = "                if getattr(entity, 'is_cooperative', False) and entity.energy > entity.max_energy * 0.6:"
+target_behavior_replace = """                if getattr(entity, 'is_empathic', False) and entity.energy > entity.max_energy * 0.5:
+                    flockmates = self.get_nearby_flockmates(entity, 1)
+                    for flockmate in flockmates:
+                        if flockmate.energy < flockmate.max_energy * 0.3:
+                            flockmate.energy += 2
+                            entity.energy -= 2
+                            break
 
-new_scent_loop = """                                    # Scent tracking behavior
-                                    best_scent = 0
-                                    best_pos = None
-                                    import math
-                                    search_radius = [(dx, dy) for dx in range(-2, 3) for dy in range(-2, 3) if 0 < abs(dx) + abs(dy) <= 2] if getattr(entity, 'is_tracker', False) else [(0, -1), (0, 1), (-1, 0), (1, 0)]
-                                    for dx, dy in search_radius:
-                                        nx, ny = entity.x + dx, entity.y + dy
-                                        if (nx, ny) in self.scent_trails and self.scent_trails[(nx, ny)] > best_scent:
-                                            # We just need any valid move towards the scent if it's further than 1 tile
-                                            step_dx = int(math.copysign(1, dx)) if dx != 0 else 0
-                                            step_dy = int(math.copysign(1, dy)) if dy != 0 else 0
-                                            if abs(dx) > 0 and abs(dy) > 0:
-                                                # Prefer moving along the larger difference if possible, but manhattan dist 2 means (1,1) or (2,0) or (0,2).
-                                                # For (1,1) we can pick x or y.
-                                                if random.random() < 0.5:
-                                                    step_dy = 0
-                                                else:
-                                                    step_dx = 0
-                                            check_nx = entity.x + step_dx
-                                            check_ny = entity.y + step_dy
-                                            if self.is_passable(check_nx, check_ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + step_dx * 2, entity.y + step_dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False))):
-                                                best_scent = self.scent_trails[(nx, ny)]
-                                                best_pos = (step_dx, step_dy)
-                                    if best_pos:"""
+                if getattr(entity, 'is_cooperative', False) and entity.energy > entity.max_energy * 0.6:"""
+content = content.replace(target_behavior_search, target_behavior_replace)
 
-content = content.replace(old_scent_loop, new_scent_loop)
-
-
-with open('src/universe/engine.py', 'w') as f:
+with open("src/universe/engine.py", "w") as f:
     f.write(content)

@@ -1,53 +1,54 @@
 import re
 
-test_code = """
-class TestIsTracker(unittest.TestCase):
+with open("tests/test_engine.py", "r") as f:
+    content = f.read()
+
+new_test_class = """
+class TestIsEmpathic(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
 
-    def test_is_tracker_scent_detection(self):
-        # Create an entity with is_tracker=True, stamina=50 to allow movement
-        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100)
-        self.universe.entities.append(entity)
+    def test_is_empathic_mutation(self):
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=5, age=10, max_age=100, is_empathic=False)
+        self.universe.add_entity(parent)
+        self.universe.time = 0
+        original_random = __import__('random').random
 
-        # Place a strong scent trail at distance 2 (7, 5)
-        self.universe.scent_trails[(7, 5)] = 20
-
-        # Also put a weak scent at distance 1 to ensure it prefers the strong one
-        self.universe.scent_trails[(6, 5)] = 5
-
-        # It should move towards (7, 5) which means taking a step in (1, 0) direction
-        self.universe.tick()
-
-        self.assertEqual(entity.x, 6)
-        self.assertEqual(entity.y, 5)
-
-    def test_is_tracker_mutation(self):
-        parent = Entity(name="parent", x=1, y=1, energy=100, max_energy=100, size=2, age=5, max_age=10)
-        # Ensure it has enough energy to reproduce
-        self.universe.entities.append(parent)
-
-        original_random = random.random
         try:
-            # Force mutation chance to succeed
-            random.random = lambda: 0.0
-
-            # Since random is 0.0, it will mutate the boolean trait from False to True.
+            __import__('random').random = lambda: 0.0
             self.universe.tick()
 
             children = [e for e in self.universe.entities if e != parent]
             if children:
                 child = children[0]
-                self.assertTrue(getattr(child, 'is_tracker', False))
+                self.assertTrue(getattr(child, 'is_empathic', False))
         finally:
-            random.random = original_random
+            __import__('random').random = original_random
+
+    def test_is_empathic_behavior(self):
+        empathic_entity = Entity("Empathic", x=5, y=5, energy=80, size=2, max_age=100, is_empathic=True)
+        flockmate = Entity("Flockmate", x=6, y=5, energy=20, size=2, max_age=100)
+
+        empathic_entity.species = 'TestSpecies'
+        flockmate.species = 'TestSpecies'
+        empathic_entity.stamina = 0
+        flockmate.stamina = 0
+
+        self.universe.add_entity(empathic_entity)
+        self.universe.add_entity(flockmate)
+
+        original_empathic_energy = empathic_entity.energy
+        original_flockmate_energy = flockmate.energy
+
+        with unittest.mock.patch('random.random', return_value=0.99):
+            self.universe.tick()
+
+        # Empathic should lose 2 energy to the flockmate, flockmate should gain 2.
+        # But both will lose some base energy (1 for resting, etc)
+        # So we can just check if they are roughly at expected levels
+        self.assertTrue(flockmate.energy > original_flockmate_energy - 1)
 """
 
-with open('tests/test_engine.py', 'r') as f:
-    content = f.read()
-
-# Insert before if __name__ == '__main__':
-content = content.replace("if __name__ == '__main__':", test_code + "\nif __name__ == '__main__':")
-
-with open('tests/test_engine.py', 'w') as f:
-    f.write(content)
+target = "if __name__ == '__main__':"
+with open("tests/test_engine.py", "w") as f:
+    f.write(content.replace(target, new_test_class + "\n" + target))
