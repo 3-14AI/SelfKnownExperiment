@@ -520,3 +520,12 @@ Implemented the `is_sure_footed` trait. Entities with this trait are immune to s
 - Assigned the visual character `▽` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
 - Added the `TestIsSureFooted` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the specific stamina drain immunity.
 - Added `is_sure_footed` to the 'Completed' section of `agents.md`.
+
+
+### Analysis 214: Bloodthirsty Trait
+**Overview:** Implemented the `is_bloodthirsty` trait for entities.
+**Details:** Entities with this trait recover 20 stamina whenever they successfully hunt and eat a prey.
+
+### Analysis 215: Sun Tracker Trait
+**Overview:** Implemented the `is_sun_tracker` trait for entities.
+**Details:** Entities with this trait gain an energy bonus during the day if they are standing on clear terrain (not a shelter or ash), allowing them to passively absorb sunlight.
