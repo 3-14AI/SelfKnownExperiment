@@ -287,6 +287,8 @@ class CLIVisualizer:
                         char = 'ñ'
                     elif getattr(entity, 'is_arboreal', False):
                         char = '♣'
+                    elif getattr(entity, 'is_dust_bather', False):
+                        char = 'β'
                     else:
                         char = 'E'
 

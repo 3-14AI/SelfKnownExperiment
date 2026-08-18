@@ -529,3 +529,16 @@ Implemented the `is_sure_footed` trait. Entities with this trait are immune to s
 ### Analysis 215: Sun Tracker Trait
 **Overview:** Implemented the `is_sun_tracker` trait for entities.
 **Details:** Entities with this trait gain an energy bonus during the day if they are standing on clear terrain (not a shelter or ash), allowing them to passively absorb sunlight.
+
+
+### Analysis 216: Dust Bather Trait
+**Overview:**
+Implemented the `is_dust_bather` trait. Entities with this trait can cure their infections by standing on ash or sand terrain.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_dust_bather` flag.
+- Updated `Universe.tick()` to allow `is_dust_bather` to be inherited and mutated during reproduction.
+- Updated the execution block in `Universe.tick()` to cure `is_infected` status if an entity with `is_dust_bather` is on `ash` or `sand` terrain.
+- Assigned the visual character `β` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
+- Added the `TestIsDustBather` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the infection-curing mechanics.
+- Added `is_dust_bather` to the 'Completed' section of `agents.md`.
