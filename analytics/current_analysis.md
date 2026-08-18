@@ -542,3 +542,17 @@ Implemented the `is_dust_bather` trait. Entities with this trait can cure their 
 - Assigned the visual character `β` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
 - Added the `TestIsDustBather` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the infection-curing mechanics.
 - Added `is_dust_bather` to the 'Completed' section of `agents.md`.
+
+
+### Analysis 217: Magnetic Trait
+**Overview:**
+Implemented the `is_magnetic` trait. Entities with this trait draw power from magnetic storms, gaining 5 energy and 10 stamina each tick during the 'storm' event.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_magnetic` flag.
+- Updated `Universe.tick()` to allow `is_magnetic` to be inherited and mutated during reproduction.
+- Updated the environmental event execution block in `Universe.tick()` to apply energy and stamina bonuses when `self.current_event == 'storm'`.
+- Assigned the visual character `⚡` to represent this trait in `src/universe/visualizer.py`.
+- Added the `TestIsMagnetic` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the storm bonuses.
+- Also added missing dedicated tests for `is_farsighted` and `is_pacifist`.
+- Added `is_magnetic` to the 'Completed' section of `agents.md`.

@@ -10704,3 +10704,123 @@ class TestIsSureFooted(unittest.TestCase):
         self.assertGreater(len(children), 0)
         # With random=0.0, mutation_chance is 0.05, so mutation will happen (0.0 < 0.05)
         self.assertFalse(children[0].is_sure_footed)
+
+
+class TestIsMagnetic(unittest.TestCase):
+    def test_is_magnetic_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=2, is_magnetic=False)
+        universe = Universe(width=10, height=10)
+        universe.add_entity(parent)
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.001
+            universe.tick()
+
+            children = [e for e in universe.entities if e != parent]
+            self.assertTrue(len(children) > 0)
+            child = children[0]
+
+            self.assertTrue(getattr(child, 'is_magnetic', False))
+        finally:
+            random.random = original_random
+
+    def test_is_magnetic_bonus(self):
+        entity = Entity(name="Magnetic", x=1, y=1, energy=40, max_stamina=50, stamina=10, size=1, is_magnetic=True)
+        control = Entity(name="Control", x=2, y=2, energy=40, max_stamina=50, stamina=10, size=1, is_magnetic=False)
+        universe = Universe(width=10, height=10)
+        universe.add_entity(entity)
+        universe.add_entity(control)
+
+        universe.current_event = 'storm'
+        universe.event_remaining_time = 5
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.5
+            universe.tick()
+
+            self.assertEqual(entity.energy, control.energy + 5)
+            self.assertEqual(entity.stamina, control.stamina + 10)
+        finally:
+            random.random = original_random
+
+
+class TestIsFarsighted(unittest.TestCase):
+    def test_is_farsighted_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=100, is_farsighted=False)
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.add_entity(parent)
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.01
+            universe.tick()
+
+            children = [e for e in universe.entities if e != parent]
+            self.assertTrue(len(children) > 0)
+            child = children[0]
+
+            self.assertTrue(getattr(child, 'is_farsighted', False))
+        finally:
+            random.random = original_random
+
+    def test_is_farsighted_effect(self):
+        entity = Entity(name="Farsighted", x=5, y=5, energy=40, max_stamina=50, stamina=10, size=1, perception_radius=3, is_farsighted=True)
+        universe = Universe(width=20, height=20)
+        universe.add_entity(entity)
+
+        from src.universe.engine import Terrain
+        universe.add_terrain(Terrain(x=5, y=11, terrain_type='wall'))
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.5
+            universe.tick()
+
+            self.assertIn((5, 11), entity.memory)
+        finally:
+            random.random = original_random
+
+class TestIsPacifist(unittest.TestCase):
+    def test_is_pacifist_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=100, is_pacifist=False)
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.add_entity(parent)
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.01
+            universe.tick()
+
+            children = [e for e in universe.entities if e != parent]
+            self.assertTrue(len(children) > 0)
+            child = children[0]
+
+            self.assertTrue(getattr(child, 'is_pacifist', False))
+        finally:
+            random.random = original_random
+
+    def test_is_pacifist_effect(self):
+        predator = Entity(name="Predator", x=1, y=1, energy=10, max_stamina=50, stamina=10, size=1, diet='carnivore', target_species=['PreySpecies'], is_pacifist=True)
+        prey = Entity(name="Prey", x=2, y=1, energy=40, max_stamina=50, stamina=10, size=1, species='PreySpecies')
+        universe = Universe(width=10, height=10)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.5
+            universe.tick()
+
+            self.assertTrue(prey.is_alive)
+        finally:
+            random.random = original_random

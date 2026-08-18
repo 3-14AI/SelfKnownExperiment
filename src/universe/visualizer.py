@@ -289,6 +289,8 @@ class CLIVisualizer:
                         char = '♣'
                     elif getattr(entity, 'is_dust_bather', False):
                         char = 'β'
+                    elif getattr(entity, 'is_magnetic', False):
+                        char = '⚡'
                     else:
                         char = 'E'
 
