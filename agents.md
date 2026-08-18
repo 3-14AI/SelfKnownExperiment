@@ -215,3 +215,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_sun_tracker` trait. Entities with this trait gain an energy bonus during the day if they are standing on clear terrain (not a shelter or ash), allowing them to passively absorb sunlight.
 - [x] Implemented `is_hypnotic` trait. Entities with this trait halve the effective attack of their predators during combat.
 - [x] Implemented `is_empathic` trait. Entities with this trait transfer 2 energy to an adjacent flockmate if the flockmate's energy is below 30% of its maximum and the empathic entity has more than 50% of its maximum energy.
+- [x] Implemented `is_contagious` trait. Entities with this trait transmit their infection to any entity they engage in combat with, regardless of who initiated the attack or if the prey was eaten.

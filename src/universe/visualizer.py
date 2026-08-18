@@ -279,6 +279,8 @@ class CLIVisualizer:
                         char = '•'
                     elif getattr(entity, 'is_tracker', False):
                         char = '↬'
+                    elif getattr(entity, 'is_contagious', False):
+                        char = 'ñ'
                     else:
                         char = 'E'
 

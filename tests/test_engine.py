@@ -10465,3 +10465,56 @@ class TestIsIntrospective(unittest.TestCase):
                 self.assertTrue(getattr(child, 'is_introspective', False))
         finally:
             random.random = original_random
+
+class TestIsContagious(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_contagious_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_contagious=False, energy=100, age=5, size=2)
+        self.universe.add_entity(parent)
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0
+            self.universe.tick()
+            children = [e for e in self.universe.entities if e != parent]
+            if children:
+                child = children[0]
+                self.assertTrue(getattr(child, 'is_contagious', False))
+        finally:
+            random.random = original_random
+
+    def test_is_contagious_attacker(self):
+        attacker = Entity(name="Attacker", x=1, y=1, energy=100, attack=10, is_infected=True, is_contagious=True, diet='carnivore', size=1)
+        defender = Entity(name="Defender", x=1, y=1, energy=10, defense=1, size=1)
+        self.universe.add_entity(attacker)
+        self.universe.add_entity(defender)
+
+        # Manually force combat and track infection
+        self.universe.tick()
+
+        self.assertTrue(getattr(defender, 'is_infected', False))
+        self.assertTrue(getattr(defender, 'infection_time', -1) >= 0)
+
+    def test_is_contagious_defender(self):
+        attacker = Entity(name="Attacker", x=1, y=1, energy=100, attack=10, diet='carnivore', size=1)
+        defender = Entity(name="Defender", x=1, y=1, energy=10, defense=1, is_infected=True, is_contagious=True, size=1)
+        self.universe.add_entity(attacker)
+        self.universe.add_entity(defender)
+
+        self.universe.tick()
+
+        self.assertTrue(getattr(attacker, 'is_infected', False))
+        self.assertTrue(getattr(attacker, 'infection_time', -1) >= 0)
+
+    def test_is_contagious_immunity(self):
+        attacker = Entity(name="Attacker", x=1, y=1, energy=100, attack=10, is_infected=True, is_contagious=True, diet='carnivore', size=1)
+        defender = Entity(name="Defender", x=1, y=1, energy=10, defense=1, is_immune=True, size=1)
+        self.universe.add_entity(attacker)
+        self.universe.add_entity(defender)
+
+        self.universe.tick()
+
+        self.assertFalse(getattr(defender, 'is_infected', False))
