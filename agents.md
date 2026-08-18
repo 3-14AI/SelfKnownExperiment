@@ -217,3 +217,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_empathic` trait. Entities with this trait transfer 2 energy to an adjacent flockmate if the flockmate's energy is below 30% of its maximum and the empathic entity has more than 50% of its maximum energy.
 - [x] Implemented `is_contagious` trait. Entities with this trait transmit their infection to any entity they engage in combat with, regardless of who initiated the attack or if the prey was eaten.
 - [x] Implemented `is_arboreal` trait. Entities with this trait treat `forest` terrain as a shelter, gaining increased defense and energy recovery while stationed there.
+- [x] Implemented `is_stargazer` trait. Entities with this trait gain an energy bonus and extra stamina recovery on clear nights.

@@ -232,6 +232,8 @@ class CLIVisualizer:
                         char = 'o'
                     elif getattr(entity, 'is_sunbather', False):
                         char = '#'
+                    elif getattr(entity, 'is_stargazer', False):
+                        char = '✧'
                     elif getattr(entity, 'is_photosensitive', False):
                         char = '!'
                     elif getattr(entity, 'is_thief', False):
