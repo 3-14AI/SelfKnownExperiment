@@ -7379,6 +7379,70 @@ class TestIsEmpathic(unittest.TestCase):
         # So we can just check if they are roughly at expected levels
         self.assertTrue(flockmate.energy > original_flockmate_energy - 1)
 
+
+
+class TestIsArboreal(unittest.TestCase):
+    def test_is_arboreal_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=2, is_arboreal=False)
+        universe = Universe(width=10, height=10)
+        universe.add_entity(parent)
+
+        # Force reproduction conditions
+        universe.time = parent.size
+
+        # Test mutation turning it ON
+        with patch('random.random', return_value=0.0): # Force mutation
+            universe.tick()
+            children = [e for e in universe.entities if e != parent]
+            if children:
+                child = children[0]
+                self.assertTrue(getattr(child, 'is_arboreal', False))
+
+    def test_is_arboreal_energy_recovery(self):
+        # Setup universe with forest terrain
+        universe = Universe(width=5, height=5)
+        universe.add_terrain(Terrain(x=2, y=2, terrain_type='forest'))
+
+        arboreal = Entity(name="Arboreal", x=2, y=2, energy=50, is_arboreal=True, size=2)
+        regular = Entity(name="Regular", x=2, y=2, energy=50, is_arboreal=False, size=2)
+
+        universe.add_entity(arboreal)
+        universe.add_entity(regular)
+
+        # Force tick execution
+        universe.time = 2
+        universe.tick()
+
+        # Arboreal should have lost less energy due to 'in_shelter' (loss = size instead of 2 * size)
+        self.assertGreater(arboreal.energy, regular.energy)
+
+    def test_is_arboreal_defense(self):
+        # Setup universe with forest terrain
+        universe = Universe(width=5, height=5)
+        universe.add_terrain(Terrain(x=2, y=2, terrain_type='forest'))
+
+        # Attacker with high attack
+        attacker = Entity(name="Attacker", x=2, y=2, energy=100, attack=50, diet='carnivore', size=1)
+
+        # Defenseless arboreal
+        defender = Entity(name="Defender", x=2, y=2, energy=100, defense=0, is_arboreal=True, size=1)
+
+        universe.add_entity(attacker)
+        universe.add_entity(defender)
+
+        # Force combat to occur
+        universe.time = 1
+
+        # Without arboreal on forest, effective_defense = 0.
+        # With arboreal on forest, prey_in_shelter adds +3 effective_defense.
+        # Mock random to guarantee escape ONLY IF defense > 0.
+        # escape_chance = defense / (attack + defense) = 3 / 53 ~ 0.056
+        with patch('random.random', return_value=0.05):
+            universe.tick()
+
+        self.assertTrue(defender.is_alive)
+        self.assertTrue(defender.is_alive) # Defender survived combat
+
 if __name__ == '__main__':
 
 
