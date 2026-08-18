@@ -484,3 +484,15 @@ Implemented the `is_contagious` trait. Entities with this trait transmit their i
 - Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to enforce transmission logic: if the attacker is infected and contagious, the defender becomes infected (unless immune); and if the defender is infected and contagious, the attacker becomes infected (unless immune).
 - Assigned the visual character `ñ` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
 - Added a `TestIsContagious` class to `tests/test_engine.py` with 4 dedicated tests (`test_is_contagious_mutation`, `test_is_contagious_attacker`, `test_is_contagious_defender`, `test_is_contagious_immunity`) to fully verify the expected transmission logic and immunity interactions.
+
+### Analysis 211: Arboreal Trait
+**Overview:**
+Implemented the `is_arboreal` trait. Entities with this trait gain a natural affinity for forest environments, treating them as shelters.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_arboreal` flag.
+- Updated `Universe.tick()` to allow `is_arboreal` to be inherited and mutated during reproduction.
+- Updated the `in_shelter` definition in `Universe.tick()` to evaluate to `True` for arboreal entities stationed on `forest` terrain, reducing their per-tick energy loss dynamically.
+- Updated `prey_in_shelter` calculations within both the tracking and collision combat blocks in `Universe.tick()` to grant arboreal entities on `forest` terrain a flat +3 effective defense bonus.
+- Assigned the visual character `♣` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
+- Added the `TestIsArboreal` class to `tests/test_engine.py` to verify trait inheritance, energy recovery mechanics, and combat defense bonuses.
