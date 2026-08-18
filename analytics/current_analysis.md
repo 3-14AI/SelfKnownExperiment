@@ -472,3 +472,15 @@ The `is_empathic` trait has been implemented, introducing a cooperative resource
 - **Cost:** The empathic entity sacrifices 2 of its own energy to perform this transfer, provided its energy is above 50% of its maximum capacity.
 - **Selective Advantage:** This trait increases the overall survivability of a species cluster by preventing starvation in vulnerable individuals, buffering against localized food scarcity or severe energy drains, and extending the operational longevity of the flock as a whole.
 - **Integration:** The trait is successfully integrated into reproduction logic, meaning it can be inherited or spontaneously mutated. Visualized by the '±' character.
+
+### Analysis 210: Contagious Trait
+**Overview:**
+Implemented the `is_contagious` trait. Entities with this trait transmit their infection to any entity they engage in combat with, regardless of who initiated the attack or if the prey was eaten.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_contagious` flag.
+- Added inheritance and mutation logic for `is_contagious` in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
+- Updated the reproduction child creation code in `Universe.tick()` to pass the `is_contagious` parameter correctly.
+- Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to enforce transmission logic: if the attacker is infected and contagious, the defender becomes infected (unless immune); and if the defender is infected and contagious, the attacker becomes infected (unless immune).
+- Assigned the visual character `ñ` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added a `TestIsContagious` class to `tests/test_engine.py` with 4 dedicated tests (`test_is_contagious_mutation`, `test_is_contagious_attacker`, `test_is_contagious_defender`, `test_is_contagious_immunity`) to fully verify the expected transmission logic and immunity interactions.
