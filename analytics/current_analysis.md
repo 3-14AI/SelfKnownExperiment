@@ -496,3 +496,15 @@ Implemented the `is_arboreal` trait. Entities with this trait gain a natural aff
 - Updated `prey_in_shelter` calculations within both the tracking and collision combat blocks in `Universe.tick()` to grant arboreal entities on `forest` terrain a flat +3 effective defense bonus.
 - Assigned the visual character `♣` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
 - Added the `TestIsArboreal` class to `tests/test_engine.py` to verify trait inheritance, energy recovery mechanics, and combat defense bonuses.
+
+### Analysis 212: Stargazer Trait
+**Overview:**
+Implemented the `is_stargazer` trait. Entities with this trait gain an energy bonus and extra stamina recovery on clear nights.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_stargazer` flag.
+- Added inheritance and mutation logic for `is_stargazer` in `Universe.tick()`, allowing offspring to inherit or mutate the trait.
+- Updated energy and stamina logic in `Universe.tick()` to grant +1 energy and +2 stamina recovery per tick on clear nights (when `self.is_night` is true and `self.current_event` is None).
+- Assigned the visual character `✧` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added the `TestIsStargazer` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the specific conditional energy and stamina bonuses.
+- Added `is_stargazer` to the 'Completed' section of `agents.md`.

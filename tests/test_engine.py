@@ -7443,6 +7443,49 @@ class TestIsArboreal(unittest.TestCase):
         self.assertTrue(defender.is_alive)
         self.assertTrue(defender.is_alive) # Defender survived combat
 
+
+class TestIsStargazer(unittest.TestCase):
+    def test_is_stargazer_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=2, is_stargazer=False)
+        universe = Universe(width=10, height=10)
+        universe.add_entity(parent)
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.001
+            universe.tick()
+
+            children = [e for e in universe.entities if e != parent]
+            self.assertTrue(len(children) > 0)
+            child = children[0]
+
+            self.assertTrue(getattr(child, 'is_stargazer', False))
+        finally:
+            random.random = original_random
+
+    def test_is_stargazer_bonus(self):
+        entity = Entity(name="Stargazer", x=1, y=1, energy=40, max_stamina=50, stamina=10, size=1, is_stargazer=True)
+        control_entity = Entity(name="Control", x=2, y=2, energy=40, max_stamina=50, stamina=10, size=1, is_stargazer=False)
+        universe = Universe(width=10, height=10)
+        universe.add_entity(entity)
+        universe.add_entity(control_entity)
+
+        # Make it night and clear
+        universe.time = universe.day_length // 2  # Trigger night
+        universe.current_event = None
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.5  # No events, no reproduction
+            universe.tick()
+
+            # Stargazer should have 1 more energy and 2 more stamina than control
+            self.assertEqual(entity.energy, control_entity.energy + 1)
+            self.assertEqual(entity.stamina, control_entity.stamina + 2)
+        finally:
+            random.random = original_random
 if __name__ == '__main__':
 
 
