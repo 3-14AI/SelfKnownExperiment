@@ -7488,7 +7488,47 @@ class TestIsStargazer(unittest.TestCase):
             self.assertEqual(entity.stamina, control_entity.stamina + 2)
         finally:
             random.random = original_random
+
+class TestIsDustBather(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_dust_bather_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_dust_bather=False, energy=100, age=5, size=2)
+        self.universe.add_entity(parent)
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0
+            self.universe.tick()
+            children = [e for e in self.universe.entities if e != parent]
+            if children:
+                self.assertTrue(getattr(children[0], 'is_dust_bather', False))
+        finally:
+            random.random = original_random
+
+    def test_is_dust_bather_cures_infection(self):
+        entity1 = Entity(name="DustBather", x=1, y=1, is_dust_bather=True, is_infected=True, infection_time=5, size=1)
+        entity2 = Entity(name="NonDustBather", x=2, y=2, is_dust_bather=False, is_infected=True, infection_time=5, size=1)
+        self.universe.add_entity(entity1)
+        self.universe.add_entity(entity2)
+
+        # Add ash terrain
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='ash'))
+        self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='ash'))
+
+        self.universe.tick()
+
+        # entity1 should be cured
+        self.assertFalse(getattr(entity1, 'is_infected', False))
+        self.assertEqual(getattr(entity1, 'infection_time', 5), 0)
+
+        # entity2 should still be infected
+        self.assertTrue(getattr(entity2, 'is_infected', False))
+
 if __name__ == '__main__':
+
 
 
 
