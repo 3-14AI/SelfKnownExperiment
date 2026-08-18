@@ -7411,6 +7411,8 @@ class TestIsArboreal(unittest.TestCase):
 
         # Force tick execution
         universe.time = 2
+        universe.current_event = 'storm'
+        universe.event_remaining_time = 5
         universe.tick()
 
         # Arboreal should have lost less energy due to 'in_shelter' (loss = size instead of 2 * size)
@@ -10625,3 +10627,40 @@ class TestIsContagious(unittest.TestCase):
         self.universe.tick()
 
         self.assertFalse(getattr(defender, 'is_infected', False))
+
+
+class TestIsSureFooted(unittest.TestCase):
+    def test_is_sure_footed_earthquake_immunity(self):
+        universe = Universe()
+
+        # We need stamina > 50 so that if it recovers, we can see if it was drained first.
+        # Actually max_stamina defaults to 50 but we can pass it
+        e_sure = Entity("e1", x=5, y=5, energy=50, max_stamina=100, stamina=100, is_sure_footed=True, size=1)
+        e_not_sure = Entity("e2", x=5, y=6, energy=50, max_stamina=100, stamina=100, is_sure_footed=False, size=1)
+
+        universe.add_entity(e_sure)
+        universe.add_entity(e_not_sure)
+
+        universe.current_event = 'earthquake'
+        universe.event_remaining_time = 5
+
+        universe.tick()
+
+        # The penalty is -5.
+        self.assertGreater(e_sure.stamina, e_not_sure.stamina)
+
+    def test_is_sure_footed_mutation(self):
+        universe = Universe()
+        parent = Entity("parent", energy=100, is_sure_footed=True, size=1)
+        # Give enough energy to reproduce
+        parent.energy = 100
+
+        universe.add_entity(parent)
+
+        with patch('random.random', return_value=0.0): # Forces reproduction and mutation
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        # With random=0.0, mutation_chance is 0.05, so mutation will happen (0.0 < 0.05)
+        self.assertFalse(children[0].is_sure_footed)

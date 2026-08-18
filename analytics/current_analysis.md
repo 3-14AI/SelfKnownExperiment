@@ -508,3 +508,15 @@ Implemented the `is_stargazer` trait. Entities with this trait gain an energy bo
 - Assigned the visual character `✧` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
 - Added the `TestIsStargazer` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the specific conditional energy and stamina bonuses.
 - Added `is_stargazer` to the 'Completed' section of `agents.md`.
+
+### Analysis 213: Sure Footed Trait
+**Overview:**
+Implemented the `is_sure_footed` trait. Entities with this trait are immune to stamina drain during earthquake events.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_sure_footed` flag.
+- Updated `Universe.tick()` to allow `is_sure_footed` to be inherited and mutated during reproduction.
+- Updated the stamina logic in `Universe.tick()` to drain 5 stamina from entities without the `is_sure_footed` trait during `earthquake` events.
+- Assigned the visual character `▽` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added the `TestIsSureFooted` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the specific stamina drain immunity.
+- Added `is_sure_footed` to the 'Completed' section of `agents.md`.

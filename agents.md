@@ -218,3 +218,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_contagious` trait. Entities with this trait transmit their infection to any entity they engage in combat with, regardless of who initiated the attack or if the prey was eaten.
 - [x] Implemented `is_arboreal` trait. Entities with this trait treat `forest` terrain as a shelter, gaining increased defense and energy recovery while stationed there.
 - [x] Implemented `is_stargazer` trait. Entities with this trait gain an energy bonus and extra stamina recovery on clear nights.
+- [x] Implemented `is_sure_footed` trait. Entities with this trait are immune to stamina drain during earthquake events. Entities with this trait gain an energy bonus and extra stamina recovery on clear nights.
