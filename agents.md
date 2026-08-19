@@ -223,3 +223,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_sure_footed` trait. Entities with this trait are immune to stamina drain during earthquake events. Entities with this trait gain an energy bonus and extra stamina recovery on clear nights.
 
 - [x] Implemented `is_magnetic` trait. Entities with this trait draw power from magnetic storms, gaining 5 energy and 10 stamina each tick during the 'storm' event.
+- [x] Implemented `is_moon_bather` trait. Entities with this trait gain an energy bonus and extra stamina recovery at night when standing on clear terrain.

@@ -592,3 +592,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 224: Disease Vector Trait
 **Overview:** Implemented the `disease_vector` trait for entities.
 **Details:** scavenger entities, causing them to spread disease more rapidly when interacting with corpses.
+
+### Analysis 225: Moon Bather Trait
+**Overview:** Implemented the `is_moon_bather` trait for entities.
+**Details:** Entities with this trait gain an energy bonus and extra stamina recovery at night when standing on clear terrain.

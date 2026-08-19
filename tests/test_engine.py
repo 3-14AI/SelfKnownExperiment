@@ -7566,6 +7566,56 @@ class TestIsDroughtResistant(unittest.TestCase):
         # Control should lose 1 hydration
         self.assertEqual(control.hydration, 49)
 
+
+
+
+class TestIsMoonBather(unittest.TestCase):
+    def test_is_moon_bather_night_bonus(self):
+        universe = Universe(width=10, height=10, day_length=20)
+        universe.time = 15  # Night (15 % 20 >= 10)
+        e = Entity("MoonBather", energy=10, stamina=10, size=1, is_moon_bather=True)
+        universe.add_entity(e)
+        import unittest.mock
+        with unittest.mock.patch('random.choice', return_value=None):
+            universe.tick()
+        self.assertTrue(e.energy > 10, "is_moon_bather should grant energy bonus at night")
+        self.assertEqual(e.stamina, 17, "is_moon_bather should grant +5 stamina +2 passive recovery at night")
+
+    def test_is_moon_bather_day_no_bonus(self):
+        universe = Universe(width=10, height=10, day_length=20)
+        universe.time = 5  # Day (5 % 20 < 10)
+        e = Entity("MoonBather", energy=10, stamina=10, size=1, is_moon_bather=True)
+        universe.add_entity(e)
+        import unittest.mock
+        with unittest.mock.patch('random.choice', return_value=None):
+            universe.tick()
+        self.assertEqual(e.energy, 9, "is_moon_bather should grant no bonus during the day")
+        self.assertEqual(e.stamina, 12, "is_moon_bather should grant no bonus during the day")
+
+    def test_is_moon_bather_shelter_no_bonus(self):
+        universe = Universe(width=10, height=10, day_length=20)
+        universe.time = 15  # Night
+        universe.add_terrain(Terrain(x=0, y=0, terrain_type='shelter'))
+        e = Entity("MoonBather", x=0, y=0, energy=10, stamina=10, size=1, is_moon_bather=True)
+        universe.add_entity(e)
+        import unittest.mock
+        with unittest.mock.patch('random.choice', return_value=None):
+            universe.tick()
+        self.assertEqual(e.energy, 11, "is_moon_bather should not trigger in shelter")
+        self.assertEqual(e.stamina, 12, "is_moon_bather should not trigger in shelter")
+
+    def test_is_moon_bather_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("MoonBather", energy=50, age=10, size=1, is_moon_bather=True)
+        universe.add_entity(parent)
+        universe.mutation_chance = 1.0
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.01):
+            universe.tick()
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertFalse(getattr(children[0], 'is_moon_bather', True), "is_moon_bather should mutate and flip to False")
+
 if __name__ == '__main__':
 
 

@@ -1,7 +1,9 @@
-with open("agents.md") as f:
-    lines = f.readlines()
+import re
 
-for i in range(len(lines)-1, -1, -1):
-    if lines[i].startswith("- [x] Implemented `is_"):
-        print(lines[i].strip())
-        break
+with open('agents.md') as f:
+    text = f.read()
+
+completed_items = re.findall(r'- \[x\] Implemented `([^`]+)` trait\.', text)
+print("Last 10 completed traits:")
+for item in completed_items[-10:]:
+    print(item)
