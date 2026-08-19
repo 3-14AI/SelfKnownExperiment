@@ -596,3 +596,15 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 225: Moon Bather Trait
 **Overview:** Implemented the `is_moon_bather` trait for entities.
 **Details:** Entities with this trait gain an energy bonus and extra stamina recovery at night when standing on clear terrain.
+
+### Analysis 226: Can Hoard Trait
+**Overview:** Implemented the `can_hoard` trait for entities.
+**Details:** Entities with this trait can store food items in their inventory to consume later when hungry.
+
+### Analysis 227: Can Burrow Trait
+**Overview:** Implemented the `can_burrow` trait for entities.
+**Details:** Entities with this trait can sleep underground, treating any terrain as a shelter to hide from predators while sleeping.
+
+### Analysis 228: Is Sunbather Trait
+**Overview:** Implemented the `is_sunbather` trait for entities.
+**Details:** Entities with this trait recover extra energy and stamina during the day when the temperature is warm, but lose hydration faster.
