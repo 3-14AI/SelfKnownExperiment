@@ -234,6 +234,8 @@ class CLIVisualizer:
                         char = '#'
                     elif getattr(entity, 'is_stargazer', False):
                         char = '✧'
+                    elif getattr(entity, 'is_moon_bather', False):
+                        char = '☾'
                     elif getattr(entity, 'is_sure_footed', False):
                         char = '▽'
                     elif getattr(entity, 'is_photosensitive', False):
