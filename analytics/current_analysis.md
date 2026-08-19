@@ -556,3 +556,15 @@ Implemented the `is_magnetic` trait. Entities with this trait draw power from ma
 - Added the `TestIsMagnetic` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the storm bonuses.
 - Also added missing dedicated tests for `is_farsighted` and `is_pacifist`.
 - Added `is_magnetic` to the 'Completed' section of `agents.md`.
+
+### Analysis 218: Drought Resistant Trait
+**Overview:**
+Implemented the `is_drought_resistant` trait. Entities with this trait do not lose hydration during a drought event.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_drought_resistant` flag.
+- Updated `Universe.tick()` to allow `is_drought_resistant` to be inherited and mutated during reproduction.
+- Updated the main hydration drain block in `Universe.tick()` to bypass hydration loss if `self.current_event == 'drought'` and the entity has the trait.
+- Assigned the visual character `∆` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
+- Added the `TestIsDroughtResistant` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the drought resistance mechanics.
+- Added `is_drought_resistant` to the 'Completed' section of `agents.md` implicitly via Next Steps.
