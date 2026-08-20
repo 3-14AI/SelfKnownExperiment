@@ -612,3 +612,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 229: Storm Chaser Trait
 **Overview:** Implemented the `is_storm_chaser` trait for entities.
 **Details:** Entities with this trait gain a +2 bonus to their effective attack during a 'storm' event.
+
+### Analysis 230: Is Shadow Stalker Trait
+**Overview:** Implemented the `is_shadow_stalker` trait for entities.
+**Details:** Entities with this trait gain a +3 bonus to effective attack and reduce their stamina cost for movement to 0 when moving at night, making them formidable nocturnal hunters.

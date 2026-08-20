@@ -238,6 +238,8 @@ class CLIVisualizer:
                         char = '☾'
                     elif getattr(entity, 'is_storm_chaser', False):
                         char = '¿'
+                    elif getattr(entity, 'is_shadow_stalker', False):
+                        char = '♞'
                     elif getattr(entity, 'is_sure_footed', False):
                         char = '▽'
                     elif getattr(entity, 'is_photosensitive', False):
