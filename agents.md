@@ -229,3 +229,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_sunbather` trait. Entities with this trait recover extra energy and stamina during the day when the temperature is warm, but lose hydration faster.
 - [x] Implemented `is_storm_chaser` trait. Entities with this trait gain a flat +2 bonus to effective attack during a 'storm' event.
 - [x] Implemented `is_shadow_stalker` trait. Entities with this trait gain a +3 bonus to effective attack and reduce their stamina cost for movement to 0 when moving at night.
+- [x] Implemented `is_pyrophilic` trait. Entities with this trait gain an energy bonus and extra stamina recovery when standing on ash terrain.

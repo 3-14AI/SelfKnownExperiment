@@ -297,6 +297,8 @@ class CLIVisualizer:
                         char = 'β'
                     elif getattr(entity, 'is_magnetic', False):
                         char = '⚡'
+                    elif getattr(entity, 'is_pyrophilic', False):
+                        char = '%'
                     elif getattr(entity, 'is_drought_resistant', False):
                         char = '∆'
                     else:
