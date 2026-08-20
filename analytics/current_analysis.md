@@ -608,3 +608,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 228: Is Sunbather Trait
 **Overview:** Implemented the `is_sunbather` trait for entities.
 **Details:** Entities with this trait recover extra energy and stamina during the day when the temperature is warm, but lose hydration faster.
+
+### Analysis 229: Storm Chaser Trait
+**Overview:** Implemented the `is_storm_chaser` trait for entities.
+**Details:** Entities with this trait gain a +2 bonus to their effective attack during a 'storm' event.
