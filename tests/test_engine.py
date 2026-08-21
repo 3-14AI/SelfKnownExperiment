@@ -11158,3 +11158,71 @@ class TestIsDesperate(unittest.TestCase):
             self.assertFalse(getattr(prey, 'was_eaten', False))
         finally:
             random.random = original_random
+
+class TestIsIronWilledTrait(unittest.TestCase):
+    def test_is_iron_willed_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="Parent", x=5, y=5, energy=50, max_age=100, age=10, size=1, is_iron_willed=False)
+        universe.add_entity(parent)
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.01  # Guaranteed mutation
+            universe.tick()
+
+            children = [e for e in universe.entities if e != parent]
+            if children:
+                self.assertTrue(children[0].is_iron_willed)
+        finally:
+            random.random = original_random
+
+    def test_is_iron_willed_combat_attack(self):
+        # predator with iron_willed attacking intimidating/smelly prey
+        universe = Universe(width=10, height=10)
+        predator = Entity(name="Pred", x=5, y=5, energy=40, attack=5, defense=5, diet='carnivore', stamina=50, is_iron_willed=True, size=1)
+        prey = Entity(name="Prey", x=5, y=5, energy=40, attack=1, defense=5, is_intimidating=True, is_smelly=True, stamina=50, size=1)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # normally attack would be 5 (base) - 2 (intimidating) - 2 (smelly) = 1.
+        # with iron willed, attack remains 5.
+        # Escape chance = def / (atk + def)
+        # without iron willed: 5 / (1 + 5) = 5/6 = 0.833
+        # with iron willed: 5 / (5 + 5) = 0.5
+        import random
+        original_random = random.random
+        try:
+            # We set random.random to 0.6.
+            # If iron_willed works, escape_chance is 0.5, so 0.6 > 0.5 -> prey is eaten.
+            random.random = lambda: 0.6
+            universe.tick()
+            self.assertFalse(getattr(prey, 'was_eaten', False) == False) # should be True
+        finally:
+            random.random = original_random
+
+    def test_is_iron_willed_combat_defense(self):
+        # prey with iron willed attacked by intimidating predator
+        universe = Universe(width=10, height=10)
+        predator = Entity(name="Pred", x=5, y=5, energy=40, attack=5, defense=5, diet='carnivore', stamina=50, is_intimidating=True, size=1)
+        prey = Entity(name="Prey", x=5, y=5, energy=40, attack=1, defense=5, is_iron_willed=True, stamina=50, size=1)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # normally prey defense would be 5 - 2 = 3.
+        # with iron willed, defense remains 5.
+        # Escape chance = def / (atk + def)
+        # without iron willed: 3 / (5 + 3) = 3/8 = 0.375
+        # with iron willed: 5 / (5 + 5) = 0.5
+        import random
+        original_random = random.random
+        try:
+            # We set random.random to 0.4.
+            # If iron willed works, escape_chance is 0.5. 0.4 < 0.5 -> prey escapes.
+            random.random = lambda: 0.4
+            universe.tick()
+            self.assertFalse(getattr(prey, 'was_eaten', False))
+        finally:
+            random.random = original_random
