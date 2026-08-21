@@ -1332,3 +1332,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 232: is_iron_willed Trait
 **Overview:** Implemented the `is_iron_willed` trait for entities.
 **Details:** Entities with this trait are immune to the stat reductions caused by `is_intimidating` and `is_smelly` opponents in combat.
+
+### Analysis 233: Is Frost Walker Trait
+**Overview:** Implemented the `is_frost_walker` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving on `snow` or `ice` terrain. Added to the `Entity.__init__` and mutation logic, and updated `Universe.move_entity()` to check for this trait and terrain combination.
