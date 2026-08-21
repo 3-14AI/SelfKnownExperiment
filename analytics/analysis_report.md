@@ -1328,3 +1328,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 - Added `is_desperate` parameter to `Entity.__init__`
 - Updated child mutation and inheritance in `Universe.tick`
 - Applied +4 `effective_attack` modifier in both combat logic blocks when `is_desperate=True` and `energy` < 30% of `max_energy`.
+
+### Analysis 232: is_iron_willed Trait
+**Overview:** Implemented the `is_iron_willed` trait for entities.
+**Details:** Entities with this trait are immune to the stat reductions caused by `is_intimidating` and `is_smelly` opponents in combat.
