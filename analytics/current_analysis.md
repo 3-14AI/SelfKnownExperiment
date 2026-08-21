@@ -620,3 +620,10 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 231: Is Pyrophilic Trait
 **Overview:** Implemented the `is_pyrophilic` trait for entities.
 **Details:** Entities with this trait gain an energy bonus and extra stamina recovery when standing on ash terrain.
+
+### Analysis 96: is_desperate Trait
+**Overview:** Implemented the `is_desperate` trait which gives a +4 attack bonus when energy is <30%.
+**Details:**
+- Added `is_desperate` parameter to `Entity.__init__`
+- Updated child mutation and inheritance in `Universe.tick`
+- Applied +4 `effective_attack` modifier in both combat logic blocks when `is_desperate=True` and `energy` < 30% of `max_energy`.
