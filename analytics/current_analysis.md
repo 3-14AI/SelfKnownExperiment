@@ -620,3 +620,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 231: Is Pyrophilic Trait
 **Overview:** Implemented the `is_pyrophilic` trait for entities.
 **Details:** Entities with this trait gain an energy bonus and extra stamina recovery when standing on ash terrain.
+
+### Analysis 232: Mud Camouflaged Trait
+**Overview:** Implemented the `is_mud_camouflaged` trait for entities.
+**Details:** Entities with this trait gain a +0.5 camouflage bonus when standing on mud terrain, effectively hiding them from predators and prey.
