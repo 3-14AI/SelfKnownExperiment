@@ -987,3 +987,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 233: Is Frost Walker Trait
 **Overview:** Implemented the `is_frost_walker` trait for entities.
 **Details:** Entities with this trait consume 0 stamina when moving on `snow` or `ice` terrain. Added to the `Entity.__init__` and mutation logic, and updated `Universe.move_entity()` to check for this trait and terrain combination.
+
+### Analysis 234: Marsh Strider Trait
+**Overview:** Implemented the `is_marsh_strider` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving on `mud` terrain and gain +2 effective defense during combat when standing on `mud`. Added to `Entity.__init__`, mutation logic, `Universe.move_entity()`, and the two combat logic blocks.
