@@ -6920,6 +6920,9 @@ class TestIsForager(unittest.TestCase):
     def test_is_forager_eating_meat(self, mock_random):
         from src.universe.engine import Entity, Food
 
+        self.universe.entities = []
+        self.universe.terrains = []
+
         e1 = Entity("ForagerCarnivore", x=0, y=0, is_forager=True, diet='carnivore', size=1, age=0, max_age=100, stamina=0, max_stamina=0)
         e1.energy = 10
         self.universe.entities.append(e1)
@@ -7515,6 +7518,8 @@ class TestIsDustBather(unittest.TestCase):
             random.random = original_random
 
     def test_is_dust_bather_cures_infection(self):
+        self.universe.entities = []
+        self.universe.terrains = []
         entity1 = Entity(name="DustBather", x=1, y=1, is_dust_bather=True, is_infected=True, infection_time=5, size=1)
         entity2 = Entity(name="NonDustBather", x=2, y=2, is_dust_bather=False, is_infected=True, infection_time=5, size=1)
         self.universe.add_entity(entity1)
@@ -7524,7 +7529,12 @@ class TestIsDustBather(unittest.TestCase):
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='ash'))
         self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='ash'))
 
+        self.universe.time = 0
+
         self.universe.tick()
+
+        self.assertFalse(entity1.is_infected)
+        self.assertTrue(entity2.is_infected)
 
         # entity1 should be cured
         self.assertFalse(getattr(entity1, 'is_infected', False))
@@ -11315,3 +11325,57 @@ class TestIsMarshStriderLogic(unittest.TestCase):
             self.assertFalse(getattr(prey, 'was_eaten', False))
         finally:
             random.random = original_random
+
+class TestIsDuneWalkerTrait(unittest.TestCase):
+    def test_is_dune_walker_stamina_cost(self):
+        # Entity with is_dune_walker=True should consume 0 stamina when moving on sand
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="dune_walker", x=0, y=0, size=1, is_dune_walker=True, stamina=50)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='sand'))
+
+        # Ensure it moves to (1,0) by adding food there
+        food = Food(x=1, y=0, energy=10, plant_type='generic')
+        universe.add_food(food)
+
+        # Tick to process movement
+        universe.tick()
+
+        # Check stamina consumption. Base cost is 1, but should be 0 here.
+        # It may also lose passive stamina, but we are primarily testing move cost.
+        # We can test movement cost explicitly by calling move_entity
+
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="dune_walker", x=0, y=0, size=1, is_dune_walker=True, stamina=50)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='sand'))
+
+        universe.move_entity(entity, 1, 0)
+
+        self.assertEqual(entity.stamina, 50)
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 0)
+
+        # Entity without is_dune_walker=True should consume stamina
+        entity2 = Entity(name="normal", x=0, y=1, size=1, is_dune_walker=False, stamina=50)
+        universe.add_entity(entity2)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='sand'))
+        universe.move_entity(entity2, 1, 1)
+
+        self.assertTrue(entity2.stamina < 50)
+
+    @mock.patch('random.random', return_value=0.01)
+    def test_is_dune_walker_mutation(self, mock_random):
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, energy=200, age=10, size=1, is_dune_walker=False)
+        universe.add_entity(parent)
+
+        universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+
+        mutated_child = children[0]
+        self.assertTrue(mutated_child.is_dune_walker)

@@ -991,3 +991,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 234: Marsh Strider Trait
 **Overview:** Implemented the `is_marsh_strider` trait for entities.
 **Details:** Entities with this trait consume 0 stamina when moving on `mud` terrain and gain +2 effective defense during combat when standing on `mud`. Added to `Entity.__init__`, mutation logic, `Universe.move_entity()`, and the two combat logic blocks.
+
+### Analysis 235: Dune Walker Trait
+**Overview:** Implemented the `is_dune_walker` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving on `sand` terrain. Added to `Entity.__init__`, mutation logic, and `Universe.move_entity()`.
