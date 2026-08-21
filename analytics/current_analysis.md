@@ -983,3 +983,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 99: Lucky Trait
 **Overview:** Implemented the `lucky` trait for entities.
 **Details:** Entities with this trait have a 10% higher chance to completely avoid being eaten or attacked and successfully escape combat.
+
+### Analysis 233: Is Frost Walker Trait
+**Overview:** Implemented the `is_frost_walker` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving on `snow` or `ice` terrain. Added to the `Entity.__init__` and mutation logic, and updated `Universe.move_entity()` to check for this trait and terrain combination.
