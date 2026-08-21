@@ -995,3 +995,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 235: Dune Walker Trait
 **Overview:** Implemented the `is_dune_walker` trait for entities.
 **Details:** Entities with this trait consume 0 stamina when moving on `sand` terrain. Added to `Entity.__init__`, mutation logic, and `Universe.move_entity()`.
+
+### Analysis 236: Water Strider Trait
+**Overview:** Implemented the `is_water_strider` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving on `water` terrain and can walk on `water` (treated as passable). Added to `Entity.__init__`, mutation logic, `Universe.is_passable()`, and `Universe.move_entity()`. Also ensured pathfinding and `get_terrains_at` usages treat it properly.

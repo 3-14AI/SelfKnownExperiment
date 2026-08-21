@@ -11379,3 +11379,49 @@ class TestIsDuneWalkerTrait(unittest.TestCase):
 
         mutated_child = children[0]
         self.assertTrue(mutated_child.is_dune_walker)
+
+class TestIsWaterStrider(unittest.TestCase):
+    def test_is_water_strider_passable(self):
+        universe = Universe(width=10, height=10)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='water'))
+        universe.add_terrain(Terrain(x=2, y=2, terrain_type='deep-water'))
+
+        entity = Entity(name="strider", x=0, y=1, size=1, is_water_strider=True, stamina=50)
+        universe.add_entity(entity)
+
+        # Should be able to move to water
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 1)
+        self.assertEqual(entity.stamina, 50)
+
+        # Should NOT be able to move to deep-water
+        with self.assertRaises(ValueError):
+            universe.move_entity(entity, 1, 1)
+
+    def test_is_water_strider_not_passable(self):
+        universe = Universe(width=10, height=10)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='water'))
+
+        entity = Entity(name="strider", x=0, y=1, size=1, is_water_strider=False, stamina=50)
+        universe.add_entity(entity)
+
+        # Should NOT be able to move to water
+        with self.assertRaises(ValueError):
+            universe.move_entity(entity, 1, 0)
+
+    @mock.patch('random.random', return_value=0.01)
+    def test_is_water_strider_mutation(self, mock_random):
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, energy=200, age=10, size=1, is_water_strider=False)
+        universe.add_entity(parent)
+
+        universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+
+        mutated_child = children[0]
+        self.assertTrue(mutated_child.is_water_strider)
