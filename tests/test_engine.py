@@ -11556,3 +11556,33 @@ class TestIsWindGlider(unittest.TestCase):
         children = [e for e in self.universe.entities if e.name != 'parent']
         self.assertTrue(len(children) > 0)
         self.assertTrue(children[0].is_wind_glider)
+
+class TestIsForestWalker(unittest.TestCase):
+    def test_is_forest_walker_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        # energy >= max_energy * 0.8 is usually required to reproduce. Size 1 -> max 50. Let's give energy 50.
+        # Wait, the parent must move or act in tick to reproduce. Let's make sure it can reproduce.
+        parent = Entity(name="parent", x=5, y=5, energy=100, age=10, size=1, is_forest_walker=False)
+        universe.add_entity(parent)
+
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if "child" in e.name]
+        self.assertTrue(len(children) > 0)
+        for child in children:
+            self.assertTrue(getattr(child, 'is_forest_walker', False))
+
+    def test_is_forest_walker_stamina(self):
+        universe = Universe(width=10, height=10)
+        universe.terrains = []
+        universe.add_terrain(Terrain(x=5, y=5, terrain_type='forest'))
+        universe.add_terrain(Terrain(x=6, y=5, terrain_type='forest'))
+
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_forest_walker=True)
+        universe.add_entity(entity)
+
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50)
