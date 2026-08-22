@@ -1340,3 +1340,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 235: Dune Walker Trait
 **Overview:** Implemented the `is_dune_walker` trait for entities.
 **Details:** Entities with this trait consume 0 stamina when moving on `sand` terrain. Added to `Entity.__init__`, mutation logic, and `Universe.move_entity()`.
+
+### Analysis 237: Web Walker Trait
+**Overview:** Implemented the `is_web_walker` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving on `web` terrain and are immune to having their stamina set to 0 by webs. Added to `Entity.__init__`, mutation logic, and `Universe.move_entity()`.
