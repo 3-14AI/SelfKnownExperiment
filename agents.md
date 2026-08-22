@@ -242,3 +242,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_web_walker` trait. Entities with this trait consume no stamina when moving on web terrain and are immune to having their stamina set to 0 by webs.
 - [x] Implemented `is_ash_walker` trait. Entities with this trait consume no stamina when moving on ash terrain.
 - [x] Implemented `is_wind_glider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event.
+- [x] Implemented `is_forest_walker` trait. Entities with this trait consume 0 stamina when moving on forest terrain.
