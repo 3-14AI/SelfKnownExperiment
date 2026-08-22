@@ -11681,3 +11681,64 @@ class TestIsBlizzardGlider(unittest.TestCase):
         children = [e for e in self.universe.entities if e.name != 'parent']
         self.assertTrue(len(children) > 0)
         self.assertTrue(children[0].is_blizzard_glider)
+
+class TestIsSeismicSensitiveMutation(unittest.TestCase):
+    def test_is_seismic_sensitive_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        parent = Entity(name="parent", x=5, y=5, energy=100, max_age=50, age=10, size=1, is_seismic_sensitive=False)
+        universe.add_entity(parent)
+
+        with mock.patch('random.random', return_value=0.01):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Reproduction should occur")
+        child = children[0]
+        self.assertTrue(child.is_seismic_sensitive, "Child should have mutated is_seismic_sensitive to True")
+
+class TestIsSeismicSensitivePerception(unittest.TestCase):
+    def test_is_seismic_sensitive_perception(self):
+        universe = Universe(width=20, height=20)
+        universe.current_event = 'earthquake'
+        universe.event_remaining_time = 5
+
+        # Test entity with seismic_sensitive
+        e_sensitive = Entity(name="sensitive", x=5, y=5, size=1, energy=50, max_age=100, perception_radius=5, is_seismic_sensitive=True, diet='carnivore')
+        universe.add_entity(e_sensitive)
+
+        # Test baseline entity
+        e_normal = Entity(name="normal", x=10, y=10, size=1, energy=50, max_age=100, perception_radius=5, is_seismic_sensitive=False, diet='carnivore')
+        universe.add_entity(e_normal)
+
+        # Ensure time lines up for movement (time % size == 0)
+        universe.time = 0
+
+        # Mock get_nearest_prey to capture max_distance
+        with mock.patch.object(Universe, 'get_nearest_prey', return_value=None) as mock_get_prey:
+            # We set food to avoid eating
+            # We also need to avoid mock random interfering
+            with mock.patch('random.random', return_value=0.5):
+                universe.tick()
+
+        # Collect max_distances passed for each entity
+        sensitive_dist = None
+        normal_dist = None
+
+        for call in mock_get_prey.call_args_list:
+            args, kwargs = call
+            # get_nearest_prey(self, x, y, max_distance=None, entity=None)
+            # Usually called as: self.get_nearest_prey(entity.x, entity.y, max_distance=effective_perception, entity=entity)
+            entity_called_for = kwargs.get('entity') if 'entity' in kwargs else (args[3] if len(args) > 3 else None)
+            dist = kwargs.get('max_distance') if 'max_distance' in kwargs else (args[2] if len(args) > 2 else None)
+
+            if entity_called_for and entity_called_for.name == "sensitive":
+                sensitive_dist = dist
+            elif entity_called_for and entity_called_for.name == "normal":
+                normal_dist = dist
+
+        self.assertIsNotNone(sensitive_dist, "get_nearest_prey not called for sensitive entity")
+        self.assertIsNotNone(normal_dist, "get_nearest_prey not called for normal entity")
+
+        self.assertEqual(sensitive_dist, 5 * 3, "Sensitive entity should have 3x perception radius")
+        self.assertEqual(normal_dist, 5, "Normal entity should have baseline perception radius")

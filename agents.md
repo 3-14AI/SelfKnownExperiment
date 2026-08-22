@@ -245,3 +245,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_forest_walker` trait. Entities with this trait consume 0 stamina when moving on forest terrain.
 - [x] Implemented `is_rain_dancer` trait. Entities with this trait gain energy when they are within the radius of a 'rain' event.
 - [x] Implemented `is_blizzard_glider` trait. Entities with this trait consume 0 stamina when moving during a 'blizzard' event.
+- [x] Implemented `is_seismic_sensitive` trait. Entities with this trait have their effective perception radius tripled during an 'earthquake' event.
