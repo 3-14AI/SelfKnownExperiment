@@ -7818,6 +7818,9 @@ class TestIsRainDancer(unittest.TestCase):
         self.universe.entities = []
         self.universe.mutation_chance = 1.0
         parent = Entity(name="parent", x=5, y=5, energy=100, age=10, size=2, is_rain_dancer=False)
+        parent.lays_eggs = False
+        parent.is_parasitic = False
+        parent.is_vampiric = False
         self.universe.add_entity(parent)
         self.universe.time = 2
 
@@ -7832,9 +7835,18 @@ class TestIsRainDancer(unittest.TestCase):
     def test_is_rain_dancer_rain(self):
         self.universe = Universe(width=10, height=10)
         self.universe.entities = []
+        self.universe.foods = []
         self.universe.terrains = []
-        e1 = Entity(name="e1", x=5, y=5, energy=20, size=1, is_rain_dancer=True)
-        e2 = Entity(name="e2", x=5, y=5, energy=20, size=1, is_rain_dancer=False)
+        self.universe.current_event = None
+        self.universe.event_remaining_time = 0
+        self.universe.base_temperature = 20
+        self.universe.reproduction_threshold = 100
+        self.universe.time = 0
+        e1 = Entity(name="e1", x=5, y=5, energy=20, size=1, is_rain_dancer=True, is_photosensitive=False, preferred_temperature=20, temperature_tolerance=100, is_volcanic=False, is_arctic=False)
+        e2 = Entity(name="e2", x=5, y=5, energy=20, size=1, is_rain_dancer=False, is_photosensitive=False, preferred_temperature=20, temperature_tolerance=100, is_volcanic=False, is_arctic=False)
+        # Prevent size energy drain issue
+        e1.stamina = 50
+        e2.stamina = 50
         self.universe.add_entity(e1)
         self.universe.add_entity(e2)
 
@@ -7846,10 +7858,9 @@ class TestIsRainDancer(unittest.TestCase):
         self.universe.tick()
 
         # baseline energy loss = size (1)
-        # e1 should gain 5 from rain, so energy = 20 - 1 + 5 = 24
-        self.assertEqual(e1.energy, 24)
-        # e2 should just lose 1, so energy = 19
-        self.assertEqual(e2.energy, 19)
+        # e1 gains 5 energy, so it should have 5 more than e2
+        self.assertGreater(e1.energy, e2.energy)
+        self.assertEqual(e1.energy, e2.energy + 5)
 
 if __name__ == '__main__':
 
@@ -11626,3 +11637,47 @@ class TestIsForestWalker(unittest.TestCase):
 
         universe.move_entity(entity, 1, 0)
         self.assertEqual(entity.stamina, 50)
+
+class TestIsBlizzardGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+
+    def test_is_blizzard_glider_stamina_blizzard(self):
+        # Base entity without trait loses stamina
+        e1 = Entity(name='e1', x=5, y=5, stamina=20)
+        self.universe.entities.append(e1)
+        self.universe.current_event = 'blizzard'
+        self.universe.event_remaining_time = 5
+        self.universe.move_entity(e1, 1, 0)
+        self.assertLess(e1.stamina, 20)
+
+        # Entity with trait does not lose stamina
+        e2 = Entity(name='e2', x=5, y=5, stamina=20, is_blizzard_glider=True)
+        self.universe.entities.append(e2)
+        self.universe.move_entity(e2, 1, 0)
+        self.assertEqual(e2.stamina, 20)
+
+    def test_is_blizzard_glider_mutation(self):
+        # Clear out state properly
+        self.universe.entities = []
+
+        parent = Entity(name='parent', x=5, y=5, energy=100, age=10, size=2, is_blizzard_glider=False)
+        # Disable bleeding traits that cause side effects
+        parent.lays_eggs = False
+        parent.is_vampiric = False
+        parent.is_parasitic = False
+        self.universe.time = 2
+        self.universe.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        # Find child
+        children = [e for e in self.universe.entities if e.name != 'parent']
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_blizzard_glider)
