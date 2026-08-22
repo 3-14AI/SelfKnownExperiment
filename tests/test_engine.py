@@ -11256,7 +11256,7 @@ class TestIsFrostWalkerMutation(unittest.TestCase):
         universe.add_entity(parent)
 
         from unittest import mock
-        with mock.patch('random.random', return_value=0.01):
+        with mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         children = [e for e in universe.entities if "child" in e.name]
@@ -11287,7 +11287,7 @@ class TestIsMarshStriderMutation(unittest.TestCase):
         universe.add_entity(parent)
 
         from unittest import mock
-        with mock.patch('random.random', return_value=0.01):
+        with mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         children = [e for e in universe.entities if "child" in e.name]
@@ -11513,10 +11513,45 @@ class TestIsAshWalker(unittest.TestCase):
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
 
-        with mock.patch('random.random', return_value=0.01):
+        with mock.patch('random.random', return_value=0.0):
             self.universe.time = parent.size
             self.universe.tick()
 
         children = [e for e in self.universe.entities if e != parent]
         if children:
             self.assertTrue(children[0].is_ash_walker)
+
+class TestIsWindGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+
+    def test_is_wind_glider_stamina_storm(self):
+        # Base entity without trait loses stamina
+        e1 = Entity(name='e1', x=5, y=5, stamina=20)
+        self.universe.entities.append(e1)
+        self.universe.current_event = 'storm'
+        self.universe.event_remaining_time = 5
+        self.universe.move_entity(e1, 1, 0)
+        self.assertLess(e1.stamina, 20)
+
+        # Entity with trait does not lose stamina
+        e2 = Entity(name='e2', x=5, y=5, stamina=20, is_wind_glider=True)
+        self.universe.entities.append(e2)
+        self.universe.move_entity(e2, 1, 0)
+        self.assertEqual(e2.stamina, 20)
+
+    def test_is_wind_glider_mutation(self):
+        parent = Entity(name='parent', x=5, y=5, energy=100, age=10, size=2, is_wind_glider=False)
+        self.universe.entities.append(parent)
+        self.universe.mutation_chance = 1.0
+
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        # Find child
+        children = [e for e in self.universe.entities if e.name != 'parent']
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_wind_glider)
