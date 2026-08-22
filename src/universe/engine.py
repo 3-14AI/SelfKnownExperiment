@@ -1537,7 +1537,7 @@ class Universe:
                         child_is_web_walker = not child_is_web_walker
                         mutation_occurred = True
 
-                    if random.random() < mutation_chance * 0.1:
+                    if random.random() < mutation_chance:
                         child_is_ash_walker = not child_is_ash_walker
                         mutation_occurred = True
 
