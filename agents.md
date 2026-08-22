@@ -243,3 +243,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_ash_walker` trait. Entities with this trait consume no stamina when moving on ash terrain.
 - [x] Implemented `is_wind_glider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event.
 - [x] Implemented `is_forest_walker` trait. Entities with this trait consume 0 stamina when moving on forest terrain.
+- [x] Implemented `is_rain_dancer` trait. Entities with this trait gain energy when they are within the radius of a 'rain' event.

@@ -1016,3 +1016,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 240: Forest Walker Trait
 **Overview:** Implemented the `is_forest_walker` trait for entities.
 **Details:** Entities with this trait consume 0 stamina when moving on `forest` terrain. Added to `Entity.__init__`, mutation logic, and stamina tracking in `Universe.move_entity()`.
+
+### Analysis 241: Rain Dancer Trait
+**Overview:** Implemented the `is_rain_dancer` trait for entities.
+**Details:** Entities with this trait gain energy when they are within the radius of a 'rain' event. Added to `Entity.__init__`, mutation logic, and `Universe.tick()` rain event handling. Also added corresponding unit tests.
