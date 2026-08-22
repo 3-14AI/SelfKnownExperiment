@@ -239,3 +239,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_marsh_strider` trait. Entities with this trait consume no stamina when moving on mud terrain and gain a defense bonus while on mud.
 - [x] Implemented `is_dune_walker` trait. Entities with this trait consume no stamina when moving on sand terrain.
 - [x] Implemented `is_water_strider` trait. Entities with this trait consume no stamina when moving on water terrain and can walk on water.
+- [x] Implemented `is_web_walker` trait. Entities with this trait consume no stamina when moving on web terrain and are immune to having their stamina set to 0 by webs.
