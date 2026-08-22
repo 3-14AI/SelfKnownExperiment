@@ -1003,3 +1003,12 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 237: Web Walker Trait
 **Overview:** Implemented the `is_web_walker` trait for entities.
 **Details:** Entities with this trait consume 0 stamina when moving on `web` terrain and are immune to having their stamina set to 0 by webs. Added to `Entity.__init__`, mutation logic, and `Universe.move_entity()`.
+
+
+### Analysis 238: Ash Walker Trait
+**Overview:** Implemented the `is_ash_walker` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving on `ash` terrain.
+
+### Analysis 239: Wind Glider Trait
+**Overview:** Implemented the `is_wind_glider` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving during a 'storm' event. Added to `Entity.__init__`, mutation logic, and stamina logic in `Universe.tick()`.
