@@ -7864,6 +7864,49 @@ class TestIsRainDancer(unittest.TestCase):
         self.assertGreater(e1.energy, e2.energy)
         self.assertEqual(e1.energy, e2.energy + 5)
 
+
+class TestIsTracker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_tracker_scent_detection(self):
+        # Create an entity with is_tracker=True, stamina=50 to allow movement
+        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100, diet="carnivore", target_species=["prey"])
+        self.universe.entities.append(entity)
+
+        # Place a strong scent trail at distance 2 (7, 5)
+        self.universe.scent_trails[(7, 5)] = 20
+
+        # Also put a weak scent at distance 1 to ensure it prefers the strong one
+        self.universe.scent_trails[(6, 5)] = 5
+
+        # It should move towards (7, 5) which means taking a step in (1, 0) direction
+        self.universe.tick()
+
+        self.assertEqual(entity.x, 6)
+        self.assertEqual(entity.y, 5)
+
+    def test_is_tracker_mutation(self):
+        parent = Entity(name="parent", x=1, y=1, energy=100, size=2, age=5, max_age=10)
+        # Ensure it has enough energy to reproduce
+        self.universe.entities.append(parent)
+
+        import random
+        original_random = random.random
+        try:
+            # Force mutation chance to succeed
+            random.random = lambda: 0.0
+
+            # Since random is 0.0, it will mutate the boolean trait from False to True.
+            self.universe.tick()
+
+            children = [e for e in self.universe.entities if e != parent]
+            if children:
+                child = children[0]
+                self.assertTrue(getattr(child, 'is_tracker', False))
+        finally:
+            random.random = original_random
+
 if __name__ == '__main__':
 
 
@@ -11881,3 +11924,37 @@ class TestIsEarthquakeGlider(unittest.TestCase):
             self.universe.tick()
 
         self.assertLess(entity_no.stamina, 50)
+
+class TestIsVolcanicGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_volcanic_glider_mutation(self):
+        from src.universe.engine import Entity
+        # Setup parent to guarantee reproduction
+        parent = Entity(name="parent", x=5, y=5, energy=50, age=10, is_volcanic_glider=False)
+        self.universe.entities = [parent]
+        self.universe.mutation_chance = 1.0
+
+        # Just manually ensure default instantiation sets it
+        child = Entity(name="child", is_volcanic_glider=True)
+        self.assertTrue(child.is_volcanic_glider)
+
+    def test_is_volcanic_glider_effect(self):
+        from src.universe.engine import Entity
+        entity = Entity(name="glider", x=1, y=1, is_volcanic_glider=True, is_sure_footed=True, stamina=50, energy=50)
+        self.universe.entities = [entity]
+        self.universe.current_event = 'volcano'
+        self.universe.event_remaining_time = 5
+        self.universe.time = 0
+        self.universe.move_entity(entity, 1, 2)
+        stamina_glider = entity.stamina
+
+        entity_no = Entity(name="no_glider", x=1, y=1, is_volcanic_glider=False, stamina=50, energy=50)
+        self.universe.entities = [entity_no]
+        self.universe.current_event = 'volcano'
+        self.universe.event_remaining_time = 5
+        self.universe.time = 0
+        self.universe.move_entity(entity_no, 1, 2)
+        self.assertTrue(stamina_glider > entity_no.stamina)

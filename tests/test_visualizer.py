@@ -751,5 +751,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('€', output)
 
+    def test_render_is_volcanic_glider(self):
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=10, height=10)
+        e = Entity("VGlider", x=0, y=0, is_volcanic_glider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('∨', output)
+
 if __name__ == '__main__':
     unittest.main()

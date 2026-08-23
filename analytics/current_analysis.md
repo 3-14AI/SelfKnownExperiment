@@ -1367,3 +1367,7 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 ### Analysis 246: Seismic Sensitive Trait
 **Overview:** Implemented the `is_seismic_sensitive` trait for entities.
 **Details:** Entities with this trait have their effective perception radius tripled during an 'earthquake' event.
+
+### Analysis 247: Volcanic Glider Trait
+**Overview:** Implemented the `is_volcanic_glider` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving during a 'volcano' event. Added to `Entity.__init__`, mutation logic, and stamina tracking in `Universe.move_entity`. Assigned the visual character `∨` to represent this trait in `src/universe/visualizer.py`. Also added tests `TestIsVolcanicGlider` and `test_render_is_volcanic_glider`.
