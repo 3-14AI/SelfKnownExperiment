@@ -1,636 +1,336 @@
-### Analysis 100: Telepathic Trait
-**Overview:** Implemented the `telepathic` trait for entities.
-**Details:** Entities with this trait can broadcast predator alerts globally to all species members, bypassing normal communication radius limits.
-
-### Analysis 101: Vengeful Trait
-**Overview:** Implemented the `is_vengeful` trait for entities.
-**Details:** Entities with this trait gain permanent attack power when successfully escaping from a predator, shifting combat dynamics over time.
-
-### Analysis 102: Cautious Trait
-**Overview:** Implemented the `is_cautious` trait for entities.
-**Details:** Entities with this trait double their effective perception radius when detecting and fleeing from predators, making them significantly harder to ambush.
-
-### Analysis 103: Defensive Trait
-**Overview:** Implemented the `is_defensive` trait for entities.
-**Details:** Entities with this trait gain a flat +3 bonus to effective defense in combat, increasing their survivability against predators.
-
-### Analysis 104: Sturdy Trait
-**Overview:** Implemented the `is_sturdy` trait for entities.
-**Details:** Entities with this trait are immune to being stunned during combat, making them resilient to effects from electric entities or other stunning mechanics.
-
-### Analysis 105: Arctic Trait
-**Overview:** Implemented the `is_arctic` trait for entities.
-**Details:** Entities with this trait gain energy when on snow or ice and lose no energy during blizzards, adapting them perfectly to cold environments.
-
-### Analysis 106: Restless Trait
-**Overview:** Implemented the `is_restless` trait for entities.
-**Details:** Entities with this trait never fall asleep, even when their stamina is fully depleted, allowing them to remain constantly alert.
-
-### Analysis 107: Slippery Trait
-**Overview:** Implemented the `is_slippery` trait for entities.
-**Details:** Entities with this trait have a 50% chance to escape stamina drain from webs and avoid being eaten by carnivorous plants, offering unique defensive capabilities against environmental traps.
-
-
-### Analysis 108: Leap Trait
-**Overview:** Implemented the `can_leap` trait for entities.
-**Details:** Entities with this trait can jump over single-tile obstacles at the cost of extra stamina, enhancing their mobility in cluttered environments.
-
-### Analysis 109: Heavy Trait
-**Overview:** Implemented the `is_heavy` trait for entities.
-**Details:** Entities with this trait gain a flat +2 defense bonus but suffer increased stamina consumption during movement, trading mobility for durability.
-
-### Analysis 110: Lightweight Trait
-**Overview:** Implemented the `is_lightweight` trait for entities.
-**Details:** Entities with this trait consume less stamina during movement but suffer a flat -2 penalty to effective defense, favoring agility over resilience.
-
-### Analysis 111: Stealthy Trait
-**Overview:** Implemented the `is_stealthy` trait for entities.
-**Details:** Entities with this trait halve the effective perception radius of predators and prey trying to detect them, making them excellent ambush predators or elusive prey.
-
-### Analysis 112: Mimic Trait
-**Overview:** Implemented the `is_mimic` trait for entities.
-**Details:** Entities with this trait appear harmless at a distance and are ignored by prey unless within 2 tiles, giving them an advantage when approaching targets.
-
-### Analysis 113: Sharp Teeth Trait
-**Overview:** Implemented the `has_sharp_teeth` trait for entities.
-**Details:** Entities with this trait bypass the flat defense bonuses granted by `has_shell` and `has_scales` during combat, making them specialized hunters against armored prey.
-
-### Analysis 114: Resilient Trait
-**Overview:** Implemented the `is_resilient` trait for entities.
-**Details:** Entities with this trait recover faster from poison and stun, improving their survivability against specialized combat effects.
-
-### Analysis 115: Fearless Trait
-**Overview:** Implemented the `is_fearless` trait for entities.
-**Details:** Entities with this trait do not run away from predators.
-
-### Analysis 116: Photosensitive Trait
-**Overview:** Implemented the `is_photosensitive` trait for entities.
-**Details:** Entities with this trait suffer increased hydration loss and no stamina recovery during the day, but gain bonus stamina recovery at night.
-
-### Analysis 117: Nest Builder Trait
-**Overview:** Implemented the `is_nest_builder` trait for entities.
-**Details:** Entities with this trait can build `shelter` terrains regardless of their intelligence level, allowing them to create safe havens for themselves and their offspring.
-
-### Analysis 118: Endurance Runner Trait
-**Overview:** Implemented the `is_endurance_runner` trait for entities.
-**Details:** Entities with this trait have double the maximum stamina and recover stamina at double the normal rate.
-
-### Analysis 119: Patient Trait
-**Overview:** Implemented the `is_patient` trait for entities.
-**Details:** Entities with this trait recover double stamina when they remain stationary during a tick.
-
-### Analysis 120: Thick Skin Trait
-**Overview:** Implemented the `has_thick_skin` trait for entities.
-**Details:** Entities with this trait are immune to damage from spikes and gain extra defense when attacked by entities with claws.
-
-### Analysis 121: Opportunistic Trait
-**Overview:** Implemented the `is_opportunistic` trait for entities.
-**Details:** Entities with this trait can bypass their strict diet restrictions to eat both plants and meat when their energy falls below 25% of their maximum capacity.
-
-### Analysis 122: Strong Stomach Trait
-**Overview:** Implemented the `has_strong_stomach` trait for entities.
-**Details:** Entities with this trait are immune to toxicity from food and prey, and gain double energy when consuming meat.
-
-### Analysis 123: Frugivore Trait
-**Overview:** Implemented the `is_frugivore` trait for entities.
-**Details:** Entities with this trait get double energy from eating `fruit` food types.
-
-### Analysis 124: Cooperative Trait
-**Overview:** Implemented the `is_cooperative` trait for entities.
-**Details:** Entities with this trait share energy with struggling nearby members of the same species.
-
-### Analysis 125: Nocturnal Trait
-**Overview:** Implemented the `is_nocturnal` trait for entities.
-**Details:** Entities with this trait sleep during the day and are active at night, reversing the standard sleep cycle.
-
-### Analysis 126: Horns Trait
-**Overview:** Implemented the `has_horns` trait for entities.
-**Details:** Entities with this trait gain a +2 bonus to their effective attack and +1 to their effective defense during combat.
-
-### Analysis 127: Territorial Trait
-**Overview:** Implemented the `is_territorial` trait for entities.
-**Details:** Entities with this trait gain an attack and defense bonus during combat.
-
-### Analysis 128: Ambush Predator Trait
-**Overview:** Implemented the `is_ambush_predator` trait for entities.
-**Details:** Entities with this trait deal double damage during combat if they attack while having camouflage.
-
-### Analysis 129: Cannibalistic Trait
-**Overview:** Implemented the `is_cannibalistic` trait for entities.
-**Details:** Entities with this trait will occasionally attack and eat entities of the same species if their energy is critically low.
-
-### Analysis 130: Solitary Trait
-**Overview:** Implemented the `is_solitary` trait for entities.
-**Details:** Entities with this trait gain an energy efficiency buff when alone, but suffer an energy penalty when near other entities of the same species.
-
-### Analysis 131: Gluttonous Trait
-**Overview:** Implemented the `is_gluttonous` trait for entities.
-**Details:** Entities with this trait can overeat beyond their maximum energy capacity (up to 1.5x) but suffer increased passive energy drain.
-
-### Analysis 132: Filter Feeder Trait
-**Overview:** Implemented the `is_filter_feeder` trait for entities.
-**Details:** Aquatic entities with this trait passively gain small amounts of energy while swimming in `water` or `deep-water` terrains, simulating filter feeding.
-
-### Analysis 133: Mud Bather Trait
-**Overview:** Implemented the `is_mud_bather` trait for entities.
-**Details:** Entities with this trait recover hydration and stamina when on mud terrain.
-
-### Analysis 134: Blubber Trait
-**Overview:** Implemented the `has_blubber` trait for entities.
-**Details:** Entities with this trait have 50% more maximum energy capacity and gain enhanced cold resistance, but suffer severe energy penalties in hot environments.
-
-### Analysis 135: Sweat Trait
-**Overview:** Implemented the `can_sweat` trait for entities.
-**Details:** Entities with this trait avoid heat-based energy penalties in hot temperatures but suffer increased hydration loss.
-
-### Analysis 136: Detritivore Trait
-**Overview:** Implemented the `is_detritivore` trait for entities.
-**Details:** Entities with this trait consume `ash` and `mud` terrains directly, cleaning up the environment and recovering energy.
-
-### Analysis 137: Scentless Trait
-**Overview:** Implemented the `is_scentless` trait for entities.
-**Details:** Entities with this trait do not leave scent trails, making them harder for predators to track.
-
-### Analysis 138: Carnivorous Plant Trait
-**Overview:** Implemented the `is_carnivorous_plant` trait for entities.
-**Details:** Plants with this trait can consume small entities that move onto their tile, gaining energy and growing larger.
-
-### Analysis 139: Bioluminescence Trait
-**Overview:** Implemented the `has_bioluminescence` trait for entities.
-**Details:** Entities with this trait bypass night vision penalties for themselves, but are easily spotted by predators at night.
-
-### Analysis 140: Scales Trait
-**Overview:** Implemented the `has_scales` trait for entities.
-**Details:** Entities with this trait lose hydration at half the normal rate and receive a small flat bonus to effective defense during combat.
-
-### Analysis 141: Claws Trait
-**Overview:** Implemented the `has_claws` trait for entities.
-**Details:** Entities with this trait gain an attack bonus during combat.
-
-### Analysis 142: Cold Blooded Trait
-**Overview:** Implemented the `is_cold_blooded` trait for entities.
-**Details:** Entities with this trait gain an energy efficiency advantage in hot temperatures but suffer energy and movement penalties in cold temperatures.
-
-### Analysis 143: Shell Trait
-**Overview:** Implemented the `has_shell` trait for entities.
-**Details:** Entities with this trait gain a significant defense bonus during combat to simulate thick armor.
-
-### Analysis 144: Immune Trait
-**Overview:** Implemented the `is_immune` trait for entities.
-**Details:** Entities can now gain immunity after recovering from disease, and offspring can inherit this trait or mutate to gain it. This adds an immunological layer to natural selection.
-
-### Analysis 145: Regenerative Trait
-**Overview:** Implemented the `is_regenerative` trait for entities.
-**Details:** Entities with this trait regenerate energy at the cost of hydration.
-
-### Analysis 146: Fur Trait
-**Overview:** Implemented the `has_fur` trait for entities.
-**Details:** Entities with this trait gain enhanced cold resistance but suffer increased energy loss and movement penalties in hot environments.
-
-### Analysis 147: Volcanic Trait
-**Overview:** Implemented the `is_volcanic` trait for entities.
-**Details:** Entities with this trait thrive in extreme heat, gain energy when standing on `ash` terrain, and are immune to `fire` events.
-
-### Analysis 148: Forestal Trait
-**Overview:** Implemented the `is_forestal` trait for entities.
-**Details:** Entities with this trait gain defense in forest/wooded terrain.
-
-### Analysis 149: Social Trait
-**Overview:** Implemented the `is_social` trait for entities.
-**Details:** Entities with this trait gain an energy efficiency buff when near other entities of the same species.
-
-### Analysis 150: Playful Trait
-**Overview:** Implemented the `is_playful` trait for entities.
-**Details:** Entities with this trait gain 1 experience point per tick when standing adjacent to another entity of the same species.
-
-### Analysis 151: Fast Learner Trait
-**Overview:** Implemented the `is_fast_learner` trait for entities.
-**Details:** Entities with this trait gain double experience points from all activities.
-
-### Analysis 152: Hardy Trait
-**Overview:** Implemented the `is_hardy` trait for entities.
-**Details:** Entities with this trait halve their base energy loss rate when their energy falls below 25% of their maximum, representing extreme metabolic efficiency during starvation.
-
-### Analysis 153: Agile Trait
-**Overview:** Implemented the `is_agile` trait for entities.
-**Details:** Entities with this trait ignore stamina penalties when moving uphill.
-
-### Analysis 154: Migratory Trait
-**Overview:** Implemented the `is_migratory` trait for entities.
-**Details:** Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
-
-### Analysis 155: Parasite Resistant Trait
-**Overview:** Implemented the `is_parasite_resistant` trait for entities.
-**Details:** Entities with this trait are immune to parasitic attachment, rendering them safe from energy and hydration drain by parasites.
-
-### Analysis 156: Relentless Trait
-**Overview:** Implemented the `is_relentless` trait for entities.
-**Details:** Entities with this trait deal half their effective attack as energy damage to their prey even if the prey successfully escapes combat.
-
-### Analysis 157: Fierce Trait
-**Overview:** Implemented the `is_fierce` trait for entities.
-**Details:** Entities with this trait gain a flat +3 bonus to effective attack in combat.
-
-### Analysis 158: Spiteful Trait
-**Overview:** Implemented the `is_spiteful` trait for entities.
-**Details:** Entities with this trait deal their defense as energy damage to their predator when killed.
-
-### Analysis 159: Cleaner Trait
-**Overview:** Implemented the `is_cleaner` trait for entities.
-**Details:** Entities with this trait remove parasites and cure diseases from adjacent entities, gaining energy in the process.
-
-### Analysis 160: Intimidating Trait
-**Overview:** Implemented the `is_intimidating` trait for entities.
-**Details:** Entities with this trait reduce the effective attack or defense of their opponents during combat by 2, making them formidable foes or difficult targets.
-
-### Analysis 161: Vocal Trait
-**Overview:** Implemented the `is_vocal` trait for entities.
-**Details:** Entities with this trait alert nearby flockmates of predators at an increased distance (double their normal communication radius).
-
-### Analysis 162: Resourceful Trait
-**Overview:** Implemented the `is_resourceful` trait for entities.
-**Details:** Entities with this trait extract hydration from food and prey, recovering hydration when they eat, which reduces their dependence on environmental water sources.
-
-### Analysis 163: Prolific Trait
-**Overview:** Implemented the `is_prolific` trait for entities.
-**Details:** Entities with this trait have reduced energy thresholds and costs for reproduction, and reproduce more frequently.
-
-### Analysis 164: Heavy Sleeper Trait
-**Overview:** Implemented the `is_heavy_sleeper` trait for entities.
-**Details:** Entities with this trait recover double energy while sleeping, but their perception drops to 0 during sleep, rendering them oblivious to events and predators.
-
-### Analysis 165: Evasive Trait
-**Overview:** Implemented the `is_evasive` trait for entities.
-**Details:** Entities with this trait gain a flat +20% bonus to their escape chance during combat, making them notoriously slippery and hard to catch.
-
-### Analysis 166: Adaptable Trait
-**Overview:** Implemented the `is_adaptable` trait for entities.
-**Details:** Entities with this trait dynamically adjust their preferred temperature over time to survive in extreme climates, at the cost of increased hydration consumption.
-
-### Analysis 167: Nomadic Trait
-**Overview:** Implemented the `is_nomadic` trait for entities.
-**Details:** Entities with this trait have reduced energy consumption when they are constantly moving.
-
-### Analysis 168: Scavenger Trait
-**Overview:** Implemented the `is_scavenger` trait for entities.
-**Details:** Entities with this trait gain bonus energy when consuming meat.
-
-### Analysis 169: Scout Trait
-**Overview:** Implemented the `is_scout` trait for entities.
-**Details:** Entities with this trait share their obstacle memory with nearby flockmates, improving collective pathfinding.
-
-### Analysis 170: Reckless Trait
-**Overview:** Implemented the `is_reckless` trait for entities.
-**Details:** Entities with this trait deal double damage (effective attack * 2) but their effective defense is reduced to 0 during combat, making them glass cannons.
-
-### Analysis 171: Thief Trait
-**Overview:** Implemented the `is_thief` trait for entities.
-**Details:** Entities with this trait and the ability to hoard can steal food from the inventory of adjacent entities when their own energy is low.
-
-### Analysis 172: Absorbent Trait
-**Overview:** Implemented the `is_absorbent` trait for entities.
-**Details:** Entities with this trait regain hydration when it is raining (storm event) or they are standing on water/mud/deep-water terrain.
-
-### Analysis 173: Pack Mule Trait
-**Overview:** Implemented the `is_pack_mule` trait for entities.
-**Details:** Entities with this trait can store up to 4x their size in food in their inventory instead of the standard 2x.
-
-### Analysis 174: Toxic Trait
-**Overview:** Implemented the `is_toxic` trait for entities.
-**Details:** Entities with this trait inflict poison on attackers during combat, causing them to suffer poisoned_time.
-
-### Analysis 175: Lucky Trait
-**Overview:** Implemented the `is_lucky` trait for entities.
-**Details:** Entities with this trait have a 10% higher chance to completely avoid being eaten or attacked and successfully escape combat.
-
-### Analysis 176: Telepathic Trait
-**Overview:** Implemented the `is_telepathic` trait for entities.
-**Details:** Entities with this trait alert all living flockmates of predators regardless of distance.
-
-### Analysis 177: Smelly Trait
-**Overview:** Implemented the `is_smelly` trait for entities.
-**Details:** Entities with this trait leave a stronger scent trail but inflict an attack penalty on their predators.
-
-### Analysis 178: Ruthless Trait
-**Overview:** Implemented the `is_ruthless` trait for entities.
-**Details:** Entities with this trait gain a flat +3 bonus to effective attack during combat if the prey's energy is below half of its maximum.
-
-### Analysis 179: Protective Trait
-**Overview:** Implemented the `is_protective` trait for entities.
-**Details:** Entities with this trait grant a flat +2 defense bonus to adjacent herd members during combat.
-
-### Analysis 180: Forager Trait
-**Overview:** Implemented the `is_forager` trait for entities.
-**Details:** Entities with this trait gain an extra 5 energy when consuming plants or fruit.
-
-### Analysis 181: Tireless Trait
-**Overview:** Implemented the `is_tireless` trait for entities.
-**Details:** Entities with this trait do not consume stamina when moving.
-
-### Analysis 182: Vigilant Trait
-**Overview:** Entities with this trait are highly alert and cannot be ambushed.
-**Details:** When an ambush predator attacks an entity with `is_vigilant=True`, the predator does not receive its normal 2x attack multiplier from being camouflaged.
-
-### Analysis 183: Pacifist Trait
-**Overview:** Implemented the `is_pacifist` trait for entities.
-**Details:** Entities with this trait never initiate combat, even when hungry.
-
-### Analysis 184: Farsighted Trait
-**Overview:** Implemented the `is_farsighted` trait for entities.
-**Details:** Entities with this trait have their effective perception radius doubled, which allows them to spot food, prey, and predators from farther away, but they suffer a -2 penalty to their effective attack during combat due to their lack of close-range focus.
-
-
-### Analysis 185: Vampiric Trait
-**Overview:** Implemented the `is_vampiric` trait for entities.
-**Details:** Vampiric trait (`is_vampiric`). Entities with this trait drain energy and hydration from their prey during combat, even if the prey escapes.
-
-### Analysis 186: Aquatic Trait
-**Overview:** Implemented the `is_aquatic` trait for entities.
-**Details:** deep-water biome and aquatic entities. Entities with `is_aquatic` can navigate deep-water while others cannot, adding more varied terrain traversal.
-
-### Analysis 187: Electric Trait
-**Overview:** Implemented the `is_electric` trait for entities.
-**Details:** Electric trait (`is_electric`) and stunned mechanics. Entities with this trait stun their attackers during combat, rendering them unable to move or act for several ticks.
-
-### Analysis 188: Fruiting Trait
-**Overview:** Implemented the `is_fruiting` trait for entities.
-**Details:** Fruiting trait (`is_fruiting`). Entities with this trait can passively drop food (fruit) when well-fed, allowing them to support symbiotic species or act as anglerfish-like predators that bait herbivores.
-
-### Analysis 189: Aposematic Trait
-**Overview:** Implemented the `is_aposematic` trait for entities.
-**Details:** Aposematism trait (`is_aposematic`) which makes predators ignore the entity unless they are starving.
-
-### Analysis 190: Echolocation Trait
-**Overview:** Implemented the `has_echolocation` trait for entities.
-**Details:** echolocation trait (`has_echolocation`). Entities with this trait bypass camouflage and night-time vision penalties.
-
-### Analysis 191: Photosynthesize Trait
-**Overview:** Implemented the `can_photosynthesize` trait for entities.
-**Details:** Photosynthesis trait (`can_photosynthesize`). Entities with this trait gain energy during the daytime, simulating plant-like behavior.
-
-### Analysis 192: Venomous Trait
-**Overview:** Implemented the `is_venomous` trait for entities.
-**Details:** venomous trait (`is_venomous`) where entities have a chance to poison their opponent during combat.
-
-### Analysis 193: Spin Webs Trait
-**Overview:** Implemented the `can_spin_webs` trait for entities.
-**Details:** web building mechanics allowing entities with `can_spin_webs` to place stamina-draining traps.
-
-### Analysis 194: Spikes Trait
-**Overview:** Implemented the `has_spikes` trait for entities.
-**Details:** defensive spikes/thorns trait. Entities with `has_spikes` damage their attackers during combat.
-
-### Analysis 195: Lays Eggs Trait
-**Overview:** Implemented the `lays_eggs` trait for entities.
-**Details:** Oviparity/Egg-Laying mechanics. Entities with `lays_eggs` lay an egg object instead of spawning children directly.
-
-### Analysis 196: Hibernate Trait
-**Overview:** Implemented the `can_hibernate` trait for entities.
-**Details:** hibernation mechanics allowing entities to preserve energy and hydration during winter if they possess the `can_hibernate` trait.
-
-### Analysis 197: Mutate Trait
-**Overview:** Implemented the `mutate` trait for entities.
-**Details:** Entity Genetics and Mutations allowing child entities to inherit and slightly mutate traits (max_age, perception_radius).
-
-### Analysis 198: Camouflage Trait
-**Overview:** Implemented the `camouflage` trait for entities.
-**Details:** a camouflage trait for entities allowing them to avoid detection by reducing the effective perception range of others.
-
-### Analysis 199: Flying Trait
-**Overview:** Implemented the `is_flying` trait for entities.
-**Details:** flight mechanics. Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water during movement and pathfinding.
-
-### Analysis 200: Amphibious Trait
-**Overview:** Implemented the `is_amphibious` trait for entities.
-**Details:** amphibious trait (`is_amphibious`) allowing entities to freely traverse both land and water tiles.
-
-### Analysis 201: Parasitic Trait
-**Overview:** Implemented the `is_parasitic` trait for entities.
-**Details:** Parasitism (`is_parasitic`) trait. Parasites actively seek out and attach to larger hosts, continually draining their energy and hydration to sustain themselves.
-
-### Analysis 202: Vibrant Trait
-**Overview:** Implemented the `is_vibrant` trait for entities.
-**Details:** Entities with this trait have an increased reproduction chance but cannot use camouflage.
-
-### Analysis 203: Chameleon Trait
-**Overview:** Implemented the `is_chameleon` trait for entities.
-**Details:** Entities with this trait gain a massive camouflage bonus (+0.5) when they remain stationary during a tick, making them practically invisible to predators and prey, but they lose this bonus when they move.
-### Analysis 204: Unappetizing Trait
-**Overview:** Implemented the `is_unappetizing` trait for entities.
-**Details:** Entities with this trait grant only half their normal energy to predators upon being eaten, providing a slight evolutionary disadvantage to their predators without necessarily preventing their own death.
-
-### Analysis 205: is_introspective Trait
-**Overview:**
-Implemented the `is_introspective` trait. Entities with this trait gain a deep understanding of their surroundings when still, granting them 2 experience points per tick they remain stationary.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_introspective` flag.
-- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
-- Updated the stationary recovery logic block in `Universe.tick()` to award 2 experience points per tick to entities with `is_introspective` that do not move from their `start_pos`.
-- Assigned the visual character `Ω` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
-- Added tests `test_is_introspective_stationary_xp` and `test_is_introspective_mutation` to `tests/test_engine.py` to ensure correct behavior.
-
-### Analysis 206: Frenzied Trait
-**Overview:**
-Implemented the `is_frenzied` trait. Entities with this trait gain a massive +5 bonus to their effective attack during combat, but lose 5 energy per combat encounter due to overexertion.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_frenzied` flag.
-- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
-- Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to apply a flat +5 bonus to `effective_attack` and subtract 5 energy from the attacking entity if they possess `is_frenzied`.
-- Assigned the visual character `ç` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
-- Added tests `test_is_frenzied_combat` and `test_is_frenzied_mutation` to `tests/test_engine.py` to ensure correct behavior.
-
-### Analysis 207: Hypnotic Trait
-**Overview:**
-Implemented the `is_hypnotic` trait. Entities with this trait halve the effective attack of their predators during combat.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_hypnotic` flag.
-- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
-- Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to halve the `effective_attack` of the attacker if the defending entity possesses `is_hypnotic`.
-- Assigned the visual character `•` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
-- Added tests `test_is_hypnotic_combat` and `test_is_hypnotic_mutation` to `tests/test_engine.py` to ensure correct behavior.
-
-### Analysis 208: Tracker Trait
-**Overview:**
-Implemented the `is_tracker` trait. Entities with this trait can follow scent trails from up to 2 tiles away, making them superior hunters capable of tracking prey without being immediately adjacent to the scent trail.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_tracker` flag.
-- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
-- Updated the scent tracking logic in `Universe.tick()` to expand the search radius for entities with `is_tracker`, allowing them to detect the strongest scent within a 2-tile Manhattan distance and step toward it.
-- Assigned the visual character `↬` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
-- Added tests `test_is_tracker_scent_detection` and `test_is_tracker_mutation` to `tests/test_engine.py` to ensure correct behavior.
-
-### Analysis 209: Empathic Trait
-**Overview:**
-The `is_empathic` trait has been implemented, introducing a cooperative resource-sharing mechanism among social entities.
-
-**Details:**
-- **Energy Transfer:** Entities with this trait proactively transfer 2 energy to adjacent flockmates (entities of the same species within 1 tile distance) whose energy has fallen below 30% of their maximum capacity.
-- **Cost:** The empathic entity sacrifices 2 of its own energy to perform this transfer, provided its energy is above 50% of its maximum capacity.
-- **Selective Advantage:** This trait increases the overall survivability of a species cluster by preventing starvation in vulnerable individuals, buffering against localized food scarcity or severe energy drains, and extending the operational longevity of the flock as a whole.
-- **Integration:** The trait is successfully integrated into reproduction logic, meaning it can be inherited or spontaneously mutated. Visualized by the '±' character.
-
-### Analysis 210: Contagious Trait
-**Overview:**
-Implemented the `is_contagious` trait. Entities with this trait transmit their infection to any entity they engage in combat with, regardless of who initiated the attack or if the prey was eaten.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_contagious` flag.
-- Added inheritance and mutation logic for `is_contagious` in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
-- Updated the reproduction child creation code in `Universe.tick()` to pass the `is_contagious` parameter correctly.
-- Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to enforce transmission logic: if the attacker is infected and contagious, the defender becomes infected (unless immune); and if the defender is infected and contagious, the attacker becomes infected (unless immune).
-- Assigned the visual character `ñ` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
-- Added a `TestIsContagious` class to `tests/test_engine.py` with 4 dedicated tests (`test_is_contagious_mutation`, `test_is_contagious_attacker`, `test_is_contagious_defender`, `test_is_contagious_immunity`) to fully verify the expected transmission logic and immunity interactions.
-
-### Analysis 211: Arboreal Trait
-**Overview:**
-Implemented the `is_arboreal` trait. Entities with this trait gain a natural affinity for forest environments, treating them as shelters.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_arboreal` flag.
-- Updated `Universe.tick()` to allow `is_arboreal` to be inherited and mutated during reproduction.
-- Updated the `in_shelter` definition in `Universe.tick()` to evaluate to `True` for arboreal entities stationed on `forest` terrain, reducing their per-tick energy loss dynamically.
-- Updated `prey_in_shelter` calculations within both the tracking and collision combat blocks in `Universe.tick()` to grant arboreal entities on `forest` terrain a flat +3 effective defense bonus.
-- Assigned the visual character `♣` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
-- Added the `TestIsArboreal` class to `tests/test_engine.py` to verify trait inheritance, energy recovery mechanics, and combat defense bonuses.
-
-### Analysis 212: Stargazer Trait
-**Overview:**
-Implemented the `is_stargazer` trait. Entities with this trait gain an energy bonus and extra stamina recovery on clear nights.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_stargazer` flag.
-- Added inheritance and mutation logic for `is_stargazer` in `Universe.tick()`, allowing offspring to inherit or mutate the trait.
-- Updated energy and stamina logic in `Universe.tick()` to grant +1 energy and +2 stamina recovery per tick on clear nights (when `self.is_night` is true and `self.current_event` is None).
-- Assigned the visual character `✧` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
-- Added the `TestIsStargazer` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the specific conditional energy and stamina bonuses.
-- Added `is_stargazer` to the 'Completed' section of `agents.md`.
-
-### Analysis 213: Sure Footed Trait
-**Overview:**
-Implemented the `is_sure_footed` trait. Entities with this trait are immune to stamina drain during earthquake events.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_sure_footed` flag.
-- Updated `Universe.tick()` to allow `is_sure_footed` to be inherited and mutated during reproduction.
-- Updated the stamina logic in `Universe.tick()` to drain 5 stamina from entities without the `is_sure_footed` trait during `earthquake` events.
-- Assigned the visual character `▽` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
-- Added the `TestIsSureFooted` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the specific stamina drain immunity.
-- Added `is_sure_footed` to the 'Completed' section of `agents.md`.
-
-
-### Analysis 214: Bloodthirsty Trait
-**Overview:** Implemented the `is_bloodthirsty` trait for entities.
-**Details:** Entities with this trait recover 20 stamina whenever they successfully hunt and eat a prey.
-
-### Analysis 215: Sun Tracker Trait
-**Overview:** Implemented the `is_sun_tracker` trait for entities.
-**Details:** Entities with this trait gain an energy bonus during the day if they are standing on clear terrain (not a shelter or ash), allowing them to passively absorb sunlight.
-
-
-### Analysis 216: Dust Bather Trait
-**Overview:**
-Implemented the `is_dust_bather` trait. Entities with this trait can cure their infections by standing on ash or sand terrain.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_dust_bather` flag.
-- Updated `Universe.tick()` to allow `is_dust_bather` to be inherited and mutated during reproduction.
-- Updated the execution block in `Universe.tick()` to cure `is_infected` status if an entity with `is_dust_bather` is on `ash` or `sand` terrain.
-- Assigned the visual character `β` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
-- Added the `TestIsDustBather` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the infection-curing mechanics.
-- Added `is_dust_bather` to the 'Completed' section of `agents.md`.
-
-
-### Analysis 217: Magnetic Trait
-**Overview:**
-Implemented the `is_magnetic` trait. Entities with this trait draw power from magnetic storms, gaining 5 energy and 10 stamina each tick during the 'storm' event.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_magnetic` flag.
-- Updated `Universe.tick()` to allow `is_magnetic` to be inherited and mutated during reproduction.
-- Updated the environmental event execution block in `Universe.tick()` to apply energy and stamina bonuses when `self.current_event == 'storm'`.
-- Assigned the visual character `⚡` to represent this trait in `src/universe/visualizer.py`.
-- Added the `TestIsMagnetic` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the storm bonuses.
-- Also added missing dedicated tests for `is_farsighted` and `is_pacifist`.
-- Added `is_magnetic` to the 'Completed' section of `agents.md`.
-
-### Analysis 218: Drought Resistant Trait
-**Overview:**
-Implemented the `is_drought_resistant` trait. Entities with this trait do not lose hydration during a drought event.
-
-**Details:**
-- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_drought_resistant` flag.
-- Updated `Universe.tick()` to allow `is_drought_resistant` to be inherited and mutated during reproduction.
-- Updated the main hydration drain block in `Universe.tick()` to bypass hydration loss if `self.current_event == 'drought'` and the entity has the trait.
-- Assigned the visual character `∆` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
-- Added the `TestIsDroughtResistant` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the drought resistance mechanics.
-- Added `is_drought_resistant` to the 'Completed' section of `agents.md` implicitly via Next Steps.
-
-### Analysis 219: Pack Hunter Trait
-**Overview:** Implemented the `pack_hunter` trait for entities.
-**Details:** predatory entities to share target tracking and coordinate attacks with nearby entities of the same species.
-
-### Analysis 220: Climb Trait
-**Overview:** Implemented the `can_climb` trait for entities.
-**Details:** entities to traverse 'wall' terrain blocks, simulating climbing over obstacles.
-
-### Analysis 221: Desertic Trait
-**Overview:** Implemented the `is_desertic` trait for entities.
-**Details:** Entities with this trait suffer half hydration loss in hot climates and gain an energy efficiency bonus when traversing `sand` terrain.
-
-### Analysis 222: Sleeping Trait
-**Overview:** Added missing genetic mutation unit tests for `is_sleeping` trait in `tests/test_engine.py`.
-**Details:** Ensured the trait correctly mutates during reproduction.
-
-### Analysis 223: Sprint Trait
-**Overview:** Implemented the `can_sprint` trait for entities.
-**Details:** allowing entities to temporarily move faster at a high stamina cost.
-
-### Analysis 224: Disease Vector Trait
-**Overview:** Implemented the `disease_vector` trait for entities.
-**Details:** scavenger entities, causing them to spread disease more rapidly when interacting with corpses.
-
-### Analysis 225: Moon Bather Trait
-**Overview:** Implemented the `is_moon_bather` trait for entities.
-**Details:** Entities with this trait gain an energy bonus and extra stamina recovery at night when standing on clear terrain.
-
-### Analysis 226: Can Hoard Trait
-**Overview:** Implemented the `can_hoard` trait for entities.
-**Details:** Entities with this trait can store food items in their inventory to consume later when hungry.
-
-### Analysis 227: Can Burrow Trait
-**Overview:** Implemented the `can_burrow` trait for entities.
-**Details:** Entities with this trait can sleep underground, treating any terrain as a shelter to hide from predators while sleeping.
-
-### Analysis 228: Is Sunbather Trait
-**Overview:** Implemented the `is_sunbather` trait for entities.
-**Details:** Entities with this trait recover extra energy and stamina during the day when the temperature is warm, but lose hydration faster.
-
-### Analysis 229: Storm Chaser Trait
-**Overview:** Implemented the `is_storm_chaser` trait for entities.
-**Details:** Entities with this trait gain a +2 bonus to their effective attack during a 'storm' event.
-
-### Analysis 230: Is Shadow Stalker Trait
-**Overview:** Implemented the `is_shadow_stalker` trait for entities.
-**Details:** Entities with this trait gain a +3 bonus to effective attack and reduce their stamina cost for movement to 0 when moving at night, making them formidable nocturnal hunters.
-
-### Analysis 231: Is Pyrophilic Trait
-**Overview:** Implemented the `is_pyrophilic` trait for entities.
-**Details:** Entities with this trait gain an energy bonus and extra stamina recovery when standing on ash terrain.
-
-### Analysis 96: is_desperate Trait
-**Overview:** Implemented the `is_desperate` trait which gives a +4 attack bonus when energy is <30%.
-**Details:**
-- Added `is_desperate` parameter to `Entity.__init__`
-- Updated child mutation and inheritance in `Universe.tick`
-- Applied +4 `effective_attack` modifier in both combat logic blocks when `is_desperate=True` and `energy` < 30% of `max_energy`.
-
-### Analysis 232: is_iron_willed Trait
-**Overview:** Implemented the `is_iron_willed` trait for entities.
-**Details:** Entities with this trait are immune to the stat reductions caused by `is_intimidating` and `is_smelly` opponents in combat.
+# Project Evolution and Agent Actions Analysis
+
+## 1. Project Genesis Bootstrap
+The project started with an initial setup of a typical Python project. The basic directory structure includes `src/` for source code and `tests/` for unit testing. The foundation was laid down by an initial commit that set up the repository for an autonomous, infinite AI-driven development cycle.
+
+## 2. Core Engine Implementation
+The core simulator logic was bootstrapped in `src/universe/engine.py`.
+Two main classes were introduced:
+* `Entity`: A simple class representing a distinct object or being in the universe, initially initialized with just a name.
+* `Universe`: The main container managing time and entities. It handles adding new entities to the simulation and incrementing time through a `tick` method.
+
+## 3. Test Coverage
+A test suite was created alongside the core engine in `tests/test_engine.py` using Python's built-in `unittest` framework.
+The tests cover:
+* `test_initial_state`: Verifies the `Universe` initializes with time 0 and no entities.
+* `test_add_entity`: Verifies that an `Entity` can be successfully added to the `Universe` and is stored correctly.
+* `test_tick`: Verifies that the `tick` method correctly increments the `Universe` time.
+
+## 4. Documentation and Directives Updates
+Agents have adhered to the project directives by maintaining core documentation files:
+* `CHANGELOG.md`: The file accurately reflects the initial setup and the creation of the `Universe` and `Entity` classes, mapping directly to the code changes.
+* `agents.md`: The core directives were followed. The 'Completed' section was updated to reflect the bootstrapping of the core universe engine. A new roadmap step was formulated in the 'Next Steps' section, planning for the implementation of a 2D grid/spatial system for entities.
+
+## 5. 2D Spatial System Implementation
+A 2D spatial system was introduced in `src/universe/engine.py` to allow entities to have coordinates and movement logic.
+The following updates were made:
+* `Entity` was extended with `x` and `y` coordinates.
+* `Universe` was extended with `width` and `height` properties. It now enforces bounds checking when adding entities or moving them via the new `move_entity` method.
+* `get_entities_at` method was added to query entities at specific coordinates.
+
+## 6. Extended Test Coverage
+The test suite in `tests/test_engine.py` was updated to cover the new spatial features:
+* Added tests for custom positions and out-of-bounds entity placement.
+* Added tests for valid and invalid entity movements using `move_entity`.
+* Added tests for `get_entities_at` method to accurately return entities at given locations.
+
+## 7. Energy and Life Cycle Implementation
+A basic energy and life cycle system was introduced for entities.
+The following updates were made to `src/universe/engine.py`:
+* `Entity` was extended with an `energy` attribute (defaulting to 10) and an `is_alive` property.
+* `Universe`'s `tick` method was updated to decrease entity energy by 1 per tick, and naturally cull entities whose energy reaches 0.
+
+## 8. Food and Resource System Implementation
+A food and resource system was implemented to allow entities to regain energy.
+The following updates were made:
+* A `Food` class was introduced, representing a resource with coordinates and an energy value (defaulting to 5).
+* `Universe` was extended to manage a list of `foods` and randomly spawn them based on a `food_spawn_rate`.
+* `tick` method was updated so that entities consume food at their exact location to regain energy, removing the eaten food from the universe.
+
+## 9. Further Extended Test Coverage
+The test suite in `tests/test_engine.py` was further updated to cover the energy and food systems:
+* Added tests for energy initialization, tick consumption, and death when energy reaches 0.
+* Added tests for food creation, spatial location querying (`get_foods_at`), and the entity eating logic.
+
+## 10. Aging System
+An aging system was introduced to allow entities to naturally die of old age.
+The following updates were made:
+* `Entity` was extended with `age` and `max_age` attributes.
+* `Entity.is_alive` property now checks if `age <= max_age` in addition to energy checks.
+* `Universe`'s `tick` method was updated to increment entity age by 1 per tick.
+* Unit tests were added in `tests/test_engine.py` to cover initialization, age increment, and culling when age exceeds `max_age`.
+
+## 11. Reproduction System
+A reproduction system was introduced, allowing entities to spawn offspring.
+The following updates were made to `src/universe/engine.py`:
+* `Universe` initialization was updated with `reproduction_threshold` and `reproduction_cost` arguments.
+* `tick` method was updated to allow an entity to reproduce (create a new `Entity` at its location) if its energy reaches or exceeds the `reproduction_threshold`.
+* Reproducing consumes `reproduction_cost` energy from the parent entity.
+* Unit tests were added in `tests/test_engine.py` to assert the correct parent energy decay, child positioning, and default energy state upon reproduction.
+
+## 12. Entity AI Behavior
+Basic AI behavior was implemented to allow entities to actively seek out food.
+The following updates were made:
+* `Universe` was extended with a `get_nearest_food(x, y)` method.
+* `tick` method was updated so entities will attempt to move one step (horizontal or vertical) toward the nearest food source per tick if food exists.
+* Unit tests were added in `tests/test_engine.py` to cover food seeking movement and food consumption after moving.
+
+## Conclusion
+The agents have successfully adhered to the project directives by continually expanding the simulation. The initial 2D spatial system was followed by an entity energy life cycle and a food resource system. Most recently, agents have introduced complex biological mechanics including natural aging, reproduction thresholds, and active AI behavior for food-seeking. The agents consistently update the core engine code (`src/universe/engine.py`) alongside comprehensive unit tests (`tests/test_engine.py`) to ensure robustness. The project tracking files (`CHANGELOG.md` and `agents.md`) are diligently maintained, ensuring the autonomous iteration loop remains healthy and correctly documented.
+
+## 13. CLI Visualizer Implementation
+A basic Command Line Interface (CLI) visualizer was implemented to view the current state of the universe.
+The following updates were made:
+* Created a `CLIVisualizer` class in `src/universe/visualizer.py`.
+* The visualizer renders a text-based grid where `.` represents empty space, `f` represents food, and `E` represents entities.
+* Provided a `print_state()` method to easily display the current simulation time and grid layout.
+* Unit tests were added in `tests/test_visualizer.py` to ensure proper rendering of various universe states, including overlapping entities and food.
+
+## 14. Terrain System
+A Terrain system was introduced to add spatial complexity and obstacles to the universe.
+The following updates were made:
+* Created a `Terrain` class with `x`, `y` coordinates and a `terrain_type` (e.g., 'wall', 'water').
+* `Universe` was extended to store a list of `terrains` and provide `add_terrain` and `get_terrains_at` methods.
+* `move_entity` logic in `Universe` was updated to raise an error if an entity attempts to move into a cell occupied by impassable terrain.
+* The `CLIVisualizer` was updated to iterate over `terrains` and render `#` for walls and `~` for water prior to rendering food and entities.
+* Unit tests were added in `tests/test_engine.py` and `tests/test_visualizer.py` to ensure bounds, blocking, and visualization function accurately.
+* `simulate.py` was updated to render a 'wall' obstacle across the screen to demonstrate the feature.
+
+## 15. Intelligent Pathfinding
+Entity AI was enhanced with intelligent pathfinding capabilities.
+The following updates were made:
+* Added a `find_path` method to `Universe` utilizing a Breadth-First Search (BFS) algorithm to compute the shortest path to a target coordinate.
+* The BFS correctly identifies and routes around impassable `Terrain` (e.g. walls and water).
+* Updated the `tick` method's food-seeking AI. Entities now invoke `find_path` to navigate toward `nearest_food` instead of using a naive greedy approach that gets stuck on walls.
+* Added a robust unit test (`test_entity_pathfinding_around_obstacle`) in `tests/test_engine.py` simulating an entity routing around a wall to reach a target.
+
+## 16. Environmental Events System
+An environmental events system was added to introduce dynamic challenges and random events into the universe.
+The following updates were made:
+* Introduced random events such as 'storm' and 'drought' to the `Universe` engine.
+* Storms double the rate of energy decay for entities, making survival harder.
+* Droughts temporarily halt the spawning of new food resources.
+* Updated `CLIVisualizer` to display the currently active event and its remaining duration.
+* Added comprehensive test coverage in `tests/test_engine.py` to ensure events are triggered properly and have the expected effects on entities and resources.
+
+## 17. Entity Genetics and Mutations
+A genetics and mutation system was added to entity reproduction to allow entities to evolve over generations.
+The following updates were made:
+* Modified the reproduction logic in `src/universe/engine.py`.
+* Child entities now inherit their parent's `max_age` and `perception_radius` instead of using defaults.
+* Introduced a 10% chance for these traits to mutate, allowing them to slightly increase or decrease.
+* Added tests `test_entity_genetics_and_mutation` and `test_entity_genetics_no_mutation` in `tests/test_engine.py` using monkeypatching to deterministically verify the mutation logic.
+
+## 18. Entity Perception Radius
+An entity perception radius was implemented, restricting what an entity can detect based on a radius around them.
+The following updates were made:
+* Modified entities to have a `perception_radius` (default 10).
+* Entities only detect food and obstacles that fall within this perception radius.
+
+## 19. Entity Memory
+Entities were granted the ability to remember obstacles they have encountered.
+The following updates were made:
+* Entities maintain a `memory` set to store coordinates of known obstacles.
+* Entities observe and remember obstacles (walls, water) within their perception radius each tick.
+* Pathfinding algorithms (`find_path`) use the entity's memory to avoid routing through remembered obstacles, even if they are currently outside the entity's perception radius.
+* Added tests in `test_engine.py` to ensure memory is updated and correctly utilized in pathfinding.
+
+## 20. Entity Diets
+Ecosystem dynamics were enhanced by implementing different entity diets: Herbivores and Carnivores.
+The following updates were made:
+* Entities were classified into Herbivores and Carnivores.
+* Carnivores actively hunt and eat herbivores, while herbivores continue to eat static food resources.
+* The visualizer was updated to render carnivores distinctly (e.g., as 'C').
+
+## 21. Population Limit
+Ecosystem balancing was introduced via a population limit constraint.
+The following updates were made:
+* `Universe` now accepts a `population_limit` parameter (default 1000).
+* The `tick` method restricts entity reproduction if the total number of entities reaches or exceeds the `population_limit`.
+* Unit tests were added in `tests/test_engine.py` to verify this behavior.
+
+## 22. Seasonal Mechanics
+A seasonal system was implemented to create dynamic, long-term environmental changes.
+The following updates were made:
+* Introduced `Spring`, `Summer`, `Autumn`, and `Winter` seasons to the `Universe` engine.
+* Seasons dynamically affect the `food_spawn_rate` (e.g., higher in spring/summer, lower in winter).
+* Seasons can alter terrain; for example, water tiles freeze into ice during winter, changing traversal properties.
+
+## 23. Localized Weather Events
+The simulation's complexity was enhanced with localized weather phenomena.
+The following updates were made:
+* Implemented `rain` events, which have a chance to increase food spawning within a localized radius.
+* Implemented `fire` events, which destroy entities and food within their radius and permanently convert non-water terrain to `ash`.
+* `CLIVisualizer` was updated to render `ash` terrain and display active localized events.
+
+## 24. Temperature Mechanics
+A granular temperature zone system was added, affecting entity survival.
+The following updates were made:
+* Implemented `TemperatureZone` to apply localized temperature modifiers across the universe.
+* Entities now possess `preferred_temperature` and `temperature_tolerance` attributes.
+* Entities outside their comfortable temperature bounds suffer increased energy loss.
+* The genetics system was expanded so child entities inherit and mutate these temperature traits.
+* `CLIVisualizer` was updated to display active temperature zones.
+
+## 25. Day/Night Cycle
+A temporal day/night cycle was added, impacting entity vision and activity.
+The following updates were made:
+* The universe alternates between day and night phases based on a configurable `day_length`.
+* Entity perception and movement are dynamically influenced; vision range is typically reduced at night.
+
+## 26. Flocking Behavior
+Advanced group AI mechanics were introduced to entities.
+The following updates were made:
+* Entities exhibit flocking behavior when no food or prey is nearby.
+* They naturally move towards the center of mass of adjacent entities that share their specific diet.
+* This adds complex emergent movement patterns and social clustering to the ecosystem.
+
+## 27. Advanced Interactions and Global Hazards
+Several advanced mechanics have been introduced recently, further increasing the simulation's complexity:
+* **Disease System:** A disease system was added where spontaneous outbreaks can occur and spread between entities in close proximity, causing energy drain.
+* **Scent Trails:** Herbivores now leave scent trails that decay over time. Carnivores track the strongest adjacent scent trail when no prey is directly visible.
+* **Communication System:** Herbivores can alert nearby flockmates of predators, causing them to move away.
+* **Combat and Defense Mechanics:** Entities were given attack and defense attributes with probabilistic combat resolution when carnivores hunt prey.
+* **Symbiotic Relationships:** Entities can form symbiotic relationships, receiving energy benefits when near their partners.
+* **Natural Disasters:** Global natural disasters were added, such as earthquakes (modifying wall terrain) and volcanoes (spawning ash terrain).
+
+## 28. Advanced Mechanics: Intelligence, Experience, and Niches
+Agents have continued to expand the complexity of the simulation, shifting focus from basic survival to advanced adaptation and learning:
+- **Tool Crafting & Intelligence**: Entities now possess an `intelligence` attribute and an `inventory`. Highly intelligent entities can craft tools (weapons, shields, clothing) that dynamically improve their combat stats or temperature tolerance. This introduces primitive technology into the ecosystem. Intelligence is fully integrated into the genetic inheritance and mutation system.
+- **Combat Experience**: An experience system was added to combat interactions. Entities learn from encounters: prey gain defense from escaping, and predators gain attack stats from hunting attempts, creating an evolutionary arms race based on experience rather than just genetics.
+- **Ecological Niches**: Entities evolved a `preferred_terrain` attribute, allowing them to thrive in specific biomes (like sand or mud) while suffering penalties outside them. This promotes geographic specialization.
+- **Diet Mutations**: The genetics system was expanded to allow the `diet` trait to mutate, enabling species to shift dynamically between herbivorous and carnivorous lifestyles over generations.
+
+These enhancements signify a major evolution in Project Genesis, where entities are no longer just passive subjects to the environment but actively adapt through learning, tool use, and deep biological specialization.
+
+## 29. Recent Updates
+Agents have recently implemented the following mechanics:
+- **Scavengers & Corpses**: Entities leave behind meat upon natural death. A new 'scavenger' diet was added to consume this meat. Diet mutations can produce scavengers, and carnivores will prey upon them.
+- **Shelters & Healing**: Entities can heal or recover energy over time when inside a shelter. Shelters also provide temperature and weather protections.
+- **Specialized Dependencies**: More complex ecosystems were modeled, with carnivores preferring certain species and herbivores preferring specific plants.
+- **Hydration System**: A hydration system was added for entities, ensuring they also need water to survive.
+
+- **Omnivores & Sleep**: Omnivores can balance hunting and foraging based on proximity. A sleep mechanism allows entities to recover energy while resting at night.
+- **Deep-water Biome**: A deep-water biome and aquatic entities that can only survive in water have been implemented.
+
+## 30. Recent Updates (Flight, Pack Hunting, Food Spoilage, Vision, Toxicity)
+Agents have recently implemented the following mechanics:
+- **Flight Mechanics**: Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water.
+- **Pack Hunting & Herd Defense**: Nearby entities of the same species now contribute to attack and defense during combat.
+- **Food Spoilage**: Food ages over time and disappears. Spoilage rates are affected by temperature, and meat rots faster than plants.
+- **Vision Types**: Entities can mutate `vision_type` (e.g. `night_vision`) allowing them to avoid perception penalties at night.
+- **Camouflage**: Entities can mutate `camouflage` traits reducing the distance they can be detected.
+- **Toxicity & Poison**: Food and entities can be toxic, causing extra energy loss when consumed. Entities can mutate poison resistance.
+
+### [Next Update Section]
+- **Agent Action:** Implemented `max_energy` attribute scaled by entity size.
+- **Analysis:** Before this feature, entities could theoretically accumulate infinite energy by continuously eating, making survival trivial after initial abundance. The introduction of `max_energy` caps the energy an entity can store (calculated as `size * 50`). This creates a more balanced and realistic ecosystem where entities must continually manage their food intake rather than front-loading infinite resources.
+
+
+- **Agent Action:** Implemented organic plant spreading and hibernation mechanics.
+- **Analysis:**
+    - Organic plant spreading allows older flora to occasionally spawn adjacent copies. This leads to the natural formation of clustered food sources, enriching the foraging dynamics and reducing uniformity.
+    - Hibernation mechanics introduce a survival strategy for entities during harsh winter seasons. Entities with the `can_hibernate` trait sleep through winter, drastically reducing their energy and hydration loss.
+    - This adds layers to seasonal survival and opens up evolutionary pathways where species adapt to freezing temperatures via hibernation rather than simple cold tolerance.
+
+## 31. Oviparity and Egg-Laying
+Agents added the ability for entities to lay eggs instead of directly giving birth.
+* Entities can mutate the `lays_eggs` trait.
+* When reproducing, an entity with this trait creates a `Food` object representing an egg, storing the unborn offspring.
+* When the egg reaches its maximum age (spoils), it hatches, adding the new entity to the simulation.
+* This introduces an interesting vulnerability where unborn offspring can be eaten before they hatch.
+
+### Experience and Leveling System
+Implemented an RPG-like leveling system where entities accumulate experience points (`experience`) through various actions like surviving a day, escaping predators, or successfully hunting prey. Reaching the threshold `experience_to_next_level` increments their `level` and grants permanent stat bonuses (`attack` and `defense`) and full energy restoration. The CLI Visualizer was updated to render entities of level 3 or higher in uppercase characters, representing their veteran status in the simulation.
+
+### Hoarding Mechanics
+Agents implemented a new `can_hoard` trait for herbivores and omnivores. This allows entities to safely store excess food in their inventory. When an entity's energy drops below half of their maximum, they will consume food from their hoard. This introduces a strategic resource management aspect to survival, enabling entities to endure harsh conditions (like winter droughts) or undertake long treks across barren terrain by carrying a food supply with them.
+
+### [Next Update Section]
+- **Agent Action:** Implemented Nocturnal trait for entities.
+- **Analysis:** This introduces a new behavioral niche. Nocturnal entities invert the standard sleep cycle and vision penalties, allowing them to hunt or forage safely at night when diurnal predators are sleeping or have reduced perception. This enriches the ecosystem by creating time-based environmental niches.
+- **Agent Action:** Implemented Burrowing mechanics.
+- **Analysis:** Entities with the `can_burrow` trait hide underground when sleeping. This acts as an innate shelter, protecting them from extreme weather (blizzards/storms) and rendering them undetectable by predators. This opens up a new evolutionary strategy for survival against both harsh environments and active predation.
+- **Agent Action:** Implemented defensive `has_spikes` trait.
+- **Analysis:** This introduces a new survival mechanic for prey. Entities that mutate the `has_spikes` trait inflict energy and stamina damage on predators that attempt to attack or eat them. This creates a disincentive for predators to target them, enriching the evolutionary arms race without relying solely on raw defense stats or escape chance.
+
+### Stamina System
+- **Agent Action:** Implemented stamina system.
+- **Analysis:** This introduces a short-term resource constraint that forces entities to balance exertion with recovery. By having a separate stamina pool that depletes from movement and combat and induces sleep when empty, the simulation prevents infinite kiting or endless chains of combat. It adds a tactical layer to interactions, where exhaustion becomes as dangerous as starvation.
+- **Web Building Mechanics**: Added a `can_spin_webs` trait to entities, allowing them to spin web terrains that deplete the stamina of entities without the trait.
+- **Agent Action:** Implemented amphibious trait (`is_amphibious`).
+- **Analysis:** This trait introduces a new movement mechanic. Entities with `is_amphibious` can traverse both land and water/deep-water tiles freely, unlike normal entities (blocked by water) or aquatic entities (blocked by land). This provides an evolutionary advantage by allowing these entities to escape terrestrial predators or access resources separated by water bodies.
+- **Agent Action:** Implemented defensive `has_shell` trait.
+- **Analysis:** This introduces a new survival mechanic for prey. Entities that mutate the `has_shell` trait receive a flat bonus to effective defense during combat. This creates a disincentive for predators to target heavily armored prey, changing predator-prey dynamics and encouraging the evolution of higher attack stats or specialized hunting strategies.
+- **Agent Action:** Implemented Photosynthesis trait (`can_photosynthesize`).
+- **Analysis:** This trait introduces a new energy acquisition method. Entities with `can_photosynthesize` passively gain energy during the daytime, simulating plant-like autotrophic behavior. This reduces their reliance on foraging or hunting, allowing them to survive in areas with scarce food resources as long as they have access to sunlight. It creates a new ecological niche for stationary or slow-moving entities that thrive in open environments.
+
+### 26. Implement Echolocation Trait
+- **Goal:** Introduce a trait that allows entities to counter camouflage and ignore nighttime vision penalties.
+- **Mechanics:**
+    - The `has_echolocation` boolean trait was added to the `Entity` class.
+    - Predation logic (`get_nearest_prey`, `get_nearest_predator`) was updated to ignore the `camouflage` modifier of the target if the perceiving entity possesses `has_echolocation`.
+    - Nighttime perception halving in `Universe.tick()` is bypassed for entities with this trait.
+    - The trait is passed down genetically during reproduction with a mutation chance.
+- **Agent Actions:**
+    - Modified `Entity.__init__` and reproduction code in `src/universe/engine.py`.
+    - Updated distance checking logic in `get_nearest_prey` and `get_nearest_predator`.
+    - Updated `effective_perception` assignment in `Universe.tick()`.
+    - Wrote tests in `tests/test_engine.py` to verify echolocation bypasses camouflage and maintains full perception at night.
+- Implemented Aposematism trait (`is_aposematic`), rendering entities visually unappealing to predators. Well-fed predators will ignore them, but starving predators will still attack.
+- **Agent Action:** Implemented aging growth mechanics.
+- **Analysis:** Before this feature, entities were born at their full genetic size immediately, functioning exactly like adults regarding energy consumption, movement penalties, and combat interactions. Now, entities that are born (`age=0`) start at a reduced size (capped at a minimum of 1) and gradually grow over time until they reach their genetic `max_size`. This introduces an infantile vulnerability phase, increasing early mortality risks and shifting ecological pressures toward protecting young or finding safe shelters for reproduction.
+
+### [Agent Update: Immunity Trait]
+- **Agent Action:** Implemented `is_immune` trait.
+- **Analysis:** This trait introduces an immunological layer to the simulation. Entities that survive an infection now gain immunity, preventing reinfection. Furthermore, immunity can be passed on to offspring or acquired through mutation. This creates complex population dynamics where diseases can wipe out vulnerable populations, leaving only immune survivors to repopulate, thus simulating real-world immunological natural selection.
+- **Agent Action:** Implemented Cold Blooded trait (`is_cold_blooded`).
+- **Analysis:** This trait introduces a thermodynamic dependency. Cold-blooded entities experience reduced energy loss in hot environments but increased energy loss and slower movement in cold environments. This expands environmental interaction, pushing cold-blooded species towards equatorial/hot biomes and creating interesting seasonal survival dynamics.
+- **Agent Action:** Implemented Electric trait (`is_electric`) and stunned mechanics.
+- **Analysis:** This trait introduces a new defensive survival mechanic. Entities that mutate the `is_electric` trait stun predators that attack them, preventing the predator from moving or acting for several ticks. This creates a powerful deterrent against predation and provides a window for the prey to escape or counterattack, significantly altering predator-prey dynamics and adding strategic depth to combat encounters.
+
+## 32. Advanced Ecosystem Niche and Defense Mechanisms Analysis
+Recent agent iterations have significantly deepened the biological complexity and evolutionary arms race within Project Genesis by introducing a suite of advanced defensive and ecological traits:
+- **Sensory & Visual Deception:** The introduction of `camouflage`, countered by `has_echolocation`, alongside `is_aposematic` (warning coloration), creates complex predator-prey targeting rules. Predators must now weigh energy status against prey toxicity and visibility.
+- **Physical & Chemical Defenses:** Prey entities have evolved formidable counter-attacks. Traits like `has_spikes`, `is_venomous`, and `is_electric` mean that hunting is no longer a guaranteed energy gain for carnivores, but carries substantial risks of stamina drain, poisoning, or being stunned.
+- **Thermodynamic & Immunological Niche:** Entities now adapt to their microclimates and microscopic threats. `is_cold_blooded` restricts entities to warmer biomes to avoid movement and energy penalties. Concurrently, `is_immune` introduces an epidemiological layer where surviving populations become resistant to repeated disease outbreaks.
+- **Lifecycle & Propagation:** `is_fruiting` introduces mutualistic relationships by dropping food, and aging growth mechanics ensure young entities are vulnerable before reaching full size, introducing dynamic life-stages.
+
+**Agent Actions:** Agents systematically implemented these traits within `Entity.__init__`, correctly integrated them into the genetic mutation and inheritance systems, and rigorously updated combat resolution, tick events, and targeted unit tests.
+**Result:** The simulation has transitioned from simple spatial resource gathering to a deep, trait-based evolutionary ecosystem where survival depends on highly specialized biological niches.
+
+### 34. Deep-water Biome and Aquatic Entities
+- **Feature description**: Added a new terrain type `deep-water` which organically generates when water tiles are completely surrounded by other water tiles. Normal and amphibious entities are blocked from entering deep-water, but entities possessing the `is_aquatic` trait can freely traverse it.
+- **Code implementation**:
+  - Updated `is_passable` in `src/universe/engine.py` to specifically permit aquatic entities but deny amphibious/normal entities in deep-water.
+  - Implemented dynamic terrain generation in `Universe.tick()` to slowly convert stable pools of water into deep-water.
+  - Updated `CLIVisualizer` to represent deep-water tiles as `≈`.
+- **Reasoning**: This enhances ecosystem complexity by creating unreachable zones for land predators and specialized biomes for marine life, simulating realistic bodies of water and encouraging diet and species divergence based on traversal abilities.
+- **Agent Action**: Implemented `has_claws` trait.
+- **Analysis**: This trait introduces a new offensive survival mechanic. Entities that mutate the `has_claws` trait receive a flat bonus to effective attack during combat. This provides a direct advantage for predators when hunting or for prey defending themselves, encouraging the evolution of higher defense stats or specialized escape strategies in response.
+
+### 35. Claws Trait Analysis
+- **Feature description**: Added a new combat trait `has_claws` for entities.
+- **Code implementation**:
+  - Updated `Entity.__init__` to include `has_claws` boolean attribute.
+  - Updated combat mechanics in `Universe.tick()` to add an attack bonus if the entity `has_claws`.
+- **Reasoning**: Introduces a new offensive survival mechanic. Entities that mutate the `has_claws` trait receive a flat bonus to effective attack during combat. This provides a direct advantage for predators when hunting or for prey defending themselves, encouraging the evolution of higher defense stats or specialized escape strategies in response.
+
+### 18. Parasitism
+- Added `is_parasitic` trait.
+- Parasites skip standard moving to actively track and attach to larger entities (hosts).
+- Upon attachment, parasites drain energy and hydration from their host each tick.
+- If the host dies, the parasite detaches and resumes seeking.- Analyzed recent project changes (Specialized Dependencies) and verified existing engine logic.
+
+### 36. Scales Trait Analysis
+- **Feature description**: Implemented `has_scales` trait.
+- **Code implementation**:
+  - Updated `Entity.__init__` to include `has_scales` boolean attribute.
+  - Modified `Universe.tick()` to reduce hydration loss by half for entities with `has_scales` (they only lose hydration every even tick).
+  - Modified combat logic in `Universe.tick()` to grant a +2 `effective_defense` bonus to preys with `has_scales`.
+  - Updated entity reproduction logic to allow inheritance and mutation of the `has_scales` trait.
+  - Updated `CLIVisualizer` to render entities with `has_scales` using the 'R' character.
+- **Reasoning**: This trait introduces a new hydration-management and defensive mechanic. Entities that mutate `has_scales` lose hydration at half the normal rate, making them highly adapted to desert or water-scarce environments. Additionally, their scaly exterior provides a flat +2 bonus to effective defense during combat, making them tougher for predators to hunt.
 
 ### Analysis 37: Fur Trait
 - **Description**: Implemented `has_fur` trait.
@@ -972,6 +672,13 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 **Overview:** Implemented the `fierce` trait for entities.
 **Details:** Entities with this trait gain a flat +3 bonus to effective attack in combat.
 
+### Analysis 96: is_desperate Trait
+**Overview:** Implemented the `is_desperate` trait which gives a +4 attack bonus when energy is <30%.
+**Details:**
+- Added `is_desperate` parameter to `Entity.__init__`
+- Updated child mutation and inheritance in `Universe.tick`
+- Applied +4 `effective_attack` modifier in both combat logic blocks when `is_desperate=True` and `energy` < 30% of `max_energy`.
+
 ### Analysis 97: Absorbent Trait
 **Overview:** Implemented the `absorbent` trait for entities.
 **Details:** Entities with this trait regain hydration when it is raining (storm event) or they are standing on water/mud/deep-water terrain.
@@ -983,6 +690,629 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 99: Lucky Trait
 **Overview:** Implemented the `lucky` trait for entities.
 **Details:** Entities with this trait have a 10% higher chance to completely avoid being eaten or attacked and successfully escape combat.
+
+### Analysis 100: Telepathic Trait
+**Overview:** Implemented the `telepathic` trait for entities.
+**Details:** Entities with this trait can broadcast predator alerts globally to all species members, bypassing normal communication radius limits.
+
+### Analysis 101: Vengeful Trait
+**Overview:** Implemented the `is_vengeful` trait for entities.
+**Details:** Entities with this trait gain permanent attack power when successfully escaping from a predator, shifting combat dynamics over time.
+
+### Analysis 102: Cautious Trait
+**Overview:** Implemented the `is_cautious` trait for entities.
+**Details:** Entities with this trait double their effective perception radius when detecting and fleeing from predators, making them significantly harder to ambush.
+
+### Analysis 103: Defensive Trait
+**Overview:** Implemented the `is_defensive` trait for entities.
+**Details:** Entities with this trait gain a flat +3 bonus to effective defense in combat, increasing their survivability against predators.
+
+### Analysis 104: Sturdy Trait
+**Overview:** Implemented the `is_sturdy` trait for entities.
+**Details:** Entities with this trait are immune to being stunned during combat, making them resilient to effects from electric entities or other stunning mechanics.
+
+### Analysis 105: Arctic Trait
+**Overview:** Implemented the `is_arctic` trait for entities.
+**Details:** Entities with this trait gain energy when on snow or ice and lose no energy during blizzards, adapting them perfectly to cold environments.
+
+### Analysis 106: Restless Trait
+**Overview:** Implemented the `is_restless` trait for entities.
+**Details:** Entities with this trait never fall asleep, even when their stamina is fully depleted, allowing them to remain constantly alert.
+
+### Analysis 107: Slippery Trait
+**Overview:** Implemented the `is_slippery` trait for entities.
+**Details:** Entities with this trait have a 50% chance to escape stamina drain from webs and avoid being eaten by carnivorous plants, offering unique defensive capabilities against environmental traps.
+
+### Analysis 108: Leap Trait
+**Overview:** Implemented the `can_leap` trait for entities.
+**Details:** Entities with this trait can jump over single-tile obstacles at the cost of extra stamina, enhancing their mobility in cluttered environments.
+
+### Analysis 109: Heavy Trait
+**Overview:** Implemented the `is_heavy` trait for entities.
+**Details:** Entities with this trait gain a flat +2 defense bonus but suffer increased stamina consumption during movement, trading mobility for durability.
+
+### Analysis 110: Lightweight Trait
+**Overview:** Implemented the `is_lightweight` trait for entities.
+**Details:** Entities with this trait consume less stamina during movement but suffer a flat -2 penalty to effective defense, favoring agility over resilience.
+
+### Analysis 111: Stealthy Trait
+**Overview:** Implemented the `is_stealthy` trait for entities.
+**Details:** Entities with this trait halve the effective perception radius of predators and prey trying to detect them, making them excellent ambush predators or elusive prey.
+
+### Analysis 112: Mimic Trait
+**Overview:** Implemented the `is_mimic` trait for entities.
+**Details:** Entities with this trait appear harmless at a distance and are ignored by prey unless within 2 tiles, giving them an advantage when approaching targets.
+
+### Analysis 113: Sharp Teeth Trait
+**Overview:** Implemented the `has_sharp_teeth` trait for entities.
+**Details:** Entities with this trait bypass the flat defense bonuses granted by `has_shell` and `has_scales` during combat, making them specialized hunters against armored prey.
+
+### Analysis 114: Resilient Trait
+**Overview:** Implemented the `is_resilient` trait for entities.
+**Details:** Entities with this trait recover faster from poison and stun, improving their survivability against specialized combat effects.
+
+### Analysis 115: Fearless Trait
+**Overview:** Implemented the `is_fearless` trait for entities.
+**Details:** Entities with this trait do not run away from predators.
+
+### Analysis 116: Photosensitive Trait
+**Overview:** Implemented the `is_photosensitive` trait for entities.
+**Details:** Entities with this trait suffer increased hydration loss and no stamina recovery during the day, but gain bonus stamina recovery at night.
+
+### Analysis 117: Nest Builder Trait
+**Overview:** Implemented the `is_nest_builder` trait for entities.
+**Details:** Entities with this trait can build `shelter` terrains regardless of their intelligence level, allowing them to create safe havens for themselves and their offspring.
+
+### Analysis 118: Endurance Runner Trait
+**Overview:** Implemented the `is_endurance_runner` trait for entities.
+**Details:** Entities with this trait have double the maximum stamina and recover stamina at double the normal rate.
+
+### Analysis 119: Patient Trait
+**Overview:** Implemented the `is_patient` trait for entities.
+**Details:** Entities with this trait recover double stamina when they remain stationary during a tick.
+
+### Analysis 120: Thick Skin Trait
+**Overview:** Implemented the `has_thick_skin` trait for entities.
+**Details:** Entities with this trait are immune to damage from spikes and gain extra defense when attacked by entities with claws.
+
+### Analysis 121: Opportunistic Trait
+**Overview:** Implemented the `is_opportunistic` trait for entities.
+**Details:** Entities with this trait can bypass their strict diet restrictions to eat both plants and meat when their energy falls below 25% of their maximum capacity.
+
+### Analysis 122: Strong Stomach Trait
+**Overview:** Implemented the `has_strong_stomach` trait for entities.
+**Details:** Entities with this trait are immune to toxicity from food and prey, and gain double energy when consuming meat.
+
+### Analysis 123: Frugivore Trait
+**Overview:** Implemented the `is_frugivore` trait for entities.
+**Details:** Entities with this trait get double energy from eating `fruit` food types.
+
+### Analysis 124: Cooperative Trait
+**Overview:** Implemented the `is_cooperative` trait for entities.
+**Details:** Entities with this trait share energy with struggling nearby members of the same species.
+
+### Analysis 125: Nocturnal Trait
+**Overview:** Implemented the `is_nocturnal` trait for entities.
+**Details:** Entities with this trait sleep during the day and are active at night, reversing the standard sleep cycle.
+
+### Analysis 126: Horns Trait
+**Overview:** Implemented the `has_horns` trait for entities.
+**Details:** Entities with this trait gain a +2 bonus to their effective attack and +1 to their effective defense during combat.
+
+### Analysis 127: Territorial Trait
+**Overview:** Implemented the `is_territorial` trait for entities.
+**Details:** Entities with this trait gain an attack and defense bonus during combat.
+
+### Analysis 128: Ambush Predator Trait
+**Overview:** Implemented the `is_ambush_predator` trait for entities.
+**Details:** Entities with this trait deal double damage during combat if they attack while having camouflage.
+
+### Analysis 129: Cannibalistic Trait
+**Overview:** Implemented the `is_cannibalistic` trait for entities.
+**Details:** Entities with this trait will occasionally attack and eat entities of the same species if their energy is critically low.
+
+### Analysis 130: Solitary Trait
+**Overview:** Implemented the `is_solitary` trait for entities.
+**Details:** Entities with this trait gain an energy efficiency buff when alone, but suffer an energy penalty when near other entities of the same species.
+
+### Analysis 131: Gluttonous Trait
+**Overview:** Implemented the `is_gluttonous` trait for entities.
+**Details:** Entities with this trait can overeat beyond their maximum energy capacity (up to 1.5x) but suffer increased passive energy drain.
+
+### Analysis 132: Filter Feeder Trait
+**Overview:** Implemented the `is_filter_feeder` trait for entities.
+**Details:** Aquatic entities with this trait passively gain small amounts of energy while swimming in `water` or `deep-water` terrains, simulating filter feeding.
+
+### Analysis 133: Mud Bather Trait
+**Overview:** Implemented the `is_mud_bather` trait for entities.
+**Details:** Entities with this trait recover hydration and stamina when on mud terrain.
+
+### Analysis 134: Blubber Trait
+**Overview:** Implemented the `has_blubber` trait for entities.
+**Details:** Entities with this trait have 50% more maximum energy capacity and gain enhanced cold resistance, but suffer severe energy penalties in hot environments.
+
+### Analysis 135: Sweat Trait
+**Overview:** Implemented the `can_sweat` trait for entities.
+**Details:** Entities with this trait avoid heat-based energy penalties in hot temperatures but suffer increased hydration loss.
+
+### Analysis 136: Detritivore Trait
+**Overview:** Implemented the `is_detritivore` trait for entities.
+**Details:** Entities with this trait consume `ash` and `mud` terrains directly, cleaning up the environment and recovering energy.
+
+### Analysis 137: Scentless Trait
+**Overview:** Implemented the `is_scentless` trait for entities.
+**Details:** Entities with this trait do not leave scent trails, making them harder for predators to track.
+
+### Analysis 138: Carnivorous Plant Trait
+**Overview:** Implemented the `is_carnivorous_plant` trait for entities.
+**Details:** Plants with this trait can consume small entities that move onto their tile, gaining energy and growing larger.
+
+### Analysis 139: Bioluminescence Trait
+**Overview:** Implemented the `has_bioluminescence` trait for entities.
+**Details:** Entities with this trait bypass night vision penalties for themselves, but are easily spotted by predators at night.
+
+### Analysis 140: Scales Trait
+**Overview:** Implemented the `has_scales` trait for entities.
+**Details:** Entities with this trait lose hydration at half the normal rate and receive a small flat bonus to effective defense during combat.
+
+### Analysis 141: Claws Trait
+**Overview:** Implemented the `has_claws` trait for entities.
+**Details:** Entities with this trait gain an attack bonus during combat.
+
+### Analysis 142: Cold Blooded Trait
+**Overview:** Implemented the `is_cold_blooded` trait for entities.
+**Details:** Entities with this trait gain an energy efficiency advantage in hot temperatures but suffer energy and movement penalties in cold temperatures.
+
+### Analysis 143: Shell Trait
+**Overview:** Implemented the `has_shell` trait for entities.
+**Details:** Entities with this trait gain a significant defense bonus during combat to simulate thick armor.
+
+### Analysis 144: Immune Trait
+**Overview:** Implemented the `is_immune` trait for entities.
+**Details:** Entities can now gain immunity after recovering from disease, and offspring can inherit this trait or mutate to gain it. This adds an immunological layer to natural selection.
+
+### Analysis 145: Regenerative Trait
+**Overview:** Implemented the `is_regenerative` trait for entities.
+**Details:** Entities with this trait regenerate energy at the cost of hydration.
+
+### Analysis 146: Fur Trait
+**Overview:** Implemented the `has_fur` trait for entities.
+**Details:** Entities with this trait gain enhanced cold resistance but suffer increased energy loss and movement penalties in hot environments.
+
+### Analysis 147: Volcanic Trait
+**Overview:** Implemented the `is_volcanic` trait for entities.
+**Details:** Entities with this trait thrive in extreme heat, gain energy when standing on `ash` terrain, and are immune to `fire` events.
+
+### Analysis 148: Forestal Trait
+**Overview:** Implemented the `is_forestal` trait for entities.
+**Details:** Entities with this trait gain defense in forest/wooded terrain.
+
+### Analysis 149: Social Trait
+**Overview:** Implemented the `is_social` trait for entities.
+**Details:** Entities with this trait gain an energy efficiency buff when near other entities of the same species.
+
+### Analysis 150: Playful Trait
+**Overview:** Implemented the `is_playful` trait for entities.
+**Details:** Entities with this trait gain 1 experience point per tick when standing adjacent to another entity of the same species.
+
+### Analysis 151: Fast Learner Trait
+**Overview:** Implemented the `is_fast_learner` trait for entities.
+**Details:** Entities with this trait gain double experience points from all activities.
+
+### Analysis 152: Hardy Trait
+**Overview:** Implemented the `is_hardy` trait for entities.
+**Details:** Entities with this trait halve their base energy loss rate when their energy falls below 25% of their maximum, representing extreme metabolic efficiency during starvation.
+
+### Analysis 153: Agile Trait
+**Overview:** Implemented the `is_agile` trait for entities.
+**Details:** Entities with this trait ignore stamina penalties when moving uphill.
+
+### Analysis 154: Migratory Trait
+**Overview:** Implemented the `is_migratory` trait for entities.
+**Details:** Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
+
+### Analysis 155: Parasite Resistant Trait
+**Overview:** Implemented the `is_parasite_resistant` trait for entities.
+**Details:** Entities with this trait are immune to parasitic attachment, rendering them safe from energy and hydration drain by parasites.
+
+### Analysis 156: Relentless Trait
+**Overview:** Implemented the `is_relentless` trait for entities.
+**Details:** Entities with this trait deal half their effective attack as energy damage to their prey even if the prey successfully escapes combat.
+
+### Analysis 157: Fierce Trait
+**Overview:** Implemented the `is_fierce` trait for entities.
+**Details:** Entities with this trait gain a flat +3 bonus to effective attack in combat.
+
+### Analysis 158: Spiteful Trait
+**Overview:** Implemented the `is_spiteful` trait for entities.
+**Details:** Entities with this trait deal their defense as energy damage to their predator when killed.
+
+### Analysis 159: Cleaner Trait
+**Overview:** Implemented the `is_cleaner` trait for entities.
+**Details:** Entities with this trait remove parasites and cure diseases from adjacent entities, gaining energy in the process.
+
+### Analysis 160: Intimidating Trait
+**Overview:** Implemented the `is_intimidating` trait for entities.
+**Details:** Entities with this trait reduce the effective attack or defense of their opponents during combat by 2, making them formidable foes or difficult targets.
+
+### Analysis 161: Vocal Trait
+**Overview:** Implemented the `is_vocal` trait for entities.
+**Details:** Entities with this trait alert nearby flockmates of predators at an increased distance (double their normal communication radius).
+
+### Analysis 162: Resourceful Trait
+**Overview:** Implemented the `is_resourceful` trait for entities.
+**Details:** Entities with this trait extract hydration from food and prey, recovering hydration when they eat, which reduces their dependence on environmental water sources.
+
+### Analysis 163: Prolific Trait
+**Overview:** Implemented the `is_prolific` trait for entities.
+**Details:** Entities with this trait have reduced energy thresholds and costs for reproduction, and reproduce more frequently.
+
+### Analysis 164: Heavy Sleeper Trait
+**Overview:** Implemented the `is_heavy_sleeper` trait for entities.
+**Details:** Entities with this trait recover double energy while sleeping, but their perception drops to 0 during sleep, rendering them oblivious to events and predators.
+
+### Analysis 165: Evasive Trait
+**Overview:** Implemented the `is_evasive` trait for entities.
+**Details:** Entities with this trait gain a flat +20% bonus to their escape chance during combat, making them notoriously slippery and hard to catch.
+
+### Analysis 166: Adaptable Trait
+**Overview:** Implemented the `is_adaptable` trait for entities.
+**Details:** Entities with this trait dynamically adjust their preferred temperature over time to survive in extreme climates, at the cost of increased hydration consumption.
+
+### Analysis 167: Nomadic Trait
+**Overview:** Implemented the `is_nomadic` trait for entities.
+**Details:** Entities with this trait have reduced energy consumption when they are constantly moving.
+
+### Analysis 168: Scavenger Trait
+**Overview:** Implemented the `is_scavenger` trait for entities.
+**Details:** Entities with this trait gain bonus energy when consuming meat.
+
+### Analysis 169: Scout Trait
+**Overview:** Implemented the `is_scout` trait for entities.
+**Details:** Entities with this trait share their obstacle memory with nearby flockmates, improving collective pathfinding.
+
+### Analysis 170: Reckless Trait
+**Overview:** Implemented the `is_reckless` trait for entities.
+**Details:** Entities with this trait deal double damage (effective attack * 2) but their effective defense is reduced to 0 during combat, making them glass cannons.
+
+### Analysis 171: Thief Trait
+**Overview:** Implemented the `is_thief` trait for entities.
+**Details:** Entities with this trait and the ability to hoard can steal food from the inventory of adjacent entities when their own energy is low.
+
+### Analysis 172: Absorbent Trait
+**Overview:** Implemented the `is_absorbent` trait for entities.
+**Details:** Entities with this trait regain hydration when it is raining (storm event) or they are standing on water/mud/deep-water terrain.
+
+### Analysis 173: Pack Mule Trait
+**Overview:** Implemented the `is_pack_mule` trait for entities.
+**Details:** Entities with this trait can store up to 4x their size in food in their inventory instead of the standard 2x.
+
+### Analysis 174: Toxic Trait
+**Overview:** Implemented the `is_toxic` trait for entities.
+**Details:** Entities with this trait inflict poison on attackers during combat, causing them to suffer poisoned_time.
+
+### Analysis 175: Lucky Trait
+**Overview:** Implemented the `is_lucky` trait for entities.
+**Details:** Entities with this trait have a 10% higher chance to completely avoid being eaten or attacked and successfully escape combat.
+
+### Analysis 176: Telepathic Trait
+**Overview:** Implemented the `is_telepathic` trait for entities.
+**Details:** Entities with this trait alert all living flockmates of predators regardless of distance.
+
+### Analysis 177: Smelly Trait
+**Overview:** Implemented the `is_smelly` trait for entities.
+**Details:** Entities with this trait leave a stronger scent trail but inflict an attack penalty on their predators.
+
+### Analysis 178: Ruthless Trait
+**Overview:** Implemented the `is_ruthless` trait for entities.
+**Details:** Entities with this trait gain a flat +3 bonus to effective attack during combat if the prey's energy is below half of its maximum.
+
+### Analysis 179: Protective Trait
+**Overview:** Implemented the `is_protective` trait for entities.
+**Details:** Entities with this trait grant a flat +2 defense bonus to adjacent herd members during combat.
+
+### Analysis 180: Forager Trait
+**Overview:** Implemented the `is_forager` trait for entities.
+**Details:** Entities with this trait gain an extra 5 energy when consuming plants or fruit.
+
+### Analysis 181: Tireless Trait
+**Overview:** Implemented the `is_tireless` trait for entities.
+**Details:** Entities with this trait do not consume stamina when moving.
+
+### Analysis 182: Vigilant Trait
+**Overview:** Entities with this trait are highly alert and cannot be ambushed.
+**Details:** When an ambush predator attacks an entity with `is_vigilant=True`, the predator does not receive its normal 2x attack multiplier from being camouflaged.
+
+### Analysis 183: Pacifist Trait
+**Overview:** Implemented the `is_pacifist` trait for entities.
+**Details:** Entities with this trait never initiate combat, even when hungry.
+
+### Analysis 184: Farsighted Trait
+**Overview:** Implemented the `is_farsighted` trait for entities.
+**Details:** Entities with this trait have their effective perception radius doubled, which allows them to spot food, prey, and predators from farther away, but they suffer a -2 penalty to their effective attack during combat due to their lack of close-range focus.
+
+### Analysis 185: Vampiric Trait
+**Overview:** Implemented the `is_vampiric` trait for entities.
+**Details:** Vampiric trait (`is_vampiric`). Entities with this trait drain energy and hydration from their prey during combat, even if the prey escapes.
+
+### Analysis 186: Aquatic Trait
+**Overview:** Implemented the `is_aquatic` trait for entities.
+**Details:** deep-water biome and aquatic entities. Entities with `is_aquatic` can navigate deep-water while others cannot, adding more varied terrain traversal.
+
+### Analysis 187: Electric Trait
+**Overview:** Implemented the `is_electric` trait for entities.
+**Details:** Electric trait (`is_electric`) and stunned mechanics. Entities with this trait stun their attackers during combat, rendering them unable to move or act for several ticks.
+
+### Analysis 188: Fruiting Trait
+**Overview:** Implemented the `is_fruiting` trait for entities.
+**Details:** Fruiting trait (`is_fruiting`). Entities with this trait can passively drop food (fruit) when well-fed, allowing them to support symbiotic species or act as anglerfish-like predators that bait herbivores.
+
+### Analysis 189: Aposematic Trait
+**Overview:** Implemented the `is_aposematic` trait for entities.
+**Details:** Aposematism trait (`is_aposematic`) which makes predators ignore the entity unless they are starving.
+
+### Analysis 190: Echolocation Trait
+**Overview:** Implemented the `has_echolocation` trait for entities.
+**Details:** echolocation trait (`has_echolocation`). Entities with this trait bypass camouflage and night-time vision penalties.
+
+### Analysis 191: Photosynthesize Trait
+**Overview:** Implemented the `can_photosynthesize` trait for entities.
+**Details:** Photosynthesis trait (`can_photosynthesize`). Entities with this trait gain energy during the daytime, simulating plant-like behavior.
+
+### Analysis 192: Venomous Trait
+**Overview:** Implemented the `is_venomous` trait for entities.
+**Details:** venomous trait (`is_venomous`) where entities have a chance to poison their opponent during combat.
+
+### Analysis 193: Spin Webs Trait
+**Overview:** Implemented the `can_spin_webs` trait for entities.
+**Details:** web building mechanics allowing entities with `can_spin_webs` to place stamina-draining traps.
+
+### Analysis 194: Spikes Trait
+**Overview:** Implemented the `has_spikes` trait for entities.
+**Details:** defensive spikes/thorns trait. Entities with `has_spikes` damage their attackers during combat.
+
+### Analysis 195: Lays Eggs Trait
+**Overview:** Implemented the `lays_eggs` trait for entities.
+**Details:** Oviparity/Egg-Laying mechanics. Entities with `lays_eggs` lay an egg object instead of spawning children directly.
+
+### Analysis 196: Hibernate Trait
+**Overview:** Implemented the `can_hibernate` trait for entities.
+**Details:** hibernation mechanics allowing entities to preserve energy and hydration during winter if they possess the `can_hibernate` trait.
+
+### Analysis 197: Mutate Trait
+**Overview:** Implemented the `mutate` trait for entities.
+**Details:** Entity Genetics and Mutations allowing child entities to inherit and slightly mutate traits (max_age, perception_radius).
+
+### Analysis 198: Camouflage Trait
+**Overview:** Implemented the `camouflage` trait for entities.
+**Details:** a camouflage trait for entities allowing them to avoid detection by reducing the effective perception range of others.
+
+### Analysis 199: Flying Trait
+**Overview:** Implemented the `is_flying` trait for entities.
+**Details:** flight mechanics. Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water during movement and pathfinding.
+
+### Analysis 200: Amphibious Trait
+**Overview:** Implemented the `is_amphibious` trait for entities.
+**Details:** amphibious trait (`is_amphibious`) allowing entities to freely traverse both land and water tiles.
+
+### Analysis 201: Parasitic Trait
+**Overview:** Implemented the `is_parasitic` trait for entities.
+**Details:** Parasitism (`is_parasitic`) trait. Parasites actively seek out and attach to larger hosts, continually draining their energy and hydration to sustain themselves.
+
+### Analysis 202: Vibrant Trait
+**Overview:** Implemented the `is_vibrant` trait for entities.
+**Details:** Entities with this trait have an increased reproduction chance but cannot use camouflage.
+
+### Analysis 203: Chameleon Trait
+**Overview:** Implemented the `is_chameleon` trait for entities.
+**Details:** Entities with this trait gain a massive camouflage bonus (+0.5) when they remain stationary during a tick, making them practically invisible to predators and prey, but they lose this bonus when they move.
+
+### Analysis 204: Unappetizing Trait
+**Overview:** Implemented the `is_unappetizing` trait for entities.
+**Details:** Entities with this trait grant only half their normal energy to predators upon being eaten, providing a slight evolutionary disadvantage to their predators without necessarily preventing their own death.
+
+### Analysis 205: is_introspective Trait
+**Overview:**
+Implemented the `is_introspective` trait. Entities with this trait gain a deep understanding of their surroundings when still, granting them 2 experience points per tick they remain stationary.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_introspective` flag.
+- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
+- Updated the stationary recovery logic block in `Universe.tick()` to award 2 experience points per tick to entities with `is_introspective` that do not move from their `start_pos`.
+- Assigned the visual character `Ω` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added tests `test_is_introspective_stationary_xp` and `test_is_introspective_mutation` to `tests/test_engine.py` to ensure correct behavior.
+
+### Analysis 206: Frenzied Trait
+**Overview:**
+Implemented the `is_frenzied` trait. Entities with this trait gain a massive +5 bonus to their effective attack during combat, but lose 5 energy per combat encounter due to overexertion.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_frenzied` flag.
+- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
+- Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to apply a flat +5 bonus to `effective_attack` and subtract 5 energy from the attacking entity if they possess `is_frenzied`.
+- Assigned the visual character `ç` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added tests `test_is_frenzied_combat` and `test_is_frenzied_mutation` to `tests/test_engine.py` to ensure correct behavior.
+
+### Analysis 207: Hypnotic Trait
+**Overview:**
+Implemented the `is_hypnotic` trait. Entities with this trait halve the effective attack of their predators during combat.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_hypnotic` flag.
+- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
+- Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to halve the `effective_attack` of the attacker if the defending entity possesses `is_hypnotic`.
+- Assigned the visual character `•` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added tests `test_is_hypnotic_combat` and `test_is_hypnotic_mutation` to `tests/test_engine.py` to ensure correct behavior.
+
+### Analysis 208: Tracker Trait
+**Overview:**
+Implemented the `is_tracker` trait. Entities with this trait can follow scent trails from up to 2 tiles away, making them superior hunters capable of tracking prey without being immediately adjacent to the scent trail.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_tracker` flag.
+- Added inheritance and mutation logic in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
+- Updated the scent tracking logic in `Universe.tick()` to expand the search radius for entities with `is_tracker`, allowing them to detect the strongest scent within a 2-tile Manhattan distance and step toward it.
+- Assigned the visual character `↬` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added tests `test_is_tracker_scent_detection` and `test_is_tracker_mutation` to `tests/test_engine.py` to ensure correct behavior.
+
+### Analysis 209: Empathic Trait
+**Overview:**
+The `is_empathic` trait has been implemented, introducing a cooperative resource-sharing mechanism among social entities.
+
+**Details:**
+- **Energy Transfer:** Entities with this trait proactively transfer 2 energy to adjacent flockmates (entities of the same species within 1 tile distance) whose energy has fallen below 30% of their maximum capacity.
+- **Cost:** The empathic entity sacrifices 2 of its own energy to perform this transfer, provided its energy is above 50% of its maximum capacity.
+- **Selective Advantage:** This trait increases the overall survivability of a species cluster by preventing starvation in vulnerable individuals, buffering against localized food scarcity or severe energy drains, and extending the operational longevity of the flock as a whole.
+- **Integration:** The trait is successfully integrated into reproduction logic, meaning it can be inherited or spontaneously mutated. Visualized by the '±' character.
+
+### Analysis 210: Contagious Trait
+**Overview:**
+Implemented the `is_contagious` trait. Entities with this trait transmit their infection to any entity they engage in combat with, regardless of who initiated the attack or if the prey was eaten.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_contagious` flag.
+- Added inheritance and mutation logic for `is_contagious` in `Universe.tick()`, allowing offspring to inherit or randomly mutate the trait.
+- Updated the reproduction child creation code in `Universe.tick()` to pass the `is_contagious` parameter correctly.
+- Updated both combat calculation blocks (scent tracking and direct collision) in `Universe.tick()` to enforce transmission logic: if the attacker is infected and contagious, the defender becomes infected (unless immune); and if the defender is infected and contagious, the attacker becomes infected (unless immune).
+- Assigned the visual character `ñ` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added a `TestIsContagious` class to `tests/test_engine.py` with 4 dedicated tests (`test_is_contagious_mutation`, `test_is_contagious_attacker`, `test_is_contagious_defender`, `test_is_contagious_immunity`) to fully verify the expected transmission logic and immunity interactions.
+
+### Analysis 211: Arboreal Trait
+**Overview:**
+Implemented the `is_arboreal` trait. Entities with this trait gain a natural affinity for forest environments, treating them as shelters.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_arboreal` flag.
+- Updated `Universe.tick()` to allow `is_arboreal` to be inherited and mutated during reproduction.
+- Updated the `in_shelter` definition in `Universe.tick()` to evaluate to `True` for arboreal entities stationed on `forest` terrain, reducing their per-tick energy loss dynamically.
+- Updated `prey_in_shelter` calculations within both the tracking and collision combat blocks in `Universe.tick()` to grant arboreal entities on `forest` terrain a flat +3 effective defense bonus.
+- Assigned the visual character `♣` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
+- Added the `TestIsArboreal` class to `tests/test_engine.py` to verify trait inheritance, energy recovery mechanics, and combat defense bonuses.
+
+### Analysis 212: Stargazer Trait
+**Overview:**
+Implemented the `is_stargazer` trait. Entities with this trait gain an energy bonus and extra stamina recovery on clear nights.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_stargazer` flag.
+- Added inheritance and mutation logic for `is_stargazer` in `Universe.tick()`, allowing offspring to inherit or mutate the trait.
+- Updated energy and stamina logic in `Universe.tick()` to grant +1 energy and +2 stamina recovery per tick on clear nights (when `self.is_night` is true and `self.current_event` is None).
+- Assigned the visual character `✧` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added the `TestIsStargazer` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the specific conditional energy and stamina bonuses.
+- Added `is_stargazer` to the 'Completed' section of `agents.md`.
+
+### Analysis 213: Sure Footed Trait
+**Overview:**
+Implemented the `is_sure_footed` trait. Entities with this trait are immune to stamina drain during earthquake events.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_sure_footed` flag.
+- Updated `Universe.tick()` to allow `is_sure_footed` to be inherited and mutated during reproduction.
+- Updated the stamina logic in `Universe.tick()` to drain 5 stamina from entities without the `is_sure_footed` trait during `earthquake` events.
+- Assigned the visual character `▽` to represent this trait in `src/universe/visualizer.py` and recorded it in `used_chars.txt`.
+- Added the `TestIsSureFooted` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the specific stamina drain immunity.
+- Added `is_sure_footed` to the 'Completed' section of `agents.md`.
+
+### Analysis 214: Bloodthirsty Trait
+**Overview:** Implemented the `is_bloodthirsty` trait for entities.
+**Details:** Entities with this trait recover 20 stamina whenever they successfully hunt and eat a prey.
+
+### Analysis 215: Sun Tracker Trait
+**Overview:** Implemented the `is_sun_tracker` trait for entities.
+**Details:** Entities with this trait gain an energy bonus during the day if they are standing on clear terrain (not a shelter or ash), allowing them to passively absorb sunlight.
+
+### Analysis 216: Dust Bather Trait
+**Overview:**
+Implemented the `is_dust_bather` trait. Entities with this trait can cure their infections by standing on ash or sand terrain.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_dust_bather` flag.
+- Updated `Universe.tick()` to allow `is_dust_bather` to be inherited and mutated during reproduction.
+- Updated the execution block in `Universe.tick()` to cure `is_infected` status if an entity with `is_dust_bather` is on `ash` or `sand` terrain.
+- Assigned the visual character `β` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
+- Added the `TestIsDustBather` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the infection-curing mechanics.
+- Added `is_dust_bather` to the 'Completed' section of `agents.md`.
+
+### Analysis 217: Magnetic Trait
+**Overview:**
+Implemented the `is_magnetic` trait. Entities with this trait draw power from magnetic storms, gaining 5 energy and 10 stamina each tick during the 'storm' event.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_magnetic` flag.
+- Updated `Universe.tick()` to allow `is_magnetic` to be inherited and mutated during reproduction.
+- Updated the environmental event execution block in `Universe.tick()` to apply energy and stamina bonuses when `self.current_event == 'storm'`.
+- Assigned the visual character `⚡` to represent this trait in `src/universe/visualizer.py`.
+- Added the `TestIsMagnetic` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the storm bonuses.
+- Also added missing dedicated tests for `is_farsighted` and `is_pacifist`.
+- Added `is_magnetic` to the 'Completed' section of `agents.md`.
+
+### Analysis 218: Drought Resistant Trait
+**Overview:**
+Implemented the `is_drought_resistant` trait. Entities with this trait do not lose hydration during a drought event.
+
+**Details:**
+- Modified `Entity.__init__` in `src/universe/engine.py` to accept and store the `is_drought_resistant` flag.
+- Updated `Universe.tick()` to allow `is_drought_resistant` to be inherited and mutated during reproduction.
+- Updated the main hydration drain block in `Universe.tick()` to bypass hydration loss if `self.current_event == 'drought'` and the entity has the trait.
+- Assigned the visual character `∆` to represent this trait in `src/universe/visualizer.py` and appended it to `used_chars.txt`.
+- Added the `TestIsDroughtResistant` class to `tests/test_engine.py` to verify trait inheritance, mutation, and the drought resistance mechanics.
+- Added `is_drought_resistant` to the 'Completed' section of `agents.md` implicitly via Next Steps.
+
+### Analysis 219: Pack Hunter Trait
+**Overview:** Implemented the `pack_hunter` trait for entities.
+**Details:** predatory entities to share target tracking and coordinate attacks with nearby entities of the same species.
+
+### Analysis 220: Climb Trait
+**Overview:** Implemented the `can_climb` trait for entities.
+**Details:** entities to traverse 'wall' terrain blocks, simulating climbing over obstacles.
+
+### Analysis 221: Desertic Trait
+**Overview:** Implemented the `is_desertic` trait for entities.
+**Details:** Entities with this trait suffer half hydration loss in hot climates and gain an energy efficiency bonus when traversing `sand` terrain.
+
+### Analysis 222: Sleeping Trait
+**Overview:** Added missing genetic mutation unit tests for `is_sleeping` trait in `tests/test_engine.py`.
+**Details:** Ensured the trait correctly mutates during reproduction.
+
+### Analysis 223: Sprint Trait
+**Overview:** Implemented the `can_sprint` trait for entities.
+**Details:** allowing entities to temporarily move faster at a high stamina cost.
+
+### Analysis 224: Disease Vector Trait
+**Overview:** Implemented the `disease_vector` trait for entities.
+**Details:** scavenger entities, causing them to spread disease more rapidly when interacting with corpses.
+
+### Analysis 225: Moon Bather Trait
+**Overview:** Implemented the `is_moon_bather` trait for entities.
+**Details:** Entities with this trait gain an energy bonus and extra stamina recovery at night when standing on clear terrain.
+
+### Analysis 226: Can Hoard Trait
+**Overview:** Implemented the `can_hoard` trait for entities.
+**Details:** Entities with this trait can store food items in their inventory to consume later when hungry.
+
+### Analysis 227: Can Burrow Trait
+**Overview:** Implemented the `can_burrow` trait for entities.
+**Details:** Entities with this trait can sleep underground, treating any terrain as a shelter to hide from predators while sleeping.
+
+### Analysis 228: Is Sunbather Trait
+**Overview:** Implemented the `is_sunbather` trait for entities.
+**Details:** Entities with this trait recover extra energy and stamina during the day when the temperature is warm, but lose hydration faster.
+
+### Analysis 229: Storm Chaser Trait
+**Overview:** Implemented the `is_storm_chaser` trait for entities.
+**Details:** Entities with this trait gain a +2 bonus to their effective attack during a 'storm' event.
+
+### Analysis 230: Is Shadow Stalker Trait
+**Overview:** Implemented the `is_shadow_stalker` trait for entities.
+**Details:** Entities with this trait gain a +3 bonus to effective attack and reduce their stamina cost for movement to 0 when moving at night, making them formidable nocturnal hunters.
+
+### Analysis 231: Is Pyrophilic Trait
+**Overview:** Implemented the `is_pyrophilic` trait for entities.
+**Details:** Entities with this trait gain an energy bonus and extra stamina recovery when standing on ash terrain.
+
+### Analysis 232: is_iron_willed Trait
+**Overview:** Implemented the `is_iron_willed` trait for entities.
+**Details:** Entities with this trait are immune to the stat reductions caused by `is_intimidating` and `is_smelly` opponents in combat.
 
 ### Analysis 233: Is Frost Walker Trait
 **Overview:** Implemented the `is_frost_walker` trait for entities.
@@ -1003,7 +1333,6 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 237: Web Walker Trait
 **Overview:** Implemented the `is_web_walker` trait for entities.
 **Details:** Entities with this trait consume 0 stamina when moving on `web` terrain and are immune to having their stamina set to 0 by webs. Added to `Entity.__init__`, mutation logic, and `Universe.move_entity()`.
-
 
 ### Analysis 238: Ash Walker Trait
 **Overview:** Implemented the `is_ash_walker` trait for entities.
@@ -1026,3 +1355,15 @@ The `is_mud_glider` trait has been implemented to allow entities to navigate mud
 
 ### Analysis 243: Drought Strider Trait
 The `is_drought_strider` trait has been implemented to allow entities to navigate during drought events without expending stamina. This provides a significant mobility advantage during periods of extreme heat and dryness. This trait promotes survival strategies centered around drought events.
+
+### Analysis 244: Earthquake Glider Trait
+**Overview:** Implemented the `is_earthquake_glider` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving during an 'earthquake' event. Added to `Entity.__init__`, mutation logic, and stamina tracking.
+
+### Analysis 245: Blizzard Glider Trait
+**Overview:** Implemented the `is_blizzard_glider` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving during a 'blizzard' event. Added to `Entity.__init__`, mutation logic, and stamina tracking.
+
+### Analysis 246: Seismic Sensitive Trait
+**Overview:** Implemented the `is_seismic_sensitive` trait for entities.
+**Details:** Entities with this trait have their effective perception radius tripled during an 'earthquake' event.
