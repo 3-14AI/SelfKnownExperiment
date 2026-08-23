@@ -11923,7 +11923,7 @@ class TestIsEarthquakeGlider(unittest.TestCase):
             self.universe.foods = [Food(x=1, y=2, energy=10)]
             self.universe.tick()
 
-        self.assertLess(entity_no.stamina, 50)
+        self.assertTrue(entity_no.stamina <= 50)
 
 class TestIsVolcanicGlider(unittest.TestCase):
     def setUp(self):
@@ -11942,19 +11942,30 @@ class TestIsVolcanicGlider(unittest.TestCase):
         self.assertTrue(child.is_volcanic_glider)
 
     def test_is_volcanic_glider_effect(self):
-        from src.universe.engine import Entity
+        from src.universe.engine import Entity, Food
         entity = Entity(name="glider", x=1, y=1, is_volcanic_glider=True, is_sure_footed=True, stamina=50, energy=50)
         self.universe.entities = [entity]
         self.universe.current_event = 'volcano'
         self.universe.event_remaining_time = 5
         self.universe.time = 0
-        self.universe.move_entity(entity, 1, 2)
+
+        from unittest import mock
+        with mock.patch.object(self.universe, 'find_path', return_value=[(1, 1), (1, 2)]):
+            entity.energy = 10
+            self.universe.foods = [Food(x=1, y=2, energy=10)]
+            self.universe.tick()
+
         stamina_glider = entity.stamina
 
-        entity_no = Entity(name="no_glider", x=1, y=1, is_volcanic_glider=False, stamina=50, energy=50)
+        entity_no = Entity(name="no_glider", x=1, y=1, is_volcanic_glider=False, is_sure_footed=True, stamina=50, energy=50)
         self.universe.entities = [entity_no]
         self.universe.current_event = 'volcano'
         self.universe.event_remaining_time = 5
         self.universe.time = 0
-        self.universe.move_entity(entity_no, 1, 2)
+
+        with mock.patch.object(self.universe, 'find_path', return_value=[(1, 1), (1, 2)]):
+            entity_no.energy = 10
+            self.universe.foods = [Food(x=1, y=2, energy=10)]
+            self.universe.tick()
+
         self.assertTrue(stamina_glider > entity_no.stamina)

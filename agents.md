@@ -250,3 +250,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_mud_glider` trait. Entities with this trait consume no stamina when moving on mud terrain.
 - [x] Implemented `is_drought_strider` trait. Entities with this trait consume no stamina when moving during a 'drought' event.
 - [x] Implemented `is_earthquake_glider` trait. Entities with this trait consume 0 stamina when moving during an 'earthquake' event.
+- [x] Implemented `is_volcanic_glider` trait. Entities with this trait consume 0 stamina when moving during a 'volcano' event.
