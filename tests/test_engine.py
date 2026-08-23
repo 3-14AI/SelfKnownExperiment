@@ -7907,6 +7907,45 @@ class TestIsTracker(unittest.TestCase):
         finally:
             random.random = original_random
 
+
+class TestIsIceGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_ice_glider_effect(self):
+        from src.universe.engine import Entity, Terrain
+        entity = Entity(name="glider", x=1, y=1, is_ice_glider=True, stamina=50, energy=50, size=1)
+        self.universe.entities = [entity]
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='ice'))
+        self.universe.add_terrain(Terrain(x=1, y=2, terrain_type='ice'))
+
+        self.universe.move_entity(entity, 1, 2)
+        stamina_glider = entity.stamina
+
+        entity_no = Entity(name="no_glider", x=1, y=1, is_ice_glider=False, stamina=50, energy=50, size=1)
+        self.universe.entities = [entity_no]
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='ice'))
+        self.universe.add_terrain(Terrain(x=1, y=2, terrain_type='ice'))
+
+        self.universe.move_entity(entity_no, 1, 2)
+
+        self.assertTrue(stamina_glider >= entity_no.stamina)
+
+    def test_is_ice_glider_mutation(self):
+        from src.universe.engine import Entity
+        entity = Entity(name="parent", x=1, y=1, energy=100, max_age=10, age=5, is_ice_glider=False, size=1)
+        self.universe.entities = [entity]
+        self.universe.mutation_chance = 1.0
+
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name == "parent_child"]
+        if children:
+            self.assertTrue(children[0].is_ice_glider)
+
 if __name__ == '__main__':
 
 
