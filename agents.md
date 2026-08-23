@@ -155,6 +155,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
 
 ## Next Steps
+- [x] Implemented `is_volcanic_glider` trait. Entities with this trait consume 0 stamina when moving during a 'volcano' event.
 - [x] Implemented `is_drought_resistant` trait. Entities with this trait do not lose hydration during a drought event.
 - [x] Implemented `is_dust_bather` trait. Entities with this trait can cure their infections by standing on ash or sand terrain.
 - [x] Implemented `is_tracker` trait. Entities with this trait can follow scent trails from up to 2 tiles away.
