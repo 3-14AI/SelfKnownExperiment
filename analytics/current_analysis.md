@@ -1023,3 +1023,6 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 
 ### Analysis 242: Mud Glider Trait
 The `is_mud_glider` trait has been implemented to allow entities to navigate mud terrain without expending stamina. This provides a significant mobility advantage in environments with abundant mud, which would typically slow down or drain the stamina of other entities. This trait promotes survival strategies centered around swampy or muddy biomes.
+
+### Analysis 243: Drought Strider Trait
+The `is_drought_strider` trait has been implemented to allow entities to navigate during drought events without expending stamina. This provides a significant mobility advantage during periods of extreme heat and dryness. This trait promotes survival strategies centered around drought events.
