@@ -6542,7 +6542,10 @@ class TestIsResilient(unittest.TestCase):
 
     def test_is_resilient_poison_recovery(self):
         from src.universe.engine import Entity
-        entity = Entity("Test", x=5, y=5, energy=50, poisoned_time=10, is_resilient=True)
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.food_spawn_rate = 0
+        entity = Entity("Test", x=5, y=5, energy=50, poisoned_time=10, is_resilient=True, poison_resistance=0)
         self.universe.entities = [entity]
 
         self.assertEqual(entity.poisoned_time, 10)
@@ -11869,14 +11872,10 @@ class TestIsMudGlider(unittest.TestCase):
         universe.add_terrain(Terrain(x=5, y=5, terrain_type='mud'))
         universe.add_terrain(Terrain(x=6, y=5, terrain_type='mud'))
 
-        # Stamina passive recovery happens if they stay still, maybe they didn't move because they didn't sleep? No wait, stamina recovery is +2 if stationary, or something. Let's make sure they don't recover stamina by overriding tick or looking at engine.py
-        # Actually if they sleep they recover. If they move, they don't recover.
-        # But normal stamina didn't go down. Why?
+        universe.move_entity(glider, 1, 0)
+        universe.move_entity(normal, 1, 0)
 
-        universe.time = 0
-        universe.tick()
-
-        self.assertTrue(glider.stamina >= normal.stamina)
+        self.assertTrue(glider.stamina > normal.stamina)
         self.assertEqual(glider.stamina, 50)
 
 class TestIsDroughtStrider(unittest.TestCase):
@@ -12006,5 +12005,66 @@ class TestIsVolcanicGlider(unittest.TestCase):
             entity_no.energy = 10
             self.universe.foods = [Food(x=1, y=2, energy=10)]
             self.universe.tick()
+
+        self.assertTrue(stamina_glider > entity_no.stamina)
+
+
+class TestIsDayGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10, day_length=20)
+        self.universe.entities = []
+        self.universe.terrains = []
+
+    def test_is_day_glider_mutation(self):
+        from src.universe.engine import Entity
+        from unittest import mock
+        entity = Entity(name="parent", x=1, y=1, energy=100, age=10, size=1)
+        entity.is_day_glider = False
+        self.universe.add_entity(entity)
+        self.universe.population_limit = 100
+        self.universe.reproduction_threshold = 10
+        self.universe.reproduction_cost = 5
+
+        with mock.patch('random.random', return_value=0.01):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name == 'parent_child']
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_day_glider', False))
+
+    def test_is_day_glider_effect(self):
+        from src.universe.engine import Entity, Terrain
+        # day_length is 20, time is 0 initially, so it's day.
+        entity = Entity(name="glider", x=1, y=1, is_day_glider=True, stamina=50, energy=50)
+        self.universe.add_entity(entity)
+
+        from unittest import mock
+        with mock.patch.object(self.universe, 'find_path', return_value=[(1, 0)]):
+            entity.energy = 10 # Make it hungry so it moves
+            # ensure no passive stamina recovery masks the check
+            entity.is_sleeping = False
+            self.universe.tick()
+
+        # Stamina cost should be 0 because it's day.
+        # It's not completely 0 if something else drains it, but moving should not drain it.
+        # Let's directly call move_entity for precision instead of relying on tick.
+
+        entity.stamina = 50
+        self.universe.move_entity(entity, 1, 0)
+        stamina_glider = entity.stamina
+
+        # Now at night
+        self.universe.time = 15 # >= 10 is night
+        entity.stamina = 50
+        self.universe.move_entity(entity, -1, 0)
+        stamina_glider_night = entity.stamina
+
+        self.assertTrue(stamina_glider > stamina_glider_night)
+
+        # Test no glider
+        self.universe.time = 0
+        entity_no = Entity(name="no_glider", x=1, y=1, is_day_glider=False, stamina=50, energy=50)
+        self.universe.move_entity(entity_no, 1, 0)
 
         self.assertTrue(stamina_glider > entity_no.stamina)
