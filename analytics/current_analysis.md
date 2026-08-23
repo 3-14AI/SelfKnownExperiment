@@ -1020,3 +1020,6 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 241: Rain Dancer Trait
 **Overview:** Implemented the `is_rain_dancer` trait for entities.
 **Details:** Entities with this trait gain energy when they are within the radius of a 'rain' event. Added to `Entity.__init__`, mutation logic, and `Universe.tick()` rain event handling. Also added corresponding unit tests.
+
+### Analysis 242: Mud Glider Trait
+The `is_mud_glider` trait has been implemented to allow entities to navigate mud terrain without expending stamina. This provides a significant mobility advantage in environments with abundant mud, which would typically slow down or drain the stamina of other entities. This trait promotes survival strategies centered around swampy or muddy biomes.
