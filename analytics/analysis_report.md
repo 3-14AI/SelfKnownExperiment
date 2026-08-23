@@ -1354,3 +1354,7 @@ Implemented the `is_drought_resistant` trait. Entities with this trait do not lo
 ### Analysis 236: Water Strider Trait
 **Overview:** Implemented the `is_water_strider` trait for entities.
 **Details:** Entities with this trait consume 0 stamina when moving on `water` terrain and can walk on `water` (treated as passable). Added to `Entity.__init__`, mutation logic, `Universe.is_passable()`, and `Universe.move_entity()`. Also ensured pathfinding and `get_terrains_at` usages treat it properly.
+
+### Analysis 243: Drought Strider Trait
+**Overview:** Implemented the `is_drought_strider` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving during a 'drought' event.

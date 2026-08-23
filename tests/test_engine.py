@@ -7648,6 +7648,7 @@ class TestIsStormChaser(unittest.TestCase):
         parent.energy = 50
         parent.age = 10
         self.universe.mutation_chance = 1.0
+        self.universe.reproduction_threshold = 10
         self.universe.tick()
         children = [e for e in self.universe.entities if e.generation == 1]
         if children:
@@ -7817,6 +7818,7 @@ class TestIsRainDancer(unittest.TestCase):
         self.universe = Universe(width=10, height=10)
         self.universe.entities = []
         self.universe.mutation_chance = 1.0
+        self.universe.reproduction_threshold = 10
         parent = Entity(name="parent", x=5, y=5, energy=100, age=10, size=2, is_rain_dancer=False)
         parent.lays_eggs = False
         parent.is_parasitic = False
@@ -8898,8 +8900,8 @@ class TestStrongStomach(unittest.TestCase):
         self.assertTrue(getattr(child, "has_strong_stomach", False))
 
     def test_has_strong_stomach_immunity(self):
-        e1 = Entity("Strong", energy=100, has_strong_stomach=True, poison_resistance=0, is_telepathic=False)
-        e2 = Entity("Weak", energy=100, has_strong_stomach=False, poison_resistance=0, is_telepathic=False)
+        e1 = Entity("Strong", energy=10, has_strong_stomach=True, poison_resistance=0, is_telepathic=False)
+        e2 = Entity("Weak", energy=10, has_strong_stomach=False, poison_resistance=0, is_telepathic=False)
         toxic_food = Food(x=0, y=0, energy=10, plant_type='toxic_plant', toxicity=10)
 
         # Test on e1
@@ -11499,6 +11501,7 @@ class TestIsWebWalkerTrait(unittest.TestCase):
         parent = Entity(name="parent", energy=100, age=10, size=2, is_web_walker=False)
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
+        self.universe.reproduction_threshold = 10
 
         with patch('random.random', return_value=0.01):
             self.universe.tick()
@@ -11537,6 +11540,9 @@ class TestIsAshWalker(unittest.TestCase):
 
     def test_is_ash_walker_movement(self):
         entity = Entity(name="aw", x=0, y=0, is_ash_walker=True, stamina=50, max_stamina=50, size=1)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
         self.universe.add_entity(entity)
 
         # Place ash terrain at (1, 0)
@@ -11566,6 +11572,7 @@ class TestIsAshWalker(unittest.TestCase):
         parent = Entity(name="p", x=0, y=0, energy=150, age=30, size=1)
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
+        self.universe.reproduction_threshold = 10
 
         with mock.patch('random.random', return_value=0.0):
             self.universe.time = parent.size
@@ -11600,6 +11607,7 @@ class TestIsWindGlider(unittest.TestCase):
         parent = Entity(name='parent', x=5, y=5, energy=100, age=10, size=2, is_wind_glider=False)
         self.universe.entities.append(parent)
         self.universe.mutation_chance = 1.0
+        self.universe.reproduction_threshold = 10
 
         from unittest import mock
         with mock.patch('random.random', return_value=0.0):
@@ -11661,29 +11669,26 @@ class TestIsBlizzardGlider(unittest.TestCase):
         self.assertEqual(e2.stamina, 20)
 
     def test_is_blizzard_glider_mutation(self):
-        # Clear out state properly
         self.universe.entities = []
-
+        self.universe.reproduction_threshold = 10
         parent = Entity(name='parent', x=5, y=5, energy=100, age=10, size=2, is_blizzard_glider=False)
-        # Disable bleeding traits that cause side effects
         parent.lays_eggs = False
         parent.is_vampiric = False
         parent.is_parasitic = False
-        self.universe.time = 2
-        self.universe.reproduction_threshold = 10
         self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0
 
-        from unittest import mock
-        with mock.patch('random.random', return_value=0.0):
+        self.universe.mutation_chance = 1.0
+        self.universe.reproduction_threshold = 10
+        with unittest.mock.patch('random.random', return_value=0.001):
             self.universe.tick()
 
-        # Find child
-        children = [e for e in self.universe.entities if e.name != 'parent']
+        children = [e for e in self.universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
-        self.assertTrue(children[0].is_blizzard_glider)
+        for child in children:
+            self.assertTrue(child.is_blizzard_glider)
 
 class TestIsSeismicSensitiveMutation(unittest.TestCase):
+
     def test_is_seismic_sensitive_mutation(self):
         universe = Universe(width=10, height=10)
         universe.mutation_chance = 1.0
@@ -11791,3 +11796,46 @@ class TestIsMudGlider(unittest.TestCase):
 
         self.assertTrue(glider.stamina >= normal.stamina)
         self.assertEqual(glider.stamina, 50)
+
+class TestIsDroughtStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe()
+
+    def test_is_drought_strider_stamina_cost(self):
+        self.universe.entities = []
+        # Normal entity
+        normal = Entity(name="n", x=0, y=0, max_stamina=20, stamina=20, is_drought_strider=False, size=1)
+        # Drought strider entity
+        strider = Entity(name="s", x=0, y=1, max_stamina=20, stamina=20, is_drought_strider=True, size=1)
+        self.universe.add_entity(normal)
+        self.universe.add_entity(strider)
+
+        self.universe.current_event = 'drought'
+        self.universe.event_remaining_time = 5
+        self.universe.time = 0
+
+        # force movement
+        normal.energy = 50
+        strider.energy = 50
+        self.universe.tick()
+
+        self.assertTrue(strider.stamina >= normal.stamina)
+
+    def test_is_drought_strider_mutation(self):
+        from unittest import mock
+        with mock.patch("random.random", return_value=0.0001):
+                self.universe.entities = []
+                pass
+                self.universe.mutation_chance = 1.0
+                self.universe.reproduction_threshold = 10
+                self.universe.reproduction_threshold = 10
+
+                parent = Entity(name="p", x=0, y=0, size=1, energy=100, is_drought_strider=False, age=5, lays_eggs=False)
+                self.universe.add_entity(parent)
+
+                self.universe.tick()
+
+                children = [e for e in self.universe.entities if e != parent]
+                self.assertTrue(len(children) > 0)
+                for child in children:
+                    self.assertTrue(child.is_drought_strider)
