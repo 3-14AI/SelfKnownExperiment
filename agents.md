@@ -256,3 +256,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_day_glider` trait. Entities with this trait consume 0 stamina when moving during the day.
 - [x] Implemented `is_night_glider` trait. Entities with this trait consume 0 stamina when moving at night.
 - [x] Implemented `is_deep_water_glider` trait. Entities with this trait consume 0 stamina when moving on `deep-water` terrain.
+- [x] Implemented `is_ash_glider` trait. Entities with this trait consume 0 stamina when moving on `ash` terrain.
