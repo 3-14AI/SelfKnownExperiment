@@ -359,3 +359,4 @@ All notable changes to Project Genesis will be documented in this file.
 
 ### Added
 - Implemented `is_scout` trait. Entities with this trait explore the terrain and share their memory of obstacles with nearby flockmates, simulating a scouting behavior that aids in collective pathfinding.
+- Implemented `is_spring_glider` trait. Entities with this trait consume 0 stamina when moving during the 'spring' season.
