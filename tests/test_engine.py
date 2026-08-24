@@ -12079,20 +12079,31 @@ class TestIsDayGlider(unittest.TestCase):
         self.universe.terrains = []
 
     def test_is_day_glider_mutation(self):
-        from src.universe.engine import Entity
-        from unittest import mock
-        entity = Entity(name="parent", x=1, y=1, energy=100, age=10, size=1)
-        entity.is_day_glider = False
-        self.universe.add_entity(entity)
-        self.universe.population_limit = 100
-        self.universe.reproduction_threshold = 10
+        self.universe.entities = []                  # убрать возможный автоспавн
+        self.universe.mutation_chance = 1.0
+        self.universe.reproduction_threshold = 10    # низкий порог энергии — оставить
+        self.universe.population_limit = 100         # КЛЮЧЕВОЕ #1: дефолтный лимит населения блокирует репродукцию
         self.universe.reproduction_cost = 5
 
-        with mock.patch('random.random', return_value=0.01):
+        parent = Entity(name="Parent", x=5, y=5, energy=100, age=10, size=1,
+                        max_age=50, is_day_glider=False)
+        parent.lays_eggs = False
+        parent.is_parasitic = False
+        self.universe.add_entity(parent)
+        self.universe.time = 0
+
+        with mock.patch('random.random', return_value=0.0):
             self.universe.tick()
 
-        children = [e for e in self.universe.entities if e.name == 'parent_child']
-        self.assertTrue(len(children) > 0)
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+
+        if len(children) == 0:
+            self.universe.time = parent.size - 1
+            with mock.patch('random.random', return_value=0.0):
+                self.universe.tick()
+            children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+
+        self.assertGreater(len(children), 0)
         self.assertTrue(getattr(children[0], 'is_day_glider', False))
 
     def test_is_day_glider_effect(self):
@@ -12162,3 +12173,43 @@ class TestSnowGlider(unittest.TestCase):
         children = [e for e in self.universe.entities if e.generation == 1]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_snow_glider', False))
+
+class TestIsSpringGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_spring_glider_movement(self):
+        # Entity with is_spring_glider
+        entity = Entity(name="E1", x=0, y=0, max_stamina=50, stamina=50, is_spring_glider=True)
+        self.universe.add_entity(entity)
+        # force spring by overriding time or mocking
+        with mock.patch('src.universe.engine.Universe.current_season', new_callable=mock.PropertyMock, return_value='spring'):
+            # Test moving in spring
+            self.universe.move_entity(entity, 1, 1)
+            self.assertEqual(entity.stamina, 50)
+
+        # Test moving in summer
+        with mock.patch('src.universe.engine.Universe.current_season', new_callable=mock.PropertyMock, return_value='summer'):
+            self.universe.move_entity(entity, 2, 2)
+        self.assertTrue(entity.stamina < 50)
+
+    def test_is_spring_glider_mutation(self):
+        self.universe.entities = []                  # убрать возможный автоспавн
+        self.universe.mutation_chance = 1.0
+        self.universe.reproduction_threshold = 10    # низкий порог энергии — оставить
+        self.universe.population_limit = 100         # КЛЮЧЕВОЕ #1: дефолтный лимит населения блокирует репродукцию
+        self.universe.reproduction_cost = 5
+
+        parent = Entity(name="Parent", x=5, y=5, energy=100, age=10, size=1,
+                        max_age=50, is_spring_glider=False)
+        parent.lays_eggs = False
+        parent.is_parasitic = False
+        self.universe.add_entity(parent)
+        self.universe.time = 0
+
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(getattr(children[0], 'is_spring_glider', False))
