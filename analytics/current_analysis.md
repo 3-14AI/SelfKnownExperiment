@@ -1387,3 +1387,7 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 ### Analysis 251: Night Glider Trait
 **Overview:** Implemented the `is_night_glider` trait for entities.
 **Details:** Entities with this trait consume 0 stamina when moving at night.
+
+### Analysis 252: Deep Water Glider Trait
+**Overview:** Implemented the `is_deep_water_glider` trait for entities.
+**Details:** Entities with this trait consume 0 stamina when moving on `deep-water` terrain. Added trait to `Entity.__init__`, added mutation logic in `Universe.tick`, and updated stamina rules in `Universe.move_entity`. Tested in `tests/test_engine.py`.
