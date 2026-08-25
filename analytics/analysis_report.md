@@ -1401,3 +1401,36 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 - Added `TestIsSummerGlider` test class in `tests/test_engine.py` to verify stamina conservation during summer, normal stamina drain in spring, and correct mutation logic.
 - Skips flakiness tests by restoring missing `self.universe.entities = []` and adding flaky decorators when appropriate.
 - Updated `agents.md` checklist with the completed trait.
+
+
+### Analysis 254: Implemented is_autumn_glider Trait
+- Added the `is_autumn_glider` trait to the `Entity` class.
+- Updated `Universe.tick()` to reduce movement stamina cost to 0 when `entity.is_autumn_glider` is True and `self.current_season == 'autumn'`.
+- Added reproduction and trait inheritance logic for `is_autumn_glider` in `Universe.tick()`, including random mutations.
+- Ensured proper instantiation of children entities with `is_autumn_glider`.
+- Added `TestIsAutumnGlider` test class in `tests/test_engine.py` to verify stamina conservation during autumn, normal stamina drain in winter, and correct mutation logic.
+- Updated `agents.md` checklist with the completed trait.
+
+### Analysis 255: Implemented is_ash_glider Trait
+- Added the `is_ash_glider` trait to the `Entity` class.
+- Updated `Universe.tick()` to reduce movement stamina cost to 0 when `entity.is_ash_glider` is True and the entity is on `ash` terrain.
+- Added reproduction and trait inheritance logic for `is_ash_glider` in `Universe.tick()`, including random mutations.
+- Ensured proper instantiation of children entities with `is_ash_glider`.
+- Added `TestIsAshGlider` test class in `tests/test_engine.py` to verify stamina conservation on ash terrain.
+- Updated `agents.md` checklist with the completed trait.
+
+### Analysis 256: Implemented is_spring_glider Trait
+- Added the `is_spring_glider` trait to the `Entity` class.
+- Updated `Universe.tick()` to reduce movement stamina cost to 0 when `entity.is_spring_glider` is True and `self.current_season == 'spring'`.
+- Added reproduction and trait inheritance logic for `is_spring_glider` in `Universe.tick()`, including random mutations.
+- Ensured proper instantiation of children entities with `is_spring_glider`.
+- Added `TestIsSpringGlider` test class in `tests/test_engine.py` to verify stamina conservation during spring.
+- Updated `agents.md` checklist with the completed trait.
+
+### Analysis 257: Implemented is_winter_glider Trait
+- Added the `is_winter_glider` trait to the `Entity` class.
+- Updated `Universe.tick()` to reduce movement stamina cost to 0 when `entity.is_winter_glider` is True and `self.current_season == 'winter'`.
+- Added reproduction and trait inheritance logic for `is_winter_glider` in `Universe.tick()`, including random mutations.
+- Ensured proper instantiation of children entities with `is_winter_glider`.
+- Added `TestIsWinterGlider` test class in `tests/test_engine.py` to verify stamina conservation during winter.
+- Updated `agents.md` checklist with the completed trait.
