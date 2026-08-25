@@ -12423,11 +12423,16 @@ class TestIsAutumnGlider(unittest.TestCase):
 
     def test_is_autumn_glider_mutation(self):
         from unittest import mock
-        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=10, max_age=50, is_autumn_glider=False)
+        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=1, max_age=50, is_autumn_glider=False)
         self.universe.entities = [parent]
         self.universe.population_limit = 100
         self.universe.reproduction_threshold = 20
-        self.universe.time = 99
+        self.universe.time = 0
+        self.universe.foods = []
+        self.universe.terrains = []
+        parent.energy = 50
+        self.universe.foods = []
+        self.universe.terrains = []
 
         with mock.patch('random.random', return_value=0.001):
             self.universe.tick()
@@ -12435,3 +12440,50 @@ class TestIsAutumnGlider(unittest.TestCase):
         children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_autumn_glider', False))
+
+class TestIsRainGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_rain_glider(self):
+        from src.universe.engine import Entity, LocalizedEvent
+        self.universe.entities = []
+        entity1 = Entity(name="E1", x=1, y=1, is_rain_glider=True, energy=100)
+        entity1.stamina = 50
+
+        # Add rain event at entity position
+        event = LocalizedEvent('rain', 1, 1, 5, 10)
+        self.universe.localized_events = [event]
+
+        self.universe.entities.append(entity1)
+        self.universe.move_entity(entity1, 1, 0)
+
+        # stamina should remain 50
+        self.assertEqual(entity1.stamina, 50)
+
+        # Remove event, should consume stamina
+        self.universe.localized_events = []
+        self.universe.move_entity(entity1, 1, 0)
+        self.assertTrue(entity1.stamina < 50)
+
+    def test_is_rain_glider_mutation(self):
+        from src.universe.engine import Entity
+        from unittest import mock
+        self.universe.entities = []
+        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=1, max_age=50, is_rain_glider=False)
+        self.universe.entities = [parent]
+        self.universe.population_limit = 100
+        self.universe.reproduction_threshold = 20
+        self.universe.time = 0
+        self.universe.foods = []
+        self.universe.terrains = []
+        parent.energy = 50
+        self.universe.foods = []
+        self.universe.terrains = []
+
+        with mock.patch('random.random', return_value=0.001):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_rain_glider', False))
