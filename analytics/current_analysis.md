@@ -1433,3 +1433,6 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 - Ensured proper instantiation of children entities with `is_winter_glider`.
 - Added `TestIsWinterGlider` test class in `tests/test_engine.py` to verify stamina conservation during winter.
 - Updated `agents.md` checklist with the completed trait.
+
+### Analysis 258:
+Implemented the `is_wall_glider` trait to allow entities to consume 0 stamina when moving on `wall` terrains. Updated `agents.md` to reflect this change.

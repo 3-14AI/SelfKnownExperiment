@@ -12424,6 +12424,7 @@ class TestIsAutumnGlider(unittest.TestCase):
     def test_is_autumn_glider_mutation(self):
         from unittest import mock
         parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=10, max_age=50, is_autumn_glider=False)
+        parent.mutation_chance = 1.0
         self.universe.entities = [parent]
         self.universe.population_limit = 100
         self.universe.reproduction_threshold = 20
@@ -12435,3 +12436,40 @@ class TestIsAutumnGlider(unittest.TestCase):
         children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_autumn_glider', False))
+
+class TestIsWallGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_wall_glider_movement(self):
+        self.universe.entities = []
+        self.universe.terrains = []
+
+        # Entity needs can_climb=True to pass over wall terrain normally
+        e = Entity(name="wall_glider", x=1, y=1, is_wall_glider=True, can_climb=True, max_stamina=10, stamina=10, size=1)
+        self.universe.add_entity(e)
+        self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='wall'))
+
+        self.universe.move_entity(e, 1, 1) # Moves to 2, 2
+
+        # stamina_cost should be 0, so stamina remains 10
+        self.assertEqual(e.stamina, 10)
+
+    @unittest.mock.patch('random.random')
+    def test_is_wall_glider_mutation(self, mock_random):
+        mock_random.return_value = 0.0 # Force mutation
+
+        self.universe.entities = []
+        e = Entity(name="parent", x=1, y=1, energy=50, size=1, max_age=10, age=2)
+        e.is_wall_glider = False
+        e.mutation_chance = 1.0
+        self.universe.add_entity(e)
+
+        self.universe.population_limit = 100
+        self.universe.time = 0 # Ensures reproduction tick triggers (time + 1 % size == 0)
+
+        self.universe.tick()
+
+        children = [ent for ent in self.universe.entities if getattr(ent, 'generation', 0) == 1]
+        self.assertEqual(len(children), 1)
+        self.assertTrue(getattr(children[0], 'is_wall_glider', False))
