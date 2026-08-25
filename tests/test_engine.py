@@ -12337,3 +12337,51 @@ class TestSnowGlider(unittest.TestCase):
         children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_snow_glider', False))
+
+class TestIsAutumnGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+
+        # Advance time to autumn (season_length is 50, so time=100 is autumn)
+        self.universe.time = 100
+        self.assertEqual(self.universe.current_season, 'autumn')
+
+    def test_is_autumn_glider(self):
+        entity1 = Entity(name="e1", x=5, y=5, is_autumn_glider=True, stamina=50, energy=50)
+        entity2 = Entity(name="e2", x=5, y=5, is_autumn_glider=False, stamina=50, energy=50)
+        self.universe.entities.extend([entity1, entity2])
+
+        self.universe.move_entity(entity1, 1, 0)
+        self.universe.move_entity(entity2, 1, 0)
+
+        # e1 should have 50 stamina (consumed 0 for moving)
+        # e2 should have < 50 stamina (consumed for moving)
+        self.assertEqual(entity1.stamina, 50)
+        self.assertTrue(entity2.stamina < 50)
+
+        # Advance time to winter (time=150)
+        self.universe.time = 150
+
+        entity1.stamina = 50
+        self.universe.move_entity(entity1, 1, 0)
+
+        # Now e1 should lose stamina since it's not autumn
+        self.assertTrue(entity1.stamina < 50)
+
+    def test_is_autumn_glider_mutation(self):
+        from unittest import mock
+        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=10, max_age=50, is_autumn_glider=False)
+        self.universe.entities = [parent]
+        self.universe.population_limit = 100
+        self.universe.reproduction_threshold = 20
+        self.universe.time = 99
+
+        with mock.patch('random.random', return_value=0.001):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_autumn_glider', False))

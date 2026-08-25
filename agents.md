@@ -260,3 +260,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_spring_glider` trait. Entities with this trait consume 0 stamina when moving during the 'spring' season.
 
 - [x] Implemented `is_summer_glider` trait. Entities with this trait consume 0 stamina when moving during the 'summer' season.
+- [x] Implemented `is_autumn_glider` trait. Entities with this trait consume 0 stamina when moving during the 'autumn' season.
