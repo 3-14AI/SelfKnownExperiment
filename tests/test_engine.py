@@ -8227,6 +8227,53 @@ class TestIsWinterGlider(unittest.TestCase):
         self.assertTrue(getattr(children[0], 'is_winter_glider', False))
 
 
+
+class TestIsSnowDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+
+    def test_is_snow_dancer_default(self):
+        entity = Entity(name="e1")
+        self.assertFalse(getattr(entity, 'is_snow_dancer', False))
+
+    def test_is_snow_dancer_effect_inside_radius(self):
+        entity = Entity(name="e1", x=5, y=5, energy=10, is_snow_dancer=True, size=5)
+        self.universe.add_entity(entity)
+        from src.universe.engine import LocalizedEvent
+        self.universe.localized_events = [LocalizedEvent('snow', 5, 5, 2, 5)]
+        self.universe.tick()
+        # energy loss = 1, gain = 5, total = 14
+        self.assertEqual(entity.energy, 14)
+
+    def test_is_snow_dancer_effect_outside_radius(self):
+        entity = Entity(name="e1", x=0, y=0, energy=10, is_snow_dancer=True, size=5)
+        self.universe.add_entity(entity)
+        from src.universe.engine import LocalizedEvent
+        self.universe.localized_events = [LocalizedEvent('snow', 5, 5, 2, 5)]
+        self.universe.tick()
+        # energy loss = 1, total = 9
+        self.assertEqual(entity.energy, 9)
+
+    @mock.patch('random.random')
+    def test_is_snow_dancer_mutation(self, mock_random):
+        self.universe.population_limit = 100
+        entity = Entity(name="e1", x=5, y=5, energy=50, age=20, is_snow_dancer=False)
+        entity.reproduction_threshold = 20
+        entity.mutation_chance = 1.0
+        self.universe.add_entity(entity)
+        self.universe.time = 0  # To ensure time % size == 0
+        mock_random.return_value = 0.0  # Force mutation
+        self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        # Mutation flips it to True
+        self.assertTrue(getattr(child, 'is_snow_dancer', False))
+
 if __name__ == '__main__':
 
 
