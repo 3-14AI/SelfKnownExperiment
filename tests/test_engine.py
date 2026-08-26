@@ -8227,7 +8227,47 @@ class TestIsWinterGlider(unittest.TestCase):
         self.assertTrue(getattr(children[0], 'is_winter_glider', False))
 
 
+
+
+class TestIsRainGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=20, height=20)
+        self.universe.time = 1
+
+    def test_is_rain_glider_stamina(self):
+        from src.universe.engine import Entity, LocalizedEvent
+        # Base entity loses stamina
+        e1 = Entity(name='e1', x=5, y=5, stamina=20)
+        self.universe.entities.append(e1)
+        rain_event = LocalizedEvent(event_type='rain', x=5, y=5, radius=5, duration=10)
+        self.universe.localized_events.append(rain_event)
+        self.universe.move_entity(e1, 1, 0)
+        self.assertLess(e1.stamina, 20)
+
+        # Entity with trait does not lose stamina
+        e2 = Entity(name='e2', x=5, y=5, stamina=20, is_rain_glider=True)
+        self.universe.entities.append(e2)
+        self.universe.move_entity(e2, 1, 0)
+        self.assertEqual(e2.stamina, 20)
+
+    def test_is_rain_glider_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name='parent', x=5, y=5, energy=100, age=10, size=2, is_rain_glider=False)
+        self.universe.entities.append(parent)
+        self.universe.mutation_chance = 1.0
+        self.universe.reproduction_threshold = 10
+
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(getattr(children[0], 'is_rain_glider', False), "Child did not mutate is_rain_glider")
+
 if __name__ == '__main__':
+
 
 
 
