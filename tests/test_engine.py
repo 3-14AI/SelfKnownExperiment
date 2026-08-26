@@ -8227,6 +8227,34 @@ class TestIsWinterGlider(unittest.TestCase):
         self.assertTrue(getattr(children[0], 'is_winter_glider', False))
 
 
+class TestIsRainGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_rain_glider(self):
+        from src.universe.engine import Entity, LocalizedEvent
+
+        self.universe.entities.clear()
+        self.universe.localized_events.clear()
+
+        entity = Entity(name="rain_glider", x=5, y=5, is_rain_glider=True, max_stamina=100)
+        entity.stamina = 100
+
+        # Add rain event covering entity's position
+        rain_event = LocalizedEvent('rain', 5, 5, 3, 10)
+        self.universe.localized_events.append(rain_event)
+        self.universe.add_entity(entity)
+
+        self.universe.move_entity(entity, 1, 0)
+
+        self.assertEqual(entity.stamina, 100, "Stamina should not decrease when moving in a rain event for rain gliders")
+
+        entity.stamina = 100
+        entity.is_rain_glider = False
+        self.universe.move_entity(entity, 1, 0)
+
+        self.assertLess(entity.stamina, 100, "Stamina should decrease when moving in a rain event for non-rain gliders")
+
 if __name__ == '__main__':
 
 
