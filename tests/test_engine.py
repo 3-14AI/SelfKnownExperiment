@@ -8227,6 +8227,39 @@ class TestIsWinterGlider(unittest.TestCase):
         self.assertTrue(getattr(children[0], 'is_winter_glider', False))
 
 
+class TestIsRainGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_rain_glider(self):
+        from src.universe.engine import Entity, LocalizedEvent
+        entity1 = Entity(name="e1", x=5, y=5, is_rain_glider=True, stamina=50, energy=50)
+        entity2 = Entity(name="e2", x=5, y=5, is_rain_glider=False, stamina=50, energy=50)
+        self.universe.entities.extend([entity1, entity2])
+
+        # Add rain event
+        self.universe.localized_events.append(LocalizedEvent('rain', 5, 5, 5, 10))
+
+        self.universe.move_entity(entity1, 1, 0)
+        self.universe.move_entity(entity2, 1, 0)
+
+        # e1 should have 50 stamina (consumed 0 for moving in rain)
+        # e2 should have < 50 stamina (consumed for moving)
+        self.assertEqual(entity1.stamina, 50)
+        self.assertTrue(entity2.stamina < 50)
+
+    @unittest.mock.patch('random.random', return_value=0.0)
+    def test_is_rain_glider_mutation(self, mock_random):
+        from src.universe.engine import Entity
+        self.universe.population_limit = 10
+        entity = Entity(name="e1", x=5, y=5, energy=50, is_rain_glider=False)
+        self.universe.entities.append(entity)
+        self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(any(getattr(child, 'is_rain_glider', False) for child in children))
+
 if __name__ == '__main__':
 
 
