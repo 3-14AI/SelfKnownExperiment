@@ -8227,7 +8227,48 @@ class TestIsWinterGlider(unittest.TestCase):
         self.assertTrue(getattr(children[0], 'is_winter_glider', False))
 
 
+
+class TestIsWallGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_wall_glider(self):
+        from src.universe.engine import Entity, Terrain
+        self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='wall'))
+        self.universe.add_terrain(Terrain(x=6, y=5, terrain_type='wall'))
+
+        entity1 = Entity(name="e1", x=5, y=5, is_wall_glider=True, stamina=50, energy=50, can_climb=True)
+        entity2 = Entity(name="e2", x=5, y=5, is_wall_glider=False, stamina=50, energy=50, can_climb=True)
+        self.universe.entities.extend([entity1, entity2])
+
+        self.universe.move_entity(entity1, 1, 0)
+        self.universe.move_entity(entity2, 1, 0)
+
+        # e1 should have 50 stamina (consumed 0 for moving on wall)
+        # e2 should have < 50 stamina (consumed for moving on wall)
+        self.assertEqual(entity1.stamina, 50)
+        self.assertTrue(entity2.stamina < 50)
+
+    def test_is_wall_glider_mutation(self):
+        from src.universe.engine import Entity
+        from unittest import mock
+        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=10, max_age=50, is_wall_glider=False)
+        self.universe.entities = [parent]
+        self.universe.population_limit = 100
+        self.universe.reproduction_threshold = 20
+        self.universe.time = 99
+
+        with mock.patch('random.random', return_value=0.001):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_wall_glider', False))
+
 if __name__ == '__main__':
+
+
 
 
 
