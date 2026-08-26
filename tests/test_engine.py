@@ -12435,3 +12435,24 @@ class TestIsAutumnGlider(unittest.TestCase):
         children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_autumn_glider', False))
+
+class TestIsRainGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.entity = Entity(name="Rain Glider", x=5, y=5, is_rain_glider=True, stamina=10)
+        self.universe.add_entity(self.entity)
+
+    def test_is_rain_glider(self):
+        # Base case: no rain event
+        self.universe.current_event = None
+        self.universe.move_entity(self.entity, 1, 0)
+        self.assertEqual(self.entity.stamina, 9)
+
+        # Rain event
+        self.universe.current_event = "rain"
+        self.universe.move_entity(self.entity, 1, 0)
+        self.assertEqual(self.entity.stamina, 9) # Reduced stamina cost 9 - 0 = 9
