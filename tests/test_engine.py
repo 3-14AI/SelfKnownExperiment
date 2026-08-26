@@ -12424,6 +12424,9 @@ class TestIsAutumnGlider(unittest.TestCase):
     def test_is_autumn_glider_mutation(self):
         from unittest import mock
         parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=10, max_age=50, is_autumn_glider=False)
+        parent.lays_eggs = False
+        parent.is_parasitic = False
+        parent.is_vampiric = False
         self.universe.entities = [parent]
         self.universe.population_limit = 100
         self.universe.reproduction_threshold = 20
