@@ -12435,3 +12435,68 @@ class TestIsAutumnGlider(unittest.TestCase):
         children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_autumn_glider', False))
+
+class TestIsRainGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe, Entity, LocalizedEvent
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.localized_events = []
+
+        self.entity_with_trait = Entity(name="rain_glider", x=5, y=5, is_rain_glider=True)
+        self.entity_with_trait.stamina = 50
+        self.entity_with_trait.max_stamina = 50
+
+        self.entity_without_trait = Entity(name="no_rain_glider", x=5, y=5, is_rain_glider=False)
+        self.entity_without_trait.stamina = 50
+        self.entity_without_trait.max_stamina = 50
+
+        self.universe.add_entity(self.entity_with_trait)
+        self.universe.add_entity(self.entity_without_trait)
+
+    def test_is_rain_glider_effect(self):
+        from src.universe.engine import LocalizedEvent
+        # Add rain event at (5, 5) with radius 5
+        self.universe.localized_events.append(LocalizedEvent('rain', 5, 5, 5, 10))
+
+        # Move entity_with_trait, should cost 0 stamina
+        self.universe.move_entity(self.entity_with_trait, 1, 0)
+        self.assertEqual(self.entity_with_trait.stamina, 50)
+
+        # Move entity_without_trait, should cost 1 stamina
+        self.universe.move_entity(self.entity_without_trait, 1, 0)
+        self.assertEqual(self.entity_without_trait.stamina, 49)
+
+    def test_is_rain_glider_no_event(self):
+        # No rain event
+        self.universe.move_entity(self.entity_with_trait, 1, 0)
+        self.assertEqual(self.entity_with_trait.stamina, 49)
+
+    def test_is_rain_glider_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest import mock
+
+        universe = Universe(width=10, height=10)
+        universe.entities = []
+        universe.mutation_chance = 1.0
+        universe.reproduction_threshold = 10
+        universe.population_limit = 100
+
+        parent = Entity(name="parent", x=5, y=5, energy=100, age=10, size=1, is_rain_glider=False)
+        parent.lays_eggs = False
+        parent.is_parasitic = False
+        parent.is_vampiric = False
+        universe.add_entity(parent)
+
+        with mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0)
+
+        has_mutated = any(getattr(c, 'is_rain_glider', False) for c in children)
+        self.assertTrue(has_mutated, "The is_rain_glider trait should mutate and be inherited by offspring.")
+
+
+if __name__ == '__main__':
+    unittest.main()
