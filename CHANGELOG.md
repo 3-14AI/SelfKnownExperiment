@@ -251,6 +251,10 @@
 
 ## [Unreleased]
 ### Added
+- Implemented `is_water_glider` trait. Entities with this trait consume 0 stamina when moving on water terrain.
+- Implemented `is_forest_glider` trait. Entities with this trait consume 0 stamina when moving on forest terrain.
+- Implemented `is_fire_glider` trait. Entities with this trait consume 0 stamina when moving during a 'fire' event.
+- Implemented `is_web_glider` trait. Entities with this trait consume 0 stamina when moving on web terrain.
 - Fixed food spawn logic to properly handle spawn rates greater than 1.0 (e.g. spring's 1.5 multiplier).
 - Refactored `Universe.tick` to calculate a whole integer spawn count and use a fractional chance for an additional food item, correctly simulating rates like 1.5 food/tick.
 
