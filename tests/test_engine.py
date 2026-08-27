@@ -12624,3 +12624,48 @@ class TestIsWallGliderMutation(unittest.TestCase):
         children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertGreater(len(children), 0)
         self.assertTrue(getattr(children[0], 'is_wall_glider', False))
+
+class TestIsWebGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+
+    def test_is_web_glider_effect(self):
+        from src.universe.engine import Entity, Terrain
+        # Entity with is_web_glider
+        entity = Entity(name="E1", x=0, y=0, max_stamina=50, stamina=50, is_web_glider=True)
+        self.universe.add_entity(entity)
+        self.universe.add_terrain(Terrain(x=1, y=0, terrain_type='web'))
+
+        self.universe.move_entity(entity, 1, 0)
+        # Should consume 0 stamina because it's a web glider
+        self.assertEqual(entity.stamina, 50)
+
+        entity2 = Entity(name="E2", x=0, y=1, max_stamina=50, stamina=50, is_web_glider=False, is_web_walker=True)
+        self.universe.add_entity(entity2)
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='web'))
+
+        self.universe.move_entity(entity2, 1, 0)
+        # Should consume 0 stamina because it's a web walker (web walkers also have 0 stamina cost on web, see line 447)
+        self.assertEqual(entity2.stamina, 50)
+
+    def test_is_web_glider_mutation(self):
+        from src.universe.engine import Entity
+        from unittest import mock
+
+        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=2, max_age=50, is_web_glider=False, lays_eggs=False, is_parasitic=False, is_vampiric=False)
+        self.universe.add_entity(parent)
+        self.universe.population_limit = 100
+
+        parent.energy = 100
+        parent.reproduction_threshold = 20
+        self.universe.time = 1
+
+        with mock.patch('random.random', return_value=0.011):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(getattr(children[0], 'is_web_glider', False))
