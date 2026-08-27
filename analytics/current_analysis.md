@@ -1441,3 +1441,12 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 - Ensured proper instantiation of children entities with `is_rain_glider`.
 - Added `TestIsRainGlider` test class in `tests/test_engine.py` to verify stamina conservation during rain and correct mutation logic.
 - Updated `agents.md` checklist with the completed trait.
+
+
+### Analysis 259: Implemented is_sand_glider Trait
+- Added the `is_sand_glider` trait to the `Entity` class.
+- Updated `Universe.move_entity()` to reduce movement stamina cost to 0 when `entity.is_sand_glider` is True and moving on 'sand' terrain.
+- Added reproduction and trait inheritance logic for `is_sand_glider` in `Universe.tick()`, including random mutations.
+- Ensured proper instantiation of children entities with `is_sand_glider`.
+- Added `TestIsSandGlider` test class in `tests/test_engine.py` to verify stamina conservation on sand and correct mutation logic.
+- Updated `agents.md` checklist with the completed trait.
