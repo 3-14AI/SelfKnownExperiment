@@ -12423,7 +12423,7 @@ class TestIsAutumnGlider(unittest.TestCase):
 
     def test_is_autumn_glider_mutation(self):
         from unittest import mock
-        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=10, max_age=50, is_autumn_glider=False)
+        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=1, max_age=50, is_autumn_glider=False)
         self.universe.entities = [parent]
         self.universe.population_limit = 100
         self.universe.reproduction_threshold = 20
@@ -12435,3 +12435,41 @@ class TestIsAutumnGlider(unittest.TestCase):
         children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_autumn_glider', False))
+
+class TestIsSandGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_sand_glider_movement(self):
+        glider = Entity(name="Glider", x=1, y=1, is_sand_glider=True, stamina=50)
+        non_glider = Entity(name="NonGlider", x=1, y=2, is_sand_glider=False, stamina=50)
+        self.universe.add_entity(glider)
+        self.universe.add_entity(non_glider)
+        self.universe.add_terrain(Terrain(x=2, y=1, terrain_type='sand'))
+        self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='sand'))
+
+        from unittest import mock
+        with mock.patch.object(self.universe, 'find_path', return_value=[(1, 1), (2, 1)]):
+            self.universe.move_entity(glider, 1, 0)
+        with mock.patch.object(self.universe, 'find_path', return_value=[(1, 2), (2, 2)]):
+            self.universe.move_entity(non_glider, 1, 0)
+
+        self.assertEqual(glider.stamina, 50)
+
+    def test_is_sand_glider(self):
+        glider = Entity(name="Glider", x=1, y=1, is_sand_glider=True, stamina=50)
+        self.assertTrue(glider.is_sand_glider)
+
+    def test_is_sand_glider_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=1, max_age=50, is_sand_glider=False)
+        self.universe.population_limit = 100
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 10
+        self.universe.time = 0
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_sand_glider', False))
