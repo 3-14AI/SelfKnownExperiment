@@ -270,3 +270,4 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_forest_glider` trait. Entities with this trait consume 0 stamina when moving on forest terrain.
 - [x] Implemented `is_water_glider` trait. Entities with this trait consume 0 stamina when moving on water terrain.
+- [x] Implemented `is_shelter_glider` trait. Entities with this trait consume 0 stamina when moving on shelter terrain.
