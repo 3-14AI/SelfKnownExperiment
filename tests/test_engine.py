@@ -8314,6 +8314,61 @@ class TestIsSandGlider(unittest.TestCase):
         # Verify the trait was mutated and inherited
         self.assertTrue(getattr(children[0], 'is_sand_glider', False))
 
+
+class TestIsFireGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+
+    def test_is_fire_glider_effect(self):
+        # Create a fire event
+        from src.universe.engine import LocalizedEvent
+        fire = LocalizedEvent(event_type='fire', x=5, y=5, radius=3, duration=10)
+        self.universe.localized_events.append(fire)
+
+        # Entity with the trait moving inside fire event
+        e_glider = Entity(name="glider", x=5, y=5, is_fire_glider=True, stamina=50, max_stamina=50)
+        self.universe.add_entity(e_glider)
+
+        # Entity without the trait moving inside fire event
+        e_normal = Entity(name="normal", x=5, y=5, is_fire_glider=False, stamina=50, max_stamina=50)
+        self.universe.add_entity(e_normal)
+
+        # Move both
+        self.universe.move_entity(e_glider, 1, 1)
+        self.universe.move_entity(e_normal, 1, 1)
+
+        # e_glider should consume 0 stamina, so it should still have 50
+        self.assertEqual(e_glider.stamina, 50)
+        # e_normal should consume stamina (typically 1 for moving to adjacent empty tile)
+        self.assertLess(e_normal.stamina, 50)
+
+    @mock.patch('random.random')
+    def test_is_fire_glider_mutation(self, mock_random):
+        self.universe.population_limit = 100
+        # Give enough age and energy
+        parent = Entity(name="parent", x=5, y=5, energy=100, age=5, max_age=50, size=1, is_fire_glider=False, lays_eggs=False)
+        parent.mutation_chance = 1.0
+        self.universe.add_entity(parent)
+
+        # Force reproduction conditions
+        self.universe.reproduction_threshold = 10
+        self.universe.time = 0
+
+        # Set mock_random to 0.011 to trigger mutation but avoid 0.01 disease
+        mock_random.return_value = 0.011
+
+        # Act
+        self.universe.tick()
+
+        # Check for children
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "No children produced")
+        self.assertTrue(getattr(children[0], 'is_fire_glider', False), "Trait did not mutate to True")
+
 if __name__ == '__main__':
 
 
