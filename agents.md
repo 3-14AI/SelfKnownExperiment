@@ -262,3 +262,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_summer_glider` trait. Entities with this trait consume 0 stamina when moving during the 'summer' season.
 - [x] Implemented `is_autumn_glider` trait. Entities with this trait consume 0 stamina when moving during the 'autumn' season.
 - [x] Implemented `is_winter_glider` trait. Entities with this trait consume 0 stamina when moving during the 'winter' season.
+
+- [x] Implemented `is_meteorologist` trait. Entities with this trait have their effective perception radius doubled during global events like storms, blizzards, earthquakes, droughts, and volcanoes.
