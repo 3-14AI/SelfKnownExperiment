@@ -8369,6 +8369,47 @@ class TestIsFireGlider(unittest.TestCase):
         self.assertTrue(len(children) > 0, "No children produced")
         self.assertTrue(getattr(children[0], 'is_fire_glider', False), "Trait did not mutate to True")
 
+class TestIsForestGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_forest_glider_effect(self):
+        from src.universe.engine import Entity, Terrain
+        entity = Entity(name="Glider", x=1, y=1, is_forest_glider=True)
+        self.universe.add_entity(entity)
+        self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='forest'))
+
+        initial_stamina = entity.stamina
+        self.universe.move_entity(entity, 1, 1) # Move to (2,2)
+
+        # Stamina cost should be 0, so stamina remains max
+        self.assertEqual(entity.stamina, initial_stamina)
+
+        # Verify it still loses stamina off forest
+        self.universe.move_entity(entity, -1, -1) # Move back to (1,1) where there's no forest
+        self.assertLess(entity.stamina, initial_stamina)
+
+    def test_is_forest_glider_mutation(self):
+        from src.universe.engine import Entity
+        from unittest import mock
+
+        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=2, max_age=50, is_forest_glider=False, lays_eggs=False, is_parasitic=False, is_vampiric=False)
+        self.universe.add_entity(parent)
+        self.universe.population_limit = 100
+
+        # Prevent premature reproduction from previous tests leaking state
+        parent.reproduction_threshold = 20
+        parent.energy = 50 # Start with enough energy but less than max
+        self.universe.time = 1
+
+        with mock.patch('random.random', return_value=0.011):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(getattr(children[0], 'is_forest_glider', False))
+
 if __name__ == '__main__':
 
 
