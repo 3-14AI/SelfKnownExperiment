@@ -275,3 +275,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_mountain_walker` trait. Entities with this trait do not consume extra stamina when moving to a higher elevation.
 - [x] Implemented `is_mountain_glider` trait. Entities with this trait consume 0 stamina when moving on mountain terrain.
 - [x] Implemented `is_deep_water_glider` tests. Added missing tests to ensure correct stamina behavior on deep-water terrains.
+- [x] Implemented `is_mountain_dweller` trait. Entities with this trait treat mountain terrain as a shelter, gaining increased defense and energy recovery.
