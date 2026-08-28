@@ -1442,3 +1442,7 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 - Ensured proper instantiation of children entities with `is_fire_glider`.
 - Added `TestIsFireGlider` test class in `tests/test_engine.py` to verify stamina conservation in fire events and correct mutation logic.
 - Updated `agents.md` checklist with the completed trait.
+
+### Analysis 261: Mountain Glider Trait Analysis
+**Overview:** Evaluated the recent implementation of the `is_mountain_glider` trait.
+**Details:** Commit 7852d5c introduced the `is_mountain_glider` trait, enabling entities to consume 0 stamina when traversing mountain terrain. This provides a significant survival and mobility advantage in mountainous biomes. Reviewed changes in `src/universe/engine.py` (added trait, mutation logic, stamina adjustment), tests, and documentation (`CHANGELOG.md`, `agents.md`).
