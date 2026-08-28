@@ -761,5 +761,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('∨', output)
 
+    def test_render_is_mountain_dweller(self):
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=1, height=1)
+        entity = Entity("Mdweller", x=0, y=0, is_mountain_dweller=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertEqual(output.strip(), 'M')
+
 if __name__ == '__main__':
     unittest.main()

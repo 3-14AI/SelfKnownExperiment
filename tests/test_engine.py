@@ -7605,7 +7605,7 @@ class TestIsMoonBather(unittest.TestCase):
         e = Entity("MoonBather", energy=10, stamina=10, size=1, is_moon_bather=True)
         universe.add_entity(e)
         import unittest.mock
-        with unittest.mock.patch('random.choice', return_value=None):
+        with unittest.mock.patch('random.choice', return_value=e):
             universe.tick()
         self.assertTrue(e.energy > 10, "is_moon_bather should grant energy bonus at night")
         self.assertTrue(e.stamina >= 15, "is_moon_bather should grant +5 stamina + passive recovery at night")
@@ -12903,3 +12903,47 @@ class TestIsMountainDweller(unittest.TestCase):
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0, "Reproduction failed")
         self.assertTrue(any(getattr(child, 'is_mountain_dweller', False) for child in children), "is_mountain_dweller should be capable of mutating in children")
+
+class TestSandDweller(unittest.TestCase):
+    def test_is_sand_dweller(self):
+        universe = Universe(width=10, height=10, population_limit=0)
+        entity = Entity(name="Sand Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_sand_dweller=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='sand'))
+
+        universe.tick()
+        self.assertEqual(entity.energy, 21, "is_sand_dweller should treat sand as shelter for energy recovery")
+
+    @mock.patch('random.random')
+    def test_is_sand_dweller_mutation(self, mock_random):
+        mock_random.return_value = 0.011
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_sand_dweller=False)
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_sand_dweller', False) for child in children), "is_sand_dweller should be capable of mutating in children")
+
+class TestSandDweller(unittest.TestCase):
+    def test_is_sand_dweller(self):
+        universe = Universe(width=10, height=10, population_limit=0)
+        entity = Entity(name="Sand Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_sand_dweller=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='sand'))
+
+        universe.tick()
+        self.assertEqual(entity.energy, 21, "is_sand_dweller should treat sand as shelter for energy recovery")
+
+    @mock.patch('random.random')
+    def test_is_sand_dweller_mutation(self, mock_random):
+        mock_random.return_value = 0.011
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_sand_dweller=False)
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_sand_dweller', False) for child in children), "is_sand_dweller should be capable of mutating in children")
