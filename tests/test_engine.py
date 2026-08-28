@@ -12858,3 +12858,24 @@ class TestIsWaterGlider(unittest.TestCase):
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0)
         self.assertTrue(children[0].is_water_glider)
+
+class TestMountainGlider(unittest.TestCase):
+    def test_is_mountain_glider_stamina(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="Mountain Glider", x=1, y=1, is_mountain_glider=True, max_stamina=50, stamina=50)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=2, y=1, terrain_type='mountain', elevation=5))
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50, "is_mountain_glider should consume 0 stamina when moving on mountain terrain")
+
+    @mock.patch('random.random')
+    def test_is_mountain_glider_mutation(self, mock_random):
+        mock_random.return_value = 0.001
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_mountain_glider=False)
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_mountain_glider', False) for child in children), "is_mountain_glider should be capable of mutating in children")
