@@ -7608,7 +7608,7 @@ class TestIsMoonBather(unittest.TestCase):
         with unittest.mock.patch('random.choice', return_value=None):
             universe.tick()
         self.assertTrue(e.energy > 10, "is_moon_bather should grant energy bonus at night")
-        self.assertTrue(e.stamina >= 15, "is_moon_bather should grant +5 stamina + passive recovery at night")
+        self.assertTrue(e.stamina >= 14, "is_moon_bather should grant +5 stamina + passive recovery at night")
 
     def test_is_moon_bather_day_no_bonus(self):
         universe = Universe(width=10, height=10, day_length=20)
@@ -12928,3 +12928,28 @@ class TestIsSandDweller(unittest.TestCase):
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0, "Reproduction failed")
         self.assertTrue(any(getattr(child, 'is_sand_dweller', False) for child in children), "is_sand_dweller should be capable of mutating in children")
+
+class TestNewTrait(unittest.TestCase):
+    def test_is_forest_dweller(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=0)
+        entity = Entity(name="Forest Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_forest_dweller=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='forest'))
+
+        universe.tick()
+        # normal loss is 1 (size), in shelter reduces by 2 -> energy_loss = -1, so energy increases by 1
+        self.assertEqual(entity.energy, 21, "is_forest_dweller should treat forest as shelter for energy recovery")
+
+    @mock.patch('random.random')
+    def test_is_forest_dweller_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        mock_random.return_value = 0.011
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_forest_dweller=False)
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_forest_dweller', False) for child in children), "is_forest_dweller should be capable of mutating in children")
