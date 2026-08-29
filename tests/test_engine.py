@@ -8512,6 +8512,35 @@ class TestIsAshDweller(unittest.TestCase):
         self.assertTrue(len(children) > 0, "Reproduction failed")
         self.assertTrue(any(getattr(child, 'is_ash_dweller', False) for child in children), "is_ash_dweller should be capable of mutating in children")
 
+
+class TestIsSnowDweller(unittest.TestCase):
+    def test_is_snow_dweller(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.foods = []
+        universe.entities = []
+        universe.terrains = []
+        universe.localized_events = []
+        entity = Entity(name="Snow Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_snow_dweller=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='snow'))
+
+        universe.tick()
+        self.assertTrue(entity.energy in [19, 21, 26], "is_snow_dweller should treat snow as shelter for energy recovery")
+
+    @mock.patch('random.random')
+    def test_is_snow_dweller_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        mock_random.return_value = 0.02
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_snow_dweller=False)
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_snow_dweller', False) for child in children), "is_snow_dweller should be capable of mutating in children")
+
 if __name__ == '__main__':
 
 
@@ -12910,7 +12939,11 @@ class TestMountainGlider(unittest.TestCase):
 class TestIsMountainDweller(unittest.TestCase):
     def test_is_mountain_dweller(self):
         universe = Universe(width=10, height=10, population_limit=0)
-        entity = Entity(name="Mountain Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_mountain_dweller=True, intelligence=1, preferred_terrain='mountain')
+        universe.foods = []
+        universe.entities = []
+        universe.terrains = []
+        universe.localized_events = []
+        entity = Entity(name="Mountain Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_mountain_dweller=True, intelligence=1)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='mountain', elevation=5))
 
@@ -12985,6 +13018,10 @@ class TestIsWaterDweller(unittest.TestCase):
     def test_is_water_dweller(self):
         from src.universe.engine import Universe, Entity, Terrain
         universe = Universe(width=10, height=10, population_limit=0)
+        universe.foods = []
+        universe.entities = []
+        universe.terrains = []
+        universe.localized_events = []
         entity = Entity(name="Water Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_water_dweller=True, intelligence=1)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='water'))
