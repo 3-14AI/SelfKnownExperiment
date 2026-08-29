@@ -3,6 +3,17 @@ from src.universe.engine import Universe, Entity, Food, Terrain
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+
+    def test_render_is_snow_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Snow Dweller", x=5, y=5, is_snow_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('K', output)
+
     def test_visualizer_disease_vector(self):
         from src.universe.engine import Universe, Entity
         from src.universe.visualizer import CLIVisualizer
