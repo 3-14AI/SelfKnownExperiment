@@ -8485,6 +8485,33 @@ class TestMountainWalker(unittest.TestCase):
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(any(getattr(child, 'is_mountain_walker', False) for child in children), "is_mountain_walker should be capable of mutating in children")
 
+
+class TestIsAshDweller(unittest.TestCase):
+    def test_is_ash_dweller(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=0)
+        entity = Entity(name="Ash Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_ash_dweller=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='ash'))
+
+        universe.tick()
+        # normal loss is 1 (size), in shelter reduces by 2 -> energy_loss = -1
+        # Similar to ice_dweller, asserting 19.
+        self.assertEqual(entity.energy, 21, "is_ash_dweller should treat ash as shelter for energy recovery")
+
+    @mock.patch('random.random')
+    def test_is_ash_dweller_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        mock_random.return_value = 0.02
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_ash_dweller=False)
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_ash_dweller', False) for child in children), "is_ash_dweller should be capable of mutating in children")
+
 if __name__ == '__main__':
 
 
