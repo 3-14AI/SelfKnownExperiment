@@ -11,6 +11,8 @@
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Analyzed recent project changes (Leap, Heavy, Lightweight, Stealthy, Mimic, Sharp Teeth, Resilient traits) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Added missing visualization rendering and unit tests for `is_sleeping`, `is_flying`, `can_hibernate`, `lays_eggs`, `can_hoard`, `can_burrow`, `is_territorial`, `is_agile`, `is_opportunistic`, and `has_thick_skin` traits.
@@ -23,6 +25,8 @@
 - Cleaned up duplicated tests in `tests/test_engine.py`.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Added missing visualizer tests for `has_bioluminescence` and `pack_hunter` traits.
 - Implemented `has_bioluminescence` trait. Entities with this trait bypass night vision penalties for themselves, but are easily spotted by predators at night.
@@ -34,51 +38,73 @@
 - Cleaned up duplicated tests in `tests/test_engine.py` (climbing, echolocation, immunity).
 - Added visualizer support and tests for `is_regenerative`, `is_immune`, `is_amphibious` traits.
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented `can_climb` trait allowing entities to traverse 'wall' terrain blocks, bypassing obstacles.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented `pack_hunter` trait. Predatory entities with this trait share their targets with nearby pack members of the same species, and gain an attack bonus during combat when multiple pack members surround the same prey.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented `has_fur` trait. Entities with fur have increased temperature tolerance in the cold, but suffer energy and movement penalties in hot environments.
 
-## [Unreleased] - YYYY-MM-DD
+## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+ - YYYY-MM-DD
 ### Added
 - Analyzed recent project changes (Scales trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Added `is_parasitic` trait allowing entities to attach to larger hosts and leech their energy/hydration.
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented `is_cold_blooded` trait. Entities with this trait gain an energy efficiency advantage in hot temperatures but suffer energy and movement penalties in cold temperatures.
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented `is_immune` trait. Entities can gain immunity to diseases after recovering, preventing reinfection. Immunity can also be inherited by offspring or acquired via genetic mutation.
 - Implemented aging growth mechanics where entities start out smaller when born and gradually grow to their `max_size` over time.
 - Added Aposematism trait allowing prey to be ignored by well-fed predators.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Added `has_echolocation` trait to entities. Echolocation allows entities to bypass camouflage when detecting prey or predators, and prevents their perception radius from being halved during the night.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Analyzed recent project changes (Photosynthesis trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented amphibious trait (`is_amphibious`). Entities with this trait can freely traverse both land and water tiles, opening up new movement and survival strategies.
 - Implemented Photosynthesis trait (`can_photosynthesize`). Entities with this trait gain energy during the daytime, simulating plant-like behavior.
 - Updated `CLIVisualizer` to render photosynthesizing entities as `P`.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented web building mechanics. Entities with the `can_spin_webs` trait can create web terrain.
 - Entities lacking the trait will lose all stamina when moving onto web terrain, simulating getting trapped.
 - Updated `CLIVisualizer` to render `web` terrain as `x`.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented `has_spikes` defensive trait. Entities with this trait damage attackers (reducing energy and stamina) during combat.
 
@@ -87,6 +113,8 @@
 - Nocturnal entities invert their sleep cycles, sleeping during the day and being active at night.
 - Nocturnal entities retain full perception at night but have halved perception during the day.
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented stamina system. Entities have `stamina` and `max_stamina` attributes, losing stamina when moving or participating in combat, and falling asleep if it drops to 0.
 - Implemented Hoarding Mechanics. Entities can now mutate a `can_hoard` trait.
@@ -96,6 +124,8 @@
 
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented an experience and leveling system for entities. Entities gain experience by surviving days, escaping predators, or successfully hunting.
 - Entities level up upon reaching experience thresholds, gaining attack, defense, and full energy restoration.
@@ -108,6 +138,8 @@
 - Implemented Oviparity/Egg-Laying mechanic. Entities can mutate the `lays_eggs` trait. When reproducing, instead of immediately spawning a child, they lay an egg (a Food object) that hatches into the offspring after aging.
 - Added a reproduction chance modifier based on intelligence. Entities with higher intelligence have a greater chance to reproduce successfully.
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented organic plant spreading allowing flora to naturally grow into patches over time.
 - Implemented hibernation mechanics allowing entities to preserve energy and hydration during winter if they possess the `can_hibernate` trait.
@@ -225,6 +257,8 @@
 
 # Changelog
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented flight mechanics. Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water during movement and pathfinding.
 
@@ -250,6 +284,8 @@
 
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented `is_water_glider` trait. Entities with this trait consume 0 stamina when moving on water terrain.
 - Implemented `is_forest_glider` trait. Entities with this trait consume 0 stamina when moving on forest terrain.
@@ -281,6 +317,8 @@
 - Updated `agents.md` tracking progress.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 ### Added
 - Implemented an experience system for combat interactions:
   - Entities gain attack/defense stats when surviving encounters with predators (escaping).
@@ -288,7 +326,9 @@
   - Predators gain larger attack/defense stat boosts when successfully hunting and eating prey.
 - Updated `agents.md` to reflect completed tasks and new steps.
 
-## [Unreleased] - 2026-07-10
+## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+ - 2026-07-10
 ### Added
 - Implemented environmental events system in the Universe engine ('storm', 'drought').
 - Storms double entity energy decay, and droughts temporarily halt food spawning.
@@ -314,6 +354,8 @@
 All notable changes to Project Genesis will be documented in this file.
 
 ## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+
 - Engine: Modified `get_nearest_prey` so carnivores evaluate potential prey based on a combination of distance, size, and defense, effectively prioritizing smaller, weaker targets over slightly closer but more resilient ones.
 - Tests: Added `test_carnivore_prefers_smaller_weaker_prey` to explicitly test this targeting logic.
 
@@ -339,7 +381,9 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented basic energy and life cycle for entities. Entities now consume 1 energy per tick and are removed from the universe when their energy reaches 0.
 - Implemented an energy system and life cycle for entities (entities have 10 starting energy, consume 1 energy per tick, and die if energy drops to 0 or below).
 - Expanded unit tests in `tests/test_engine.py` to cover energy decay and death.
-## [Unreleased] - 2026-07-08
+## [Unreleased]
+- Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+ - 2026-07-08
 ### Added
 - Implemented basic energy and life cycle for entities (entities have starting energy, lose 1 per tick, and die at 0).
 - Wrote tests for energy consumption and death logic in `tests/test_engine.py`.

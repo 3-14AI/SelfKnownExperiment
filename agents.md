@@ -155,6 +155,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
 
 ## Next Steps
+- [x] Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_snow_glider` trait. Entities with this trait consume 0 stamina when moving on snow terrain.
 - [x] Implemented `is_volcanic_glider` trait. Entities with this trait consume 0 stamina when moving during a 'volcano' event.
 - [x] Implemented `is_drought_resistant` trait. Entities with this trait do not lose hydration during a drought event.

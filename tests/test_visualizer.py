@@ -734,6 +734,14 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn("'", output)
 
 
+    def test_render_is_ice_dweller(self):
+        universe = Universe(10, 10)
+        entity = Entity("Ice Dweller", x=5, y=5, is_ice_dweller=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('I', output)
+
     def test_draw_pacifist_entity(self):
         universe = Universe(10, 10)
         entity = Entity("Pacifist", x=5, y=5, is_pacifist=True)
