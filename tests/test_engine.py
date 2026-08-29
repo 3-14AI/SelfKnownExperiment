@@ -8377,7 +8377,7 @@ class TestIsForestGlider(unittest.TestCase):
         from src.universe.engine import Universe
         self.universe = Universe(width=10, height=10)
 
-    def test_is_forest_glider_effect(self):
+    def test_is_forest_glider(self):
         from src.universe.engine import Entity, Terrain
         entity = Entity(name="Glider", x=1, y=1, is_forest_glider=True)
         self.universe.add_entity(entity)
@@ -12805,7 +12805,7 @@ class TestIsWebGlider(unittest.TestCase):
         self.assertTrue(children[0].is_web_glider)
 
 class TestIsWaterGlider(unittest.TestCase):
-    def test_is_water_glider_effect(self):
+    def test_is_water_glider(self):
         from src.universe.engine import Entity, Terrain, Universe
         universe = Universe(width=10, height=10)
         entity = Entity(name='Test', x=5, y=5, is_water_glider=True, stamina=50, is_aquatic=True)
