@@ -769,5 +769,16 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('∨', output)
 
+
+    def test_render_is_ash_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Ash Dweller", x=5, y=5, is_ash_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('J', output)
+
 if __name__ == '__main__':
     unittest.main()

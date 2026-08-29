@@ -60,6 +60,8 @@ class CLIVisualizer:
                         char = '%'
                     elif getattr(entity, 'is_ice_dweller', False):
                         char = 'I'
+                    elif getattr(entity, 'is_ash_dweller', False):
+                        char = 'J'
                     elif getattr(entity, 'is_sleeping', False):
                         char = '0'
                     elif getattr(entity, 'is_bloodthirsty', False):
