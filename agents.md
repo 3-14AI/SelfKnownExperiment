@@ -278,3 +278,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_mountain_dweller` trait. Entities with this trait treat mountain terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sand_dweller` trait. Entities with this trait treat sand terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_forest_dweller` trait. Entities with this trait treat forest terrain as a shelter, gaining increased defense and energy recovery.
+- [x] Implemented `is_water_dweller` trait. Entities with this trait treat water terrain as a shelter, gaining increased defense and energy recovery.
