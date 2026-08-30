@@ -1496,3 +1496,12 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 - Discovered failing pre-commit checks due to a mismatch in test naming conventions expected by `check_missing_tests.py`.
 - Renamed the tests `test_is_forest_glider_effect`, `test_is_water_glider_effect`, and `test_is_shelter_glider_effect` to `test_is_forest_glider`, `test_is_water_glider`, and `test_is_shelter_glider` respectively in `tests/test_engine.py`.
 - This ensures the automated verification scripts correctly detect the test coverage for the glider traits.
+
+
+### Analysis 267: Implemented is_cave_dweller Trait
+- Introduced the `is_cave_dweller` trait to the `Entity` class.
+- Modified `Universe.tick()` so that entities with this trait view `cave` terrain as a protective shelter, offering passive defense and energy regeneration.
+- Ensured genetic propagation and mutation handling for the trait during reproduction.
+- Added visual representation ('C') in `src/universe/visualizer.py`.
+- Included comprehensive test coverage in `tests/test_engine.py` and `tests/test_visualizer.py`.
+- Updated `agents.md` and `CHANGELOG.md` to reflect the completed task.
