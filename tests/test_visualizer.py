@@ -14,6 +14,16 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('K', output)
 
+    def test_render_is_wall_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Wall Dweller", x=5, y=5, is_wall_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('W', output)
+
     def test_visualizer_disease_vector(self):
         from src.universe.engine import Universe, Entity
         from src.universe.visualizer import CLIVisualizer
