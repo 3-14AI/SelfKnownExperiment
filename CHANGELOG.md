@@ -476,3 +476,5 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_scout` trait. Entities with this trait explore the terrain and share their memory of obstacles with nearby flockmates, simulating a scouting behavior that aids in collective pathfinding.
 - Implemented `is_spring_glider` trait. Entities with this trait consume 0 stamina when moving during the 'spring' season.
 - Implemented `is_forest_dweller` trait. Entities with this trait treat forest terrain as a shelter, gaining increased defense and energy recovery.
+
+- Implemented `is_blizzard_dweller` trait. Entities with this trait treat blizzard conditions as a shelter, gaining energy recovery and defense.
