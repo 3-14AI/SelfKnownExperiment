@@ -11,6 +11,7 @@
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
 ## [Unreleased]
+- Implemented `is_storm_dweller` trait. Entities with this trait treat `storm` conditions as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.

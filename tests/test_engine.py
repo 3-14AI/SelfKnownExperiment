@@ -13348,3 +13348,26 @@ class TestIsBlizzardDweller(unittest.TestCase):
         children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0, "Reproduction failed")
         self.assertTrue(getattr(children[0], 'is_blizzard_dweller', False), "Mutation to is_blizzard_dweller failed")
+
+class TestStormDweller(unittest.TestCase):
+    def test_is_storm_dweller(self):
+        universe = Universe(width=5, height=5)
+        universe.current_event = 'storm'
+        universe.event_remaining_time = 10
+        entity = Entity(name="Storm Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_storm_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=-20, temperature_tolerance=40)
+        universe.add_entity(entity)
+        universe.tick()
+
+        self.assertGreaterEqual(entity.energy, 20, "is_storm_dweller should recover energy during a storm")
+
+    def test_is_storm_dweller_mutation(self):
+        universe = Universe(width=5, height=5, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_storm_dweller=False)
+        universe.add_entity(parent)
+
+        with mock.patch('random.random', return_value=0.02):
+            universe.tick()
+
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertGreater(len(children), 0, "Reproduction should occur")
+        self.assertTrue(any(getattr(child, 'is_storm_dweller', False) for child in children), "is_storm_dweller should be capable of mutating in children")
