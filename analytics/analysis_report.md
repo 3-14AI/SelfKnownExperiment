@@ -1505,3 +1505,9 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 - Modified `Universe.move_entity()` so that entities with this trait consume 0 stamina when moving on `cave` terrain.
 - Ensured genetic propagation and mutation handling for the trait during reproduction.
 - Added test coverage in `tests/test_engine.py`.
+
+### Analysis 270: Implemented is_blizzard_dweller Trait
+- Added the `is_blizzard_dweller` trait to the `Entity` class.
+- Updated `Universe.tick()` so that entities with this trait treat `blizzard` conditions as a shelter, gaining energy recovery and defense.
+- Ensured genetic propagation and mutation handling for the trait during reproduction.
+- Added test coverage in `tests/test_engine.py` for both the trait effect and its mutation logic.
