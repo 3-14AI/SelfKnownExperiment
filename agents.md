@@ -288,3 +288,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 - [x] Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_wall_dweller` trait. Entities with this trait treat `wall` terrain as a shelter, gaining increased defense and energy recovery.
+
+- [x] Implemented `is_cave_glider` trait. Entities with this trait consume 0 stamina when moving on cave terrain.
