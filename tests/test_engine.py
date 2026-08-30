@@ -13136,3 +13136,65 @@ class TestMountainDwellerCave(unittest.TestCase):
         initial_energy = entity.energy
         universe.tick()
         self.assertGreaterEqual(entity.energy, initial_energy + 2, "is_mountain_dweller should be protected from storm in cave")
+
+class TestIsWebDweller(unittest.TestCase):
+    def test_is_web_dweller(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.foods = []
+        universe.entities = []
+        universe.terrains = []
+
+        entity = Entity(name="Web Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_web_dweller=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='web'))
+        initial_energy = entity.energy
+
+        universe.tick()
+
+        self.assertEqual(entity.energy, initial_energy + 1, "is_web_dweller should recover energy on web")
+
+    @mock.patch('random.random')
+    def test_is_web_dweller_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        mock_random.return_value = 0.02
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_web_dweller=False)
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.tick()
+
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_web_dweller', False) for child in children), "is_web_dweller should be capable of mutating in children")
+
+class TestIsDeepWaterDweller(unittest.TestCase):
+    def test_is_deep_water_dweller(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.foods = []
+        universe.entities = []
+        universe.terrains = []
+
+        entity = Entity(name="Deep Water Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_deep_water_dweller=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='deep-water'))
+        initial_energy = entity.energy
+
+        universe.tick()
+
+        self.assertEqual(entity.energy, initial_energy + 1, "is_deep_water_dweller should recover energy on deep-water")
+
+    @mock.patch('random.random')
+    def test_is_deep_water_dweller_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        mock_random.return_value = 0.02
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_deep_water_dweller=False)
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.tick()
+
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_deep_water_dweller', False) for child in children), "is_deep_water_dweller should be capable of mutating in children")
