@@ -282,3 +282,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_water_dweller` trait. Entities with this trait treat water terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_ash_dweller` trait. Entities with this trait treat ash terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_snow_dweller` trait. Entities with this trait treat snow terrain as a shelter, gaining increased defense and energy recovery.
+- [x] Implemented `is_mud_dweller` trait. Entities with this trait treat mud terrain as a shelter, gaining increased defense and energy recovery.
+- [x] Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.

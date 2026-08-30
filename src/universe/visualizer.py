@@ -31,6 +31,8 @@ class CLIVisualizer:
                     grid[terrain.y][terrain.x] = 'x'
                 elif terrain.terrain_type == 'forest':
                     grid[terrain.y][terrain.x] = 'Y'
+                elif terrain.terrain_type == 'cave':
+                    grid[terrain.y][terrain.x] = 'c'
 
         # Add food
         for food in self.universe.foods:
@@ -64,6 +66,8 @@ class CLIVisualizer:
                         char = 'J'
                     elif getattr(entity, 'is_snow_dweller', False):
                         char = 'K'
+                    elif getattr(entity, 'is_mud_dweller', False):
+                        char = 'L'
                     elif getattr(entity, 'is_sleeping', False):
                         char = '0'
                     elif getattr(entity, 'is_bloodthirsty', False):
@@ -120,6 +124,8 @@ class CLIVisualizer:
                         char = 'L'
                     elif getattr(entity, 'pack_hunter', False):
                         char = 'W'
+                    elif getattr(entity, 'is_mountain_dweller', False):
+                        char = 'G'
                     elif getattr(entity, 'is_regenerative', False):
                         char = 'G'
                     elif getattr(entity, 'is_immune', False):
