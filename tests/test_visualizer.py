@@ -781,6 +781,47 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('∨', output)
 
 
+    def test_render_is_mud_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Mud Dweller", x=5, y=5, is_mud_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+        import io, sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn("L", captured_output.getvalue())
+
+    def test_render_cave_terrain(self):
+        from src.universe.engine import Universe, Terrain
+        universe = Universe(10, 10)
+        universe.add_terrain(Terrain(x=5, y=5, terrain_type='cave'))
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+        import io, sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn("c", captured_output.getvalue())
+
+    def test_render_is_mountain_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Mountain Dweller", x=5, y=5, is_mountain_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+        import io, sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn("G", captured_output.getvalue())
+
     def test_render_is_ash_dweller(self):
         from src.universe.engine import Universe, Entity
         universe = Universe(10, 10)
