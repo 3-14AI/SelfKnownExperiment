@@ -14,6 +14,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Analyzed recent project changes (Leap, Heavy, Lightweight, Stealthy, Mimic, Sharp Teeth, Resilient traits) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
@@ -30,6 +31,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Added missing visualizer tests for `has_bioluminescence` and `pack_hunter` traits.
@@ -45,6 +47,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented `can_climb` trait allowing entities to traverse 'wall' terrain blocks, bypassing obstacles.
@@ -53,6 +56,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented `pack_hunter` trait. Predatory entities with this trait share their targets with nearby pack members of the same species, and gain an attack bonus during combat when multiple pack members surround the same prey.
@@ -61,6 +65,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented `has_fur` trait. Entities with fur have increased temperature tolerance in the cold, but suffer energy and movement penalties in hot environments.
@@ -69,6 +74,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
  - YYYY-MM-DD
 ### Added
 - Analyzed recent project changes (Scales trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
@@ -77,6 +83,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented `is_cold_blooded` trait. Entities with this trait gain an energy efficiency advantage in hot temperatures but suffer energy and movement penalties in cold temperatures.
@@ -84,6 +91,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented `is_immune` trait. Entities can gain immunity to diseases after recovering, preventing reinfection. Immunity can also be inherited by offspring or acquired via genetic mutation.
@@ -94,6 +102,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Added `has_echolocation` trait to entities. Echolocation allows entities to bypass camouflage when detecting prey or predators, and prevents their perception radius from being halved during the night.
@@ -102,6 +111,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Analyzed recent project changes (Photosynthesis trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
@@ -110,6 +120,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented amphibious trait (`is_amphibious`). Entities with this trait can freely traverse both land and water tiles, opening up new movement and survival strategies.
@@ -120,6 +131,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented web building mechanics. Entities with the `can_spin_webs` trait can create web terrain.
@@ -130,6 +142,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented `has_spikes` defensive trait. Entities with this trait damage attackers (reducing energy and stamina) during combat.
@@ -142,6 +155,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented stamina system. Entities have `stamina` and `max_stamina` attributes, losing stamina when moving or participating in combat, and falling asleep if it drops to 0.
@@ -155,6 +169,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented an experience and leveling system for entities. Entities gain experience by surviving days, escaping predators, or successfully hunting.
@@ -171,6 +186,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented organic plant spreading allowing flora to naturally grow into patches over time.
@@ -292,6 +308,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented flight mechanics. Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water during movement and pathfinding.
@@ -321,6 +338,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented `is_water_glider` trait. Entities with this trait consume 0 stamina when moving on water terrain.
@@ -356,6 +374,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Implemented an experience system for combat interactions:
@@ -368,6 +387,7 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
  - 2026-07-10
 ### Added
 - Implemented environmental events system in the Universe engine ('storm', 'drought').
@@ -397,6 +417,7 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 - Engine: Modified `get_nearest_prey` so carnivores evaluate potential prey based on a combination of distance, size, and defense, effectively prioritizing smaller, weaker targets over slightly closer but more resilient ones.
 - Tests: Added `test_carnivore_prefers_smaller_weaker_prey` to explicitly test this targeting logic.
@@ -427,6 +448,7 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
  - 2026-07-08
 ### Added
 - Implemented basic energy and life cycle for entities (entities have starting energy, lose 1 per tick, and die at 0).

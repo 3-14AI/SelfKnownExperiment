@@ -832,5 +832,19 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('J', output)
 
+    def test_render_is_cave_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Cave Dweller", x=5, y=5, is_cave_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+        import io, sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn("C", captured_output.getvalue())
+
 if __name__ == '__main__':
     unittest.main()
