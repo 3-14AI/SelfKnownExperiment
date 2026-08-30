@@ -1511,3 +1511,10 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 - Updated `Universe.tick()` so that entities with this trait treat `blizzard` conditions as a shelter, gaining energy recovery and defense.
 - Ensured genetic propagation and mutation handling for the trait during reproduction.
 - Added test coverage in `tests/test_engine.py` for both the trait effect and its mutation logic.
+
+### Analysis 271: Implemented is_storm_dweller Trait
+- Introduced the `is_storm_dweller` trait to the `Entity` class.
+- Modified `Universe.tick()` so that entities with this trait view `storm` conditions as a protective shelter, offering passive defense and energy regeneration.
+- Ensured genetic propagation and mutation handling for the trait during reproduction.
+- Added test coverage in `tests/test_engine.py`.
+- Updated `agents.md` and `CHANGELOG.md` to reflect the completed task.
