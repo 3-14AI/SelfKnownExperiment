@@ -13228,3 +13228,39 @@ class TestCaveDweller(unittest.TestCase):
         universe.tick()
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(any(getattr(child, 'is_cave_dweller', False) for child in children), "is_cave_dweller should be capable of mutating in children")
+
+class TestIsWallDweller(unittest.TestCase):
+    def test_is_wall_dweller(self):
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.foods = []
+        universe.entities = []
+        universe.terrains = []
+        universe.localized_events = []
+        entity = Entity(name="Wall Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_wall_dweller=True, intelligence=1, is_sleeping=True)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='wall'))
+
+        initial_energy = entity.energy
+        universe.tick()
+
+        # baseline energy_loss = 1
+        # shelter means energy_loss = 1, but sleeping in shelter recovers 2 * size = 2
+        # net change +1
+        self.assertEqual(entity.energy, initial_energy + 1, "is_wall_dweller should recover energy on wall")
+
+    @mock.patch('random.random')
+    def test_is_wall_dweller_mutation(self, mock_random):
+        mock_random.return_value = 0.02
+        universe = Universe(width=10, height=10, population_limit=100)
+        universe.foods = []
+        universe.entities = []
+        universe.terrains = []
+        universe.localized_events = []
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_wall_dweller=False)
+        parent.mutation_chance = 1.0
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_wall_dweller', False) for child in children), "is_wall_dweller should be capable of mutating in children")
