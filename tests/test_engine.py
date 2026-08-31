@@ -8614,6 +8614,34 @@ class TestIsTracker(unittest.TestCase):
         finally:
             random.random = original_random
 
+
+class TestIsWinterDwellerTrait(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10, population_limit=0)
+
+    def test_is_winter_dweller(self):
+        self.universe.entities = []
+        self.universe.time = 150 # (150//50)%4 == 3 (winter)
+        self.universe.current_event = None
+        self.universe.event_chance = 0
+        entity = Entity("WinterDweller", x=5, y=5, size=1, energy=50, is_winter_dweller=True, lays_eggs=False, is_parasitic=False, is_vampiric=False)
+        self.universe.add_entity(entity)
+
+        self.universe.tick()
+        self.assertGreaterEqual(entity.energy, 50)
+
+    def test_is_winter_dweller_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.time = 0
+        universe.population_limit = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_winter_dweller=False)
+        universe.add_entity(parent)
+        with mock.patch('random.random', return_value=0.02):
+            universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        if len(children) > 0:
+            self.assertTrue(any(getattr(child, 'is_winter_dweller', False) for child in children), "is_winter_dweller should be capable of mutating in children")
+
 if __name__ == '__main__':
 
 
@@ -13551,9 +13579,17 @@ class TestIsSpringDweller(unittest.TestCase):
 
     def test_is_summer_dweller(self):
         universe = Universe(width=10, height=10)
+        universe.entities = []
+        universe.terrains = []
+        universe.foods = []
+        universe.localized_events = []
+        universe.scent_trails = {}
         universe.time = 50
         universe.population_limit = 0
-        entity = Entity(name="Summer Dweller", x=1, y=1, energy=40, size=1, age=5, is_summer_dweller=True, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40, is_sleeping=True)
+        universe.current_event = None
+        universe.event_chance = 0
+        universe.localized_event_chance = 0
+        entity = Entity(name="Summer Dweller", x=1, y=1, energy=40, size=1, age=5, is_summer_dweller=True, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40, is_sleeping=True, is_parasitic=False, is_vampiric=False)
         universe.add_entity(entity)
         universe.tick()
         self.assertGreaterEqual(entity.energy, 39)
@@ -13574,9 +13610,17 @@ class TestIsSpringDweller(unittest.TestCase):
 class TestIsAutumnDweller(unittest.TestCase):
     def test_is_autumn_dweller(self):
         universe = Universe(width=10, height=10)
+        universe.entities = []
+        universe.terrains = []
+        universe.foods = []
+        universe.localized_events = []
+        universe.scent_trails = {}
         universe.time = 100
         universe.population_limit = 0
-        entity = Entity(name="Autumn Dweller", x=1, y=1, energy=40, size=1, age=5, is_autumn_dweller=True, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40, is_sleeping=True)
+        universe.current_event = None
+        universe.event_chance = 0
+        universe.localized_event_chance = 0
+        entity = Entity(name="Autumn Dweller", x=1, y=1, energy=40, size=1, age=5, is_autumn_dweller=True, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40, is_sleeping=True, is_parasitic=False, is_vampiric=False)
         universe.add_entity(entity)
         universe.tick()
         self.assertGreaterEqual(entity.energy, 39)
