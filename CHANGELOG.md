@@ -479,3 +479,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_forest_dweller` trait. Entities with this trait treat forest terrain as a shelter, gaining increased defense and energy recovery.
 
 - Implemented `is_blizzard_dweller` trait. Entities with this trait treat blizzard conditions as a shelter, gaining energy recovery and defense.
+- Implemented `is_spring_dweller` trait. Entities with this trait treat the spring season as a shelter, gaining increased defense and energy recovery.

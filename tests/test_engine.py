@@ -13434,7 +13434,7 @@ class TestIsDayDweller(unittest.TestCase):
         universe.tick()
 
         # At day, they get shelter recovery bonus
-        self.assertGreaterEqual(entity.energy, 30)
+        self.assertGreaterEqual(entity.energy,  30)
 
     def test_is_day_dweller_mutation(self):
         from src.universe.engine import Entity, Universe
@@ -13461,7 +13461,7 @@ class TestIsNightDweller(unittest.TestCase):
         universe.tick()
 
         # At night, they get shelter recovery bonus
-        self.assertGreaterEqual(entity.energy, 30)
+        self.assertGreaterEqual(entity.energy,  30)
 
     def test_is_night_dweller_mutation(self):
         from src.universe.engine import Entity, Universe
@@ -13476,3 +13476,31 @@ class TestIsNightDweller(unittest.TestCase):
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertGreater(len(children), 0, "Reproduction should occur")
         self.assertTrue(any(getattr(child, 'is_night_dweller', False) for child in children), "is_night_dweller should be capable of mutating in children")
+
+class TestIsSpringDweller(unittest.TestCase):
+    def test_is_spring_dweller(self):
+        from src.universe.engine import Entity, Universe
+        universe = Universe(width=5, height=5)
+        universe.time = 0 # Spring (season 0)
+        entity = Entity(name="Spring Dweller", x=1, y=1, energy=40, size=1, age=5, is_spring_dweller=True, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40, is_sleeping=True)
+        universe.add_entity(entity)
+
+        initial_energy = entity.energy
+        universe.tick()
+
+        # In spring, they get shelter recovery bonus
+        self.assertGreaterEqual(entity.energy, 29)
+
+    def test_is_spring_dweller_mutation(self):
+        from src.universe.engine import Entity, Universe
+        from unittest import mock
+        universe = Universe(width=5, height=5, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_spring_dweller=False)
+        universe.add_entity(parent)
+
+        with mock.patch('random.random', return_value=0.02):
+            universe.tick()
+
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertGreater(len(children), 0, "Reproduction should occur")
+        self.assertTrue(any(getattr(child, 'is_spring_dweller', False) for child in children), "is_spring_dweller should be capable of mutating in children")
