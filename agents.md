@@ -292,3 +292,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_wall_dweller` trait. Entities with this trait treat `wall` terrain as a shelter, gaining increased defense and energy recovery.
 
 - [x] Implemented `is_cave_glider` trait. Entities with this trait consume 0 stamina when moving on cave terrain.
+- [x] Implemented `is_day_dweller` trait. Entities with this trait treat day time as a shelter, gaining increased defense and energy recovery.
