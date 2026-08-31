@@ -13577,6 +13577,8 @@ class TestIsSpringDweller(unittest.TestCase):
         self.assertGreater(len(children), 0, "Reproduction should occur")
         self.assertTrue(any(getattr(child, 'is_spring_dweller', False) for child in children), "is_spring_dweller should be capable of mutating in children")
 
+
+class TestIsSummerDweller(unittest.TestCase):
     def test_is_summer_dweller(self):
         universe = Universe(width=10, height=10)
         universe.entities = []
