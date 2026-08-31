@@ -4711,6 +4711,7 @@ class TestBurrowing(unittest.TestCase):
         # But this is just ensuring it acts as a shelter vs a blizzard (which would normally do 3 * size loss)
         self.universe.add_entity(entity)
         self.universe.current_event = 'blizzard'
+        self.universe.event_remaining_time = 10
         initial_energy = entity.energy
 
         self.universe.tick()
