@@ -295,3 +295,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_day_dweller` trait. Entities with this trait treat day time as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_night_dweller` trait. Entities with this trait treat night time as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_spring_dweller` trait. Entities with this trait treat the spring season as a shelter, gaining increased defense and energy recovery.
+
+- [x] Implemented `is_autumn_dweller` trait. Entities with this trait treat the autumn season as a shelter, gaining increased defense and energy recovery.
