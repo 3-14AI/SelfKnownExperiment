@@ -1526,3 +1526,13 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 - Incorporated the trait into the reproduction system to ensure proper inheritance and mutation chances.
 - Added test coverage in `tests/test_engine.py` to assert energy recovery during spring and check mutation logic.
 - Logged changes and checked off the requirement in `agents.md`.
+
+
+## Implementation of is_autumn_dweller trait
+
+- The `is_autumn_dweller` trait was implemented, allowing entities to treat the autumn season as a shelter.
+- This grants them increased defense and energy recovery during autumn.
+- Added the trait to `src/universe/engine.py` (Entity initialization, reproduction mutation, shelter logic).
+- Added tests `test_is_autumn_dweller` and `test_is_autumn_dweller_mutation` to `tests/test_engine.py`.
+- Passed all tests successfully.
+- Updated `agents.md` and `CHANGELOG.md`.
