@@ -856,5 +856,62 @@ class TestCLIVisualizer(unittest.TestCase):
         sys.stdout = sys.__stdout__
         self.assertIn("C", captured_output.getvalue())
 
+
+    def test_render_is_spring_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Spring Dweller", x=5, y=5, is_spring_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+        import io, sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn("p", captured_output.getvalue())
+
+    def test_render_is_summer_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Summer Dweller", x=5, y=5, is_summer_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+        import io, sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn("u", captured_output.getvalue())
+
+    def test_render_is_autumn_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Autumn Dweller", x=5, y=5, is_autumn_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+        import io, sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn("a", captured_output.getvalue())
+
+    def test_render_is_winter_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Winter Dweller", x=5, y=5, is_winter_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+        import io, sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn("i", captured_output.getvalue())
+
 if __name__ == '__main__':
     unittest.main()
