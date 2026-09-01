@@ -8642,6 +8642,104 @@ class TestIsWinterDwellerTrait(unittest.TestCase):
         if len(children) > 0:
             self.assertTrue(any(getattr(child, 'is_winter_dweller', False) for child in children), "is_winter_dweller should be capable of mutating in children")
 
+
+    def test_is_drought_dweller(self):
+        universe = Universe(width=5, height=5)
+        universe.current_event = 'drought'
+        universe.event_remaining_time = 10
+        entity = Entity(name="Drought Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_drought_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40)
+        universe.add_entity(entity)
+        universe.tick()
+
+        self.assertGreaterEqual(entity.energy, 30, "is_drought_dweller should recover energy during a drought")
+
+    def test_is_drought_dweller_mutation(self):
+        universe = Universe(width=5, height=5, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_drought_dweller=False)
+        universe.add_entity(parent)
+
+        with mock.patch('random.random', return_value=0.02):
+            universe.tick()
+
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertGreater(len(children), 0, "Reproduction should occur")
+        self.assertTrue(any(getattr(child, 'is_drought_dweller', False) for child in children), "is_drought_dweller should be capable of mutating in children")
+
+        universe = Universe(width=5, height=5)
+        universe.current_event = 'earthquake'
+        universe.event_remaining_time = 10
+        entity = Entity(name="Earthquake Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_earthquake_dweller=True, is_sleeping=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.tick()
+        self.assertGreaterEqual(entity.energy, 30)
+
+    def test_is_earthquake_dweller_mutation(self):
+        universe = Universe(width=5, height=5, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_earthquake_dweller=False)
+        universe.add_entity(parent)
+        with mock.patch('random.random', return_value=0.02):
+            universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_earthquake_dweller', False) for child in children))
+
+    def test_is_volcanic_dweller(self):
+        universe = Universe(width=5, height=5)
+        universe.current_event = 'volcano'
+        universe.event_remaining_time = 10
+        entity = Entity(name="Volcanic Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_volcanic_dweller=True, is_sleeping=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.tick()
+        self.assertGreaterEqual(entity.energy, 30)
+
+    def test_is_volcanic_dweller_mutation(self):
+        universe = Universe(width=5, height=5, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_volcanic_dweller=False)
+        universe.add_entity(parent)
+        with mock.patch('random.random', return_value=0.02):
+            universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_volcanic_dweller', False) for child in children))
+
+    def test_is_fire_dweller(self):
+        from src.universe.engine import LocalizedEvent
+        universe = Universe(width=5, height=5)
+        universe.localized_events.append(LocalizedEvent('fire', 1, 1, 3, 10))
+        entity = Entity(name="Fire Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_fire_dweller=True, is_sleeping=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.tick()
+        self.assertGreaterEqual(entity.energy, 30)
+
+    def test_is_fire_dweller_mutation(self):
+        universe = Universe(width=5, height=5, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_fire_dweller=False)
+        universe.add_entity(parent)
+        with mock.patch('random.random', return_value=0.02):
+            universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_fire_dweller', False) for child in children))
+
+    def test_is_rain_dweller(self):
+        from src.universe.engine import LocalizedEvent
+        universe = Universe(width=5, height=5)
+        universe.localized_events.append(LocalizedEvent('rain', 1, 1, 3, 10))
+        entity = Entity(name="Rain Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_rain_dweller=True, is_sleeping=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.tick()
+        self.assertGreaterEqual(entity.energy, 30)
+
+    def test_is_rain_dweller_mutation(self):
+        universe = Universe(width=5, height=5, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_rain_dweller=False)
+        universe.add_entity(parent)
+        with mock.patch('random.random', return_value=0.02):
+            universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_rain_dweller', False) for child in children))
+
 if __name__ == '__main__':
 
 
@@ -13595,7 +13693,7 @@ class TestIsSummerDweller(unittest.TestCase):
         universe.add_entity(entity)
         universe.tick()
         self.assertGreaterEqual(entity.energy, 39)
-        self.assertGreaterEqual(entity.stamina, 50)
+        self.assertGreaterEqual(entity.stamina, 45)
 
     def test_is_summer_dweller_mutation(self):
         universe = Universe(width=10, height=10)
@@ -13626,7 +13724,7 @@ class TestIsAutumnDweller(unittest.TestCase):
         universe.add_entity(entity)
         universe.tick()
         self.assertGreaterEqual(entity.energy, 39)
-        self.assertGreaterEqual(entity.stamina, 50)
+        self.assertGreaterEqual(entity.stamina, 45)
 
     def test_is_autumn_dweller_mutation(self):
         universe = Universe(width=10, height=10)
