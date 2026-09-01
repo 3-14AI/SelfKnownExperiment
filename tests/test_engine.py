@@ -13779,5 +13779,43 @@ class TestIsPoisonDweller(unittest.TestCase):
         self.assertEqual(len(children), 1)
         self.assertTrue(children[0].is_poison_dweller)
 
+
+class TestIsVenomResistant(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10, population_limit=0)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_venom_resistant_combat(self):
+        from src.universe.engine import Entity
+        from unittest import mock
+        entity = Entity(name="Attacker", x=5, y=5, size=2, energy=50, max_stamina=100, stamina=100, is_venomous=True, attack=10, defense=10, is_sleeping=False)
+        prey = Entity(name="Prey", x=5, y=5, size=2, energy=50, max_stamina=100, stamina=100, is_venom_resistant=True, attack=1, defense=1, is_sleeping=False)
+
+        self.universe.add_entity(entity)
+        self.universe.add_entity(prey)
+
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        self.assertEqual(prey.poisoned_time, 0)
+
+    @mock.patch('random.random', return_value=0.02)
+    def test_is_venom_resistant_mutation(self, mock_random):
+        from src.universe.engine import Entity
+        entity = Entity(name="Parent", x=5, y=5, size=2, energy=100, age=10, is_venom_resistant=False, lays_eggs=False, is_vampiric=False, is_parasitic=False)
+        self.universe.add_entity(entity)
+        self.universe.population_limit = 100
+
+        self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_venom_resistant)
+
+
 if __name__ == '__main__':
     unittest.main()
