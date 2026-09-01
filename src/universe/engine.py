@@ -1333,6 +1333,18 @@ class Universe:
                     energy_loss -= 2
                 if getattr(entity, 'is_poison_dweller', False) and getattr(entity, 'poisoned_time', 0) > 0:
                     energy_loss -= 20
+                if getattr(entity, 'is_blizzard_dweller', False) and self.current_event == 'blizzard':
+                    energy_loss -= 1
+                if getattr(entity, 'is_drought_dweller', False) and self.current_event == 'drought':
+                    energy_loss -= 1
+                if getattr(entity, 'is_earthquake_dweller', False) and self.current_event == 'earthquake':
+                    energy_loss -= 1
+                if getattr(entity, 'is_volcanic_dweller', False) and self.current_event == 'volcano':
+                    energy_loss -= 1
+                if getattr(entity, 'is_fire_dweller', False) and any(e.event_type == 'fire' and (entity.x - e.x)**2 + (entity.y - e.y)**2 <= e.radius**2 for e in self.localized_events):
+                    energy_loss -= 1
+                if getattr(entity, 'is_rain_dweller', False) and any(e.event_type == 'rain' and (entity.x - e.x)**2 + (entity.y - e.y)**2 <= e.radius**2 for e in self.localized_events):
+                    energy_loss -= 1
                 if (getattr(entity, 'is_mountain_dweller', False) and any(t.terrain_type == 'cave' for t in terrains_here)) or getattr(entity, 'is_storm_dweller', False):
                     energy_loss -= 1
 
@@ -1362,6 +1374,18 @@ class Universe:
                     entity.stamina = min(getattr(entity, 'max_stamina', 50), getattr(entity, 'stamina', 50) + 5)
 
                 if getattr(entity, 'is_desertic', False) and any(t.terrain_type == 'sand' for t in self.get_terrains_at(entity.x, entity.y)):
+                    energy_loss -= 1
+                if getattr(entity, 'is_day_dweller', False) and self.is_day:
+                    energy_loss -= 1
+                if getattr(entity, 'is_night_dweller', False) and self.is_night:
+                    energy_loss -= 1
+                if getattr(entity, 'is_spring_dweller', False) and self.current_season == 'spring':
+                    energy_loss -= 1
+                if getattr(entity, 'is_summer_dweller', False) and self.current_season == 'summer':
+                    energy_loss -= 1
+                if getattr(entity, 'is_autumn_dweller', False) and self.current_season == 'autumn':
+                    energy_loss -= 1
+                if getattr(entity, 'is_winter_dweller', False) and self.current_season == 'winter':
                     energy_loss -= 1
 
                 if getattr(entity, 'is_sun_tracker', False) and self.is_day and not any(t.terrain_type in ['shelter', 'ash'] for t in self.get_terrains_at(entity.x, entity.y)):
