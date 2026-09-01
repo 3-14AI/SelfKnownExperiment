@@ -304,3 +304,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_spring_dweller` trait. Entities with this trait treat the spring season as a shelter, gaining increased defense and energy recovery.
 
 - [x] Implemented `is_autumn_dweller` trait. Entities with this trait treat the autumn season as a shelter, gaining increased defense and energy recovery.
+- [x] Implemented `is_summer_dweller` trait. Entities with this trait treat the summer season as a shelter, gaining increased defense and energy recovery.
+- [x] Implemented `is_winter_dweller` trait. Entities with this trait treat the winter season as a shelter, gaining increased defense and energy recovery.
