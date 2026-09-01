@@ -8740,7 +8740,12 @@ class TestIsWinterDwellerTrait(unittest.TestCase):
         self.assertGreater(len(children), 0)
         self.assertTrue(any(getattr(child, 'is_rain_dweller', False) for child in children))
 
+
+
+
+
 if __name__ == '__main__':
+
 
 
 
@@ -13779,5 +13784,40 @@ class TestIsPoisonDweller(unittest.TestCase):
         self.assertEqual(len(children), 1)
         self.assertTrue(children[0].is_poison_dweller)
 
+
+class TestIsVenomResistantTrait(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10, population_limit=0)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_venom_resistant(self):
+        predator = Entity("Predator", x=5, y=5, size=2, energy=50, diet='carnivore', attack=10, is_venomous=True, lays_eggs=False, is_parasitic=False, is_vampiric=False)
+        prey = Entity("Prey", x=5, y=5, size=1, energy=50, diet='herbivore', defense=0, poison_resistance=0, is_venom_resistant=True, lays_eggs=False, is_parasitic=False, is_vampiric=False)
+
+        self.universe.entities = [predator, prey]
+
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        # Prey should not be poisoned despite venomous predator and 0.0 random chance ensuring venom triggers
+        self.assertEqual(prey.poisoned_time, 0, "Prey with is_venom_resistant should not be poisoned by a venomous predator")
+
+    def test_is_venom_resistant_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=100, size=2, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_venom_resistant=False)
+        self.universe.entities = [parent]
+
+        with mock.patch('random.random', return_value=0.01):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.generation == 1]
+        if len(children) > 0:
+            self.assertTrue(any(getattr(child, 'is_venom_resistant', False) for child in children), "is_venom_resistant should be capable of mutating in children")
+
+
 if __name__ == '__main__':
+
     unittest.main()

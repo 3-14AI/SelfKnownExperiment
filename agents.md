@@ -157,6 +157,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_poison_dweller` trait. Entities with this trait treat being poisoned as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
 
+- [x] Implemented `is_venom_resistant` trait. Entities with this trait are completely immune to poison from venomous attackers during combat.
 - [x] Implemented `is_drought_dweller` trait. Entities with this trait treat a `drought` event as a shelter, gaining energy recovery and defense.
 - [x] Implemented `is_earthquake_dweller` trait. Entities with this trait treat an `earthquake` event as a shelter, gaining energy recovery and defense.
 - [x] Implemented `is_volcanic_dweller` trait. Entities with this trait treat a `volcano` event as a shelter, gaining energy recovery and defense.
