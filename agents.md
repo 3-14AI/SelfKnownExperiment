@@ -154,6 +154,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_agile` trait. Entities with this trait ignore stamina penalties when moving uphill.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
 
+- [x] Implemented `is_poison_dweller` trait. Entities with this trait treat being poisoned as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
 
 - [x] Implemented `is_drought_dweller` trait. Entities with this trait treat a `drought` event as a shelter, gaining energy recovery and defense.

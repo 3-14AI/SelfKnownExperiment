@@ -307,6 +307,8 @@
 - Implement entity perception radius. Entities now only detect food and route around obstacles that are within their perception radius (default 10).
 
 # Changelog
+
+- Implemented `is_poison_dweller` trait: Entities with this trait treat being poisoned as a shelter, gaining increased defense and energy recovery.
 ## [Unreleased]
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
