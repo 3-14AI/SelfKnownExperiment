@@ -13737,3 +13737,47 @@ class TestIsAutumnDweller(unittest.TestCase):
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         if len(children) > 0:
             self.assertTrue(any(getattr(child, 'is_autumn_dweller', False) for child in children), "is_autumn_dweller should be capable of mutating in children")
+
+class TestIsPoisonDweller(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_poison_dweller_energy_recovery_when_poisoned(self):
+        entity = Entity(name="Dweller", x=5, y=5, size=2, energy=50, age=10)
+        entity.is_poison_dweller = True
+        entity.poisoned_time = 10
+        self.universe.add_entity(entity)
+
+        initial_energy = entity.energy
+
+        with mock.patch('random.random', return_value=0.5):
+            self.universe.tick()
+
+        # It gets an energy_loss -= 20 which makes energy_loss effectively 0, but it gets -1 for poisoned_time,
+        # so energy loss is completely mitigated if energy_loss gets smaller than 0.
+        # It's treated as in_shelter so no penalty, and -2 for shelter, and -20 for poison.
+        self.assertGreaterEqual(entity.energy, initial_energy)
+
+    def test_is_poison_dweller_mutation(self):
+        entity = Entity(name="Dweller", x=5, y=5, size=2, energy=100, age=10)
+        entity.is_poison_dweller = False
+        entity.lays_eggs = False
+        entity.is_vampiric = False
+        entity.is_parasitic = False
+        self.universe.population_limit = 10
+        self.universe.add_entity(entity)
+
+        with mock.patch('random.random', return_value=0.02):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.generation == 1]
+        self.assertEqual(len(children), 1)
+        self.assertTrue(children[0].is_poison_dweller)
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1536,3 +1536,10 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 - Added tests `test_is_autumn_dweller` and `test_is_autumn_dweller_mutation` to `tests/test_engine.py`.
 - Passed all tests successfully.
 - Updated `agents.md` and `CHANGELOG.md`.
+
+### Analysis 273: Implemented is_poison_dweller Trait
+- Introduced the `is_poison_dweller` trait to the `Entity` class.
+- Modified `Universe.tick()` so that entities with this trait view being poisoned as a protective shelter, offering passive defense and energy regeneration.
+- Ensured genetic propagation and mutation handling for the trait during reproduction.
+- Added test coverage in `tests/test_engine.py`.
+- Updated `agents.md` to reflect the completed task.
