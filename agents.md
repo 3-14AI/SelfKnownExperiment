@@ -155,6 +155,12 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
 
 ## Next Steps
+
+- [x] Implemented `is_drought_dweller` trait. Entities with this trait treat a `drought` event as a shelter, gaining energy recovery and defense.
+- [x] Implemented `is_earthquake_dweller` trait. Entities with this trait treat an `earthquake` event as a shelter, gaining energy recovery and defense.
+- [x] Implemented `is_volcanic_dweller` trait. Entities with this trait treat a `volcano` event as a shelter, gaining energy recovery and defense.
+- [x] Implemented `is_fire_dweller` trait. Entities with this trait treat a `fire` event as a shelter, gaining energy recovery and defense, and are immune to fire damage.
+- [x] Implemented `is_rain_dweller` trait. Entities with this trait treat a `rain` event as a shelter, gaining energy recovery and defense.
 - [x] Implemented `is_storm_dweller` trait. Entities with this trait treat `storm` conditions as a shelter, gaining energy recovery and defense.
 - [x] Implemented `is_blizzard_dweller` trait. Entities with this trait treat blizzard conditions as a shelter, gaining energy recovery and defense.
 - [x] Implemented `is_deep_water_dweller` trait. Entities with this trait treat deep-water terrain as a shelter, gaining increased defense and energy recovery.
