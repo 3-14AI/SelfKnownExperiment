@@ -13819,3 +13819,39 @@ class TestIsVenomResistant(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestDiseaseDweller(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10, population_limit=0)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_disease_dweller_energy_recovery_when_infected(self):
+        from src.universe.engine import Entity
+        entity = Entity(name="Disease Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_disease_dweller=True, is_infected=True, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(1,1), temperature_tolerance=40)
+        control = Entity(name="Control", x=2, y=2, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_disease_dweller=False, is_infected=True, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(2,2), temperature_tolerance=40)
+
+        self.universe.entities.append(entity)
+        self.universe.entities.append(control)
+
+        self.universe.tick()
+
+        self.assertGreater(entity.energy, control.energy, "is_disease_dweller should recover energy when infected compared to a normal infected entity")
+        self.assertGreaterEqual(entity.energy, 30, "is_disease_dweller should recover/maintain energy when infected")
+
+    def test_is_disease_dweller_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock as mock
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_disease_dweller=False)
+        self.universe.entities.append(parent)
+
+        with mock.patch('random.random', return_value=0.02): # High mutation chance, bypasses disease
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name == "Parent" and e != parent]
+        if children:
+            self.assertTrue(any(getattr(child, 'is_disease_dweller', False) for child in children), "is_disease_dweller should be capable of mutating in children")
