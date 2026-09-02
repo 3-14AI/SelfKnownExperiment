@@ -13935,5 +13935,52 @@ class TestIsDiseaseResistant(unittest.TestCase):
             self.assertTrue(any(getattr(child, 'is_disease_resistant', False) for child in children), "is_disease_resistant should be capable of mutating in children")
 
 
+
+class TestIsParasiteDweller(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_parasite_dweller_energy_recovery_when_parasitized(self):
+        from src.universe.engine import Entity
+        entity = Entity(name="Parasite Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_parasite_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(1,1), temperature_tolerance=40)
+        parasite = Entity(name="Parasite", x=1, y=1, is_parasitic=True, energy=20)
+        entity.attached_parasites = [parasite]
+        parasite.host = entity
+
+        control = Entity(name="Control", x=2, y=2, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_parasite_dweller=False, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(2,2), temperature_tolerance=40)
+        parasite_control = Entity(name="Parasite Control", x=2, y=2, is_parasitic=True, energy=20)
+        control.attached_parasites = [parasite_control]
+        parasite_control.host = control
+
+        self.universe.entities.append(entity)
+        self.universe.entities.append(parasite)
+        self.universe.entities.append(control)
+        self.universe.entities.append(parasite_control)
+
+        self.universe.tick()
+
+        self.assertGreater(entity.energy, control.energy, "is_parasite_dweller should recover energy when parasitized compared to a normal entity")
+        self.assertGreaterEqual(entity.energy, 20, "is_parasite_dweller should recover/maintain energy when parasitized")
+
+    def test_is_parasite_dweller_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock as mock
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_parasite_dweller=False)
+        self.universe.entities.append(parent)
+
+        with mock.patch('random.random', return_value=0.02): # High mutation chance, bypasses disease
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name == "Parent" and e != parent]
+        if children:
+            self.assertTrue(any(getattr(child, 'is_parasite_dweller', False) for child in children), "is_parasite_dweller should be capable of mutating in children")
+
+
 if __name__ == '__main__':
     unittest.main()
