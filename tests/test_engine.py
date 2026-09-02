@@ -13982,5 +13982,84 @@ class TestIsParasiteDweller(unittest.TestCase):
             self.assertTrue(any(getattr(child, 'is_parasite_dweller', False) for child in children), "is_parasite_dweller should be capable of mutating in children")
 
 
+
+class TestIsTracker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_tracker_scent_detection(self):
+        # Create an entity with is_tracker=True, stamina=50 to allow movement
+        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100, diet="carnivore", target_species=["prey"])
+        self.universe.entities.append(entity)
+
+        # Place a strong scent trail at distance 2 (7, 5)
+        self.universe.scent_trails[(7, 5)] = 20
+
+        # Also put a weak scent at distance 1 to ensure it prefers the strong one
+        self.universe.scent_trails[(6, 5)] = 5
+
+        # It should move towards (7, 5) which means taking a step in (1, 0) direction
+        self.universe.tick()
+
+        self.assertEqual(entity.x, 6)
+        self.assertEqual(entity.y, 5)
+
+    def test_is_tracker_mutation(self):
+        parent = Entity(name="parent", x=1, y=1, energy=100, size=2, age=5, max_age=10)
+        # Ensure it has enough energy to reproduce
+        self.universe.entities.append(parent)
+
+        import random
+        original_random = random.random
+        try:
+            # Force mutation chance to succeed
+            random.random = lambda: 0.0
+
+            # Since random is 0.0, it will mutate the boolean trait from False to True.
+            self.universe.tick()
+
+            children = [e for e in self.universe.entities if e != parent]
+            if children:
+                child = children[0]
+                self.assertTrue(getattr(child, 'is_tracker', False))
+        finally:
+            random.random = original_random
+
+
+class TestIsStunDweller(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10, population_limit=0)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+
+    def test_is_stun_dweller_energy_recovery(self):
+        entity = Entity(name="Stun Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_stun_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(1,1), temperature_tolerance=40, stunned_time=5)
+        self.universe.add_entity(entity)
+
+        control = Entity(name="Control", x=2, y=2, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_stun_dweller=False, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(2,2), temperature_tolerance=40, stunned_time=5)
+        self.universe.add_entity(control)
+
+        self.universe.tick()
+
+        self.assertGreater(entity.energy, control.energy, "is_stun_dweller should recover/conserve energy when stunned compared to a normal entity")
+        self.assertGreaterEqual(entity.energy, 20, "is_stun_dweller should recover/maintain energy when stunned")
+
+    def test_is_stun_dweller_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_stun_dweller=False)
+        self.universe.add_entity(parent)
+        self.universe.population_limit = 0
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0
+            self.universe.tick()
+            children = [e for e in self.universe.entities if e != parent]
+            if len(children) > 0:
+                self.assertTrue(any(getattr(child, 'is_stun_dweller', False) for child in children), "is_stun_dweller should be capable of mutating in children")
+        finally:
+            random.random = original_random
+
 if __name__ == '__main__':
     unittest.main()
