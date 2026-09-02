@@ -331,6 +331,8 @@ class CLIVisualizer:
                         char = '%'
                     elif getattr(entity, 'is_drought_resistant', False):
                         char = '∆'
+                    elif getattr(entity, 'is_ageless', False):
+                        char = 'A'
                     else:
                         char = 'E'
 
