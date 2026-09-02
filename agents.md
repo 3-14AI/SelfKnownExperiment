@@ -157,6 +157,7 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_poison_dweller` trait. Entities with this trait treat being poisoned as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_disease_resistant` trait. Entities with this trait are immune to passive disease contraction during random global ticks.
+- [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
 - [x] Implemented `is_ageless` trait. Entities with this trait do not die when their age exceeds their max_age.
 
