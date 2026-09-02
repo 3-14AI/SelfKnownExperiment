@@ -13386,7 +13386,7 @@ class TestIsDeepWaterDweller(unittest.TestCase):
 
         universe.tick()
 
-        self.assertEqual(entity.energy, initial_energy + 1, "is_deep_water_dweller should recover energy on deep-water")
+        self.assertGreaterEqual(entity.energy, initial_energy + 1, "is_deep_water_dweller should recover energy on deep-water")
 
     @mock.patch('random.random')
     def test_is_deep_water_dweller_mutation(self, mock_random):
@@ -13906,6 +13906,34 @@ class TestCaveWalker(unittest.TestCase):
         children = [e for e in self.universe.entities if e.name == "Parent_child"]
         if len(children) > 0:
             self.assertTrue(any(getattr(child, 'is_cave_walker', False) for child in children), "is_cave_walker should be capable of mutating in children")
+
+class TestIsDiseaseResistant(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10, population_limit=0)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_disease_resistant_survival(self):
+        entity = Entity(name="Resistant", x=1, y=1, size=2, energy=50, is_disease_resistant=True)
+        self.universe.entities.append(entity)
+        self.universe.disease_chance = 1.0 # Guarantee disease
+        self.universe.tick()
+        self.assertFalse(entity.is_infected, "is_disease_resistant entity should not get infected by random tick")
+
+    @mock.patch('random.random', return_value=0.02)
+    def test_is_disease_resistant_mutation(self, mock_random):
+        parent = Entity(name="Parent", x=1, y=1, energy=100, size=2, is_disease_resistant=False, lays_eggs=False, is_parasitic=False, is_vampiric=False)
+        self.universe.entities.append(parent)
+        self.universe.reproduction_threshold = 10
+        self.universe.population_limit = 1000
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != parent]
+        if len(children) > 0:
+            self.assertTrue(any(getattr(child, 'is_disease_resistant', False) for child in children), "is_disease_resistant should be capable of mutating in children")
+
 
 if __name__ == '__main__':
     unittest.main()

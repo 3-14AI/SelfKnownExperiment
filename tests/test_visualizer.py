@@ -928,5 +928,15 @@ class TestCLIVisualizer(unittest.TestCase):
         out = captured_output.getvalue()
         self.assertIn("A", out)
 
+    def test_render_is_disease_resistant(self):
+        u = Universe(width=3, height=3)
+        e = Entity(name="E", x=1, y=1, is_disease_resistant=True)
+        u.entities.append(e)
+        v = CLIVisualizer(u)
+        output = v.render()
+        self.assertIn('r', output)
+
+
+
 if __name__ == '__main__':
     unittest.main()
