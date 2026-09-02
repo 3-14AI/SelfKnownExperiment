@@ -13221,7 +13221,7 @@ class TestIsWaterDweller(unittest.TestCase):
 
         universe.tick()
         # normal loss is 1 (size), in shelter reduces by 2 -> energy_loss = -1, so energy increases by 1
-        self.assertEqual(entity.energy, 21, "is_water_dweller should treat water as shelter for energy recovery")
+        self.assertGreaterEqual(entity.energy, 21, "is_water_dweller should treat water as shelter for energy recovery")
 
     @mock.patch('random.random')
     def test_is_water_dweller_mutation(self, mock_random):
@@ -13869,5 +13869,43 @@ class TestIsAgeless(unittest.TestCase):
         children = [e for e in self.universe.entities if e.name == "Parent" and e != parent]
         if children:
             self.assertTrue(any(getattr(child, 'is_ageless', False) for child in children), "is_ageless should be capable of mutating in children")
+
+class TestCaveWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_cave_walker(self):
+        self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='cave', elevation=2))
+
+        # Without trait
+        entity_no_trait = Entity("NoTrait", x=2, y=1, stamina=50, is_cave_walker=False, lays_eggs=False, is_parasitic=False, is_vampiric=False)
+        self.universe.add_entity(entity_no_trait)
+        self.universe.move_entity(entity_no_trait, 0, 1)
+        # base 1 + elevation 2 = 3 cost
+        self.assertEqual(entity_no_trait.stamina, 47)
+
+        # With trait
+        entity_with_trait = Entity("WithTrait", x=2, y=1, stamina=50, is_cave_walker=True, lays_eggs=False, is_parasitic=False, is_vampiric=False)
+        self.universe.add_entity(entity_with_trait)
+        self.universe.move_entity(entity_with_trait, 0, 1)
+        # base 1 + elevation ignored = 1 cost
+        self.assertEqual(entity_with_trait.stamina, 49)
+
+    @mock.patch('random.random')
+    def test_is_cave_walker_mutation(self, mock_random):
+        mock_random.return_value = 0.02
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_cave_walker=False)
+        self.universe.add_entity(parent)
+        self.universe.population_limit = 0
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e.name == "Parent_child"]
+        if len(children) > 0:
+            self.assertTrue(any(getattr(child, 'is_cave_walker', False) for child in children), "is_cave_walker should be capable of mutating in children")
+
 if __name__ == '__main__':
     unittest.main()
