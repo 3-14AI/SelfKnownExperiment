@@ -8740,29 +8740,6 @@ class TestIsWinterDwellerTrait(unittest.TestCase):
         self.assertGreater(len(children), 0)
         self.assertTrue(any(getattr(child, 'is_rain_dweller', False) for child in children))
 
-if __name__ == '__main__':
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    unittest.main()
 
 class TestPhotosynthesis(unittest.TestCase):
     @unittest.skip("skip")
@@ -13817,8 +13794,6 @@ class TestIsVenomResistant(unittest.TestCase):
         self.assertTrue(children[0].is_venom_resistant)
 
 
-if __name__ == '__main__':
-    unittest.main()
 
 class TestDiseaseDweller(unittest.TestCase):
     def setUp(self):
@@ -13855,3 +13830,44 @@ class TestDiseaseDweller(unittest.TestCase):
         children = [e for e in self.universe.entities if e.name == "Parent" and e != parent]
         if children:
             self.assertTrue(any(getattr(child, 'is_disease_dweller', False) for child in children), "is_disease_dweller should be capable of mutating in children")
+
+class TestIsAgeless(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.population_limit = 0
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_ageless_survival(self):
+        from src.universe.engine import Entity
+        entity = Entity(name="Immortal", x=1, y=1, energy=50, size=1, age=50, max_age=50, is_ageless=True)
+        control = Entity(name="Mortal", x=2, y=2, energy=50, size=1, age=50, max_age=50, is_ageless=False)
+        self.universe.add_entity(entity)
+        self.universe.add_entity(control)
+
+        self.assertTrue(entity.is_alive, "is_ageless entity should be alive at max_age")
+        self.assertTrue(control.is_alive, "control entity should be alive at max_age")
+
+        self.universe.tick()
+
+        self.assertTrue(entity.is_alive, "is_ageless entity should survive past max_age")
+        self.assertFalse(control.is_alive, "control entity should die when age exceeds max_age")
+
+    def test_is_ageless_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock as mock
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_ageless=False)
+        self.universe.entities.append(parent)
+
+        with mock.patch('random.random', return_value=0.02):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name == "Parent" and e != parent]
+        if children:
+            self.assertTrue(any(getattr(child, 'is_ageless', False) for child in children), "is_ageless should be capable of mutating in children")
+if __name__ == '__main__':
+    unittest.main()

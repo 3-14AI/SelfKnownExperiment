@@ -913,5 +913,20 @@ class TestCLIVisualizer(unittest.TestCase):
         sys.stdout = sys.__stdout__
         self.assertIn("i", captured_output.getvalue())
 
+    def test_render_is_ageless(self):
+        from src.universe.engine import Entity, Universe
+        universe = Universe(10, 10)
+        e = Entity(name="E", x=1, y=1, is_ageless=True)
+        universe.add_entity(e)
+        from src.universe.visualizer import CLIVisualizer
+        import io, sys
+        visualizer = CLIVisualizer(universe)
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        out = captured_output.getvalue()
+        self.assertIn("A", out)
+
 if __name__ == '__main__':
     unittest.main()
