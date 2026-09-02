@@ -938,5 +938,14 @@ class TestCLIVisualizer(unittest.TestCase):
 
 
 
+
+    def test_render_is_stun_dweller(self):
+        u = Universe(width=3, height=3)
+        e = Entity(name="E", x=1, y=1, is_stun_dweller=True)
+        u.entities.append(e)
+        v = CLIVisualizer(u)
+        output = v.render()
+        self.assertIn('D', output)
+
 if __name__ == '__main__':
     unittest.main()
