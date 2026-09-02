@@ -140,6 +140,8 @@ class CLIVisualizer:
                         char = 'G'
                     elif getattr(entity, 'is_regenerative', False):
                         char = 'G'
+                    elif getattr(entity, 'is_disease_resistant', False):
+                        char = 'r'
                     elif getattr(entity, 'is_immune', False):
                         char = 'I'
                     elif getattr(entity, 'is_amphibious', False):
