@@ -1556,3 +1556,12 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 - **Agent Intent:** Implement the `is_ageless` trait to allow entities to bypass death by old age.
 - **Implementation Details:** Modified `Entity.is_alive` to ignore `max_age` checks if `is_ageless` is True. Added trait instantiation and mutation logic inside `engine.py`. Added corresponding unit tests in `test_engine.py` and modified visualizer (`visualizer.py` and `test_visualizer.py`) to render ageless entities with character 'A'.
 - **Future work:** N/A.
+
+### Analysis 275: Implemented is_cave_walker Trait
+- **Agent Intent:** Implement the `is_cave_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_cave_walker` trait initialization and genetic propagation in `src/universe/engine.py`.
+  - Allowed entities with this trait to ignore elevation stamina penalties when walking on `cave` terrains.
+  - Added mechanical and mutation test coverage for the trait in `tests/test_engine.py`.
+  - Updated `agents.md` to reflect the task's completion.
+- **Future work:** N/A.
