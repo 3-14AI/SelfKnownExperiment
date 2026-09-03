@@ -1850,6 +1850,15 @@ class Universe:
                     child_is_stun_dweller = getattr(entity, 'is_stun_dweller', False)
                     child_is_sleep_dweller = getattr(entity, 'is_sleep_dweller', False)
                     if random.random() < mutation_chance:
+                        child_is_sleep_dweller = not child_is_sleep_dweller
+                        mutation_occurred = True
+
+                    child_is_stun_dweller = getattr(entity, 'is_stun_dweller', False)
+                    if random.random() < mutation_chance:
+                        child_is_stun_dweller = not child_is_stun_dweller
+                        mutation_occurred = True
+
+                    if random.random() < mutation_chance:
                         child_is_mountain_glider = not child_is_mountain_glider
                         mutation_occurred = True
                     if random.random() < mutation_chance:
@@ -1949,12 +1958,7 @@ class Universe:
                     if random.random() < mutation_chance:
                         child_is_parasite_dweller = not child_is_parasite_dweller
                         mutation_occurred = True
-                    if random.random() < mutation_chance:
-                        child_is_stun_dweller = not child_is_stun_dweller
-                        mutation_occurred = True
-                    if random.random() < mutation_chance:
-                        child_is_sleep_dweller = not child_is_sleep_dweller
-                        mutation_occurred = True
+
                     if random.random() < mutation_chance:
                         child_is_cold_blooded = not child_is_cold_blooded
                         mutation_occurred = True

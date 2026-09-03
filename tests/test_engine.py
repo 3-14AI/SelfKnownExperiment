@@ -6546,7 +6546,6 @@ class TestCautious(unittest.TestCase):
 
         self.assertEqual(e3.stunned_time, 5)
 
-    @unittest.skip('flaky')
     def test_is_sturdy_mutation(self):
         """Test that is_sturdy mutates correctly."""
         universe = Universe(width=20, height=20, food_spawn_rate=0.0)
@@ -14111,6 +14110,39 @@ class TestIsSleepDweller(unittest.TestCase):
         if len(children) > 0:
             for child in children:
                 self.assertTrue(getattr(child, 'is_sleep_dweller', False), "is_sleep_dweller should be capable of mutating in children")
+
+
+class TestIsSleepDwellerMutation(unittest.TestCase):
+    def test_is_sleep_dweller_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, is_sleep_dweller=False, intelligence=1, is_nest_builder=False)
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            self.assertTrue(child.is_sleep_dweller)
+
+class TestIsStunDwellerMutation(unittest.TestCase):
+    def test_is_stun_dweller_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, is_stun_dweller=False, intelligence=1, is_nest_builder=False)
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            self.assertTrue(child.is_stun_dweller)
 
 if __name__ == '__main__':
     unittest.main()
