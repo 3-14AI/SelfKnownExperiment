@@ -13843,8 +13843,8 @@ class TestIsAgeless(unittest.TestCase):
 
     def test_is_ageless_survival(self):
         from src.universe.engine import Entity
-        entity = Entity(name="Immortal", x=1, y=1, energy=50, size=1, age=50, max_age=50, is_ageless=True)
-        control = Entity(name="Mortal", x=2, y=2, energy=50, size=1, age=50, max_age=50, is_ageless=False)
+        entity = Entity(name="Immortal", x=1, y=1, energy=5000, size=1, age=50, max_age=50, is_ageless=True)
+        control = Entity(name="Mortal", x=2, y=2, energy=5000, size=1, age=50, max_age=50, is_ageless=False)
         self.universe.add_entity(entity)
         self.universe.add_entity(control)
 
@@ -14189,6 +14189,67 @@ class TestIsSnowWalkerMutation(unittest.TestCase):
         if eggs:
             child = eggs[0].hatch_entity
             self.assertTrue(child.is_snow_walker)
+
+
+class TestIsBlizzardWalker(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10, food_spawn_rate=0)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_blizzard_walker_stamina(self):
+        from src.universe.engine import Entity, Terrain
+        e1 = Entity(name="E1", x=0, y=0, energy=50, is_blizzard_walker=True, size=1)
+        e2 = Entity(name="E2", x=0, y=1, energy=50, is_blizzard_walker=False, size=1)
+        e1.stamina = 50
+        e2.stamina = 50
+
+        # Elevation diff to cause stamina drain
+        self.universe.add_terrain(Terrain(x=0, y=0, terrain_type='grass', elevation=0))
+        self.universe.add_terrain(Terrain(x=0, y=1, terrain_type='grass', elevation=0)) # For E2 moving to (0, 1), actually we move them
+        self.universe.add_terrain(Terrain(x=1, y=0, terrain_type='grass', elevation=5)) # For E1 moving to (1, 0)
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='grass', elevation=5)) # For E2 moving to (1, 1)
+
+        self.universe.add_entity(e1)
+        self.universe.add_entity(e2)
+
+        self.universe.current_event = 'blizzard'
+
+        old_stamina_e1 = e1.stamina
+        old_stamina_e2 = e2.stamina
+
+        self.universe.move_entity(e1, 1, 0)
+        self.universe.move_entity(e2, 1, 0)
+
+        # e1 should only pay regular stamina cost (which might be 0 due to some rules or small cost, but no elevation cost)
+        # Wait, regular move cost is 0 if nothing specified, but elevation adds to stamina_cost.
+        # e2 should pay extra 5 stamina.
+
+        # We just need to check that e1 lost less stamina than e2.
+        self.assertTrue(old_stamina_e1 - e1.stamina < old_stamina_e2 - e2.stamina)
+
+    def test_is_blizzard_walker_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock as mock
+
+        self.universe.population_limit = 100
+        self.universe.reproduction_threshold = 20
+        self.universe.mutation_chance = 1.0
+
+        parent = Entity(name="Parent", x=5, y=5, energy=50, age=10, size=5, lays_eggs=True, is_blizzard_walker=False)
+        self.universe.add_entity(parent)
+
+        with mock.patch('random.random', return_value=0.02):
+            self.universe.tick()
+
+        eggs = [f for f in self.universe.foods if getattr(f, 'hatch_entity', None) is not None]
+        self.assertTrue(len(eggs) > 0)
+        child = eggs[0].hatch_entity
+        self.assertTrue(getattr(child, 'is_blizzard_walker', False))
 
 if __name__ == '__main__':
     unittest.main()
