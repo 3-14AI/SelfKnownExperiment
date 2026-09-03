@@ -1584,3 +1584,6 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
   - Added mechanical and mutation test coverage for the trait in `tests/test_engine.py`.
   - Updated `agents.md` to reflect the task's completion.
 - **Future work:** N/A.
+
+## 157. `is_sleep_dweller` trait
+The `is_sleep_dweller` trait was implemented. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery while sleeping. This provides a strategic advantage for resting and conserving energy without needing a physical shelter.
