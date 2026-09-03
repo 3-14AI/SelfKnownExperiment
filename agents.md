@@ -254,6 +254,7 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_desperate` trait. Entities with this trait gain a massive +4 attack when their energy drops below 30% of max energy.
 - [x] Implemented `is_iron_willed` trait. Entities with this trait are immune to the stat reductions caused by intimidating and smelly opponents.
+- [x] Implemented `is_snow_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on snow terrain.
 - [x] Implemented `is_frost_walker` trait. Entities with this trait consume no stamina when moving on snow or ice terrain.
 - [x] Implemented `is_marsh_strider` trait. Entities with this trait consume no stamina when moving on mud terrain and gain a defense bonus while on mud.
 - [x] Implemented `is_dune_walker` trait. Entities with this trait consume no stamina when moving on sand terrain.
