@@ -14061,5 +14061,56 @@ class TestIsStunDweller(unittest.TestCase):
         finally:
             random.random = original_random
 
+
+
+class TestIsSleepDweller(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_sleep_dweller_energy_recovery(self):
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+        self.universe.population_limit = 0
+        self.universe.time = 0
+        entity = Entity(name="Sleep Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_sleep_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(1,1), temperature_tolerance=40)
+        entity.is_sleeping = True # Ensure sleeping
+
+        control = Entity(name="Control", x=2, y=2, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_sleep_dweller=False, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(2,2), temperature_tolerance=40)
+        control.is_sleeping = True # Ensure sleeping
+
+        self.universe.add_entity(entity)
+        self.universe.add_entity(control)
+
+        self.universe.tick()
+
+        self.assertGreater(entity.energy, control.energy, "is_sleep_dweller should recover/conserve energy when sleeping compared to a normal entity")
+        self.assertGreaterEqual(entity.energy, 20, "is_sleep_dweller should recover/maintain energy when sleeping")
+
+    @mock.patch('random.random', return_value=0.02)
+    def test_is_sleep_dweller_mutation(self, mock_random):
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_sleep_dweller=False)
+        self.universe.add_entity(parent)
+
+        # Force reproduction
+        parent.energy = parent.max_energy
+        self.universe.population_limit = 100
+
+        self.universe.tick()
+
+        children = [e for e in self.universe.entities if e != parent]
+        if len(children) > 0:
+            for child in children:
+                self.assertTrue(getattr(child, 'is_sleep_dweller', False), "is_sleep_dweller should be capable of mutating in children")
+
 if __name__ == '__main__':
     unittest.main()

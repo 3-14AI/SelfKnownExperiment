@@ -11,6 +11,7 @@
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
 ## [Unreleased]
+- Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_stun_dweller` trait. Entities with this trait treat being stunned as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_ageless` trait. Entities with this trait do not die from old age when their age exceeds their max_age.
