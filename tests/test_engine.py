@@ -14251,8 +14251,6 @@ class TestIsBlizzardWalker(unittest.TestCase):
         child = eggs[0].hatch_entity
         self.assertTrue(getattr(child, 'is_blizzard_walker', False))
 
-if __name__ == '__main__':
-    unittest.main()
 
 class TestIsStormWalker(unittest.TestCase):
     def setUp(self):
@@ -14296,3 +14294,49 @@ class TestIsStormWalker(unittest.TestCase):
         if children:
             child = children[0]
             self.assertTrue(getattr(child, 'is_storm_walker', False))
+
+class TestIsRainWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10, population_limit=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+        self.universe.event_chance = 0
+        self.universe.localized_event_chance = 0
+        self.universe.current_event = None
+
+    def test_is_rain_walker_stamina(self):
+        self.universe.terrains.append(Terrain(x=0, y=0, terrain_type='grass', elevation=0))
+        self.universe.terrains.append(Terrain(x=1, y=0, terrain_type='grass', elevation=1))
+
+        entity = Entity(name='test_walker', x=0, y=0, is_rain_walker=True, max_stamina=10, stamina=10, energy=100)
+        self.universe.add_entity(entity)
+        self.universe.current_event = 'rain'
+
+        self.universe.move_entity(entity, 1, 0)
+        # Without is_rain_walker, climbing +1 elevation costs 2 stamina.
+        # With it during a rain event, it costs 1 stamina.
+        self.assertEqual(entity.stamina, 9)
+
+        # Test normal behavior when event is not rain
+        entity.x, entity.y = 0, 0
+        entity.stamina = 10
+        self.universe.current_event = None
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 8)
+
+    @mock.patch('random.random', return_value=0.02)
+    def test_is_rain_walker_mutation(self, mock_random):
+        parent = Entity(name='test_parent', x=5, y=5, is_rain_walker=False, energy=50)
+        self.universe.add_entity(parent)
+        self.universe.disease_chance = 0.0 # prevent disease
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e is not parent]
+        if children:
+            child = children[0]
+            self.assertTrue(getattr(child, 'is_rain_walker', False))
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1595,3 +1595,4 @@ The `is_sleep_dweller` trait was implemented. Entities with this trait treat bei
 - Implemented `is_stun_dweller` trait. Entities with this trait treat being stunned as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_ageless` trait. Entities with this trait do not die from old age when their age exceeds their max_age.
+Implemented is_rain_walker trait.
