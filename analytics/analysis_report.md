@@ -1568,3 +1568,11 @@ The `is_drought_strider` trait has been implemented to allow entities to navigat
 
 ## 157. `is_sleep_dweller` trait
 The `is_sleep_dweller` trait was implemented. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery while sleeping. This provides a strategic advantage for resting and conserving energy without needing a physical shelter.
+
+
+### Analysis 276
+- Fixed missing mutation logic and tests for `is_sleep_dweller` and `is_stun_dweller` traits.
+- Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
+- Implemented `is_stun_dweller` trait. Entities with this trait treat being stunned as a shelter, gaining increased defense and energy recovery.
+- Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
+- Implemented `is_ageless` trait. Entities with this trait do not die from old age when their age exceeds their max_age.
