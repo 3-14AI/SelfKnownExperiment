@@ -11,6 +11,7 @@
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
 ## [Unreleased]
+- Implemented `is_snow_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on snow terrain.
 - Fixed missing mutation logic and tests for `is_sleep_dweller` and `is_stun_dweller` traits.
 - Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_stun_dweller` trait. Entities with this trait treat being stunned as a shelter, gaining increased defense and energy recovery.
