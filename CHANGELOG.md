@@ -11,6 +11,7 @@
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
 ## [Unreleased]
+- Implemented `is_earthquake_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during an 'earthquake' event.
 - Implemented `is_volcanic_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'volcano' event.
 - Implemented `is_snow_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on snow terrain.
 - Fixed missing mutation logic and tests for `is_sleep_dweller` and `is_stun_dweller` traits.
