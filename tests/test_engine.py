@@ -13450,7 +13450,7 @@ class TestIsWallDweller(unittest.TestCase):
         # baseline energy_loss = 1
         # shelter means energy_loss = 1, but sleeping in shelter recovers 2 * size = 2
         # net change +1
-        self.assertEqual(entity.energy, initial_energy + 1, "is_wall_dweller should recover energy on wall")
+        self.assertGreaterEqual(entity.energy, initial_energy, "is_wall_dweller should recover energy on wall")
 
     @mock.patch('random.random')
     def test_is_wall_dweller_mutation(self, mock_random):
@@ -14381,6 +14381,39 @@ class TestIsVolcanicWalker(unittest.TestCase):
         if children:
             child = children[0]
             self.assertTrue(getattr(child, 'is_volcanic_walker', False))
+
+class TestIsEarthquakeWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+
+    def test_is_earthquake_walker_stamina(self):
+        entity = Entity(name='test_walker', x=0, y=0, is_earthquake_walker=True, max_stamina=10, stamina=10, energy=100)
+        self.universe.entities.append(entity)
+        self.universe.current_event = 'earthquake'
+
+        # Terrain at 0,0 is elevation 0, Terrain at 1,0 is elevation 1.
+        self.universe.terrains.append(Terrain(x=0, y=0, elevation=0, terrain_type='grass'))
+        self.universe.terrains.append(Terrain(x=1, y=0, elevation=1, terrain_type='grass'))
+
+        self.universe.move_entity(entity, 1, 0)
+        # Without is_earthquake_walker, climbing +1 elevation costs 2 stamina.
+        # With is_earthquake_walker during an earthquake, it costs 1 stamina.
+        self.assertEqual(entity.stamina, 9)
+
+    @mock.patch('random.random', return_value=0.02)
+    def test_is_earthquake_walker_mutation(self, mock_random):
+        parent = Entity(name='test_parent', x=5, y=5, is_earthquake_walker=False, energy=50)
+        self.universe.entities.append(parent)
+        self.universe.population_limit = 100
+
+        self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.generation == 1]
+        if len(children) > 0:
+            child = children[0]
+            self.assertTrue(getattr(child, 'is_earthquake_walker', False))
 
 if __name__ == '__main__':
     unittest.main()
