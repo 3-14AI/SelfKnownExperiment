@@ -28,6 +28,9 @@
 - Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
+- Implemented `is_mud_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on mud terrain.
+- Implemented `is_drought_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'drought' event.
+- Implemented `is_fire_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'fire' event.
 - Analyzed recent project changes (Leap, Heavy, Lightweight, Stealthy, Mimic, Sharp Teeth, Resilient traits) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Added missing visualization rendering and unit tests for `is_sleeping`, `is_flying`, `can_hibernate`, `lays_eggs`, `can_hoard`, `can_burrow`, `is_territorial`, `is_agile`, `is_opportunistic`, and `has_thick_skin` traits.
 - Added missing genetic mutation unit tests for 29 traits in `tests/test_engine.py`.
