@@ -316,3 +316,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_stun_dweller` trait. Entities with this trait treat being stunned as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_blizzard_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'blizzard' event.
 - [x] Implemented `is_rain_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'rain' event.
+- [x] Implemented `is_volcanic_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'volcano' event.
