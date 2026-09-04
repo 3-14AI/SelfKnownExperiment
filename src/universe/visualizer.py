@@ -182,6 +182,32 @@ class CLIVisualizer:
                         char = 'd'
                     elif getattr(entity, 'is_mud_walker', False):
                         char = 'm'
+                    elif getattr(entity, 'is_earthquake_walker', False):
+                        char = 'E'
+                    elif getattr(entity, 'is_volcanic_walker', False):
+                        char = 'V'
+                    elif getattr(entity, 'is_snow_walker', False):
+                        char = 'S'
+                    elif getattr(entity, 'is_blizzard_walker', False):
+                        char = 'B'
+                    elif getattr(entity, 'is_storm_walker', False):
+                        char = 'Z'
+                    elif getattr(entity, 'is_rain_walker', False):
+                        char = 'R'
+                    elif getattr(entity, 'is_mountain_walker', False):
+                        char = 'M'
+                    elif getattr(entity, 'is_cave_walker', False):
+                        char = 'c'
+                    elif getattr(entity, 'is_dune_walker', False):
+                        char = 'u'
+                    elif getattr(entity, 'is_frost_walker', False):
+                        char = 'f'
+                    elif getattr(entity, 'is_web_walker', False):
+                        char = 'b'
+                    elif getattr(entity, 'is_ash_walker', False):
+                        char = 'h'
+                    elif getattr(entity, 'is_forest_walker', False):
+                        char = 'r'
                     elif getattr(entity, 'is_forestal', False):
                         char = 't'
                     elif getattr(entity, 'is_desertic', False):

@@ -992,5 +992,187 @@ class TestCLIVisualizer(unittest.TestCase):
         sys.stdout = sys.__stdout__
         self.assertIn('m', captured.getvalue())
 
+    def test_visualize_is_earthquake_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_earthquake_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('E', captured.getvalue())
+
+    def test_visualize_is_volcanic_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_volcanic_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('V', captured.getvalue())
+
+    def test_visualize_is_snow_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_snow_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('S', captured.getvalue())
+
+    def test_visualize_is_blizzard_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_blizzard_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('B', captured.getvalue())
+
+    def test_visualize_is_storm_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_storm_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('Z', captured.getvalue())
+
+    def test_visualize_is_rain_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_rain_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('R', captured.getvalue())
+
+    def test_visualize_is_mountain_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_mountain_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('M', captured.getvalue())
+
+    def test_visualize_is_cave_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_cave_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('c', captured.getvalue())
+
+    def test_visualize_is_dune_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_dune_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('u', captured.getvalue())
+
+    def test_visualize_is_frost_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_frost_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('f', captured.getvalue())
+
+    def test_visualize_is_web_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_web_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('b', captured.getvalue())
+
+    def test_visualize_is_ash_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_ash_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('h', captured.getvalue())
+
+    def test_visualize_is_forest_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_forest_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('r', captured.getvalue())
+
 if __name__ == '__main__':
     unittest.main()
