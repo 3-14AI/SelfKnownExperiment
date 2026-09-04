@@ -321,3 +321,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_earthquake_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during an 'earthquake' event.
 - [x] Implemented `is_drought_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'drought' event.
 - [x] Implemented `is_mud_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on mud terrain.
+- [x] Implemented `is_sand_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on sand terrain.
