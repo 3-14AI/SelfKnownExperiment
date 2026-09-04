@@ -176,6 +176,12 @@ class CLIVisualizer:
                         char = 'w'
                     elif getattr(entity, 'is_volcanic', False):
                         char = 'j'
+                    elif getattr(entity, 'is_fire_walker', False):
+                        char = 'q'
+                    elif getattr(entity, 'is_drought_walker', False):
+                        char = 'd'
+                    elif getattr(entity, 'is_mud_walker', False):
+                        char = 'm'
                     elif getattr(entity, 'is_forestal', False):
                         char = 't'
                     elif getattr(entity, 'is_desertic', False):

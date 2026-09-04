@@ -947,5 +947,50 @@ class TestCLIVisualizer(unittest.TestCase):
         output = v.render()
         self.assertIn('D', output)
 
+
+    def test_visualize_is_fire_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_fire_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('q', captured.getvalue())
+
+
+    def test_visualize_is_drought_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_drought_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('d', captured.getvalue())
+
+
+    def test_visualize_is_mud_walker(self):
+        u = Universe(width=10, height=10)
+        v = CLIVisualizer(u)
+        u.entities.clear()
+        entity = Entity(name="test", x=5, y=5, is_mud_walker=True)
+        u.add_entity(entity)
+        import io
+        import sys
+        captured = io.StringIO()
+        sys.stdout = captured
+        v.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('m', captured.getvalue())
+
 if __name__ == '__main__':
     unittest.main()

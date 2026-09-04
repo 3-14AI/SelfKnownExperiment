@@ -14454,6 +14454,78 @@ class TestIsFireWalker(unittest.TestCase):
             child = children[0]
             self.assertTrue(getattr(child, 'is_fire_walker', False))
 
+
+class TestIsDroughtWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_drought_walker_stamina(self):
+        self.universe.current_event = 'drought'
+        entity = Entity(name='test_walker', x=0, y=0, is_drought_walker=True, max_stamina=10, stamina=10, energy=100)
+        self.universe.add_entity(entity)
+
+        # Test moving to higher elevation
+        self.universe.add_terrain(Terrain(x=1, y=0, terrain_type='grass', elevation=1))
+
+        self.universe.move_entity(entity, 1, 0)
+
+        # Without is_drought_walker, climbing +1 elevation costs 2 stamina.
+        # With is_drought_walker during a drought, it costs 1 stamina.
+        self.assertEqual(entity.stamina, 9)
+
+    def test_is_drought_walker_mutation(self):
+        parent = Entity(name='test_parent', x=5, y=5, is_drought_walker=False, energy=50)
+        self.universe.add_entity(parent)
+
+        with mock.patch('random.random', return_value=0.02):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e is not parent]
+        if len(children) > 0:
+            child = children[0]
+            self.assertTrue(getattr(child, 'is_drought_walker', False))
+
+
+class TestIsMudWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_mud_walker_stamina(self):
+        self.universe.current_event = None
+        entity = Entity(name='test_walker', x=0, y=0, is_mud_walker=True, max_stamina=10, stamina=10, energy=100)
+        self.universe.add_entity(entity)
+
+        # Test moving to higher elevation
+        self.universe.add_terrain(Terrain(x=1, y=0, terrain_type='mud', elevation=1))
+
+        self.universe.move_entity(entity, 1, 0)
+
+        # Without is_mud_walker, climbing +1 elevation costs 2 stamina.
+        # With is_mud_walker on mud, it costs 1 stamina.
+        self.assertEqual(entity.stamina, 9)
+
+    def test_is_mud_walker_mutation(self):
+        parent = Entity(name='test_parent', x=5, y=5, is_mud_walker=False, energy=50)
+        self.universe.add_entity(parent)
+
+        with mock.patch('random.random', return_value=0.02):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e is not parent]
+        if len(children) > 0:
+            child = children[0]
+            self.assertTrue(getattr(child, 'is_mud_walker', False))
+
 if __name__ == '__main__':
 
     unittest.main()
