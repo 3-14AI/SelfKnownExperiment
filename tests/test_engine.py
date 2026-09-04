@@ -14563,6 +14563,62 @@ class TestIsSandWalker(unittest.TestCase):
             child = children[0]
             self.assertTrue(getattr(child, 'is_sand_walker', False))
 
+
+class TestIsWaterWalker(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10, food_spawn_rate=0, population_limit=0)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_water_walker_logic(self):
+        from src.universe.engine import Entity, Terrain
+        # Add terrain with elevation
+        t1 = Terrain(x=1, y=0, terrain_type='water')
+        t1.elevation = 2
+        self.universe.add_terrain(t1)
+
+        parent1 = Entity("P1", is_water_walker=False)
+        parent1.is_aquatic = True
+        parent1.stamina = 100
+        parent1.x, parent1.y = 0, 0
+        parent2 = Entity("P2", is_water_walker=True)
+        parent2.is_aquatic = True
+        parent2.stamina = 100
+        parent2.x, parent2.y = 0, 0
+
+        self.universe.add_entity(parent1)
+        self.universe.add_entity(parent2)
+
+        self.universe.move_entity(parent1, 1, 0)
+        self.universe.move_entity(parent2, 1, 0)
+
+        # parent1 pays 1 base + 2 elevation = 3, so stamina 97
+        self.assertEqual(parent1.stamina, 97)
+        # parent2 pays 1 base, ignores elevation on water = 1, so stamina 99
+        self.assertEqual(parent2.stamina, 99)
+
+    def test_is_water_walker_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock
+
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_water_walker = False
+        self.universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.02):
+            self.universe.tick()
+
+        eggs = self.universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            if child is not None:
+                self.assertTrue(getattr(child, 'is_water_walker', False))
+
 if __name__ == '__main__':
+
 
     unittest.main()

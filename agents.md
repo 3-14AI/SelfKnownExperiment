@@ -160,6 +160,10 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Implemented `is_water_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on water terrain.
+- [x] Implemented `is_venom_resistant` trait. Entities with this trait are immune to venom and do not get poisoned in combat.
+- [x] Implemented `is_fire_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'fire' event.
+- [x] Implemented `is_storm_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'storm' event.
 - [x] Implemented `is_ageless` trait. Entities with this trait do not die when their age exceeds their max_age.
 
 - [x] Implemented `is_drought_dweller` trait. Entities with this trait treat a `drought` event as a shelter, gaining energy recovery and defense.
