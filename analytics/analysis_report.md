@@ -1581,3 +1581,10 @@ Implemented is_rain_walker trait.
 
 ### Agent Update - Earthquake Walker
 - Implemented the `is_earthquake_walker` trait to reduce stamina consumption on elevation changes during earthquakes.
+
+### Analysis 277
+- Implemented `is_detritivore` trait. Entities with this trait can directly consume post-disaster terrains like `ash` and `mud`, clearing them from the map and gaining an immediate energy boost.
+- Implemented `is_web_glider` trait. Entities with this trait consume 0 stamina when moving on web terrain.
+- Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
+- Added missing visualization rendering and tests for `is_social`, `is_forestal`, and `is_desertic` traits.
+- Added missing genetic mutation unit tests for `is_social` and `is_forestal` traits.
