@@ -14757,6 +14757,66 @@ class TestIsNightWalkerMutation(unittest.TestCase):
             if child is not None:
                 self.assertTrue(getattr(child, 'is_night_walker', False))
 
+class TestIsDeepWaterWalker(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.scent_trails = {}
+        self.universe.localized_events = []
+        self.universe.event_chance = 0
+        self.universe.localized_event_chance = 0
+        self.universe.current_event = None
+
+    def test_is_deep_water_walker_logic(self):
+        from src.universe.engine import Entity, Terrain
+        t1 = Terrain(x=1, y=0, terrain_type='deep-water')
+        t1.elevation = 2
+        self.universe.add_terrain(t1)
+
+        parent1 = Entity("P1", is_deep_water_walker=False)
+        parent1.is_aquatic = True
+        parent1.stamina = 100
+        parent1.x, parent1.y = 0, 0
+        parent2 = Entity("P2", is_deep_water_walker=True)
+        parent2.is_aquatic = True
+        parent2.stamina = 100
+        parent2.x, parent2.y = 0, 0
+
+        self.universe.add_entity(parent1)
+        self.universe.add_entity(parent2)
+
+        self.universe.move_entity(parent1, 1, 0)
+        self.universe.move_entity(parent2, 1, 0)
+
+        self.assertEqual(parent1.stamina, 97)
+        self.assertEqual(parent2.stamina, 99)
+
+    def test_is_deep_water_walker_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock
+
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_deep_water_walker = False
+        self.universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.02):
+            self.universe.tick()
+
+        eggs = self.universe.get_foods_at(parent.x, parent.y)
+        self.assertGreater(len(eggs), 0)
+
+        children = []
+        for egg in eggs:
+            child = egg.hatch_entity
+            if child is not None:
+                children.append(child)
+
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(any(getattr(child, 'is_deep_water_walker', False) for child in children), "is_deep_water_walker should be capable of mutating in children")
+
 if __name__ == '__main__':
 
 
