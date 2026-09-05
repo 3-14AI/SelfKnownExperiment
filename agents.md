@@ -160,6 +160,11 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Implemented `is_day_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the day.
+- [x] Implemented `is_spring_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'spring' season.
+- [x] Implemented `is_summer_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'summer' season.
+- [x] Implemented `is_autumn_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'autumn' season.
+- [x] Implemented `is_winter_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'winter' season.
 - [x] Implemented `is_night_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving at night.
 
 - [x] Implemented `is_water_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on water terrain.
