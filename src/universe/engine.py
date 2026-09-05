@@ -309,6 +309,17 @@ class Entity:
             self.energy = self.max_energy
 
     @property
+    def is_climbing(self):
+        return getattr(self, 'can_climb', False)
+
+    @property
+    def is_cannibal_hungry(self):
+        return getattr(self, 'is_cannibalistic', False) and self.energy < getattr(self, 'max_energy', 50) * 0.3
+
+    def is_cannibal_target(self, other):
+        return self.is_cannibal_hungry and getattr(other, 'species', None) == getattr(self, 'species', None)
+
+    @property
     def is_alive(self):
         return self.energy > 0 and (getattr(self, 'is_ageless', False) or self.age <= self.max_age)
 
@@ -644,8 +655,8 @@ class Universe:
         return nearest
 
     def get_preys_at(self, x, y, entity=None):
-        is_cannibal_hungry = entity and getattr(entity, 'is_cannibalistic', False) and entity.energy < entity.max_energy * 0.3
-        preys = [e for e in self.entities if e.x == x and e.y == y and e.is_alive and e != entity and (e.diet in ['herbivore', 'scavenger', 'omnivore'] or (is_cannibal_hungry and e.species == entity.species))]
+        is_cannibal_hungry = entity and getattr(entity, 'is_cannibal_hungry', False)
+        preys = [e for e in self.entities if e.x == x and e.y == y and e.is_alive and e != entity and (e.diet in ['herbivore', 'scavenger', 'omnivore'] or (entity and entity.is_cannibal_target(e)))]
         if entity and entity.target_species is not None:
             preys = [p for p in preys if p.species in entity.target_species]
         if entity and entity.energy >= entity.max_energy * 0.3:
@@ -686,7 +697,7 @@ class Universe:
         for e in self.entities:
             if not e.is_alive or e == entity:
                 continue
-            is_cannibal_target = entity and getattr(entity, 'is_cannibalistic', False) and entity.energy < entity.max_energy * 0.3 and e.species == entity.species
+            is_cannibal_target = entity and entity.is_cannibal_target(e)
             if e.diet not in ['herbivore', 'scavenger', 'omnivore'] and not is_cannibal_target:
                 continue
             if getattr(e, 'can_burrow', False) and e.is_sleeping:

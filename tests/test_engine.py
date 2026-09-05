@@ -14618,6 +14618,92 @@ class TestIsWaterWalker(unittest.TestCase):
             if child is not None:
                 self.assertTrue(getattr(child, 'is_water_walker', False))
 
+
+class TestMissingTraits(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_cannibal_hungry(self):
+        # Create an entity with is_cannibalistic=True and low energy
+        entity = Entity(name="cannibal", species="same", x=5, y=5, energy=5, size=2, is_cannibalistic=True)
+        # Create a prey of same species
+        prey = Entity(name="prey", species="same", x=5, y=5, energy=100)
+        self.universe.entities.extend([entity, prey])
+
+        # Should detect the prey because cannibal is hungry
+        self.assertTrue(entity.is_cannibal_hungry)
+
+    def test_is_cannibal_target(self):
+        entity = Entity(name="cannibal", species="same", x=5, y=5, energy=5, size=2, is_cannibalistic=True)
+        # Create a prey of same species at distance
+        prey = Entity(name="prey", species="same", x=6, y=5, energy=100)
+        self.universe.entities.extend([entity, prey])
+
+        # Should return the prey because cannibal is hungry
+        self.assertTrue(entity.is_cannibal_target(prey))
+
+    def test_is_climbing(self):
+        # Test that an entity with can_climb can traverse wall terrain
+        entity = Entity(name="climber", x=5, y=5, can_climb=True, stamina=50)
+        self.universe.entities.append(entity)
+        self.universe.terrains.append(Terrain(x=6, y=5, terrain_type='wall'))
+
+        # is_passable should be True since entity has can_climb
+        self.assertTrue(self.universe.is_passable(6, 5, is_climbing=True))
+
+
+    def test_is_alive(self):
+        # Test the is_alive property
+        entity = Entity(name="alive_entity", energy=10)
+        self.assertTrue(entity.is_alive)
+        entity.energy = 0
+        self.assertFalse(entity.is_alive)
+
+    def test_is_day(self):
+        # Test the is_day property
+        self.universe.time = 6
+        self.assertTrue(self.universe.is_day)
+        self.assertFalse(self.universe.is_night)
+
+    def test_is_night(self):
+        # Test the is_night property
+        self.universe.time = 18
+        self.assertTrue(self.universe.is_night)
+        self.assertFalse(self.universe.is_day)
+
+    def test_is_water_terrain(self):
+        # Test is_water terrain
+        terrain = Terrain(x=0, y=0, terrain_type='water')
+        self.assertEqual(terrain.terrain_type, 'water')
+        self.universe.terrains.append(terrain)
+        self.assertFalse(self.universe.is_passable(0, 0)) # Assuming not aquatic
+        self.assertTrue(self.universe.is_passable(0, 0, is_aquatic=True))
+
+    def test_is_deep_water_terrain(self):
+        # Test is_deep_water terrain
+        terrain = Terrain(x=1, y=1, terrain_type='deep-water')
+        self.assertEqual(terrain.terrain_type, 'deep-water')
+        self.universe.terrains.append(terrain)
+        self.assertFalse(self.universe.is_passable(1, 1)) # Assuming not aquatic
+        self.assertTrue(self.universe.is_passable(1, 1, is_aquatic=True))
+
+    def test_is_passable(self):
+        # Test the is_passable method directly
+        self.universe.terrains.append(Terrain(x=2, y=2, terrain_type='wall'))
+        self.assertFalse(self.universe.is_passable(2, 2))
+        self.assertTrue(self.universe.is_passable(2, 2, is_flying=True))
+
+    def test_is_hibernating(self):
+        # Create entity with can_hibernate and set winter
+        entity = Entity(name="hibernator", x=5, y=5, can_hibernate=True, energy=100, size=2)
+        self.universe.entities.append(entity)
+        self.universe.time = 91 * 24
+        self.universe.tick()
+        # Ensure it went to sleep and is hibernating
+        self.assertTrue(entity.is_hibernating)
+
+
+
 if __name__ == '__main__':
 
 
