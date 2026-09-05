@@ -542,3 +542,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_spring_dweller` trait. Entities with this trait treat the spring season as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_disease_resistant` trait. Entities with this trait are immune to passive disease contraction during random global ticks.
 - [x] Implemented `is_rain_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'rain' event.
+- Implemented `is_deep_water_walker` trait.
