@@ -14709,6 +14709,54 @@ class TestIsIceWalkerMutation(unittest.TestCase):
             self.assertTrue(child.is_ice_walker)
 
 
+
+class TestIsNightWalker(unittest.TestCase):
+    def test_is_night_walker_logic(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10)
+
+        # Test night walker
+        t1 = Terrain(x=1, y=0, terrain_type='grass')
+        t1.elevation = 2
+        universe.add_terrain(t1)
+        universe.time = 15 # Night time
+
+        parent1 = Entity("P1", is_night_walker=False)
+        parent1.stamina = 100
+        parent1.x, parent1.y = 0, 0
+
+        parent2 = Entity("P2", is_night_walker=True)
+        parent2.stamina = 100
+        parent2.x, parent2.y = 0, 0
+
+        universe.add_entity(parent1)
+        universe.add_entity(parent2)
+
+        universe.move_entity(parent1, 1, 0)
+        universe.move_entity(parent2, 1, 0)
+
+        # parent1 consumes base (1) + elevation diff (2) = 3
+        self.assertEqual(parent1.stamina, 100 - 3)
+        self.assertEqual(parent2.stamina, 100 - 1)
+
+class TestIsNightWalkerMutation(unittest.TestCase):
+    def test_is_night_walker_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_night_walker = False
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.02):
+            universe.tick()
+
+        eggs = universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            if child is not None:
+                self.assertTrue(getattr(child, 'is_night_walker', False))
+
 if __name__ == '__main__':
 
 

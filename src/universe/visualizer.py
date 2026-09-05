@@ -192,6 +192,8 @@ class CLIVisualizer:
                         char = 'B'
                     elif getattr(entity, 'is_storm_walker', False):
                         char = 'Z'
+                    elif getattr(entity, 'is_night_walker', False):
+                        char = 'W'
                     elif getattr(entity, 'is_rain_walker', False):
                         char = 'R'
                     elif getattr(entity, 'is_mountain_walker', False):
