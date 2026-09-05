@@ -13,6 +13,11 @@
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
 ## [Unreleased]
+- [x] Implemented `is_day_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the day.
+- [x] Implemented `is_spring_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'spring' season.
+- [x] Implemented `is_summer_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'summer' season.
+- [x] Implemented `is_autumn_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'autumn' season.
+- [x] Implemented `is_winter_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'winter' season.
 - Implemented `is_night_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving at night.
 - [x] Implemented `is_sand_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on sand terrain.
 - Implemented `is_earthquake_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during an 'earthquake' event.

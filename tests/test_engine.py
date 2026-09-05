@@ -14867,5 +14867,269 @@ class TestIsWallWalker(unittest.TestCase):
             child = children[0]
             self.assertTrue(getattr(child, 'is_wall_walker', False))
 
+class TestIsDayWalkerMutation(unittest.TestCase):
+    def test_is_day_walker_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_day_walker = False
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.02):
+            universe.tick()
+
+        eggs = universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            if child is not None:
+                self.assertTrue(getattr(child, 'is_day_walker', False))
+
+class TestIsSpringWalkerMutation(unittest.TestCase):
+    def test_is_spring_walker_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_spring_walker = False
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.02):
+            universe.tick()
+
+        eggs = universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            if child is not None:
+                self.assertTrue(getattr(child, 'is_spring_walker', False))
+
+class TestIsSummerWalkerMutation(unittest.TestCase):
+    def test_is_summer_walker_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_summer_walker = False
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.02):
+            universe.tick()
+
+        eggs = universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            if child is not None:
+                self.assertTrue(getattr(child, 'is_summer_walker', False))
+
+class TestIsAutumnWalkerMutation(unittest.TestCase):
+    def test_is_autumn_walker_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_autumn_walker = False
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.02):
+            universe.tick()
+
+        eggs = universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            if child is not None:
+                self.assertTrue(getattr(child, 'is_autumn_walker', False))
+
+class TestIsWinterWalkerMutation(unittest.TestCase):
+    def test_is_winter_walker_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_winter_walker = False
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.02):
+            universe.tick()
+
+        eggs = universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            if child is not None:
+                self.assertTrue(getattr(child, 'is_winter_walker', False))
+
+class TestIsDayWalker(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.scent_trails = {}
+        self.universe.localized_events = []
+        self.universe.event_chance = 0
+        self.universe.localized_event_chance = 0
+        self.universe.current_event = None
+
+    def test_is_day_walker_logic(self):
+        from src.universe.engine import Entity, Terrain
+        t1 = Terrain(x=1, y=0, terrain_type='grass')
+        t1.elevation = 2
+        self.universe.add_terrain(t1)
+
+        parent1 = Entity("P1", is_day_walker=False, stamina=50)
+        parent1.can_climb = True
+        self.universe.add_entity(parent1)
+
+        parent2 = Entity("P2", is_day_walker=True, stamina=50)
+        parent2.can_climb = True
+        self.universe.add_entity(parent2)
+
+        self.universe.time = 6
+        self.universe.move_entity(parent1, 1, 0)
+        self.universe.move_entity(parent2, 1, 0)
+
+        # elevation diff = 2, base move cost = 1.
+        # no trait -> cost = 1 + 2 = 3. stamina = 47.
+        # with trait -> cost = 1. stamina = 49.
+        self.assertEqual(parent1.stamina, 47)
+        self.assertEqual(parent2.stamina, 49)
+
+class TestIsSpringWalker(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.scent_trails = {}
+        self.universe.localized_events = []
+        self.universe.event_chance = 0
+        self.universe.localized_event_chance = 0
+        self.universe.current_event = None
+
+    def test_is_spring_walker_logic(self):
+        from src.universe.engine import Entity, Terrain
+        t1 = Terrain(x=1, y=0, terrain_type='grass')
+        t1.elevation = 2
+        self.universe.add_terrain(t1)
+
+        parent1 = Entity("P1", is_spring_walker=False, stamina=50)
+        parent1.can_climb = True
+        self.universe.add_entity(parent1)
+
+        parent2 = Entity("P2", is_spring_walker=True, stamina=50)
+        parent2.can_climb = True
+        self.universe.add_entity(parent2)
+
+        self.universe.time = 0
+        self.universe.move_entity(parent1, 1, 0)
+        self.universe.move_entity(parent2, 1, 0)
+
+        self.assertEqual(parent1.stamina, 47)
+        self.assertEqual(parent2.stamina, 49)
+
+class TestIsSummerWalker(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.scent_trails = {}
+        self.universe.localized_events = []
+        self.universe.event_chance = 0
+        self.universe.localized_event_chance = 0
+        self.universe.current_event = None
+
+    def test_is_summer_walker_logic(self):
+        from src.universe.engine import Entity, Terrain
+        t1 = Terrain(x=1, y=0, terrain_type='grass')
+        t1.elevation = 2
+        self.universe.add_terrain(t1)
+
+        parent1 = Entity("P1", is_summer_walker=False, stamina=50)
+        parent1.can_climb = True
+        self.universe.add_entity(parent1)
+
+        parent2 = Entity("P2", is_summer_walker=True, stamina=50)
+        parent2.can_climb = True
+        self.universe.add_entity(parent2)
+
+        self.universe.time = self.universe.season_length
+        self.universe.move_entity(parent1, 1, 0)
+        self.universe.move_entity(parent2, 1, 0)
+
+        self.assertEqual(parent1.stamina, 47)
+        self.assertEqual(parent2.stamina, 49)
+
+class TestIsAutumnWalker(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.scent_trails = {}
+        self.universe.localized_events = []
+        self.universe.event_chance = 0
+        self.universe.localized_event_chance = 0
+        self.universe.current_event = None
+
+    def test_is_autumn_walker_logic(self):
+        from src.universe.engine import Entity, Terrain
+        t1 = Terrain(x=1, y=0, terrain_type='grass')
+        t1.elevation = 2
+        self.universe.add_terrain(t1)
+
+        parent1 = Entity("P1", is_autumn_walker=False, stamina=50)
+        parent1.can_climb = True
+        self.universe.add_entity(parent1)
+
+        parent2 = Entity("P2", is_autumn_walker=True, stamina=50)
+        parent2.can_climb = True
+        self.universe.add_entity(parent2)
+
+        self.universe.time = self.universe.season_length * 2
+        self.universe.move_entity(parent1, 1, 0)
+        self.universe.move_entity(parent2, 1, 0)
+
+        self.assertEqual(parent1.stamina, 47)
+        self.assertEqual(parent2.stamina, 49)
+
+class TestIsWinterWalker(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.scent_trails = {}
+        self.universe.localized_events = []
+        self.universe.event_chance = 0
+        self.universe.localized_event_chance = 0
+        self.universe.current_event = None
+
+    def test_is_winter_walker_logic(self):
+        from src.universe.engine import Entity, Terrain
+        t1 = Terrain(x=1, y=0, terrain_type='grass')
+        t1.elevation = 2
+        self.universe.add_terrain(t1)
+
+        parent1 = Entity("P1", is_winter_walker=False, stamina=50)
+        parent1.can_climb = True
+        self.universe.add_entity(parent1)
+
+        parent2 = Entity("P2", is_winter_walker=True, stamina=50)
+        parent2.can_climb = True
+        self.universe.add_entity(parent2)
+
+        self.universe.time = self.universe.season_length * 3
+        self.universe.move_entity(parent1, 1, 0)
+        self.universe.move_entity(parent2, 1, 0)
+
+        self.assertEqual(parent1.stamina, 47)
+        self.assertEqual(parent2.stamina, 49)
+
+
 if __name__ == '__main__':
     unittest.main()
