@@ -4,6 +4,7 @@
 # Changelog
 
 ## [2026-07-27]
+- Implemented `is_wall_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on wall terrain.
 - Implemented `is_ice_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on ice terrain.
 - Implemented `is_web_glider` trait. Entities with this trait consume 0 stamina when moving on web terrain.
 - Added missing visualization rendering and tests for `is_social`, `is_forestal`, and `is_desertic` traits.
