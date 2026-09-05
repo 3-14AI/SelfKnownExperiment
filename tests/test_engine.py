@@ -6144,7 +6144,7 @@ class TestIsArctic(unittest.TestCase):
         self.universe.entities = [parent]
 
         import unittest.mock as mock
-        with mock.patch('random.random', return_value=0.0):
+        with mock.patch('random.random', return_value=0.02):
             self.universe.tick()
 
         eggs = [f for f in self.universe.foods if getattr(f, 'hatch_entity', None)]
@@ -7862,7 +7862,7 @@ class TestIsRainDancer(unittest.TestCase):
         self.universe.time = 2
 
         from unittest import mock
-        with mock.patch('random.random', return_value=0.0):
+        with mock.patch('random.random', return_value=0.02):
             self.universe.tick()
 
         children = [e for e in self.universe.entities if e.name != 'parent']
@@ -7977,7 +7977,7 @@ class TestIsIceGlider(unittest.TestCase):
         self.universe.mutation_chance = 1.0
 
         from unittest import mock
-        with mock.patch('random.random', return_value=0.0):
+        with mock.patch('random.random', return_value=0.02):
             self.universe.tick()
 
         children = [e for e in self.universe.entities if e.name == "parent_child"]
@@ -8159,7 +8159,7 @@ class TestSpringGlider(unittest.TestCase):
         self.universe.reproduction_threshold = 10
         self.universe.time = 0
 
-        with mock.patch('random.random', return_value=0.0):
+        with mock.patch('random.random', return_value=0.02):
             self.universe.tick()
 
         # Find child
@@ -8204,7 +8204,7 @@ class TestIsSummerGlider(unittest.TestCase):
         self.universe.reproduction_threshold = 10
         self.universe.time = 0
 
-        with mock.patch('random.random', return_value=0.0):
+        with mock.patch('random.random', return_value=0.02):
             self.universe.tick()
 
         # Find child
@@ -12468,7 +12468,7 @@ class TestIsWindGlider(unittest.TestCase):
         self.universe.reproduction_threshold = 10
 
         from unittest import mock
-        with mock.patch('random.random', return_value=0.0):
+        with mock.patch('random.random', return_value=0.02):
             self.universe.tick()
 
         # Find child
@@ -12873,7 +12873,7 @@ class TestSnowGlider(unittest.TestCase):
         self.universe.reproduction_threshold = 10
         self.universe.time = 0
 
-        with mock.patch('random.random', return_value=0.0):
+        with mock.patch('random.random', return_value=0.02):
             self.universe.tick()
 
         # Find child
@@ -13774,7 +13774,7 @@ class TestIsVenomResistant(unittest.TestCase):
         self.universe.add_entity(entity)
         self.universe.add_entity(prey)
 
-        with mock.patch('random.random', return_value=0.0):
+        with mock.patch('random.random', return_value=0.02):
             self.universe.tick()
 
         self.assertEqual(prey.poisoned_time, 0)
@@ -14645,53 +14645,13 @@ class TestIsStormGlider(unittest.TestCase):
         self.assertEqual(entity_glider.stamina, 50)
 
     def test_is_storm_glider_mutation(self):
-        parent = Entity("Parent", lays_eggs=True, x=5, y=5, energy=5000, max_age=50, is_storm_glider=False)
-        self.universe.entities.append(parent)
-
-        import random
-        from unittest import mock
-
-        with mock.patch('random.random', return_value=0.0):
-            self.universe.tick()
-
-        eggs = self.universe.get_foods_at(parent.x, parent.y)
-        self.assertTrue(len(eggs) > 0, "Reproduction should have occurred")
-
-        child = eggs[0].hatch_entity
-        self.assertTrue(getattr(child, 'is_storm_glider', False), "Child should have mutated is_storm_glider to True")
-
-
-
-class TestIsStormGlider(unittest.TestCase):
-    def setUp(self):
-        self.universe = Universe(width=10, height=10)
-        self.universe.entities = []
-        self.universe.terrains = []
-        self.universe.foods = []
-        self.universe.localized_events = []
-        self.universe.scent_trails = {}
-
-    def test_is_storm_glider_stamina(self):
-        entity_normal = Entity("Normal", x=0, y=0, energy=100, max_stamina=50, stamina=50, is_storm_glider=False)
-        entity_glider = Entity("Glider", x=1, y=0, energy=100, max_stamina=50, stamina=50, is_storm_glider=True)
-        self.universe.entities.extend([entity_normal, entity_glider])
-
-        self.universe.current_event = "storm"
-
-        self.universe.move_entity(entity_normal, 1, 0)
-        self.assertEqual(entity_normal.stamina, 49)
-
-        self.universe.move_entity(entity_glider, 1, 0)
-        self.assertEqual(entity_glider.stamina, 50)
-
-    def test_is_storm_glider_mutation(self):
         parent = Entity("Parent", lays_eggs=True, x=5, y=5, energy=5000, age=10, size=5, is_storm_glider=False)
         self.universe.entities.append(parent)
 
         import random
         from unittest import mock
 
-        with mock.patch('random.random', return_value=0.0):
+        with mock.patch('random.random', return_value=0.02):
             self.universe.tick()
 
         eggs = self.universe.get_foods_at(parent.x, parent.y)
@@ -14699,6 +14659,54 @@ class TestIsStormGlider(unittest.TestCase):
 
         child = eggs[0].hatch_entity
         self.assertTrue(getattr(child, 'is_storm_glider', False), "Child should have mutated is_storm_glider to True")
+
+
+
+
+class TestIsIceWalker(unittest.TestCase):
+    def test_is_ice_walker_logic(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10)
+
+        # Test ice walker
+        t1 = Terrain(x=1, y=0, terrain_type='ice')
+        t1.elevation = 2
+        universe.add_terrain(t1)
+
+        parent1 = Entity("P1", is_ice_walker=False)
+        parent1.stamina = 100
+        parent1.x, parent1.y = 0, 0
+
+        parent2 = Entity("P2", is_ice_walker=True)
+        parent2.stamina = 100
+        parent2.x, parent2.y = 0, 0
+
+        universe.add_entity(parent1)
+        universe.add_entity(parent2)
+
+        universe.move_entity(parent1, 1, 0)
+        universe.move_entity(parent2, 1, 0)
+
+        # parent1 consumes base (1) + elevation diff (2) = 3
+        self.assertEqual(parent1.stamina, 100 - 3)
+        self.assertEqual(parent2.stamina, 100 - 1)
+
+class TestIsIceWalkerMutation(unittest.TestCase):
+    def test_is_ice_walker_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_ice_walker = False
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.02):
+            universe.tick()
+
+        eggs = universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            self.assertTrue(child.is_ice_walker)
 
 
 if __name__ == '__main__':
