@@ -14817,7 +14817,55 @@ class TestIsDeepWaterWalker(unittest.TestCase):
         self.assertTrue(len(children) > 0)
         self.assertTrue(any(getattr(child, 'is_deep_water_walker', False) for child in children), "is_deep_water_walker should be capable of mutating in children")
 
+class TestIsWallWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_wall_walker_logic(self):
+        parent1 = Entity("P1", is_wall_walker=False, can_climb=True) # Needs can_climb to access wall without ValueError
+        parent2 = Entity("P2", is_wall_walker=True, can_climb=True)
+
+        # Setup terrain
+        t1 = Terrain(x=0, y=0, terrain_type='grass', elevation=0)
+        t2 = Terrain(x=0, y=1, terrain_type='wall', elevation=2) # Higher elevation
+        self.universe.terrains.extend([t1, t2])
+
+        parent1.x, parent1.y = 0, 0
+        parent2.x, parent2.y = 0, 0
+        parent1.stamina = 10
+        parent2.stamina = 10
+
+        self.universe.move_entity(parent1, 0, 1)
+        self.universe.move_entity(parent2, 0, 1)
+
+        # Base cost 1 + climbing wall 2 + elevation diff 2 = 5
+        self.assertEqual(parent1.stamina, 6)
+        # Base cost 1 + climbing wall 2 + elevation diff 0 (ignored by wall walker) = 3
+        self.assertEqual(parent2.stamina, 8)
+
+    def test_is_wall_walker_mutation(self):
+        parent = Entity(name='test_parent', x=5, y=5, is_wall_walker=False, energy=50, age=10, size=5)
+        self.universe.add_entity(parent)
+
+        with mock.patch('random.random', return_value=0.02):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name == 'test_parent_child']
+
+        if parent.lays_eggs:
+            eggs = self.universe.get_foods_at(parent.x, parent.y)
+            if eggs and eggs[0].plant_type == 'egg':
+                child = eggs[0].hatch_entity
+                if child is not None:
+                    self.assertTrue(getattr(child, 'is_wall_walker', False))
+        elif children:
+            child = children[0]
+            self.assertTrue(getattr(child, 'is_wall_walker', False))
+
 if __name__ == '__main__':
-
-
     unittest.main()
