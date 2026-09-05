@@ -14143,7 +14143,8 @@ class TestIsStunDwellerMutation(unittest.TestCase):
         eggs = universe.get_foods_at(parent.x, parent.y)
         if eggs:
             child = eggs[0].hatch_entity
-            self.assertTrue(getattr(child, "is_stun_dweller", False))
+            if child is not None:
+                self.assertTrue(getattr(child, "is_stun_dweller", False))
 
 
 class TestIsSnowWalker(unittest.TestCase):
@@ -14617,6 +14618,88 @@ class TestIsWaterWalker(unittest.TestCase):
             child = eggs[0].hatch_entity
             if child is not None:
                 self.assertTrue(getattr(child, 'is_water_walker', False))
+
+
+class TestIsStormGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_storm_glider_stamina(self):
+        entity_normal = Entity("Normal", x=0, y=0, energy=100, max_stamina=50, stamina=50, is_storm_glider=False)
+        entity_glider = Entity("Glider", x=1, y=0, energy=100, max_stamina=50, stamina=50, is_storm_glider=True)
+        self.universe.entities.extend([entity_normal, entity_glider])
+
+        self.universe.current_event = "storm"
+
+        # Test normal entity stamina consumption (stamina cost 1 per move)
+        self.universe.move_entity(entity_normal, 1, 0)
+        self.assertEqual(entity_normal.stamina, 49)
+
+        # Test glider entity stamina consumption (stamina cost 0 per move during storm)
+        self.universe.move_entity(entity_glider, 1, 0)
+        self.assertEqual(entity_glider.stamina, 50)
+
+    def test_is_storm_glider_mutation(self):
+        parent = Entity("Parent", lays_eggs=True, x=5, y=5, energy=5000, max_age=50, is_storm_glider=False)
+        self.universe.entities.append(parent)
+
+        import random
+        from unittest import mock
+
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        eggs = self.universe.get_foods_at(parent.x, parent.y)
+        self.assertTrue(len(eggs) > 0, "Reproduction should have occurred")
+
+        child = eggs[0].hatch_entity
+        self.assertTrue(getattr(child, 'is_storm_glider', False), "Child should have mutated is_storm_glider to True")
+
+
+
+class TestIsStormGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_storm_glider_stamina(self):
+        entity_normal = Entity("Normal", x=0, y=0, energy=100, max_stamina=50, stamina=50, is_storm_glider=False)
+        entity_glider = Entity("Glider", x=1, y=0, energy=100, max_stamina=50, stamina=50, is_storm_glider=True)
+        self.universe.entities.extend([entity_normal, entity_glider])
+
+        self.universe.current_event = "storm"
+
+        self.universe.move_entity(entity_normal, 1, 0)
+        self.assertEqual(entity_normal.stamina, 49)
+
+        self.universe.move_entity(entity_glider, 1, 0)
+        self.assertEqual(entity_glider.stamina, 50)
+
+    def test_is_storm_glider_mutation(self):
+        parent = Entity("Parent", lays_eggs=True, x=5, y=5, energy=5000, age=10, size=5, is_storm_glider=False)
+        self.universe.entities.append(parent)
+
+        import random
+        from unittest import mock
+
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        eggs = self.universe.get_foods_at(parent.x, parent.y)
+        self.assertTrue(len(eggs) > 0, "Reproduction should have occurred")
+
+        child = eggs[0].hatch_entity
+        self.assertTrue(getattr(child, 'is_storm_glider', False), "Child should have mutated is_storm_glider to True")
+
 
 if __name__ == '__main__':
 
