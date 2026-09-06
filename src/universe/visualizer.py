@@ -373,6 +373,8 @@ class CLIVisualizer:
                         char = '∆'
                     elif getattr(entity, 'is_ageless', False):
                         char = 'A'
+                    elif getattr(entity, 'is_shelter_walker', False):
+                        char = 'W'
                     else:
                         char = 'E'
 

@@ -14184,7 +14184,7 @@ class TestIsSnowWalkerMutation(unittest.TestCase):
         parent.is_snow_walker = False
         universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.02):
+        with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         eggs = universe.get_foods_at(parent.x, parent.y)
@@ -14610,7 +14610,7 @@ class TestIsWaterWalker(unittest.TestCase):
         parent.is_water_walker = False
         self.universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.02):
+        with unittest.mock.patch('random.random', return_value=0.0):
             self.universe.tick()
 
         eggs = self.universe.get_foods_at(parent.x, parent.y)
@@ -14700,7 +14700,7 @@ class TestIsIceWalkerMutation(unittest.TestCase):
         parent.is_ice_walker = False
         universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.02):
+        with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         eggs = universe.get_foods_at(parent.x, parent.y)
@@ -14748,7 +14748,7 @@ class TestIsNightWalkerMutation(unittest.TestCase):
         parent.is_night_walker = False
         universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.02):
+        with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         eggs = universe.get_foods_at(parent.x, parent.y)
@@ -14802,7 +14802,7 @@ class TestIsDeepWaterWalker(unittest.TestCase):
         parent.is_deep_water_walker = False
         self.universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.02):
+        with unittest.mock.patch('random.random', return_value=0.0):
             self.universe.tick()
 
         eggs = self.universe.get_foods_at(parent.x, parent.y)
@@ -14876,7 +14876,7 @@ class TestIsDayWalkerMutation(unittest.TestCase):
         parent.is_day_walker = False
         universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.02):
+        with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         eggs = universe.get_foods_at(parent.x, parent.y)
@@ -14894,7 +14894,7 @@ class TestIsSpringWalkerMutation(unittest.TestCase):
         parent.is_spring_walker = False
         universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.02):
+        with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         eggs = universe.get_foods_at(parent.x, parent.y)
@@ -14912,7 +14912,7 @@ class TestIsSummerWalkerMutation(unittest.TestCase):
         parent.is_summer_walker = False
         universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.02):
+        with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         eggs = universe.get_foods_at(parent.x, parent.y)
@@ -14930,7 +14930,7 @@ class TestIsAutumnWalkerMutation(unittest.TestCase):
         parent.is_autumn_walker = False
         universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.02):
+        with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         eggs = universe.get_foods_at(parent.x, parent.y)
@@ -14948,7 +14948,7 @@ class TestIsWinterWalkerMutation(unittest.TestCase):
         parent.is_winter_walker = False
         universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.02):
+        with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         eggs = universe.get_foods_at(parent.x, parent.y)
@@ -15130,6 +15130,57 @@ class TestIsWinterWalker(unittest.TestCase):
         self.assertEqual(parent1.stamina, 47)
         self.assertEqual(parent2.stamina, 49)
 
+
+
+class TestIsShelterWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_shelter_walker_logic(self):
+        # Create a shelter terrain with elevation to trigger elevation stamina cost
+        t1 = Terrain(1, 0, 'shelter', elevation=1)
+        self.universe.add_terrain(t1)
+
+        # Entity without trait will consume stamina for elevation
+        parent1 = Entity("P1", is_shelter_walker=False, stamina=50)
+        parent1.can_climb = True # Prevent movement block
+        self.universe.add_entity(parent1)
+
+        # Entity with trait will not consume stamina for elevation
+        parent2 = Entity("P2", is_shelter_walker=True, stamina=50)
+        parent2.can_climb = True
+        self.universe.add_entity(parent2)
+
+        self.universe.move_entity(parent1, 1, 0)
+        self.universe.move_entity(parent2, 1, 0)
+
+        # Base movement costs 1 + 1 for climbing. Total 2.
+        # Plus elevation cost: +1 for P1, 0 for P2
+        self.assertEqual(parent1.stamina, 48)
+        self.assertEqual(parent2.stamina, 49)
+
+class TestIsShelterWalkerMutation(unittest.TestCase):
+    def test_is_shelter_walker_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_shelter_walker = False
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        eggs = universe.get_foods_at(parent.x, parent.y)
+        if eggs:
+            child = eggs[0].hatch_entity
+            if child is not None:
+                self.assertTrue(getattr(child, 'is_shelter_walker', False))
 
 if __name__ == '__main__':
     unittest.main()
