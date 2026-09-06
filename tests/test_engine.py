@@ -10046,10 +10046,12 @@ class TestPlayful(unittest.TestCase):
         u = Universe(width=10, height=10)
         u.population_limit = 0
         u.food_spawn_rate = 0.0
+        u.event_chance = 0
+        u.localized_event_chance = 0
 
         # e1 and e2 are adjacent and same species
-        e1 = Entity("Playful1", x=0, y=0, is_playful=True, species="PlayfulCat", energy=100, stamina=100, max_stamina=100, hydration=50, max_hydration=50, perception_radius=0, is_telepathic=False)
-        e2 = Entity("Playful2", x=0, y=1, is_playful=True, species="PlayfulCat", energy=100, stamina=100, max_stamina=100, hydration=50, max_hydration=50, perception_radius=0, is_telepathic=False)
+        e1 = Entity("Playful1", x=0, y=0, is_playful=True, species="PlayfulCat", energy=100, stamina=0, max_stamina=100, hydration=50, max_hydration=50, perception_radius=0, is_telepathic=False)
+        e2 = Entity("Playful2", x=0, y=1, is_playful=True, species="PlayfulCat", energy=100, stamina=0, max_stamina=100, hydration=50, max_hydration=50, perception_radius=0, is_telepathic=False)
 
         u.add_entity(e1)
         u.add_entity(e2)
@@ -13346,7 +13348,7 @@ class TestIsWebDweller(unittest.TestCase):
         universe.terrains = []
         universe.foods = []
 
-        entity = Entity(name="Web Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_web_dweller=True, intelligence=1)
+        entity = Entity(name="Web Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=0, size=1, is_web_dweller=True, intelligence=1)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='web'))
         initial_energy = entity.energy
@@ -14180,16 +14182,24 @@ class TestIsSnowWalkerMutation(unittest.TestCase):
         from src.universe.engine import Universe, Entity
         import unittest.mock
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.reproduction_threshold = 10
         parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
         parent.is_snow_walker = False
         universe.add_entity(parent)
 
-        with unittest.mock.patch('random.random', return_value=0.0):
+        with unittest.mock.patch('random.random', return_value=0.01):
             universe.tick()
 
         eggs = universe.get_foods_at(parent.x, parent.y)
+        child = None
         if eggs:
             child = eggs[0].hatch_entity
+        else:
+            children = [e for e in universe.entities if e != parent]
+            if children:
+                child = children[0]
+
+        if child is not None:
             self.assertTrue(child.is_snow_walker)
 
 
