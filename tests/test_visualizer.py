@@ -805,6 +805,20 @@ class TestCLIVisualizer(unittest.TestCase):
         sys.stdout = sys.__stdout__
         self.assertIn("L", captured_output.getvalue())
 
+    def test_render_is_web_dweller(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Web Dweller", x=5, y=5, is_web_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+        import io, sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn("θ", captured_output.getvalue())
+
     def test_render_cave_terrain(self):
         from src.universe.engine import Universe, Terrain
         universe = Universe(10, 10)
