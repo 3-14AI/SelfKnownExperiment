@@ -160,6 +160,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Implemented `is_lava_glider` trait. Entities with this trait consume 0 stamina when moving on lava terrain.
 - [x] Implemented `is_web_dweller` trait. Entities with this trait treat `web` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_shelter_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on a shelter terrain, or during events that act as a shelter.
 - [x] Implemented `is_day_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the day.
