@@ -1202,5 +1202,16 @@ class TestCLIVisualizer(unittest.TestCase):
         sys.stdout = sys.__stdout__
         self.assertIn('D', captured.getvalue())
 
+
+    def test_visualize_is_shelter_walker(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Walker", x=0, y=0, is_shelter_walker=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('W', output)
+
 if __name__ == '__main__':
     unittest.main()
