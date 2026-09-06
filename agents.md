@@ -160,6 +160,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Implemented `is_web_dweller` trait. Entities with this trait treat `web` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_shelter_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on a shelter terrain, or during events that act as a shelter.
 - [x] Implemented `is_day_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the day.
 - [x] Implemented `is_spring_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'spring' season.
@@ -312,6 +313,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_ash_dweller` trait. Entities with this trait treat ash terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_snow_dweller` trait. Entities with this trait treat snow terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_mud_dweller` trait. Entities with this trait treat mud terrain as a shelter, gaining increased defense and energy recovery.
+- [x] Implemented `is_web_dweller` trait. Entities with this trait treat `web` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 - [x] Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_wall_dweller` trait. Entities with this trait treat `wall` terrain as a shelter, gaining increased defense and energy recovery.
