@@ -15279,5 +15279,57 @@ class TestIsLavaWalker(unittest.TestCase):
             if child is not None:
                 self.assertTrue(child.is_lava_walker)
 
+
+class TestIsLavaGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(10, 10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_lava_glider_stamina(self):
+        from src.universe.engine import Terrain, Entity
+        self.universe.terrains.append(Terrain(1, 0, 'lava'))
+        self.universe.terrains.append(Terrain(1, 1, 'lava'))
+
+        glider = Entity("Glider", x=0, y=0, energy=100)
+        glider.stamina = 100
+        glider.is_lava_glider = True
+        glider.is_flying = False
+        glider.is_lava_walker = False
+
+        non_glider = Entity("NonGlider", x=0, y=1, energy=100)
+        non_glider.stamina = 100
+        non_glider.is_lava_glider = False
+        non_glider.is_flying = False
+        non_glider.is_lava_walker = False
+
+        self.universe.add_entity(glider)
+        self.universe.add_entity(non_glider)
+
+        self.universe.move_entity(glider, 1, 0)
+        self.universe.move_entity(non_glider, 1, 0)
+
+        self.assertEqual(glider.stamina, 100) # 0 cost on lava
+        self.assertEqual(non_glider.stamina, 99) # 1 base cost
+
+    @patch('random.random', return_value=0.02)
+    def test_is_lava_glider_mutation(self, mock_random):
+        from src.universe.engine import Entity
+        parent = Entity("Parent", energy=5000, age=10, size=5)
+        parent.is_lava_glider = False
+        self.universe.add_entity(parent)
+
+        self.universe.tick()
+
+        eggs = [f for f in self.universe.foods if getattr(f, 'plant_type', '') == 'egg']
+        if eggs:
+            child = eggs[0].hatch_entity
+            if child is not None:
+                self.assertTrue(child.is_lava_glider)
+
 if __name__ == '__main__':
     unittest.main()
