@@ -15233,5 +15233,51 @@ class TestIsDroughtGlider(unittest.TestCase):
         if child is not None:
             self.assertTrue(child.is_drought_glider)
 
+
+class TestIsLavaWalker(unittest.TestCase):
+    def test_is_lava_walker_logic(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10)
+
+        # Test lava walker
+        t1 = Terrain(x=1, y=0, terrain_type='lava')
+        t1.elevation = 2
+        universe.add_terrain(t1)
+
+        parent1 = Entity("P1", is_lava_walker=False)
+        parent1.stamina = 100
+        parent1.x, parent1.y = 0, 0
+
+        parent2 = Entity("P2", is_lava_walker=True)
+        parent2.stamina = 100
+        parent2.x, parent2.y = 0, 0
+
+        universe.add_entity(parent1)
+        universe.add_entity(parent2)
+
+        universe.move_entity(parent1, 1, 0)
+        universe.move_entity(parent2, 1, 0)
+
+        self.assertEqual(parent1.stamina, 97) # 100 - 1 (move) - 2 (elevation)
+        self.assertEqual(parent2.stamina, 99) # 100 - 1 (move), ignores elevation on lava
+
+    @patch('random.random', return_value=0.02)
+    def test_is_lava_walker_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        parent = Entity("Parent", energy=100, age=10, size=5)
+        parent.is_lava_walker = False
+        universe.add_entity(parent)
+
+        # force mutation
+        parent.energy = 5000
+        universe.tick()
+
+        eggs = [f for f in universe.foods if getattr(f, 'plant_type', '') == 'egg']
+        if eggs:
+            child = eggs[0].hatch_entity
+            if child is not None:
+                self.assertTrue(child.is_lava_walker)
+
 if __name__ == '__main__':
     unittest.main()

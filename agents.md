@@ -341,3 +341,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_wall_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on wall terrain.
 
 - [x] Implemented `is_drought_glider` trait. Entities with this trait consume 0 stamina when moving during a 'drought' event.
+
+- [x] Implemented `is_lava_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on lava terrain.
