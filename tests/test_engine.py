@@ -15192,5 +15192,46 @@ class TestIsShelterWalkerMutation(unittest.TestCase):
             if child is not None:
                 self.assertTrue(getattr(child, 'is_shelter_walker', False))
 
+
+
+class TestIsDroughtGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.scent_trails = {}
+        self.universe.localized_events = []
+        self.universe.event_chance = 0
+        self.universe.localized_event_chance = 0
+        self.universe.current_event = None
+
+    def test_is_drought_glider_stamina_cost(self):
+        self.universe.current_event = 'drought'
+        entity = Entity("Glider", x=1, y=1, stamina=50, max_stamina=50, is_drought_glider=True)
+        self.universe.add_entity(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50)
+
+        entity_no_trait = Entity("NoGlider", x=1, y=2, stamina=50, max_stamina=50, is_drought_glider=False)
+        self.universe.add_entity(entity_no_trait)
+        self.universe.move_entity(entity_no_trait, 1, 0)
+        self.assertEqual(entity_no_trait.stamina, 49)
+
+    @patch('random.random', return_value=0.02)
+    def test_is_drought_glider_mutation(self, mock_random):
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=10, size=5, is_drought_glider=False)
+        self.universe.add_entity(parent)
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e is not parent]
+        if not children:
+            eggs = self.universe.get_foods_at(parent.x, parent.y)
+            if eggs and getattr(eggs[0], 'hatch_entity', None):
+                children = [eggs[0].hatch_entity]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        if child is not None:
+            self.assertTrue(child.is_drought_glider)
+
 if __name__ == '__main__':
     unittest.main()
