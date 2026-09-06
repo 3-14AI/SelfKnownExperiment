@@ -13,6 +13,7 @@
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
 ## [Unreleased]
+- Implemented `is_drought_glider` trait. Entities with this trait consume 0 stamina when moving during a 'drought' event.
 - [x] Implemented `is_day_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the day.
 - [x] Implemented `is_spring_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'spring' season.
 - [x] Implemented `is_summer_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'summer' season.
