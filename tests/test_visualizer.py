@@ -1246,5 +1246,22 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('W', output)
 
+
+    def test_render_is_grass_dweller(self):
+        import io
+        import sys
+        from src.universe.engine import Universe, Entity
+        universe = Universe(10, 10)
+        entity = Entity("Grass Dweller", 1, 1, is_grass_dweller=True)
+        universe.add_entity(entity)
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+        self.assertIn('G', captured_output.getvalue())
+
 if __name__ == '__main__':
     unittest.main()

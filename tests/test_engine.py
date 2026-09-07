@@ -15429,6 +15429,53 @@ class TestIsShelterDweller(unittest.TestCase):
             self.assertTrue(getattr(child, 'is_shelter_dweller', False))
 
 
+
+
+class TestIsGrassDweller(unittest.TestCase):
+    def test_is_grass_dweller(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.event_chance = 0
+        universe.entities = []
+        universe.terrains = []
+        universe.foods = []
+        entity = Entity(name="Grass Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_grass_dweller=True, intelligence=1)
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='grass'))
+
+        universe.tick()
+        self.assertGreaterEqual(entity.energy, 21, "is_grass_dweller should treat grass as shelter for energy recovery")
+
+    def test_is_grass_dweller_defense_bonus(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=2)
+        universe.event_chance = 0
+        universe.entities = []
+        universe.terrains = []
+        universe.foods = []
+        prey = Entity(name="Prey", x=1, y=1, energy=50, size=1, is_grass_dweller=True, intelligence=1)
+        predator = Entity(name="Predator", x=1, y=1, energy=100, size=5, is_carnivorous_plant=False, lays_eggs=False, is_parasitic=False, is_vampiric=False)
+        universe.add_entity(prey)
+        universe.add_entity(predator)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='grass'))
+
+        predator.stamina = predator.max_stamina
+        universe.tick()
+        self.assertTrue(prey in universe.entities, "is_grass_dweller should survive with defense bonus on grass terrain")
+
+    @patch('random.random')
+    def test_is_grass_dweller_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        mock_random.return_value = 0.02
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_grass_dweller=False)
+        universe.add_entity(parent)
+        universe.time = 0
+        universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_grass_dweller', False) for child in children), "is_grass_dweller should be capable of mutating in children")
+
 if __name__ == '__main__':
     unittest.main()
 

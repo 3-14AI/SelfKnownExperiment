@@ -559,3 +559,5 @@ All notable changes to Project Genesis will be documented in this file.
 
 - Implemented `is_lava_dweller` trait. Entities with this trait treat `lava` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_ice_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on ice terrain.
+
+- Implemented `is_grass_dweller` trait, granting entities energy recovery and defensive bonuses while on grass terrain.
