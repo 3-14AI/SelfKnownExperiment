@@ -1627,3 +1627,12 @@ Implemented is_rain_walker trait.
   - Updated `CHANGELOG.md` to note the addition of the trait and bug fixes.
   - Updated `agents.md` documentation regarding the trait implementation.
 - **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 280
+- **Agent Intent:** Implement the `is_shelter_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_shelter_dweller` trait allowing entities to receive a defense bonus (+2 effective defense) when on `shelter` terrain, making them harder to kill by predators.
+  - Entities with this trait also receive additional passive energy recovery (+2 reduction to energy loss per tick) when resting on `shelter` terrain.
+  - Added tests in `test_engine.py` to verify energy recovery, combat survival behavior, and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
