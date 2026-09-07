@@ -3,6 +3,25 @@ from src.universe.engine import Universe, Entity, Food, Terrain
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+    def test_render_is_lava_dweller(self):
+        universe = Universe(10, 10)
+        universe.time = 0
+
+
+        entity = Entity("Lava Dweller", is_lava_dweller=True)
+        universe.add_entity(entity)
+
+        visualizer = CLIVisualizer(universe)
+
+        import io
+        import sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        visualizer.print_state()
+        sys.stdout = sys.__stdout__
+
+        self.assertIn('L', captured_output.getvalue())
+
 
     def test_render_is_snow_dweller(self):
         from src.universe.engine import Universe, Entity
