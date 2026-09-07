@@ -381,6 +381,116 @@ class CLIVisualizer:
                         char = 'A'
                     elif getattr(entity, 'is_shelter_walker', False):
                         char = 'W'
+                    elif getattr(entity, 'is_ash_glider', False):
+                        char = 'Ϩ'
+                    elif getattr(entity, 'is_autumn_glider', False):
+                        char = 'ϩ'
+                    elif getattr(entity, 'is_autumn_walker', False):
+                        char = 'Ā'
+                    elif getattr(entity, 'is_blizzard_dweller', False):
+                        char = 'ā'
+                    elif getattr(entity, 'is_blizzard_glider', False):
+                        char = 'Ă'
+                    elif getattr(entity, 'is_cave_glider', False):
+                        char = 'ă'
+                    elif getattr(entity, 'is_day_dweller', False):
+                        char = 'Ą'
+                    elif getattr(entity, 'is_day_glider', False):
+                        char = 'ą'
+                    elif getattr(entity, 'is_day_walker', False):
+                        char = 'Ć'
+                    elif getattr(entity, 'is_deep_water_dweller', False):
+                        char = 'ć'
+                    elif getattr(entity, 'is_deep_water_glider', False):
+                        char = 'Ĉ'
+                    elif getattr(entity, 'is_disease_dweller', False):
+                        char = 'ĉ'
+                    elif getattr(entity, 'is_drought_dweller', False):
+                        char = 'Ċ'
+                    elif getattr(entity, 'is_drought_glider', False):
+                        char = 'ċ'
+                    elif getattr(entity, 'is_earthquake_dweller', False):
+                        char = 'Č'
+                    elif getattr(entity, 'is_earthquake_glider', False):
+                        char = 'Ç'
+                    elif getattr(entity, 'is_fire_dweller', False):
+                        char = 'č'
+                    elif getattr(entity, 'is_fire_glider', False):
+                        char = 'Ď'
+                    elif getattr(entity, 'is_forest_dweller', False):
+                        char = 'ď'
+                    elif getattr(entity, 'is_forest_glider', False):
+                        char = 'Đ'
+                    elif getattr(entity, 'is_ice_glider', False):
+                        char = 'đ'
+                    elif getattr(entity, 'is_ice_walker', False):
+                        char = 'Ē'
+                    elif getattr(entity, 'is_lava_glider', False):
+                        char = 'ē'
+                    elif getattr(entity, 'is_lava_walker', False):
+                        char = 'Ĕ'
+                    elif getattr(entity, 'is_mountain_glider', False):
+                        char = 'ĕ'
+                    elif getattr(entity, 'is_mud_glider', False):
+                        char = 'Ė'
+                    elif getattr(entity, 'is_night_dweller', False):
+                        char = 'ė'
+                    elif getattr(entity, 'is_night_glider', False):
+                        char = 'Ę'
+                    elif getattr(entity, 'is_parasite_dweller', False):
+                        char = 'ę'
+                    elif getattr(entity, 'is_poison_dweller', False):
+                        char = 'Ě'
+                    elif getattr(entity, 'is_rain_dweller', False):
+                        char = 'ě'
+                    elif getattr(entity, 'is_rain_glider', False):
+                        char = 'Ĝ'
+                    elif getattr(entity, 'is_sand_dweller', False):
+                        char = 'ĝ'
+                    elif getattr(entity, 'is_sand_glider', False):
+                        char = 'Ğ'
+                    elif getattr(entity, 'is_sand_walker', False):
+                        char = 'ğ'
+                    elif getattr(entity, 'is_shelter_dweller', False):
+                        char = 'Ġ'
+                    elif getattr(entity, 'is_shelter_glider', False):
+                        char = 'ġ'
+                    elif getattr(entity, 'is_sleep_dweller', False):
+                        char = 'Ģ'
+                    elif getattr(entity, 'is_snow_glider', False):
+                        char = 'ģ'
+                    elif getattr(entity, 'is_spring_glider', False):
+                        char = 'Ĥ'
+                    elif getattr(entity, 'is_spring_walker', False):
+                        char = 'ĥ'
+                    elif getattr(entity, 'is_storm_dweller', False):
+                        char = 'Ħ'
+                    elif getattr(entity, 'is_storm_glider', False):
+                        char = 'ħ'
+                    elif getattr(entity, 'is_summer_glider', False):
+                        char = 'Ĩ'
+                    elif getattr(entity, 'is_summer_walker', False):
+                        char = 'ĩ'
+                    elif getattr(entity, 'is_volcanic_dweller', False):
+                        char = 'Ī'
+                    elif getattr(entity, 'is_wall_glider', False):
+                        char = 'ī'
+                    elif getattr(entity, 'is_wall_walker', False):
+                        char = 'Ĭ'
+                    elif getattr(entity, 'is_water_dweller', False):
+                        char = 'ĭ'
+                    elif getattr(entity, 'is_water_glider', False):
+                        char = 'Į'
+                    elif getattr(entity, 'is_water_walker', False):
+                        char = 'į'
+                    elif getattr(entity, 'is_web_glider', False):
+                        char = 'İ'
+                    elif getattr(entity, 'is_wind_glider', False):
+                        char = 'ı'
+                    elif getattr(entity, 'is_winter_glider', False):
+                        char = 'Ĳ'
+                    elif getattr(entity, 'is_winter_walker', False):
+                        char = 'ĳ'
                     else:
                         char = 'E'
 
