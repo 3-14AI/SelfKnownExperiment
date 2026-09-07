@@ -556,3 +556,5 @@ All notable changes to Project Genesis will be documented in this file.
 
 - Fixed bugs in `test_is_web_dweller` and `test_is_playful_exp_gain` test determinism.
 - Implemented `is_lava_glider` trait. Entities with this trait consume 0 stamina when moving on lava terrain.
+
+- Implemented `is_lava_dweller` trait. Entities with this trait treat `lava` terrain as a shelter, gaining increased defense and energy recovery.
