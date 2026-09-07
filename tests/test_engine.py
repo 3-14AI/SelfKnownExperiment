@@ -9202,6 +9202,7 @@ class TestFurTrait(unittest.TestCase):
         universe = Universe()
         universe.event_chance = 0.0
         universe.reproduction_threshold = 1000
+        universe.disease_chance = 0.0
 
         entity = Entity("Furry", energy=5000, max_age=200, age=100, size=2, intelligence=1, has_fur=True, preferred_temperature=20, temperature_tolerance=5)
         entity.is_sunbather = False
