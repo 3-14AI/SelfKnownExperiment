@@ -15332,6 +15332,103 @@ class TestIsLavaGlider(unittest.TestCase):
             if child is not None:
                 self.assertTrue(child.is_lava_glider)
 
+
+class TestIsShelterDweller(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+
+    def test_is_shelter_dweller_logic(self):
+        from src.universe.engine import Entity, Terrain
+        # Add shelter terrain
+        t1 = Terrain(x=1, y=1, terrain_type='shelter')
+        self.universe.add_terrain(t1)
+        t2 = Terrain(x=2, y=2, terrain_type='shelter')
+        self.universe.add_terrain(t2)
+
+        # Ensure they don't wander off!
+        e1 = Entity("E1", x=1, y=1, energy=40, is_shelter_dweller=True, stamina=0, is_sleeping=True)
+        self.universe.add_entity(e1)
+
+        e2 = Entity("E2", x=2, y=2, energy=40, is_shelter_dweller=False, stamina=0, is_sleeping=True)
+        self.universe.add_entity(e2)
+
+        self.universe.tick()
+
+        # E1 should recover more energy than E2 due to dweller trait
+        self.assertTrue(e1.energy > e2.energy)
+
+    def test_is_shelter_dweller_defense_bonus(self):
+        from src.universe.engine import Entity, Terrain, Universe
+        import unittest.mock
+
+        u = Universe(width=10, height=10)
+        u.entities = []
+        u.terrains = []
+        for dx in range(3):
+            for dy in range(3):
+                u.add_terrain(Terrain(x=dx, y=dy, terrain_type='shelter'))
+
+        prey = Entity("Prey", x=1, y=1, energy=50, defense=0, is_shelter_dweller=True, stamina=50, size=1, is_sleeping=True)
+        u.add_entity(prey)
+
+        predator = Entity("Predator", x=1, y=1, energy=100, attack=100, diet='carnivore', stamina=50, size=2)
+        predator.target_species = ['Prey']
+        u.add_entity(predator)
+
+        with unittest.mock.patch('random.random', return_value=0.04):
+            u.tick()
+
+        self.assertFalse(getattr(prey, 'was_eaten', False))
+
+        u2 = Universe(width=10, height=10)
+        u2.entities = []
+        u2.terrains = []
+        for dx in range(3):
+            for dy in range(3):
+                u2.add_terrain(Terrain(x=dx, y=dy, terrain_type='shelter'))
+
+        prey2 = Entity("Prey2", x=1, y=1, energy=50, defense=0, is_shelter_dweller=False, stamina=50, size=1, is_sleeping=True)
+        u2.add_entity(prey2)
+
+        predator2 = Entity("Predator2", x=1, y=1, energy=100, attack=100, diet='carnivore', stamina=50, size=2)
+        predator2.target_species = ['Prey2']
+        u2.add_entity(predator2)
+
+        with unittest.mock.patch('random.random', return_value=0.04):
+            u2.tick()
+
+        self.assertTrue(getattr(prey2, 'was_eaten', False))
+
+    def test_is_shelter_dweller_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock
+        self.universe.food_spawn_rate = 0.0
+        parent = Entity("Parent", lays_eggs=True, energy=5000, age=10, size=5, intelligence=1, is_nest_builder=False)
+        parent.is_shelter_dweller = False
+        self.universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        eggs = self.universe.get_foods_at(parent.x, parent.y)
+        if not eggs and getattr(parent, 'lays_eggs', False):
+            # Not an egg layer in test, or it hatched directly?
+            children = [e for e in self.universe.entities if e.name != "Parent"]
+        else:
+            children = [eggs[0].hatch_entity] if eggs else []
+
+        if not children:
+             children = [e for e in self.universe.entities if e.name != "Parent"]
+
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        if child is not None:
+            self.assertTrue(getattr(child, 'is_shelter_dweller', False))
+
+
 if __name__ == '__main__':
     unittest.main()
 
