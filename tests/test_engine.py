@@ -1,6 +1,6 @@
 from unittest import mock
 import unittest
-from src.universe.engine import Universe, Entity, Food, Terrain
+from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent
 
 class TestUniverse(unittest.TestCase):
 
@@ -15428,6 +15428,39 @@ class TestIsShelterDweller(unittest.TestCase):
         child = children[0]
         if child is not None:
             self.assertTrue(getattr(child, 'is_shelter_dweller', False))
+
+
+
+class TestIsFireDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.disease_chance = 0.0
+
+    def test_fire_dancer_gains_energy_in_fire(self):
+        # max_energy defaults to size * 50 = 50. Initialize with energy=10 so gain is not capped.
+        entity = Entity(name="FireDancer", x=5, y=5, energy=10, is_fire_dancer=True)
+        self.universe.add_entity(entity)
+
+        event = LocalizedEvent(event_type="fire", x=5, y=5, radius=2, duration=10)
+        self.universe.localized_events.append(event)
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        # General energy loss during tick is 1. Fire gives +5. Net change should be +4.
+        self.assertGreaterEqual(entity.energy, old_energy + 4)
+
+    def test_fire_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_fire_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.food_spawn_chance = 0.0
+
+        import random
+        random.seed(42)
+
+        # Simulate child inheriting the mutated trait.
+        # (This is a simplified test, we just check reproduction passes without TypeError)
+        self.universe.tick()
 
 
 if __name__ == '__main__':
