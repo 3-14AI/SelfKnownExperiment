@@ -15463,6 +15463,45 @@ class TestIsFireDancer(unittest.TestCase):
         self.universe.tick()
 
 
+class TestIsBlizzardDancer(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(10, 10)
+        self.universe.disease_chance = 0.0
+
+    def test_blizzard_dancer_gains_energy_in_blizzard(self):
+        from src.universe.engine import Entity
+        entity = Entity(name="BlizzardDancer", x=5, y=5, energy=10, is_blizzard_dancer=True)
+        self.universe.add_entity(entity)
+
+        self.universe.current_event = 'blizzard'
+        self.universe.event_remaining_time = 10
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        # General energy loss during tick is 0 due to trait. Blizzard gives +5. Net change should be +5.
+        self.assertGreaterEqual(entity.energy, old_energy + 5)
+
+    def test_blizzard_dancer_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_blizzard_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.food_spawn_chance = 0.0
+        self.universe.mutation_chance = 1.0
+        self.universe.reproduction_threshold = 10
+        self.universe.population_limit = 1000
+
+        from unittest import mock
+
+        with mock.patch('random.random', return_value=0.01):
+            for _ in range(10):
+                self.universe.tick()
+
+        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_blizzard_dancer', False))
+
 if __name__ == '__main__':
     unittest.main()
 
