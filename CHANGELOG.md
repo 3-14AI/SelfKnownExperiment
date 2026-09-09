@@ -561,3 +561,5 @@ All notable changes to Project Genesis will be documented in this file.
 - [x] Implemented `is_ice_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on ice terrain.
 
 - Implemented `is_fire_dancer` trait. Entities with this trait gain energy and are immune to damage when inside a fire event.
+
+- Implemented `is_snow_dancer` trait: Entities with this trait gain energy and hydration while in 'snow' localized events.

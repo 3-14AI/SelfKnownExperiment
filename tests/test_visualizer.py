@@ -1551,6 +1551,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('Ģ', output)
 
+    def test_visualize_is_snow_dancer(self):
+        universe = Universe(10, 10)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("Test", x=1, y=1, is_snow_dancer=True)
+        universe.add_entity(entity)
+        output = visualizer.render()
+        self.assertIn('❄', output)
+
     def test_visualize_is_snow_glider(self):
         universe = Universe(10, 10)
         visualizer = CLIVisualizer(universe)

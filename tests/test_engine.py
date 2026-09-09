@@ -15463,6 +15463,43 @@ class TestIsFireDancer(unittest.TestCase):
         self.universe.tick()
 
 
+
+class TestIsSnowDancer(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.population_limit = 0
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_snow_dancer_energy_gain(self):
+        from src.universe.engine import Entity, LocalizedEvent
+        entity = Entity(name="SnowDancer", x=5, y=5, energy=10, hydration=10, is_snow_dancer=True)
+        self.universe.entities.append(entity)
+        snow_event = LocalizedEvent('snow', x=5, y=5, radius=3, duration=5)
+        self.universe.localized_events.append(snow_event)
+
+        self.universe.tick()
+
+        self.assertGreaterEqual(entity.energy, 14, "is_snow_dancer should gain energy in a snow event")
+        self.assertGreaterEqual(entity.hydration, 11, "is_snow_dancer should gain hydration in a snow event")
+
+    def test_is_snow_dancer_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock as mock
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_snow_dancer=False)
+        self.universe.entities.append(parent)
+
+        with mock.patch('random.random', return_value=0.001): # Force mutation
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name == "Parent" and e != parent]
+        if children:
+            self.assertTrue(any(getattr(child, 'is_snow_dancer', False) for child in children), "is_snow_dancer should mutate in children")
+
 if __name__ == '__main__':
     unittest.main()
 
