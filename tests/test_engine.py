@@ -8527,6 +8527,7 @@ class TestIsAshDweller(unittest.TestCase):
         # Similar to ice_dweller, asserting 19.
         self.assertGreaterEqual(entity.energy, 20, "is_ash_dweller should treat ash as shelter for energy recovery")
 
+
     @mock.patch('random.random')
     def test_is_ash_dweller_mutation(self, mock_random):
         from src.universe.engine import Universe, Entity

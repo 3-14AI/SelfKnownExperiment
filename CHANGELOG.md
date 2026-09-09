@@ -14,6 +14,7 @@
 
 ## [Unreleased]
 - Implemented `is_storm_dancer` trait. Entities with this trait gain energy when inside a storm event.
+
 - Implemented `is_lava_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on lava terrain.
 - Implemented `is_drought_glider` trait. Entities with this trait consume 0 stamina when moving during a 'drought' event.
 - [x] Implemented `is_day_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the day.
