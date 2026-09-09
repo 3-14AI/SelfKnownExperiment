@@ -280,6 +280,8 @@ class CLIVisualizer:
                         char = '*'
                     elif getattr(entity, 'is_heavy', False):
                         char = 'H'
+                    elif getattr(entity, 'is_blizzard_dancer', False) or getattr(entity, 'is_storm_dancer', False):
+                        char = 'δ'
                     elif getattr(entity, 'is_lightweight', False):
                         char = 'Q'
                     elif getattr(entity, 'is_stealthy', False):

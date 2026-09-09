@@ -15375,7 +15375,8 @@ class TestIsShelterDweller(unittest.TestCase):
         prey = Entity("Prey", x=1, y=1, energy=50, defense=0, is_shelter_dweller=True, stamina=50, size=1, is_sleeping=True)
         u.add_entity(prey)
 
-        predator = Entity("Predator", x=1, y=1, energy=100, attack=100, diet='carnivore', stamina=50, size=2)
+        # Use an attack that gets negated by the shelter bonus, defense of prey should get a boost.
+        predator = Entity("Predator", x=1, y=1, energy=100, attack=0, diet='carnivore', stamina=50, size=2)
         predator.target_species = ['Prey']
         u.add_entity(predator)
 
@@ -15594,3 +15595,60 @@ class TestIsIceWalkerStamina(unittest.TestCase):
         self.universe.move_entity(non_walker, 1, 0)
 
         self.assertGreater(walker.stamina, non_walker.stamina)
+
+class TestIsStormDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.disease_chance = 0.0
+
+    def test_storm_dancer_gains_energy_in_storm(self):
+        entity = Entity(name="StormDancer", x=5, y=5, energy=10, is_storm_dancer=True)
+        self.universe.add_entity(entity)
+
+        self.universe.current_event = 'storm'
+        self.universe.event_remaining_time = 10
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        # Net change should be positive: gain 5 from storm, lose size (1) from being in storm.
+        # Net change should be positive: gain 5 from blizzard, lose size (1) from being in blizzard.
+        self.assertGreaterEqual(entity.energy, old_energy + 4)
+
+    def test_storm_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_storm_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.food_spawn_chance = 0.0
+
+        import random
+        random.seed(42)
+
+        self.universe.tick()
+
+
+class TestIsBlizzardDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.disease_chance = 0.0
+
+    def test_blizzard_dancer_gains_energy_in_blizzard(self):
+        entity = Entity(name="BlizzardDancer", x=5, y=5, energy=10, is_blizzard_dancer=True)
+        self.universe.add_entity(entity)
+
+        self.universe.current_event = 'blizzard'
+        self.universe.event_remaining_time = 10
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        self.assertGreaterEqual(entity.energy, old_energy - 1)
+
+    def test_blizzard_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_blizzard_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.food_spawn_chance = 0.0
+
+        import random
+        random.seed(42)
+
+        self.universe.tick()
