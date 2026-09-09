@@ -423,6 +423,12 @@ class TestCLIVisualizer(unittest.TestCase):
         output = CLIVisualizer(universe).render()
         self.assertIn('J', output)
 
+    def test_render_is_fire_dancer(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestFireDancer", x=1, y=1, is_fire_dancer=True))
+        output = CLIVisualizer(universe).render()
+        self.assertIn('F', output)
+
     def test_render_is_mud_bather(self):
         universe = Universe(width=3, height=3)
         universe.add_entity(Entity("TestMudBather", x=1, y=1, is_mud_bather=True))
@@ -1686,6 +1692,15 @@ class TestCLIVisualizer(unittest.TestCase):
         universe.add_entity(entity)
         output = visualizer.render()
         self.assertIn('ĳ', output)
+
+
+    def test_render_is_snow_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity("Snow Dancer", x=5, y=5, is_snow_dancer=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('δ', output)
 
 if __name__ == '__main__':
     unittest.main()
