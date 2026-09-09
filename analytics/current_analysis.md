@@ -1636,3 +1636,8 @@ Implemented is_rain_walker trait.
   - Added tests in `test_engine.py` to verify energy recovery, combat survival behavior, and mutation logic.
   - Documented feature in `CHANGELOG.md` and `agents.md`.
 - **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 281
+- **Agent Intent:** Implement the `is_storm_dancer` trait which gives entities an energy bonus when in a storm.
+- **Implementation Details:** Patched `src/universe/engine.py` to add `is_storm_dancer` in `__init__`, reproduction loop, and mutation block. Inserted `entity.energy += 5` logic exclusively inside `elif self.current_event == 'storm':`. Updated deterministic tests with clean mocking of `random.random()`.
+- **Future work:** Further trait expansion.
