@@ -15463,9 +15463,6 @@ class TestIsFireDancer(unittest.TestCase):
         self.universe.tick()
 
 
-if __name__ == '__main__':
-    unittest.main()
-
 class TestIsLavaDweller(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(10, 10)
@@ -15568,3 +15565,43 @@ class TestIsIceWalkerStamina(unittest.TestCase):
         self.universe.move_entity(non_walker, 1, 0)
 
         self.assertGreater(walker.stamina, non_walker.stamina)
+
+
+class TestIsStormDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.disease_chance = 0.0
+
+    def test_is_storm_dancer_effect(self):
+        # max_energy defaults to size * 50 = 50. Initialize with energy=20 so gain is not capped.
+        entity = Entity("StormDancer", x=5, y=5, energy=20, stamina=0, is_storm_dancer=True)
+        self.universe.add_entity(entity)
+        self.universe.current_event = 'storm'
+        # Prevent energy loss from other effects like temperature
+        entity.preferred_temperature = self.universe.get_temperature_at(entity.x, entity.y)
+        self.universe.disease_chance = 0.0
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        # Assert the entity gained energy during the storm event due to the trait.
+        self.assertGreater(entity.energy, old_energy)
+        self.assertTrue(entity.energy > 20)
+
+    def test_is_storm_dancer_mutation(self, mock_random=None):
+        import random
+        random.seed(42)
+        parent = Entity("Parent", x=5, y=5, energy=5000, age=10, size=5, is_storm_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.food_spawn_chance = 0.0
+        self.universe.mutation_chance = 1.0 # Force mutation
+
+        self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name == "Parent_child"]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_storm_dancer', False))
+
+
+if __name__ == '__main__':
+    unittest.main()

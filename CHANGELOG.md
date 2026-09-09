@@ -55,6 +55,7 @@
 - Cleaned up duplicated tests in `tests/test_engine.py`.
 
 ## [Unreleased]
+- Implemented `is_storm_dancer` trait. Entities with this trait gain energy and are immune to energy decay during a storm.
 - Implemented `is_night_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving at night.
 - Implemented `is_stun_dweller` trait. Entities with this trait treat being stunned as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
