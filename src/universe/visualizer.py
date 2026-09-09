@@ -60,6 +60,8 @@ class CLIVisualizer:
                 else:
                     if getattr(entity, 'is_spiteful', False):
                         char = '%'
+                    elif getattr(entity, 'is_snow_dancer', False):
+                        char = 'δ'
                     elif getattr(entity, 'is_ice_dweller', False):
                         char = 'I'
                     elif getattr(entity, 'is_ash_dweller', False):
@@ -244,6 +246,8 @@ class CLIVisualizer:
                         char = 'q'
                     elif getattr(entity, 'has_blubber', False):
                         char = '@'
+                    elif getattr(entity, 'is_fire_dancer', False):
+                        char = 'F'
                     elif getattr(entity, 'is_mud_bather', False):
                         char = 'n'
                     elif getattr(entity, 'has_spikes', False):

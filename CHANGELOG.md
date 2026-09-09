@@ -13,7 +13,6 @@
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
 ## [Unreleased]
-- Implemented `is_snow_dancer` trait. Entities with this trait gain energy when they are within the radius of a 'snow' event.
 - Implemented `is_lava_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on lava terrain.
 - Implemented `is_drought_glider` trait. Entities with this trait consume 0 stamina when moving during a 'drought' event.
 - [x] Implemented `is_day_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the day.
@@ -562,3 +561,4 @@ All notable changes to Project Genesis will be documented in this file.
 - [x] Implemented `is_ice_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on ice terrain.
 
 - Implemented `is_fire_dancer` trait. Entities with this trait gain energy and are immune to damage when inside a fire event.
+- Implemented `is_snow_dancer` trait. Entities with this trait gain energy when inside a snow event.

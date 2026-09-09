@@ -183,7 +183,6 @@ class Entity:
         self.is_rain_dancer = is_rain_dancer
         self.is_fire_dancer = is_fire_dancer
         self.is_snow_dancer = is_snow_dancer
-        self.is_snow_dancer = is_snow_dancer
         self.is_fire_dancer = is_fire_dancer
         self.is_fire_dancer = is_fire_dancer
         self.is_fire_dancer = is_fire_dancer
@@ -968,7 +967,7 @@ class Universe:
                 for entity in self.entities:
                     if getattr(entity, 'is_snow_dancer', False):
                         if (entity.x - event.x)**2 + (entity.y - event.y)**2 <= event.radius**2:
-                            max_energy = int(entity.max_energy * 1.5) if getattr(entity, 'is_gluttonous', False) else entity.max_energy
+                            max_energy = int(entity.max_energy * 1.5) if getattr(entity, "is_gluttonous", False) else entity.max_energy
                             entity.energy = min(max_energy, entity.energy + 5)
                 # Convert water to ice and other terrain to snow randomly
                 for _ in range(3):
@@ -1546,7 +1545,6 @@ class Universe:
                     child_is_storm_glider = getattr(entity, 'is_storm_glider', False)
                     child_is_rain_dancer = getattr(entity, 'is_rain_dancer', False)
                     child_is_fire_dancer = getattr(entity, 'is_fire_dancer', False)
-                    child_is_snow_dancer = getattr(entity, 'is_snow_dancer', False)
                     child_is_snow_dancer = getattr(entity, 'is_snow_dancer', False)
                     child_is_blizzard_glider = getattr(entity, 'is_blizzard_glider', False)
                     child_is_seismic_sensitive = getattr(entity, 'is_seismic_sensitive', False)
