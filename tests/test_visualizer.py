@@ -1693,5 +1693,11 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('ĳ', output)
 
-if __name__ == '__main__':
-    unittest.main()
+
+    def test_render_is_snow_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity("Snow Dancer", x=5, y=5, is_snow_dancer=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('δ', output)
