@@ -423,6 +423,12 @@ class TestCLIVisualizer(unittest.TestCase):
         output = CLIVisualizer(universe).render()
         self.assertIn('J', output)
 
+    def test_render_is_fire_dancer(self):
+        universe = Universe(width=3, height=3)
+        universe.add_entity(Entity("TestFireDancer", x=1, y=1, is_fire_dancer=True))
+        output = CLIVisualizer(universe).render()
+        self.assertIn('F', output)
+
     def test_render_is_mud_bather(self):
         universe = Universe(width=3, height=3)
         universe.add_entity(Entity("TestMudBather", x=1, y=1, is_mud_bather=True))
