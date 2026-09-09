@@ -1617,3 +1617,354 @@ Implemented is_rain_walker trait.
   - Added tests in `test_engine.py` to verify energy recovery, combat survival behavior, and mutation logic.
   - Documented feature in `CHANGELOG.md` and `agents.md`.
 - **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 281
+- **Agent Intent:** Implement the `is_disease_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_disease_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat being infected as a shelter, gaining increased defense and energy recovery.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 282
+- **Agent Intent:** Implement the `is_disease_resistant` trait for entities.
+- **Implementation Details:**
+  - Added `is_disease_resistant` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait are immune to passive disease contraction during random global ticks.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 283
+- **Agent Intent:** Implement the `is_lava_glider` trait for entities.
+- **Implementation Details:**
+  - Added `is_lava_glider` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait consume 0 stamina when moving on lava terrain.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 284
+- **Agent Intent:** Implement the `is_shelter_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_shelter_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving on a shelter terrain, or during events that act as a shelter.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 285
+- **Agent Intent:** Implement the `is_day_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_day_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving during the day.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 286
+- **Agent Intent:** Implement the `is_spring_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_spring_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving during the 'spring' season.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 287
+- **Agent Intent:** Implement the `is_summer_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_summer_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving during the 'summer' season.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 288
+- **Agent Intent:** Implement the `is_autumn_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_autumn_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving during the 'autumn' season.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 289
+- **Agent Intent:** Implement the `is_winter_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_winter_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving during the 'winter' season.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 290
+- **Agent Intent:** Implement the `is_night_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_night_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving at night.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 291
+- **Agent Intent:** Implement the `is_water_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_water_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving on water terrain.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 292
+- **Agent Intent:** Implement the `is_venom_resistant` trait for entities.
+- **Implementation Details:**
+  - Added `is_venom_resistant` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait are immune to venom and do not get poisoned in combat.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 293
+- **Agent Intent:** Implement the `is_storm_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_storm_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving during a 'storm' event.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 294
+- **Agent Intent:** Implement the `is_drought_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_drought_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat a `drought` event as a shelter, gaining energy recovery and defense.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 295
+- **Agent Intent:** Implement the `is_earthquake_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_earthquake_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat an `earthquake` event as a shelter, gaining energy recovery and defense.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 296
+- **Agent Intent:** Implement the `is_volcanic_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_volcanic_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat a `volcano` event as a shelter, gaining energy recovery and defense.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 297
+- **Agent Intent:** Implement the `is_fire_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_fire_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat a `fire` event as a shelter, gaining energy recovery and defense, and are immune to fire damage.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 298
+- **Agent Intent:** Implement the `is_rain_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_rain_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat a `rain` event as a shelter, gaining energy recovery and defense.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 299
+- **Agent Intent:** Implement the `is_deep_water_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_deep_water_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat deep-water terrain as a shelter, gaining increased defense and energy recovery.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 300
+- **Agent Intent:** Implement the `is_ice_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_ice_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 301
+- **Agent Intent:** Implement the `is_snow_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_snow_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving on snow terrain.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 302
+- **Agent Intent:** Implement the `is_wall_glider` trait for entities.
+- **Implementation Details:**
+  - Added `is_wall_glider` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait consume 0 stamina when moving on wall terrain.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 303
+- **Agent Intent:** Implement the `is_mountain_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_mountain_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina when moving to a higher elevation.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 304
+- **Agent Intent:** Implement the `is_ash_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_ash_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat ash terrain as a shelter, gaining increased defense and energy recovery.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 305
+- **Agent Intent:** Implement the `is_snow_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_snow_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat snow terrain as a shelter, gaining increased defense and energy recovery.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 306
+- **Agent Intent:** Implement the `is_mud_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_mud_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat mud terrain as a shelter, gaining increased defense and energy recovery.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 307
+- **Agent Intent:** Implement the `is_wall_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_wall_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat `wall` terrain as a shelter, gaining increased defense and energy recovery.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 308
+- **Agent Intent:** Implement the `is_day_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_day_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat day time as a shelter, gaining increased defense and energy recovery.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 309
+- **Agent Intent:** Implement the `is_night_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_night_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat night time as a shelter, gaining increased defense and energy recovery.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 310
+- **Agent Intent:** Implement the `is_blizzard_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_blizzard_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving during a 'blizzard' event.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 311
+- **Agent Intent:** Implement the `is_volcanic_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_volcanic_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving during a 'volcano' event.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 312
+- **Agent Intent:** Implement the `is_sand_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_sand_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving on sand terrain.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 313
+- **Agent Intent:** Implement the `is_deep_water_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_deep_water_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving on deep-water terrain.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 314
+- **Agent Intent:** Implement the `is_wall_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_wall_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving on wall terrain.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 315
+- **Agent Intent:** Implement the `is_drought_glider` trait for entities.
+- **Implementation Details:**
+  - Added `is_drought_glider` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait consume 0 stamina when moving during a 'drought' event.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 316
+- **Agent Intent:** Implement the `is_lava_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_lava_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving on lava terrain.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 317
+- **Agent Intent:** Implement the `is_lava_dweller` trait for entities.
+- **Implementation Details:**
+  - Added `is_lava_dweller` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait treat `lava` terrain as a shelter, gaining increased defense and energy recovery.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 318
+- **Agent Intent:** Implement the `is_ice_walker` trait for entities.
+- **Implementation Details:**
+  - Added `is_ice_walker` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait do not consume extra stamina from elevation changes when moving on ice terrain.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
+
+### Analysis 319
+- **Agent Intent:** Implement the `is_fire_dancer` trait for entities.
+- **Implementation Details:**
+  - Added `is_fire_dancer` trait to `Entity.__init__` and genetic mutation logic in `src/universe/engine.py`.
+  - Entities with this trait gain energy and are immune to damage when inside a fire event.
+  - Added corresponding unit tests in `tests/test_engine.py` to verify the trait's effects and mutation logic.
+  - Documented feature in `CHANGELOG.md` and `agents.md`.
+- **Future work:** Continue the autonomous development loop by implementing the next available traits or behaviors in the simulation ecosystem.
