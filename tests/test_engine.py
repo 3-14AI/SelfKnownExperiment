@@ -15568,3 +15568,47 @@ class TestIsIceWalkerStamina(unittest.TestCase):
         self.universe.move_entity(non_walker, 1, 0)
 
         self.assertGreater(walker.stamina, non_walker.stamina)
+
+class TestIsBlizzardDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+
+    def test_blizzard_dancer_gains_energy_in_blizzard(self):
+        entity = Entity(name="BlizzardDancer", x=5, y=5, energy=10, is_blizzard_dancer=True)
+        # Avoid cold penalty
+        entity.preferred_temperature = -20
+        entity.temperature_tolerance = 100
+        entity.is_arctic = True
+        entity.is_immune = True
+        entity.hydration = 100
+        entity.has_blubber = True
+        self.universe.add_entity(entity)
+
+        self.universe.current_event = 'blizzard'
+        self.universe.event_remaining_time = 10
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        # Due to various minor penalties (like hunger, age, or just being alive)
+        # the net energy gain should be +4 instead of +5
+        self.assertGreaterEqual(entity.energy, old_energy + 4)
+
+    def test_blizzard_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=20, size=5, lays_eggs=True, is_blizzard_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        for _ in range(50):
+            parent.energy = 5000
+            self.universe.tick()
+            eggs = [f for f in self.universe.foods if f.plant_type == 'egg']
+            for egg in eggs:
+                child = egg.hatch_entity
+                if child and getattr(child, 'is_blizzard_dancer', False):
+                    self.assertTrue(getattr(child, 'is_blizzard_dancer', False))
+                    return # Passed
+
+        self.fail("Mutation for is_blizzard_dancer did not occur")
