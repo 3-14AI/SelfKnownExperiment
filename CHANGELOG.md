@@ -565,3 +565,5 @@ All notable changes to Project Genesis will be documented in this file.
 
 - Implemented `is_storm_dancer` trait. Entities with this trait gain energy during a 'storm' event.
 - Implemented `is_blizzard_dancer` trait. Entities with this trait gain energy during a 'blizzard' event.
+
+- Implemented `is_earthquake_dancer`, `is_volcanic_dancer`, and `is_drought_dancer` traits allowing entities to gain energy during respective environmental events.
