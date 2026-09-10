@@ -283,7 +283,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_mud_glider` trait. Entities with this trait consume no stamina when moving on mud terrain.
 - [x] Implemented `is_drought_strider` trait. Entities with this trait consume no stamina when moving during a 'drought' event.
 - [x] Implemented `is_earthquake_glider` trait. Entities with this trait consume 0 stamina when moving during an 'earthquake' event.
-- [x] Implemented `is_volcanic_glider` trait. Entities with this trait consume 0 stamina when moving during a 'volcano' event.
 - [x] Implemented `is_ice_glider` trait. Entities with this trait consume 0 stamina when moving on ice terrain.
 - [x] Implemented `is_day_glider` trait. Entities with this trait consume 0 stamina when moving during the day.
 - [x] Implemented `is_night_glider` trait. Entities with this trait consume 0 stamina when moving at night.
@@ -314,7 +313,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_ash_dweller` trait. Entities with this trait treat ash terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_snow_dweller` trait. Entities with this trait treat snow terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_mud_dweller` trait. Entities with this trait treat mud terrain as a shelter, gaining increased defense and energy recovery.
-- [x] Implemented `is_web_dweller` trait. Entities with this trait treat `web` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 - [x] Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_wall_dweller` trait. Entities with this trait treat `wall` terrain as a shelter, gaining increased defense and energy recovery.

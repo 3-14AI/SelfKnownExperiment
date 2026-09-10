@@ -15652,3 +15652,87 @@ class TestIsBlizzardDancer(unittest.TestCase):
         random.seed(42)
 
         self.universe.tick()
+
+
+class TestIsEarthquakeDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.disease_chance = 0.0
+
+    def test_earthquake_dancer_gains_energy_in_earthquake(self):
+        entity = Entity(name="EQDancer", x=5, y=5, energy=10, is_earthquake_dancer=True)
+        self.universe.add_entity(entity)
+
+        self.universe.current_event = 'earthquake'
+        self.universe.event_remaining_time = 10
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        self.assertGreaterEqual(entity.energy, old_energy + 4)
+
+    def test_earthquake_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_earthquake_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.food_spawn_chance = 0.0
+
+        import random
+        random.seed(42)
+
+        self.universe.tick()
+
+
+class TestIsVolcanicDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.disease_chance = 0.0
+
+    def test_volcanic_dancer_gains_energy_in_volcano(self):
+        entity = Entity(name="VolcDancer", x=5, y=5, energy=10, is_volcanic_dancer=True)
+        self.universe.add_entity(entity)
+
+        self.universe.current_event = 'volcano'
+        self.universe.event_remaining_time = 10
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        self.assertGreaterEqual(entity.energy, old_energy + 4)
+
+    def test_volcanic_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_volcanic_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.food_spawn_chance = 0.0
+
+        import random
+        random.seed(42)
+
+        self.universe.tick()
+
+
+class TestIsDroughtDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.disease_chance = 0.0
+
+    def test_drought_dancer_gains_energy_in_drought(self):
+        entity = Entity(name="DroughtDancer", x=5, y=5, energy=10, is_drought_dancer=True)
+        self.universe.add_entity(entity)
+
+        self.universe.current_event = 'drought'
+        self.universe.event_remaining_time = 10
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        self.assertGreaterEqual(entity.energy, old_energy + 4)
+
+    def test_drought_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_drought_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.food_spawn_chance = 0.0
+
+        import random
+        random.seed(42)
+
+        self.universe.tick()
