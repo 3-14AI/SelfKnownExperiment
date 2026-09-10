@@ -15864,3 +15864,76 @@ class TestIsDayDancer(unittest.TestCase):
                 found_mutant = True
                 break
         self.assertTrue(found_mutant, "Trait did not mutate to True after multiple ticks.")
+
+
+class TestIsNightDancer(unittest.TestCase):
+    def test_is_night_dancer_energy_gain(self):
+        # Setup the universe and make it night
+        universe = Universe(10, 10)
+        universe.day_length = 20
+        universe.time = 15 # Night time
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.base_temperature = 20
+
+        # Verify it's actually night
+        self.assertTrue(universe.is_night)
+
+        # Create an entity with the is_night_dancer trait
+        dancer = Entity(name="Dancer", x=5, y=5, size=2, energy=50, max_stamina=100, stamina=100, is_night_dancer=True, preferred_temperature=20, temperature_tolerance=10, age=0, max_age=100)
+        universe.add_entity(dancer)
+
+        # We need to make sure the entity doesn't die or take excessive damage during tick.
+        # Let's set energy very low, so it doesn't hit max energy. Wait, initial energy is 50, max is 100.
+        dancer.is_sleeping = False
+        dancer.stamina = 100
+        dancer.hydration = 100
+
+        # Just manually execute the logic
+        # if self.is_night:
+        #     for entity in self.entities:
+        #         if getattr(entity, 'is_night_dancer', False):
+
+        # Initial energy
+        initial_energy = dancer.energy
+
+        # Call tick
+        universe.tick()
+
+        # Usually tick applies -1 metabolism, then our logic gives +5
+        # 50 - 1 = 49 + 5 = 54
+        # Wait, if they move they lose more. So set stamina=0 so they don't move
+        dancer.stamina = 0
+
+        universe.time = 15
+        initial_energy = dancer.energy
+        universe.tick()
+
+        self.assertTrue(dancer.energy > initial_energy)
+
+    def test_is_night_dancer_no_gain_during_day(self):
+        # Setup the universe and make it day
+        universe = Universe(10, 10)
+        universe.day_length = 20
+        universe.time = 5 # Day time
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.base_temperature = 20
+
+        # Verify it's actually day
+        self.assertTrue(universe.is_day)
+
+        # Create an entity with the is_night_dancer trait
+        dancer = Entity(name="Dancer", x=5, y=5, size=2, energy=50, max_stamina=100, stamina=100, is_night_dancer=True, preferred_temperature=20, temperature_tolerance=10, age=0, max_age=100)
+        universe.add_entity(dancer)
+        dancer.stamina = 0
+        dancer.hydration = 100
+
+        # Record initial energy
+        initial_energy = dancer.energy
+
+        # Tick the universe
+        universe.tick()
+
+        # Energy should decrease or stay the same (due to metabolism), definitely shouldn't increase
+        self.assertLessEqual(dancer.energy, initial_energy)

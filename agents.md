@@ -358,3 +358,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_autumn_dancer` trait. Entities with this trait gain energy during the autumn season.
 - [x] Implemented `is_winter_dancer` trait. Entities with this trait gain energy during the winter season.
 - [x] Implemented `is_day_dancer` trait. Entities with this trait gain energy during the day.
+- [x] Implemented `is_night_dancer` trait. Entities with this trait gain energy at night.
