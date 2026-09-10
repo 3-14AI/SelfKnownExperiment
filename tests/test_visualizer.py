@@ -3,6 +3,16 @@ from src.universe.engine import Universe, Entity, Food, Terrain
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+    def test_visualize_is_spring_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="SpringDancer", x=5, y=5, is_spring_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+
+        output = visualizer.render()
+
+        self.assertIn("✿", output)
+
     def test_render_is_lava_dweller(self):
         universe = Universe(10, 10)
         universe.time = 0
