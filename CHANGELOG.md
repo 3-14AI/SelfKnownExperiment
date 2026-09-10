@@ -465,3 +465,5 @@ All notable changes to Project Genesis will be documented in this file.
 - [x] Implemented `is_earthquake_dancer` trait. Entities with this trait gain energy during an 'earthquake' event.
 - [x] Implemented `is_volcanic_dancer` trait. Entities with this trait gain energy during a 'volcano' event.
 - [x] Implemented `is_drought_dancer` trait. Entities with this trait gain energy during a 'drought' event.
+
+- Implemented `is_spring_dancer` trait. Entities with this trait gain energy during the spring season.

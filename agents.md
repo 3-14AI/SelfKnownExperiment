@@ -352,3 +352,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_earthquake_dancer` trait. Entities with this trait gain energy during an 'earthquake' event.
 - [x] Implemented `is_volcanic_dancer` trait. Entities with this trait gain energy during a 'volcano' event.
 - [x] Implemented `is_drought_dancer` trait. Entities with this trait gain energy during a 'drought' event.
+
+- [x] Implemented `is_spring_dancer` trait. Entities with this trait gain energy during the spring season.

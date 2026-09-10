@@ -15736,3 +15736,87 @@ class TestIsDroughtDancer(unittest.TestCase):
         random.seed(42)
 
         self.universe.tick()
+
+class TestIsSpringDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.food_spawn_rate = 0
+        self.universe.entities = []
+
+    def test_energy_gain_in_spring(self):
+        entity = Entity(name="SpringDancer", x=5, y=5, energy=10, is_spring_dancer=True)
+        self.universe.add_entity(entity)
+        self.universe.time = 0 # spring
+
+        self.universe.tick()
+
+        # Base energy 10 - 1 (living) + 5 (dancer) = 14
+        self.assertEqual(entity.energy, 14)
+
+    def test_no_energy_gain_not_spring(self):
+        entity = Entity(name="SpringDancer", x=5, y=5, energy=10, size=1, is_spring_dancer=True)
+        self.universe.add_entity(entity)
+        self.universe.time = self.universe.season_length # summer
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+
+        self.universe.tick()
+
+        # Base loss: size=1 -> -1
+        # It's summer, not spring, so no dancer gain
+        # Is daylight, so +0 extra loss normally. But we should check carefully.
+        self.assertEqual(entity.energy, 9)
+
+    def test_no_energy_gain_not_dancer(self):
+        entity = Entity(name="NotDancer", x=5, y=5, energy=10, size=1, is_spring_dancer=False)
+        self.universe.add_entity(entity)
+        self.universe.time = 0 # spring
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+
+        self.universe.tick()
+
+        # Base loss: size=1 -> -1
+        # No dancer trait, no gain
+        self.assertEqual(entity.energy, 9)
+
+    def test_mutation_and_inheritance(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, lays_eggs=True, is_spring_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        self.universe.tick()
+
+        eggs = self.universe.get_foods_at(parent.x, parent.y)
+        self.assertGreater(len(eggs), 0, "No eggs were laid.")
+        child = eggs[0].hatch_entity
+        self.assertIsNotNone(child, "Child failed to hatch.")
+
+        has_mutated = False
+        for _ in range(50):
+            child = Entity(name="Child", x=5, y=5, energy=50, age=0, size=1)
+            child_is_spring_dancer = getattr(parent, 'is_spring_dancer', False)
+            child_is_spring_dancer = not child_is_spring_dancer
+
+            if child_is_spring_dancer:
+                has_mutated = True
+                break
+
+        # We need to loop multiple ticks since reproduction relies on probability and multiple conditions.
+        self.universe.mutation_chance = 1.0
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, lays_eggs=True, is_spring_dancer=False)
+        self.universe.add_entity(parent)
+
+        found_mutant = False
+        for _ in range(50):
+            self.universe.tick()
+            eggs = self.universe.get_foods_at(parent.x, parent.y)
+            if eggs:
+                for egg in eggs:
+                    child = getattr(egg, 'hatch_entity', None)
+                    if child and getattr(child, 'is_spring_dancer', False):
+                        found_mutant = True
+                        break
+            if found_mutant:
+                break
+        self.assertTrue(found_mutant, "Trait did not mutate to True after multiple ticks.")
