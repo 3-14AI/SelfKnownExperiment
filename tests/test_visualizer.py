@@ -1701,3 +1701,19 @@ class TestCLIVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('δ', output)
+
+    def test_render_is_storm_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity("Storm Dancer", x=5, y=5, is_storm_dancer=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('δ', output)
+
+    def test_render_is_blizzard_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity("Blizzard Dancer", x=5, y=5, is_blizzard_dancer=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('δ', output)

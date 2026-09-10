@@ -562,3 +562,6 @@ All notable changes to Project Genesis will be documented in this file.
 
 - Implemented `is_fire_dancer` trait. Entities with this trait gain energy and are immune to damage when inside a fire event.
 - Implemented `is_snow_dancer` trait. Entities with this trait gain energy when inside a snow event.
+
+- Implemented `is_storm_dancer` trait. Entities with this trait gain energy during a 'storm' event.
+- Implemented `is_blizzard_dancer` trait. Entities with this trait gain energy during a 'blizzard' event.
