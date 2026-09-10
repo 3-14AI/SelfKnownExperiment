@@ -468,3 +468,5 @@ All notable changes to Project Genesis will be documented in this file.
 - [x] Implemented `is_drought_dancer` trait. Entities with this trait gain energy during a 'drought' event.
 
 - Implemented `is_spring_dancer` trait. Entities with this trait gain energy during the spring season.
+
+- Implemented `is_night_dancer` trait. Entities with this trait gain energy at night.
