@@ -8844,7 +8844,7 @@ class TestEcholocation(unittest.TestCase):
 
     def test_echolocation_night_perception(self):
         self.universe.day_length = 20
-        self.universe.time = 5 # Night
+        self.universe.time = 15 # Night
 
         entity = Entity("Bat", x=5, y=5, energy=50, perception_radius=5, has_echolocation=True)
         self.universe.add_entity(entity)
