@@ -4084,7 +4084,7 @@ class TestUniverse(unittest.TestCase):
         with unittest.mock.patch('random.random', return_value=0.9):
             universe.tick()
 
-        self.assertTrue(True)
+        self.assertTrue(has_mutated)
 
 
     def test_is_migratory_mutation(self):
@@ -4924,7 +4924,7 @@ class TestColdBlooded(unittest.TestCase):
         with unittest.mock.patch.object(self.universe, 'get_temperature_at', return_value=0):
             self.universe.tick()
         # Just ensure it doesn't crash, test is too flaky with all the modifiers now
-        self.assertTrue(True)
+        self.assertTrue(has_mutated)
 
 class TestAposematism(unittest.TestCase):
     def setUp(self):
@@ -10676,7 +10676,7 @@ class TestIsScavenger(unittest.TestCase):
                 child = eggs[0].hatch_entity
                 self.assertTrue(child.is_scavenger)
             else:
-                self.assertTrue(True) # Safe pass if mock randomness breaks reproduction
+                self.assertTrue(has_mutated) # Safe pass if mock randomness breaks reproduction
 
 class TestIsScout(unittest.TestCase):
     def test_is_scout_mutation(self):
@@ -10729,7 +10729,7 @@ class TestIsScout(unittest.TestCase):
                 self.assertTrue(child.is_scout)
             else:
                 # Mock reproduction didn't occur due to chaining side-effects, safe pass
-                self.assertTrue(True)
+                self.assertTrue(has_mutated)
 
     @unittest.skip('flaky')
     def test_is_scout_memory_sharing(self):
@@ -16152,6 +16152,8 @@ class TestIsCaveDancer(unittest.TestCase):
         parent = Entity(name="parent", x=1, y=1, energy=100, is_cave_dancer=True)
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
 
         for _ in range(50):
             self.universe.tick()
@@ -16159,6 +16161,44 @@ class TestIsCaveDancer(unittest.TestCase):
         has_mutated = False
         for e in self.universe.entities:
             if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_cave_dancer', False) == False:
+                has_mutated = True
+                break
+        self.assertTrue(has_mutated)
+
+class TestWaterDancer(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(10, 10)
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+
+    def test_water_dancer(self):
+        from src.universe.engine import Entity, Terrain
+        e = Entity(name="test", x=1, y=1, energy=10, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_water_dancer=True)
+        self.universe.add_entity(e)
+        self.universe.terrains.append(Terrain(1, 1, 'water'))
+
+        normal_e = Entity(name="normal", x=2, y=2, energy=10, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True)
+        self.universe.add_entity(normal_e)
+        self.universe.terrains.append(Terrain(2, 2, 'water'))
+
+        self.universe.tick()
+        self.assertGreater(e.energy, normal_e.energy)
+
+    def test_water_dancer_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="parent", x=1, y=1, energy=100, is_water_dancer=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+
+        for _ in range(50):
+            self.universe.tick()
+
+        has_mutated = False
+        for e in self.universe.entities:
+            if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_water_dancer', False) == False:
                 has_mutated = True
                 break
         self.assertTrue(has_mutated)
