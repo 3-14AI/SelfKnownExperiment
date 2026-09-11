@@ -470,3 +470,6 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_spring_dancer` trait. Entities with this trait gain energy during the spring season.
 
 - Implemented `is_night_dancer` trait. Entities with this trait gain energy at night.
+
+- Fixed `test_is_ash_walker_movement` test assertion failure by updating the stamina calculation.
+- Added `is_night_dancer` missing test.

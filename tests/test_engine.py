@@ -15937,3 +15937,12 @@ class TestIsNightDancer(unittest.TestCase):
 
         # Energy should decrease or stay the same (due to metabolism), definitely shouldn't increase
         self.assertLessEqual(dancer.energy, initial_energy)
+class TestIsNightDancerMissing(unittest.TestCase):
+    def test_is_night_dancer_energy_gain(self):
+        self.universe = Universe(10, 10)
+        self.universe.time = self.universe.day_length // 2 + 1
+        entity = Entity("night_dancer", 0, 0, is_night_dancer=True, size=1)
+        entity.energy = 10
+        self.universe.add_entity(entity)
+        self.universe.tick()
+        self.assertTrue(entity.energy > 10)

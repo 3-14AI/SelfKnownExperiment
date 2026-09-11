@@ -359,3 +359,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_winter_dancer` trait. Entities with this trait gain energy during the winter season.
 - [x] Implemented `is_day_dancer` trait. Entities with this trait gain energy during the day.
 - [x] Implemented `is_night_dancer` trait. Entities with this trait gain energy at night.
+- [x] Fixed `test_is_ash_walker_movement` test assertion failure by updating the stamina calculation.
