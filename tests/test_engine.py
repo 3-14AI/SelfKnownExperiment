@@ -15937,3 +15937,50 @@ class TestIsNightDancer(unittest.TestCase):
 
         # Energy should decrease or stay the same (due to metabolism), definitely shouldn't increase
         self.assertLessEqual(dancer.energy, initial_energy)
+class TestIsMoonDancer(unittest.TestCase):
+    def test_is_moon_dancer_energy_gain(self):
+        universe = Universe(10, 10)
+        universe.day_length = 2
+        universe.time = 1 # Force night
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.base_temperature = 20
+        dancer = Entity(name="Dancer", x=5, y=5, energy=20, size=1, is_moon_dancer=True)
+        universe.add_entity(dancer)
+        dancer.stamina = 0
+
+        initial_energy = dancer.energy
+        universe.tick()
+        self.assertTrue(dancer.energy > initial_energy)
+
+    def test_is_moon_dancer_no_gain_during_day(self):
+        universe = Universe(10, 10)
+        universe.time = 0 # Force day
+        universe.day_length = 10
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.base_temperature = 20
+        dancer = Entity(name="Dancer", x=5, y=5, energy=20, size=1, is_moon_dancer=True)
+        universe.add_entity(dancer)
+        dancer.stamina = 50 # Enough stamina to not fall asleep
+
+        initial_energy = dancer.energy
+        universe.tick()
+        self.assertLessEqual(dancer.energy, initial_energy)
+
+    @mock.patch('random.random')
+    def test_is_moon_dancer_mutation(self, mock_random):
+        mock_random.return_value = 0.02
+        universe = Universe(10, 10, population_limit=100)
+        parent = Entity("Parent", x=1, y=1, energy=500, size=10, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_moon_dancer=False)
+        universe.add_entity(parent)
+        universe.time = 0
+
+        found_mutant = False
+        for _ in range(10):
+            universe.tick()
+            children = [e for e in universe.entities if e.name.startswith("Parent_child")]
+            if any(getattr(child, 'is_moon_dancer', False) for child in children):
+                found_mutant = True
+                break
+        self.assertTrue(found_mutant, "Trait did not mutate to True after multiple ticks.")
