@@ -38,3 +38,8 @@
 - **Agent Intent:** Implement the `is_weather_sensitive` trait as requested by the user, granting stamina recovery and doubled perception during weather events.
 - **Implementation Details:** Modified `Universe.tick` in `src/universe/engine.py` to grant +5 stamina and double perception during `storm`, `blizzard`, `rain`, or `snow` events for entities with `is_weather_sensitive=True`. Added `is_weather_sensitive` to `Entity.__init__` and reproduction logic (including `mutation_occurred=True`). Wrote corresponding unit tests in `tests/test_engine.py` to verify stamina recovery, perception, and mutation mechanics. Addressed and fixed an unrelated failing test in `test_is_night_dancer` along the way.
 - **Future work:** Continue implementing new traits or adding complex ecosystem interactions as defined by user requests.
+
+### Analysis 43
+- **Agent Intent:** Implement the `is_sand_dancer` trait which grants energy when standing on sand during a storm, or anywhere during a sandstorm event, and add the sandstorm global event.
+- **Implementation Details:** Added the `sandstorm` global event which converts grass, mud, and ash to sand. Added `is_sand_dancer` to `Entity` parameters and mutation logic in `Universe.tick()`. Wrote unit tests in `TestIsSandDancer` to verify logic and mutation mechanics.
+- **Future work:** Continue adding new traits, environmental mechanics, or fix any test issues as directed by user or agents.md.
