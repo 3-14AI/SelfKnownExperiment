@@ -160,6 +160,8 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Implemented `is_weather_sensitive` trait. Entities with this trait double their effective perception radius and recover bonus stamina during weather events (`storm`, `blizzard`, `rain`, `snow`).
+- [x] Fixed multiple test failures and bugs in previous agent trait implementations. Fixed missing `mutation_occurred = True` flags for numerous genetic traits (`is_defensive`, `is_protective`, `is_disease_resistant`, `is_scentless`, `is_sun_tracker`, `is_hypnotic`, `is_summer_dweller`, `pack_hunter`, `is_immune`, `has_claws`, `is_sturdy`, etc). Fixed incorrect property check in `is_ash_dweller` test causing test failures.
 - [x] Implemented `is_lava_glider` trait. Entities with this trait consume 0 stamina when moving on lava terrain.
 - [x] Implemented `is_web_dweller` trait. Entities with this trait treat `web` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_shelter_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on a shelter terrain, or during events that act as a shelter.

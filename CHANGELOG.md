@@ -470,3 +470,7 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_spring_dancer` trait. Entities with this trait gain energy during the spring season.
 
 - Implemented `is_night_dancer` trait. Entities with this trait gain energy at night.
+
+- Fixed test failures and missing `mutation_occurred` flags for several traits.
+
+- Implemented `is_weather_sensitive` trait. Entities with this trait double their effective perception radius and recover bonus stamina during weather events (`storm`, `blizzard`, `rain`, `snow`).
