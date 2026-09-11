@@ -474,3 +474,5 @@ All notable changes to Project Genesis will be documented in this file.
 - Fixed test failures and missing `mutation_occurred` flags for several traits.
 
 - Implemented `is_weather_sensitive` trait. Entities with this trait double their effective perception radius and recover bonus stamina during weather events (`storm`, `blizzard`, `rain`, `snow`).
+
+- Implemented `is_sand_dancer` trait. Entities with this trait gain energy when they are inside a sandstorm event or standing on sand during a storm.

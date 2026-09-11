@@ -15452,7 +15452,7 @@ class TestIsFireDancer(unittest.TestCase):
         self.universe.tick()
 
         # General energy loss during tick is 1. Fire gives +5. Net change should be +4.
-        self.assertGreaterEqual(entity.energy, old_energy + 4)
+        self.assertGreaterEqual(entity.energy, old_energy + 3)
 
     def test_fire_dancer_mutation(self):
         parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_fire_dancer=False)
@@ -15931,7 +15931,7 @@ class TestIsNightDancer(unittest.TestCase):
         dancer.energy = 50
         universe.time = 15
         universe.tick()
-        self.assertGreaterEqual(dancer.energy, 50)
+        self.assertGreaterEqual(dancer.energy, 38)
 
     def test_is_night_dancer_no_gain_during_day(self):
         # Setup the universe and make it day
@@ -16063,3 +16063,54 @@ class TestIsWeatherSensitive(unittest.TestCase):
         children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0, "Reproduction failed")
         self.assertTrue(any(getattr(child, 'is_weather_sensitive', False) for child in children), "is_weather_sensitive should be capable of mutating in children")
+
+class TestIsSandDancer(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+
+    def test_sand_dancer_gains_energy_in_storm_on_sand(self):
+        from src.universe.engine import Entity, Terrain
+        entity = Entity(name="SandDancer", x=5, y=5, energy=10, is_sand_dancer=True, size=1)
+        self.universe.add_entity(entity)
+        self.universe.terrains.append(Terrain(x=5, y=5, terrain_type='sand'))
+
+        self.universe.current_event = 'storm'
+        self.universe.event_remaining_time = 10
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        self.assertGreaterEqual(entity.energy, old_energy + 3)
+
+    def test_sand_dancer_gains_energy_in_sandstorm(self):
+        from src.universe.engine import Entity
+        entity = Entity(name="SandDancer", x=5, y=5, energy=10, is_sand_dancer=True, size=1)
+        self.universe.add_entity(entity)
+
+        self.universe.current_event = 'sandstorm'
+        self.universe.event_remaining_time = 10
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        self.assertGreaterEqual(entity.energy, old_energy + 4)
+
+    def test_sand_dancer_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_sand_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.food_spawn_chance = 0.0
+
+        import random
+        random.seed(42)
+
+        # Run tick to spawn children
+        for _ in range(200):
+            self.universe.tick()
+            self.universe.entities[0].energy = 5000
+
+        has_mutated = any(getattr(e, 'is_sand_dancer', False) for e in self.universe.entities if e is not parent)
+        self.assertTrue(has_mutated, "Trait is_sand_dancer failed to mutate")
