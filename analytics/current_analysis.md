@@ -43,3 +43,12 @@
 - **Agent Intent:** Implement the `is_sand_dancer` trait which grants energy when standing on sand during a storm, or anywhere during a sandstorm event, and add the sandstorm global event.
 - **Implementation Details:** Added the `sandstorm` global event which converts grass, mud, and ash to sand. Added `is_sand_dancer` to `Entity` parameters and mutation logic in `Universe.tick()`. Wrote unit tests in `TestIsSandDancer` to verify logic and mutation mechanics.
 - **Future work:** Continue adding new traits, environmental mechanics, or fix any test issues as directed by user or agents.md.
+
+### Analysis 44
+- **Agent Intent:** Implement `is_forest_dancer` trait which grants energy when standing on `forest` terrain.
+- **Implementation Details:**
+  - Added `is_forest_dancer` to `Entity.__init__` and extracted/toggled/passed it during `Universe.tick()`.
+  - Modified energy logic in `Universe.tick()` to add 5 energy (up to `max_energy` or gluttonous cap) if entity has `is_forest_dancer` and `forest` is in `terrains_here`.
+  - Added tests to `tests/test_engine.py` to ensure energy gain and mutation logic work correctly.
+  - Added the trait implementation to `agents.md` and `CHANGELOG.md`.
+- **Future work:** Consider adding more dancer traits for remaining terrains or environmental conditions to enrich entity capabilities.
