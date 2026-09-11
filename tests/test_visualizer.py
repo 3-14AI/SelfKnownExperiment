@@ -1727,3 +1727,13 @@ class TestCLIVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('δ', output)
+
+    def test_visualize_is_water_dancer(self):
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(10, 10)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("Test", x=1, y=1, is_water_dancer=True)
+        universe.add_entity(entity)
+        output = visualizer.render()
+        self.assertIn('Ĵ', output)
