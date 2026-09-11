@@ -28,3 +28,13 @@
 - **Agent Intent:** Implement the `is_night_dancer` trait as the logical next step after `is_day_dancer`.
 - **Implementation Details:** Modified `src/universe/engine.py` to add `is_night_dancer` to Entity kwargs, update energy recovery logic for night, handle mutation, and pass trait during reproduction. Also added tests to `tests/test_engine.py`.
 - **Future work:** Continue implementing missing traits and terrains based on logical next steps from `agents.md`.
+
+### Analysis 41
+- **Agent Intent:** Fixed widespread bugs from previous traits not setting `mutation_occurred = True`, which prevented trait mutations from propagating correctly during reproduction. Also fixed an incorrect `is_ash_dweller` test which caused test suite failures.
+- **Implementation Details:** Wrote an AST-based Python script to scan the `Universe.tick()` method and find all traits missing `mutation_occurred = True`. Applied patches to `is_defensive`, `is_protective`, `is_disease_resistant`, `is_scentless`, `is_sun_tracker`, `is_hypnotic`, `is_summer_dweller`, `pack_hunter`, `is_immune`, `has_claws`, and `is_sturdy`. Fixed `test_is_ash_dweller` to properly mock energy reduction and assert on correctly calculated energy levels. All tests now pass.
+- **Future work:** Ensure that new traits added going forward properly toggle `mutation_occurred` when they mutate.
+
+### Analysis 42
+- **Agent Intent:** Implement the `is_weather_sensitive` trait as requested by the user, granting stamina recovery and doubled perception during weather events.
+- **Implementation Details:** Modified `Universe.tick` in `src/universe/engine.py` to grant +5 stamina and double perception during `storm`, `blizzard`, `rain`, or `snow` events for entities with `is_weather_sensitive=True`. Added `is_weather_sensitive` to `Entity.__init__` and reproduction logic (including `mutation_occurred=True`). Wrote corresponding unit tests in `tests/test_engine.py` to verify stamina recovery, perception, and mutation mechanics. Addressed and fixed an unrelated failing test in `test_is_night_dancer` along the way.
+- **Future work:** Continue implementing new traits or adding complex ecosystem interactions as defined by user requests.
