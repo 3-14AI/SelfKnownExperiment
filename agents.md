@@ -362,3 +362,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_day_dancer` trait. Entities with this trait gain energy during the day.
 - [x] Implemented `is_night_dancer` trait. Entities with this trait gain energy at night.
 - [x] Implemented `is_moon_dancer` trait. Entities with this trait gain energy at night.
+
+- [x] Implemented `is_cave_dancer` trait. Entities with this trait gain energy when on `cave` terrain.

@@ -16114,3 +16114,51 @@ class TestIsSandDancer(unittest.TestCase):
 
         has_mutated = any(getattr(e, 'is_sand_dancer', False) for e in self.universe.entities if e is not parent)
         self.assertTrue(has_mutated, "Trait is_sand_dancer failed to mutate")
+
+
+class TestIsCaveDancer(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        self.universe = Universe(width=10, height=10)
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.terrains.append(Terrain(x=5, y=5, terrain_type='cave'))
+
+        self.entity = Entity(
+            name="dancer",
+            x=5,
+            y=5,
+            energy=10,
+            stamina=50,
+            is_cave_dancer=True,
+            is_immune=True,
+            is_pacifist=True,
+            is_ageless=True
+        )
+        self.universe.add_entity(self.entity)
+
+    def test_energy_gain_on_cave(self):
+        from src.universe.engine import Entity
+        normal_entity = Entity(
+            name="normal", x=5, y=5, energy=10, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True
+        )
+        self.universe.add_entity(normal_entity)
+
+        self.universe.tick()
+        self.assertGreater(self.entity.energy, normal_entity.energy)
+
+    def test_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="parent", x=1, y=1, energy=100, is_cave_dancer=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        for _ in range(50):
+            self.universe.tick()
+
+        has_mutated = False
+        for e in self.universe.entities:
+            if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_cave_dancer', False) == False:
+                has_mutated = True
+                break
+        self.assertTrue(has_mutated)
