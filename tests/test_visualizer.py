@@ -8,10 +8,18 @@ class TestCLIVisualizer(unittest.TestCase):
         entity = Entity(name="SpringDancer", x=5, y=5, is_spring_dancer=True)
         universe.add_entity(entity)
         visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("✿", output)
+
+    def test_visualize_is_ash_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="AshDancer", x=5, y=5, is_ash_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
 
         output = visualizer.render()
 
-        self.assertIn("✿", output)
+        self.assertIn("E", output)
 
     def test_render_is_lava_dweller(self):
         universe = Universe(10, 10)
