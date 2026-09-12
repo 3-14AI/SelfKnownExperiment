@@ -4704,7 +4704,7 @@ class TestBurrowing(unittest.TestCase):
         self.universe.population_limit = 1000
 
     def test_burrowing_entity_acts_as_shelter(self):
-        entity = Entity("Burrower", x=5, y=5, size=1, energy=50, stamina=0, can_burrow=True, diet='herbivore', preferred_temperature=20, max_stamina=10, temperature_tolerance=50)
+        entity = Entity("Burrower", x=5, y=5, size=1, energy=50, stamina=0, can_burrow=True, diet='herbivore', preferred_temperature=20, max_stamina=10, temperature_tolerance=50, is_immune=True, is_ageless=True, is_pacifist=True)
         entity.is_infected = False
         entity.is_sleeping = True
         entity.energy = 50
@@ -15652,7 +15652,7 @@ class TestIsBlizzardDancer(unittest.TestCase):
         self.universe.disease_chance = 0.0
 
     def test_blizzard_dancer_gains_energy_in_blizzard(self):
-        entity = Entity(name="BlizzardDancer", x=5, y=5, energy=10, is_blizzard_dancer=True)
+        entity = Entity(name="BlizzardDancer", x=5, y=5, energy=10, is_blizzard_dancer=True, size=1, is_immune=True, is_ageless=True, is_pacifist=True)
         self.universe.add_entity(entity)
 
         self.universe.current_event = 'blizzard'
@@ -16332,4 +16332,38 @@ class TestIsIceDancer(unittest.TestCase):
                     break
             if has_mutated:
                 break
+        self.assertTrue(has_mutated)
+
+
+class TestIsMountainDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.disease_chance = 0.0
+
+    def test_mountain_dancer_gains_energy(self):
+        entity = Entity(name="MountainDancer", x=5, y=5, energy=10, size=1, is_mountain_dancer=True, is_immune=True, is_ageless=True, is_pacifist=True, stamina=50, preferred_terrain='mountain')
+        self.universe.add_entity(entity)
+        self.universe.add_terrain(Terrain(x=5, y=5, terrain_type="mountain"))
+
+        old_energy = entity.energy
+        self.universe.tick()
+
+        # Base entity loses 1 energy from living, +5 from dancer = +4 net energy if preferred terrain.
+        self.assertGreater(entity.energy, old_energy)
+
+    def test_mountain_dancer_mutation(self):
+        parent = Entity(name="parent", x=1, y=1, energy=100, is_mountain_dancer=True, size=5)
+        self.universe.add_entity(parent)
+        self.universe.food_spawn_chance = 0.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            for e in self.universe.entities:
+                if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_mountain_dancer', False) == False:
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+
         self.assertTrue(has_mutated)
