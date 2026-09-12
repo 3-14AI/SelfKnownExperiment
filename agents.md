@@ -372,3 +372,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_ash_dancer` trait. Entities with this trait gain energy when on `ash` terrain.
 - [x] Implemented `is_mud_dancer` trait. Entities with this trait gain energy when on `mud` terrain.
 - [x] Implemented `is_ice_dancer` trait. Entities with this trait gain energy when on `ice` terrain.
+- [x] Implemented `is_mountain_dancer` trait. Entities with this trait gain energy when on `mountain` terrain.
