@@ -2032,3 +2032,8 @@ Implemented is_rain_walker trait.
 - **Agent Intent:** Implement the `is_ice_dancer` trait as requested and fix a bug related to `current_temp`.
 - **Implementation Details:** Added the `is_ice_dancer` trait to `Entity.__init__` and its mutation logic in `Universe.tick()`. Implemented energy gain for `is_ice_dancer` entities when on `ice` terrain. Added the `TestIsIceDancer` test suite checking energy gain and mutation chance. Fixed a bug where `current_temp` was referenced before definition when evaluating `is_cold_blooded` in `Universe.tick()`. Updated `agents.md` and `CHANGELOG.md` with the new trait tracking.
 - **Future work:** Continue implementing new traits or adding complex ecosystem interactions as defined by user requests or `agents.md`.
+
+### Analysis 320
+- **Agent Intent:** Implement the missing mutation logic for `is_ice_dancer` trait so that it properly inherits and mutates during reproduction.
+- **Implementation Details:** Added `child_is_ice_dancer = getattr(entity, 'is_ice_dancer', False)` to extract the parent trait. Appended `elif trait_to_mutate == 'is_ice_dancer'` block to toggle the trait during random mutations. Added `is_ice_dancer=child_is_ice_dancer` to the `Entity` reproduction constructor call. Added `test_ice_dancer_energy_gain` and `test_ice_dancer_mutation` to `tests/test_engine.py` to verify functionality.
+- **Future work:** More comprehensive trait-based tests and potentially refactoring the `Entity` constructor.
