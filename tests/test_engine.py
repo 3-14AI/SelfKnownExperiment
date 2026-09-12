@@ -16268,3 +16268,33 @@ class TestIsAshDancer(unittest.TestCase):
             if has_mutated:
                 break
         self.assertTrue(has_mutated)
+
+class TestMudDancerTrait(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+
+    def test_mud_dancer_energy_gain(self):
+        from src.universe.engine import Entity, Terrain
+        e = Entity(name="test", x=1, y=1, energy=10, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_mud_dancer=True, preferred_terrain="mud")
+        self.universe.add_entity(e)
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type="mud"))
+        self.universe.tick()
+        self.assertEqual(e.energy, 15)
+
+    def test_mud_dancer_mutates(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="parent", x=1, y=1, energy=100, is_mud_dancer=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            for e in self.universe.entities:
+                if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_mud_dancer', False) == False:
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+        self.assertTrue(has_mutated)
