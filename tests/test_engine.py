@@ -16298,3 +16298,36 @@ class TestMudDancerTrait(unittest.TestCase):
             if has_mutated:
                 break
         self.assertTrue(has_mutated)
+
+class TestIsIceDancer(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+
+    def test_ice_dancer_energy_gain(self):
+        from src.universe.engine import Entity, Terrain, TemperatureZone
+        e = Entity(name="test", x=1, y=1, energy=10, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_ice_dancer=True, preferred_terrain="ice", preferred_temperature=0, temperature_tolerance=20)
+        self.universe.add_entity(e)
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type="ice"))
+        # Add temperature zone to prevent ice from melting
+        self.universe.add_temperature_zone(TemperatureZone(x=1, y=1, radius=5, temperature_modifier=-30))
+
+        self.universe.tick()
+        self.assertEqual(e.energy, 15)
+
+    def test_ice_dancer_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="parent", x=1, y=1, energy=100, is_ice_dancer=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            for e in self.universe.entities:
+                if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_ice_dancer', False) == False:
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+        self.assertTrue(has_mutated)
