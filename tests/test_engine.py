@@ -8647,6 +8647,31 @@ class TestIsWinterDwellerTrait(unittest.TestCase):
             self.assertTrue(any(getattr(child, 'is_winter_dweller', False) for child in children), "is_winter_dweller should be capable of mutating in children")
 
 
+
+    def test_is_sandstorm_dweller(self):
+        universe = Universe(width=5, height=5)
+        universe.current_event = 'sandstorm'
+        universe.event_remaining_time = 10
+        entity = Entity(name="Sandstorm Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_sandstorm_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40)
+        universe.add_entity(entity)
+        universe.tick()
+
+        self.assertGreaterEqual(entity.energy, 30, "is_sandstorm_dweller should recover energy during a sandstorm")
+
+    def test_is_sandstorm_dweller_mutation(self):
+        import random
+        random.seed(42)
+        universe = Universe(width=5, height=5, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_sandstorm_dweller=False)
+        universe.add_entity(parent)
+
+        has_mutated = False
+        for _ in range(500):
+            parent.energy = 100
+            universe.tick()
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) >= 1]
+        self.assertTrue(any(getattr(child, 'is_sandstorm_dweller', False) for child in children), "is_sandstorm_dweller should be capable of mutating in children")
+
     def test_is_drought_dweller(self):
         universe = Universe(width=5, height=5)
         universe.current_event = 'drought'

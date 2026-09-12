@@ -179,6 +179,8 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_ageless` trait. Entities with this trait do not die when their age exceeds their max_age.
 
 - [x] Implemented `is_drought_dweller` trait. Entities with this trait treat a `drought` event as a shelter, gaining energy recovery and defense.
+- [x] Implemented `is_sandstorm_dweller` trait. Entities with this trait treat a `sandstorm` event as a shelter, gaining energy recovery and defense.
+
 - [x] Implemented `is_earthquake_dweller` trait. Entities with this trait treat an `earthquake` event as a shelter, gaining energy recovery and defense.
 - [x] Implemented `is_volcanic_dweller` trait. Entities with this trait treat a `volcano` event as a shelter, gaining energy recovery and defense.
 - [x] Implemented `is_fire_dweller` trait. Entities with this trait treat a `fire` event as a shelter, gaining energy recovery and defense, and are immune to fire damage.

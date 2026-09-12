@@ -497,6 +497,8 @@ class CLIVisualizer:
                         char = 'Ĳ'
                     elif getattr(entity, 'is_winter_walker', False):
                         char = 'ĳ'
+                    elif getattr(entity, 'is_sandstorm_dweller', False):
+                        char = 'ş'
                     elif getattr(entity, 'is_water_dancer', False):
                         char = 'Ĵ'
                     else:

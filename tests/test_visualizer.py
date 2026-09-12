@@ -1359,6 +1359,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('ĉ', output)
 
+
+    def test_visualize_is_sandstorm_dweller(self):
+        universe = Universe(width=5, height=5)
+        entity = Entity("Sandstorm Dweller", x=2, y=2, is_sandstorm_dweller=True, energy=20)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('ş', output.lower() + output.upper())
+
     def test_visualize_is_drought_dweller(self):
         universe = Universe(10, 10)
         visualizer = CLIVisualizer(universe)
