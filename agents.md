@@ -368,3 +368,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_water_dancer` trait. Entities with this trait gain energy when on `water` terrain.
 
 - [x] Implemented `is_forest_dancer` trait. Entities with this trait gain energy when on `forest` terrain.
+- [x] Implemented `is_ash_dancer` trait. Entities with this trait gain energy when on `ash` terrain.
