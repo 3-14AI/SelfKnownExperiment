@@ -485,3 +485,6 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_ash_dancer` trait. Entities with this trait gain energy when on `ash` terrain.
 
 - Implemented `is_mud_dancer` trait. Entities with this trait gain energy when on `mud` terrain.
+
+## Next Steps
+- [x] Implemented `is_deep_water_dancer` trait. Entities with this trait gain energy when on `deep-water` terrain.
