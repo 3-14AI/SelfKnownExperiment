@@ -16490,3 +16490,32 @@ class TestWallDancer(unittest.TestCase):
                 break
 
         self.assertTrue(has_mutated)
+class TestWebDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_web_dancer_energy_gain(self):
+        # Add web terrain
+        self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='web'))
+        # Add entity with is_web_dancer
+        entity = Entity(name="WebDancer", x=5, y=5, energy=10, is_web_dancer=True, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, size=1, preferred_terrain='web')
+        self.universe.add_entity(entity)
+
+        self.universe.tick()
+
+        # Energy should increase by 5 (web dancer gain)
+        self.assertEqual(entity.energy, 15)
+
+    def test_web_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_web_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0 # Guarantee mutation
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_web_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_web_dancer failed to mutate")
