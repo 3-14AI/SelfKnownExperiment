@@ -487,6 +487,7 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_mud_dancer` trait. Entities with this trait gain energy when on `mud` terrain.
 
 ## Next Steps
+- [x] Implemented `is_wind_dancer` and `is_plains_dweller` traits, updated testing stability and inheritance logic.
 - [x] Implemented `is_deep_water_dancer` trait. Entities with this trait gain energy when on `deep-water` terrain.
 
 - Implemented `is_lava_dancer` trait. Entities with this trait gain energy when on `lava` terrain.

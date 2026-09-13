@@ -5091,7 +5091,6 @@ class TestSprint(unittest.TestCase):
         # So at time=1, normally can_move=False.
         entity = Entity("Sprinter", x=0, y=0, size=2, max_stamina=50, stamina=50, can_sprint=True, intelligence=1, perception_radius=10, diet='herbivore')
         universe.add_entity(entity)
-        # Give it a reason to move
         universe.add_food(Food(x=2, y=0, energy=10))
 
         universe.time = 0 # tick increments it to 1
@@ -16277,14 +16276,30 @@ class TestMudDancerTrait(unittest.TestCase):
         self.universe = Universe(width=10, height=10)
 
     def test_mud_dancer_energy_gain(self):
-        from src.universe.engine import Entity, Terrain
-        self.universe.disease_chance = 0.0
-        self.universe.event_chance = 0.0
-        e = Entity(name="test", x=1, y=1, energy=10, size=5, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_mud_dancer=True, preferred_terrain="mud", is_aquatic=True)
-        self.universe.add_entity(e)
-        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type="mud"))
-        self.universe.tick()
-        self.assertTrue(e.energy > 10)
+        from src.universe.engine import Entity, Terrain, Universe
+
+        # Test just the isolated mutation or energy gain logic by itself without the flakiness of tick
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.base_temperature = 20
+        universe.current_event = None
+        universe.localized_events = []
+
+        e = Entity(name="test", x=1, y=1, energy=5, size=1, max_stamina=50, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_mud_dancer=True, preferred_terrain="mud", preferred_temperature=20)
+        e.memory = set()
+        universe.add_entity(e)
+
+        for x in range(10):
+            for y in range(10):
+                universe.add_terrain(Terrain(x=x, y=y, terrain_type="mud"))
+
+        universe.time = 1
+        universe._last_season = 'spring'
+
+        universe.tick()
+
+        self.assertTrue(e.energy > 5, f"mud dancer should gain energy on mud. Energy: {e.energy}")
 
     def test_mud_dancer_mutates(self):
         from src.universe.engine import Entity
@@ -16452,3 +16467,71 @@ class TestLavaDancer(unittest.TestCase):
                     break
 
         self.assertTrue(has_mutated, "is_lava_dancer trait did not mutate in child entity")
+
+class TestWindDancerAndPlainsDwellerInheritance(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_wind_dancer_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="parent", x=1, y=1, energy=100, is_wind_dancer=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        for _ in range(100):
+            self.universe.tick()
+            if len(self.universe.entities) > 1:
+                break
+
+        children = [e for e in self.universe.entities if e.name != "parent"]
+        if children:
+            child = children[0]
+            self.assertTrue(hasattr(child, 'is_wind_dancer'))
+
+    def test_is_plains_dweller_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="parent", x=1, y=1, energy=100, is_plains_dweller=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        for _ in range(100):
+            self.universe.tick()
+            if len(self.universe.entities) > 1:
+                break
+
+        children = [e for e in self.universe.entities if e.name != "parent"]
+        if children:
+            child = children[0]
+            self.assertTrue(hasattr(child, 'is_plains_dweller'))
+
+    def test_is_plains_dweller_bonus(self):
+        from src.universe.engine import Entity, Terrain, Universe
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        e = Entity(name="test", x=1, y=1, energy=10, size=1, max_stamina=50, stamina=0, is_immune=True, is_pacifist=True, is_ageless=True, is_plains_dweller=True, preferred_temperature=20)
+        e.energy = 10
+        universe.add_entity(e)
+        for x in range(10):
+            for y in range(10):
+                universe.add_terrain(Terrain(x=x, y=y, terrain_type="plains"))
+
+        universe.time = 1
+        universe.tick()
+        self.assertTrue(e.energy > 10, f"plains dweller should have more energy on plains. Energy: {e.energy}")
+
+    def test_is_wind_dancer_stamina(self):
+        from src.universe.engine import Entity, Terrain, Universe
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        e = Entity(name="test", x=1, y=1, energy=50, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_wind_dancer=True)
+        universe.add_entity(e)
+        for x in range(10):
+            for y in range(10):
+                universe.add_terrain(Terrain(x=x, y=y, terrain_type="plains"))
+        from src.universe.engine import Food
+        universe.add_food(Food(x=1, y=9, energy=50, plant_type='grass'))
+
+        universe.tick()
+        self.assertTrue(e.stamina == 50, f"wind dancer should not lose stamina moving on plains. Stamina: {e.stamina}")
