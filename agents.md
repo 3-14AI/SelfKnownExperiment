@@ -160,6 +160,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Implemented `is_shelter_dancer` trait. Entities with this trait gain energy when on `shelter` terrain.
 - [x] Implemented `is_web_dancer` trait. Entities with this trait gain energy when on `web` terrain.
 - [x] Implemented `is_lava_dancer` trait. Entities with this trait gain energy when on `lava` terrain.
 - [x] Fixed `is_ice_dancer` missing mutation logic and added missing tests.
