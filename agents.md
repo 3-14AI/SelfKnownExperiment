@@ -381,3 +381,4 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_wall_dancer` trait. Entities with this trait gain energy when on `wall` terrain.
 - [x] Implemented `is_wind_dancer` trait. Entities with this trait gain energy when inside a `storm` event.
+- [x] Fixed `is_snow_dancer` missing mutation logic.
