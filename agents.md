@@ -380,3 +380,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_deep_water_dancer` trait. Entities with this trait gain energy when on `deep-water` terrain.
 
 - [x] Implemented `is_wall_dancer` trait. Entities with this trait gain energy when on `wall` terrain.
+- [x] Implemented `is_wind_dancer` trait. Entities with this trait gain energy when inside a `storm` event.

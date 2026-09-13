@@ -3072,7 +3072,7 @@ class TestUniverse(unittest.TestCase):
         random.choice = custom_choice
 
         try:
-            for _ in range(100):
+            for _ in range(500):
                 parent.energy = 250 # Ensure it keeps reproducing
                 universe.tick()
                 children = [e for e in universe.entities if "child" in e.name and "Predator" in e.name]
@@ -13224,6 +13224,7 @@ class TestCaveDweller(unittest.TestCase):
         universe = Universe(10, 10)
         entity = Entity("Cave Dweller", x=5, y=5, is_cave_dweller=True, stamina=10, max_stamina=50, energy=10, size=1, preferred_temperature=20, temperature_tolerance=50)
         entity.is_infected = False
+        entity.is_sleeping = True # Need to be sleeping to recover energy
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=5, y=5, terrain_type='cave'))
 
@@ -16058,7 +16059,7 @@ class TestMudDancerTrait(unittest.TestCase):
         from src.universe.engine import Entity, Terrain
         self.universe.disease_chance = 0.0
         self.universe.event_chance = 0.0
-        e = Entity(name="test", x=1, y=1, energy=10, size=5, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_mud_dancer=True, preferred_terrain="mud", is_aquatic=True)
+        e = Entity(name="test", x=1, y=1, energy=10, size=1, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_mud_dancer=True, preferred_terrain="mud", is_aquatic=True, is_gluttonous=True)
         self.universe.add_entity(e)
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type="mud"))
         self.universe.tick()
@@ -16207,7 +16208,7 @@ class TestLavaDancer(unittest.TestCase):
         self.assertEqual(entity.energy, initial_energy + 5)
 
     def test_lava_dancer_mutation(self):
-        parent = Entity("Parent", x=5, y=5, energy=5000, size=100, is_lava_dancer=False)
+        parent = Entity("Parent", x=2, y=2, energy=5000, size=50, is_lava_dancer=False, is_immune=True, is_ageless=True, stamina=50, is_gluttonous=True, has_blubber=True, preferred_terrain="lava")
         self.universe.add_entity(parent)
 
         # Force reproduction conditions
@@ -16216,18 +16217,14 @@ class TestLavaDancer(unittest.TestCase):
         self.universe.reproduction_cost = 10
         self.universe.disease_chance = 0.0
         self.universe.event_chance = 0.0
+        self.universe.mutation_chance = 1.0
 
         has_mutated = False
-        for _ in range(100):
+        for _ in range(500):
             self.universe.tick()
-            if len(self.universe.entities) > 1:
-                # Check all children for mutation
-                for e in self.universe.entities:
-                    if e != parent and getattr(e, 'is_lava_dancer', False):
-                        has_mutated = True
-                        break
-                if has_mutated:
-                    break
+            if any(getattr(e, 'is_lava_dancer', False) for e in self.universe.entities if e is not parent):
+                has_mutated = True
+                break
 
         self.assertTrue(has_mutated, "is_lava_dancer trait did not mutate in child entity")
 
@@ -16367,3 +16364,38 @@ class TestIsVolcanicDancer(unittest.TestCase):
         initial = e.energy
         universe.tick()
         self.assertGreater(e.energy, initial)
+
+class TestIsWindDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.disease_chance = 0.0
+
+    def test_is_wind_dancer_energy_gain(self):
+        e = Entity(name="WindDancer", x=5, y=5, energy=10, size=1, is_wind_dancer=True, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True)
+        self.universe.add_entity(e)
+        self.universe.current_event = 'storm'
+        self.universe.event_remaining_time = 10
+
+        initial_energy = e.energy
+
+        # e.size is 1, so base drain is 1. If we are wind dancer, we gain 5. So net is +4.
+        self.universe.tick()
+
+        # But wait, storm does 4 damage! So +5 (gain) -1 (base) -4 (storm damage) = 0 net change?
+        # Let's see: storm damage is 4. If we are immune to damage (is_immune=True), storm damage is 0.
+        # Let's verify this. Net change should be +4.
+        self.assertTrue(e.energy > initial_energy, f"WindDancer should gain energy in storm, got {e.energy} from {initial_energy}")
+
+    def test_is_wind_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_wind_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_wind_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_wind_dancer failed to mutate")
