@@ -16278,7 +16278,9 @@ class TestMudDancerTrait(unittest.TestCase):
 
     def test_mud_dancer_energy_gain(self):
         from src.universe.engine import Entity, Terrain
-        e = Entity(name="test", x=1, y=1, energy=10, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_mud_dancer=True, preferred_terrain="mud")
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        e = Entity(name="test", x=1, y=1, energy=10, size=5, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_mud_dancer=True, preferred_terrain="mud", is_aquatic=True)
         self.universe.add_entity(e)
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type="mud"))
         self.universe.tick()
@@ -16376,15 +16378,15 @@ class TestDeepWaterDancer(unittest.TestCase):
 
     def test_deep_water_dancer_gains_energy(self):
         self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='deep-water'))
-
-        entity = Entity(name="Test", x=5, y=5, energy=10, size=5, is_deep_water_dancer=True, preferred_terrain='deep-water', is_immune=True, stamina=50, is_pacifist=True, is_ageless=True)
+        entity = Entity(name="Test", x=5, y=5, energy=10, size=5, is_deep_water_dancer=True, preferred_terrain='deep-water', is_immune=True, stamina=50, is_pacifist=True, is_ageless=True, is_aquatic=True)
         self.universe.add_entity(entity)
 
-        self.universe.tick()
-
-        non_dancer = Entity(name="Test2", x=5, y=6, energy=10, size=5, is_deep_water_dancer=False, preferred_terrain='deep-water', is_immune=True, stamina=50, is_pacifist=True, is_ageless=True)
         self.universe.add_terrain(Terrain(x=5, y=6, terrain_type='deep-water'))
+        non_dancer = Entity(name="Test2", x=5, y=6, energy=10, size=5, is_deep_water_dancer=False, preferred_terrain='deep-water', is_immune=True, stamina=50, is_pacifist=True, is_ageless=True, is_aquatic=True)
         self.universe.add_entity(non_dancer)
+
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
 
         self.universe.tick()
 
@@ -16403,3 +16405,50 @@ class TestDeepWaterDancer(unittest.TestCase):
                 break
 
         self.assertTrue(has_mutated, "Trait is_deep_water_dancer failed to mutate")
+
+
+class TestLavaDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='lava'))
+
+    def test_lava_dancer_energy_gain(self):
+        # Initialize entity with less than max energy
+        entity = Entity("Dancer", x=2, y=2, energy=10, size=1, preferred_terrain='lava', is_immune=True, is_pacifist=True, is_ageless=True, stamina=50)
+        entity.is_lava_dancer = True
+        self.universe.add_entity(entity)
+
+        initial_energy = entity.energy
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+
+        self.universe.tick()
+
+        # Base energy loss from size is 1, preferred_terrain makes it 0.
+        # With dancer, it gains 5, so it should be initial + 5.
+        self.assertEqual(entity.energy, initial_energy + 5)
+
+    def test_lava_dancer_mutation(self):
+        parent = Entity("Parent", x=5, y=5, energy=5000, size=100, is_lava_dancer=False)
+        self.universe.add_entity(parent)
+
+        # Force reproduction conditions
+        parent.age = 5
+        self.universe.reproduction_threshold = 50
+        self.universe.reproduction_cost = 10
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+
+        has_mutated = False
+        for _ in range(100):
+            self.universe.tick()
+            if len(self.universe.entities) > 1:
+                # Check all children for mutation
+                for e in self.universe.entities:
+                    if e != parent and getattr(e, 'is_lava_dancer', False):
+                        has_mutated = True
+                        break
+                if has_mutated:
+                    break
+
+        self.assertTrue(has_mutated, "is_lava_dancer trait did not mutate in child entity")
