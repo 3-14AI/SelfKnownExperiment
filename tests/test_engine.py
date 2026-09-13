@@ -16452,3 +16452,41 @@ class TestLavaDancer(unittest.TestCase):
                     break
 
         self.assertTrue(has_mutated, "is_lava_dancer trait did not mutate in child entity")
+
+
+class TestWallDancer(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        self.universe = Universe(width=10, height=10)
+        self.entity = Entity(name="wall_dancer", x=2, y=2, size=1, is_wall_dancer=True, preferred_terrain='wall')
+        self.universe.add_entity(self.entity)
+        self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='wall'))
+
+    def test_energy_gain_on_wall(self):
+        self.entity.energy = 5
+        initial_energy = self.entity.energy
+        self.entity.stamina = 50
+        self.entity.is_immune = True
+        self.entity.is_pacifist = True
+        self.entity.is_ageless = True
+
+        self.universe.tick()
+        self.assertTrue(self.entity.energy > initial_energy)
+
+    def test_wall_dancer_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="parent", x=1, y=1, energy=100, is_wall_dancer=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            for e in self.universe.entities:
+                if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_wall_dancer', False) == False:
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated)
