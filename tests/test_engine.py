@@ -16179,6 +16179,7 @@ class TestDeepWaterDancer(unittest.TestCase):
         has_mutated = False
         for _ in range(50):
             self.universe.tick()
+            parent.energy = 5000
             if any(getattr(e, 'is_deep_water_dancer', False) for e in self.universe.entities if e is not parent):
                 has_mutated = True
                 break
@@ -16222,6 +16223,7 @@ class TestLavaDancer(unittest.TestCase):
         has_mutated = False
         for _ in range(500):
             self.universe.tick()
+            parent.energy = 5000
             if any(getattr(e, 'is_lava_dancer', False) for e in self.universe.entities if e is not parent):
                 has_mutated = True
                 break
