@@ -382,3 +382,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_wall_dancer` trait. Entities with this trait gain energy when on `wall` terrain.
 - [x] Implemented `is_wind_dancer` trait. Entities with this trait gain energy when inside a `storm` event.
 - [x] Fixed `is_snow_dancer` missing mutation logic.
+- [x] Implemented `is_shelter_dweller` trait. Entities with this trait treat `shelter` terrain as a shelter, gaining increased defense and energy recovery.
+- [x] Implemented `is_sand_dancer` trait. Entities with this trait gain energy when they are inside a sandstorm event or standing on sand during a storm.

@@ -16172,7 +16172,7 @@ class TestDeepWaterDancer(unittest.TestCase):
         self.assertTrue(entity.energy > non_dancer.energy, f"Deep water dancer energy {entity.energy} should be > {non_dancer.energy}")
 
     def test_deep_water_dancer_mutates(self):
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_deep_water_dancer=False)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_gluttonous=True, has_blubber=True, is_deep_water_dancer=False)
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0 # Force mutation
 
