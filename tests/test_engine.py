@@ -16403,11 +16403,13 @@ class TestStunDancer(unittest.TestCase):
     def test_stun_dancer_energy_gain(self):
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.reproduction_threshold = 500
 
         entity = Entity(
             name="StunDancerEntity",
             x=5, y=5,
-            size=1,  # max_energy 50
+            size=1,
             is_stun_dancer=True,
             is_immune=True,
             is_pacifist=True,
@@ -16453,3 +16455,63 @@ class TestStunDancer(unittest.TestCase):
                     universe.entities.remove(entity)
 
         self.assertTrue(has_mutated)
+
+class TestPoisonDancerTrait(unittest.TestCase):
+    def test_poison_dancer_energy_gain(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.reproduction_threshold = 500
+
+        entity = Entity(
+            name="PoisonDancer",
+            x=5, y=5,
+            size=1,  # max_energy 50
+            is_poison_dancer=True,
+            is_immune=True,
+            is_pacifist=True,
+            is_ageless=True,
+            preferred_terrain='sand'
+        )
+        entity.stamina = 50
+        entity.energy = 20
+        entity.poisoned_time = 2
+
+        universe.add_entity(entity)
+        universe.add_terrain(Terrain(x=5, y=5, terrain_type='sand'))
+
+        universe.tick()
+
+        # Energy should have gone up from 20 to 24 (since being poisoned takes 1 base energy loss first)
+        self.assertEqual(entity.energy, 24)
+
+    def test_poison_dancer_mutation(self):
+        universe = Universe(width=10, height=10)
+
+        parent = Entity(
+            name="Parent",
+            x=5, y=5,
+            size=1,
+            is_gluttonous=True,
+            has_blubber=True,
+            is_poison_dancer=False
+        )
+        parent.energy = 500
+        universe.add_entity(parent)
+
+        has_mutated = False
+        for _ in range(150):
+            universe.tick()
+            for entity in universe.entities:
+                if getattr(entity, 'is_poison_dancer', False):
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+
+            parent.energy = 500
+            if len(universe.entities) > 50:
+                for entity in list(universe.entities)[50:]:
+                    universe.entities.remove(entity)
+
+        self.assertTrue(has_mutated, "The is_poison_dancer trait should mutate over time.")
