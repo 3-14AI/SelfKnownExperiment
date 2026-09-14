@@ -2070,3 +2070,7 @@ Implemented is_rain_walker trait.
 - **Agent Intent:** Implement the `is_shelter_dancer` trait, enabling entities to regain energy while on `shelter` terrain. Fix tests.
 - **Implementation Details:** Added `is_shelter_dancer` to `Entity.__init__`, added mutation logic in `Universe.tick()`, and updated energy gain for the entity. Added test case for `TestIsShelterDancerTrait`. Fixed several flaky tests.
 - **Future work:** More terrain types for `dancer` traits.
+
+### Analysis 321: Stun Dancer Trait
+**Overview:** Implemented the `is_stun_dancer` trait for entities.
+**Details:** Entities with this trait gain energy when they are stunned. This turns a usually detrimental status effect into a beneficial one, allowing entities to recover energy instead of just being incapacitated.
