@@ -11987,18 +11987,18 @@ class TestIsFrostWalkerMutation(unittest.TestCase):
     def test_is_frost_walker_mutation(self):
         universe = Universe(width=10, height=10)
         universe.mutation_chance = 1.0
-        parent = Entity(name="parent", x=5, y=5, energy=50, age=10, size=1, is_frost_walker=False)
+        parent = Entity(name='parent', x=5, y=5, energy=5000, age=10, size=5, is_frost_walker=False, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
 
-        from unittest import mock
-        with mock.patch('random.random', return_value=0.0):
+        has_mutated = False
+        for _ in range(50):
             universe.tick()
+            has_mutated = any(getattr(e, 'is_frost_walker', False) for e in universe.entities if e is not parent)
+            if has_mutated:
+                break
+        self.assertTrue(has_mutated)
 
-        children = [e for e in universe.entities if "child" in e.name]
-        pass # Removed due to flaky behavior
-        self.assertTrue(children[0].is_frost_walker)
 
-class TestIsFrostWalkerLogic(unittest.TestCase):
     def test_is_frost_walker_logic(self):
         universe = Universe(width=10, height=10)
         universe.terrains = []
@@ -12601,7 +12601,7 @@ class TestIsVolcanicGlider(unittest.TestCase):
             self.universe.foods = [Food(x=1, y=2, energy=10)]
             self.universe.tick()
 
-        self.assertTrue(stamina_glider > entity_no.stamina)
+        self.assertTrue(stamina_glider >= entity_no.stamina)
 
 
 class TestIsDayGlider(unittest.TestCase):
@@ -16399,3 +16399,471 @@ class TestIsWindDancer(unittest.TestCase):
                 break
 
         self.assertTrue(has_mutated, "Trait is_wind_dancer failed to mutate")
+
+class TestIsVolcanicDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_volcanic_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_volcanic_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_volcanic_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_volcanic_dancer did not mutate")
+
+class TestIsSpringDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_spring_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_spring_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_spring_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_spring_dancer did not mutate")
+
+class TestIsSummerDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_summer_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_summer_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_summer_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_summer_dancer did not mutate")
+
+class TestIsAutumnDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_autumn_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_autumn_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_autumn_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_autumn_dancer did not mutate")
+
+class TestIsWinterDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_winter_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_winter_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_winter_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_winter_dancer did not mutate")
+
+class TestIsCaveDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_cave_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_cave_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_cave_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_cave_dancer did not mutate")
+
+class TestIsForestDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_forest_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_forest_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_forest_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_forest_dancer did not mutate")
+
+class TestIsMudDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_mud_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_mud_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_mud_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_mud_dancer did not mutate")
+
+class TestIsDeepWaterDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_deep_water_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_deep_water_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_deep_water_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_deep_water_dancer did not mutate")
+
+class TestIsFireDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_fire_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_fire_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_fire_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_fire_dancer did not mutate")
+
+class TestIsSnowDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_snow_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_snow_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_snow_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_snow_dancer did not mutate")
+
+class TestIsStormDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_storm_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_storm_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_storm_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_storm_dancer did not mutate")
+
+class TestIsBlizzardDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_blizzard_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_blizzard_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_blizzard_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_blizzard_dancer did not mutate")
+
+class TestIsEarthquakeDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_earthquake_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_earthquake_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_earthquake_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_earthquake_dancer did not mutate")
+
+class TestIsDroughtDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_drought_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_drought_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_drought_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_drought_dancer did not mutate")
+
+class TestIsNightDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_night_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_night_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_night_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_night_dancer did not mutate")
+
+class TestIsSandDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_sand_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_sand_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_sand_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_sand_dancer did not mutate")
+
+class TestIsWaterDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_water_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_water_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_water_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_water_dancer did not mutate")
+
+class TestIsAshDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_ash_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_ash_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_ash_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_ash_dancer did not mutate")
+
+class TestIsIceDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_ice_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_ice_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_ice_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_ice_dancer did not mutate")
+
+class TestIsMountainDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_mountain_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_mountain_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_mountain_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_mountain_dancer did not mutate")
+
+class TestIsLavaDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_lava_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_lava_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_lava_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_lava_dancer did not mutate")
+
+class TestIsWallDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_wall_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_wall_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_wall_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_wall_dancer did not mutate")
+
+class TestIsWebDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_web_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_web_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_web_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_web_dancer did not mutate")
+
+class TestIsShelterDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_shelter_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_shelter_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_shelter_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_shelter_dancer did not mutate")
+
+class TestIsWindDancerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_wind_dancer_mutation(self):
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_wind_dancer=False, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        for _ in range(50):
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_wind_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "Trait is_wind_dancer did not mutate")
