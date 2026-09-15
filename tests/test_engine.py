@@ -16653,3 +16653,38 @@ class TestIsSleepDancer(unittest.TestCase):
                 break
 
         self.assertTrue(has_mutated, "The is_sleep_dancer trait should mutate over time.")
+
+class TestIsGrassDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_grass_dancer_energy_gain(self):
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='grass'))
+        self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='grass'))
+        entity = Entity(name="Grass Dancer", x=1, y=1, energy=10, max_stamina=50, stamina=50, size=1, is_grass_dancer=True, is_immune=True, is_pacifist=True, is_ageless=True, preferred_terrain='grass')
+        control = Entity(name="Control", x=2, y=2, energy=10, max_stamina=50, stamina=50, size=1, is_grass_dancer=False, is_immune=True, is_pacifist=True, is_ageless=True, preferred_terrain='grass')
+        self.universe.add_entity(entity)
+        self.universe.add_entity(control)
+
+        self.universe.tick()
+
+        self.assertGreaterEqual(entity.energy, 15, "is_grass_dancer should gain energy on grass")
+        self.assertEqual(control.energy, 10, "Control should not gain extra energy")
+
+    def test_grass_dancer_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, max_age=50, age=10, size=50, is_grass_dancer=False, is_immune=True, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, preferred_terrain='grass')
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+
+        has_mutated = False
+        for _ in range(100):
+            parent.energy = 5000
+            self.universe.foods = []
+            self.universe.tick()
+            if any(getattr(e, 'is_grass_dancer', False) for e in self.universe.entities if e is not parent):
+                has_mutated = True
+                break
+
+        self.assertTrue(has_mutated, "is_grass_dancer failed to mutate")
