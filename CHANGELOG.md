@@ -1,4 +1,5 @@
 ### New Features
+- [x] Implemented `is_grass_dancer` trait. Entities with this trait gain energy when on `grass` terrain.
 - Implemented `is_disease_dancer` trait. Entities with this trait gain energy when infected.
 - Implemented `is_shelter_dweller` trait. Entities with this trait treat `shelter` terrain as a shelter, gaining increased defense and energy recovery.
 - Fixed `is_snow_dancer` missing mutation logic.
