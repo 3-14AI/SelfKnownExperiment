@@ -16550,10 +16550,13 @@ class TestDiseaseDancerTrait(unittest.TestCase):
             is_vampiric=False,
             is_disease_dancer=False,
             is_gluttonous=True,
-            has_blubber=True
+            has_blubber=True,
+            preferred_terrain='grass'
         )
         self.universe.add_entity(parent)
         self.universe.reproduction_threshold = 500
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
 
         has_mutated = False
         for _ in range(100):
