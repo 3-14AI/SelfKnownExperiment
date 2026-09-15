@@ -499,6 +499,60 @@ class CLIVisualizer:
                         char = 'ĳ'
                     elif getattr(entity, 'is_water_dancer', False):
                         char = 'Ĵ'
+                    elif getattr(entity, 'is_ash_dancer', False):
+                        char = 'ķ'
+                    elif getattr(entity, 'is_autumn_dancer', False):
+                        char = 'ĸ'
+                    elif getattr(entity, 'is_cave_dancer', False):
+                        char = 'Ĺ'
+                    elif getattr(entity, 'is_day_dancer', False):
+                        char = 'ĺ'
+                    elif getattr(entity, 'is_deep_water_dancer', False):
+                        char = 'Ļ'
+                    elif getattr(entity, 'is_drought_dancer', False):
+                        char = 'ļ'
+                    elif getattr(entity, 'is_earthquake_dancer', False):
+                        char = 'Ľ'
+                    elif getattr(entity, 'is_forest_dancer', False):
+                        char = 'ľ'
+                    elif getattr(entity, 'is_ice_dancer', False):
+                        char = 'Ŀ'
+                    elif getattr(entity, 'is_lava_dancer', False):
+                        char = 'ŀ'
+                    elif getattr(entity, 'is_marsh_strider', False):
+                        char = 'Ł'
+                    elif getattr(entity, 'is_moon_dancer', False):
+                        char = 'ł'
+                    elif getattr(entity, 'is_mountain_dancer', False):
+                        char = 'Ń'
+                    elif getattr(entity, 'is_mud_dancer', False):
+                        char = 'ń'
+                    elif getattr(entity, 'is_night_dancer', False):
+                        char = 'Ņ'
+                    elif getattr(entity, 'is_poison_dancer', False):
+                        char = 'ņ'
+                    elif getattr(entity, 'is_rain_dancer', False):
+                        char = 'Ň'
+                    elif getattr(entity, 'is_sand_dancer', False):
+                        char = 'ň'
+                    elif getattr(entity, 'is_shelter_dancer', False):
+                        char = 'ŉ'
+                    elif getattr(entity, 'is_stun_dancer', False):
+                        char = 'Ŋ'
+                    elif getattr(entity, 'is_summer_dancer', False):
+                        char = 'ŋ'
+                    elif getattr(entity, 'is_volcanic_dancer', False):
+                        char = 'Ō'
+                    elif getattr(entity, 'is_wall_dancer', False):
+                        char = 'ō'
+                    elif getattr(entity, 'is_water_strider', False):
+                        char = 'Ŏ'
+                    elif getattr(entity, 'is_web_dancer', False):
+                        char = 'ŏ'
+                    elif getattr(entity, 'is_wind_dancer', False):
+                        char = 'Ő'
+                    elif getattr(entity, 'is_winter_dancer', False):
+                        char = 'ő'
                     else:
                         char = 'E'
 
