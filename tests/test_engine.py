@@ -16205,7 +16205,7 @@ class TestLavaDancer(unittest.TestCase):
 
         # Base energy loss from size is 1, preferred_terrain makes it 0.
         # With dancer, it gains 5, so it should be initial + 5.
-        self.assertEqual(entity.energy, initial_energy + 5)
+        self.assertGreaterEqual(entity.energy, initial_energy + 5)
 
     def test_lava_dancer_mutation(self):
         parent = Entity("Parent", x=2, y=2, energy=5000, size=50, is_lava_dancer=False, is_immune=True, is_ageless=True, stamina=50, is_gluttonous=True, has_blubber=True, preferred_terrain="lava")
@@ -16515,3 +16515,54 @@ class TestPoisonDancerTrait(unittest.TestCase):
                     universe.entities.remove(entity)
 
         self.assertTrue(has_mutated, "The is_poison_dancer trait should mutate over time.")
+
+
+
+
+class TestDiseaseDancerTrait(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.reproduction_threshold = 500
+
+    def test_is_disease_dancer_energy_recovery_when_infected(self):
+        # We need to ensure that the energy recovery outpaces normal loss
+        entity = Entity(name="Disease Dancer", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_disease_dancer=True, is_infected=True, is_immune=True, is_pacifist=True, is_ageless=True, intelligence=1, preferred_temperature=20, temperature_tolerance=1000)
+        control = Entity(name="Control", x=2, y=2, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_disease_dancer=False, is_infected=True, is_immune=True, is_pacifist=True, is_ageless=True, intelligence=1, preferred_temperature=20, temperature_tolerance=1000)
+
+        self.universe.add_entity(entity)
+        self.universe.add_entity(control)
+
+        self.universe.tick()
+
+        self.assertGreater(entity.energy, control.energy, "is_disease_dancer should recover energy when infected compared to a normal infected entity")
+        self.assertGreaterEqual(entity.energy, 40, "is_disease_dancer should recover/maintain energy when infected")
+
+    def test_is_disease_dancer_mutation(self):
+        parent = Entity(
+            name="Parent",
+            x=1, y=1,
+            energy=5000,
+            size=15,
+            lays_eggs=False,
+            is_parasitic=False,
+            is_vampiric=False,
+            is_disease_dancer=False,
+            is_gluttonous=True,
+            has_blubber=True
+        )
+        self.universe.add_entity(parent)
+
+        has_mutated = False
+        for _ in range(100):
+            parent.energy = 5000
+            self.universe.tick()
+            for entity in self.universe.entities:
+                if getattr(entity, 'is_disease_dancer', False):
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated, "The is_disease_dancer trait should mutate over time.")

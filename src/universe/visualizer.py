@@ -553,6 +553,8 @@ class CLIVisualizer:
                         char = 'Ő'
                     elif getattr(entity, 'is_winter_dancer', False):
                         char = 'ő'
+                    elif getattr(entity, 'is_disease_dancer', False):
+                        char = 'Œ'
                     else:
                         char = 'E'
 
