@@ -2062,9 +2062,11 @@ class TestUniverse(unittest.TestCase):
 
         # Force deterministic reproduction by setting random to 1.0 (no mutation)
         original_random = random.random
-        random.random = lambda: 0.5
-        u.tick()
-        random.random = original_random
+        try:
+            random.random = lambda: 0.5
+            u.tick()
+        finally:
+            random.random = original_random
 
         self.assertEqual(len(u.entities), 2)
         child = u.entities[1]
@@ -16192,14 +16194,17 @@ class TestLavaDancer(unittest.TestCase):
         self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='lava'))
 
     def test_lava_dancer_energy_gain(self):
+        self.universe.foods = []
         # Initialize entity with less than max energy
         entity = Entity("Dancer", x=2, y=2, energy=10, size=1, preferred_terrain='lava', is_immune=True, is_pacifist=True, is_ageless=True, stamina=50)
+        self.universe.move_entity = lambda *args, **kwargs: None
         entity.is_lava_dancer = True
         self.universe.add_entity(entity)
 
         initial_energy = entity.energy
         self.universe.disease_chance = 0.0
         self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
 
         self.universe.tick()
 
