@@ -19,7 +19,7 @@ class TestCLIVisualizer(unittest.TestCase):
 
         output = visualizer.render()
 
-        self.assertIn("E", output)
+        self.assertIn("ķ", output)
 
     def test_render_is_lava_dweller(self):
         universe = Universe(10, 10)
@@ -1745,3 +1745,219 @@ class TestCLIVisualizer(unittest.TestCase):
         universe.add_entity(entity)
         output = visualizer.render()
         self.assertIn('Ĵ', output)
+
+    def test_visualize_is_autumn_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_autumn_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ĸ", output)
+
+    def test_visualize_is_cave_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_cave_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ĺ", output)
+
+    def test_visualize_is_day_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_day_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ĺ", output)
+
+    def test_visualize_is_deep_water_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_deep_water_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ļ", output)
+
+    def test_visualize_is_drought_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_drought_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ļ", output)
+
+    def test_visualize_is_earthquake_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_earthquake_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ľ", output)
+
+    def test_visualize_is_forest_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_forest_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ľ", output)
+
+    def test_visualize_is_ice_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_ice_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ŀ", output)
+
+    def test_visualize_is_lava_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_lava_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ŀ", output)
+
+    def test_visualize_is_marsh_strider(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_marsh_strider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ł", output)
+
+    def test_visualize_is_moon_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_moon_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ł", output)
+
+    def test_visualize_is_mountain_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_mountain_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ń", output)
+
+    def test_visualize_is_mud_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_mud_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ń", output)
+
+    def test_visualize_is_night_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_night_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ņ", output)
+
+    def test_visualize_is_poison_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_poison_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ņ", output)
+
+    def test_visualize_is_rain_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_rain_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ň", output)
+
+    def test_visualize_is_sand_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_sand_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ň", output)
+
+    def test_visualize_is_shelter_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_shelter_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ŉ", output)
+
+    def test_visualize_is_stun_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_stun_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ŋ", output)
+
+    def test_visualize_is_summer_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_summer_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ŋ", output)
+
+    def test_visualize_is_volcanic_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_volcanic_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ō", output)
+
+    def test_visualize_is_wall_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_wall_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ō", output)
+
+    def test_visualize_is_water_strider(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_water_strider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ŏ", output)
+
+    def test_visualize_is_web_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_web_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ŏ", output)
+
+    def test_visualize_is_wind_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_wind_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ő", output)
+
+    def test_visualize_is_winter_dancer(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_winter_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ő", output)
+
+    def test_visualize_is_disease_dancer(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_disease_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Œ", output)

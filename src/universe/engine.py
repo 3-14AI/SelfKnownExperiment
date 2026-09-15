@@ -1605,6 +1605,7 @@ class Universe:
             if getattr(entity, 'is_disease_dancer', False) and getattr(entity, 'is_infected', False):
                 entity.energy = min(cap, entity.energy + 5)
 
+
             if getattr(entity, 'is_cave_dancer', False) and any(t.terrain_type == 'cave' for t in terrains_here):
                 max_energy = int(entity.max_energy * 1.5) if getattr(entity, "is_gluttonous", False) else entity.max_energy
                 entity.energy = min(max_energy, entity.energy + 5)

@@ -386,3 +386,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_sand_dancer` trait. Entities with this trait gain energy when they are inside a sandstorm event or standing on sand during a storm.
 - [x] Implemented `is_stun_dancer` trait. Entities with this trait gain energy while stunned.
 - [x] Implemented `is_poison_dancer` trait. Entities with this trait gain energy while poisoned.
+- [x] Implemented `is_disease_dancer` trait. Entities with this trait gain energy when infected.
