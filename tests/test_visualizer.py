@@ -1953,3 +1953,11 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn("ő", output)
+
+    def test_visualize_is_disease_dancer(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_disease_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Œ", output)
