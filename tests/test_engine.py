@@ -16686,3 +16686,39 @@ class TestIsGrassDancer(unittest.TestCase):
                 break
 
         self.assertTrue(has_mutated, "is_grass_dancer failed to mutate")
+
+class TestIsGrassWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.foods = []
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_grass_walker_stamina(self):
+        walker = Entity('Walker', x=1, y=1, is_grass_walker=True, stamina=50, max_stamina=50)
+        self.universe.add_entity(walker)
+        self.universe.add_terrain(Terrain(x=2, y=1, terrain_type='grass', elevation=5))
+        self.universe.move_entity(walker, 1, 0)
+        self.universe.tick()
+        self.assertGreaterEqual(walker.stamina, 49)
+
+    def test_grass_walker_mutates(self):
+        parent = Entity(
+            name="Parent", x=1, y=1, energy=5000, size=15,
+            is_ageless=True, is_immune=True, is_pacifist=True,
+            is_gluttonous=True, has_blubber=True,
+            is_grass_walker=False
+        )
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+        has_mutated = False
+        for _ in range(150):
+            parent.energy = 5000
+            self.universe.tick()
+            for entity in self.universe.entities:
+                if entity.name != "Parent" and getattr(entity, 'is_grass_walker', False) is True:
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+        self.assertTrue(has_mutated)
