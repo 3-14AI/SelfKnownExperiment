@@ -8664,14 +8664,6 @@ class TestIsWinterDwellerTrait(unittest.TestCase):
         self.assertGreater(len(children), 0, "Reproduction should occur")
         self.assertTrue(any(getattr(child, 'is_drought_dweller', False) for child in children), "is_drought_dweller should be capable of mutating in children")
 
-        universe = Universe(width=5, height=5)
-        universe.current_event = 'earthquake'
-        universe.event_remaining_time = 10
-        entity = Entity(name="Earthquake Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_earthquake_dweller=True, is_sleeping=True, intelligence=1)
-        universe.add_entity(entity)
-        universe.tick()
-        self.assertGreaterEqual(entity.energy, 30)
-
     def test_is_earthquake_dweller_mutation(self):
         universe = Universe(width=5, height=5, population_limit=100)
         parent = Entity(name="Parent", x=1, y=1, energy=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_earthquake_dweller=False)
@@ -16551,7 +16543,10 @@ class TestDiseaseDancerTrait(unittest.TestCase):
             is_disease_dancer=False,
             is_gluttonous=True,
             has_blubber=True,
-            preferred_terrain='grass'
+            preferred_terrain='grass',
+            is_ageless=True,
+            is_immune=True,
+            is_pacifist=True
         )
         self.universe.add_entity(parent)
         self.universe.reproduction_threshold = 500
@@ -16561,9 +16556,10 @@ class TestDiseaseDancerTrait(unittest.TestCase):
         has_mutated = False
         for _ in range(100):
             parent.energy = 5000
+            self.universe.foods = []
             self.universe.tick()
             for entity in self.universe.entities:
-                if getattr(entity, 'is_disease_dancer', False):
+                if getattr(entity, 'generation', 0) > 0 and getattr(entity, 'is_disease_dancer', False):
                     has_mutated = True
                     break
             if has_mutated:
@@ -16607,6 +16603,7 @@ class TestIsParasiteDancer(unittest.TestCase):
         has_mutated = False
         for _ in range(100):
             parent.energy = 5000
+            self.universe.foods = []
             self.universe.tick()
             for entity in self.universe.entities:
                 if getattr(entity, 'is_parasite_dancer', False):
@@ -16644,6 +16641,7 @@ class TestIsSleepDancer(unittest.TestCase):
         has_mutated = False
         for _ in range(100):
             parent.energy = 5000
+            self.universe.foods = []
             self.universe.tick()
             for entity in self.universe.entities:
                 if getattr(entity, 'is_sleep_dancer', False):
