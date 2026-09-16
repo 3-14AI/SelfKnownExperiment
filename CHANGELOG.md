@@ -1,4 +1,6 @@
 ### New Features
+- [x] Implemented `is_grass_glider` trait. Entities with this trait consume 0 stamina when moving on `grass` terrain.
+- [x] Implemented `is_grass_dweller` trait. Entities with this trait treat `grass` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_grass_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on `grass` terrain.
 - [x] Implemented `is_grass_dancer` trait. Entities with this trait gain energy when on `grass` terrain.
 - Implemented `is_disease_dancer` trait. Entities with this trait gain energy when infected.

@@ -388,3 +388,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_poison_dancer` trait. Entities with this trait gain energy while poisoned.
 - [x] Implemented `is_disease_dancer` trait. Entities with this trait gain energy when infected.
 - [x] Implemented `is_grass_dancer` trait. Entities with this trait gain energy when on `grass` terrain.
+- [x] Implemented `is_grass_glider` trait. Entities with this trait consume 0 stamina when moving on `grass` terrain.
+- [x] Implemented `is_grass_dweller` trait. Entities with this trait treat `grass` terrain as a shelter, gaining increased defense and energy recovery.
