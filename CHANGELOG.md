@@ -3,12 +3,16 @@
 - [x] Implemented `is_grass_dweller` trait. Entities with this trait treat `grass` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_grass_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on `grass` terrain.
 - [x] Implemented `is_grass_dancer` trait. Entities with this trait gain energy when on `grass` terrain.
-- Implemented `is_disease_dancer` trait. Entities with this trait gain energy when infected.
-- Implemented `is_shelter_dweller` trait. Entities with this trait treat `shelter` terrain as a shelter, gaining increased defense and energy recovery.
-- Fixed `is_snow_dancer` missing mutation logic.
-- Implemented `is_detritivore` trait. Entities with this trait can directly consume post-disaster terrains like `ash` and `mud`, clearing them from the map and gaining an immediate energy boost.
+- [x] Implemented `is_disease_dancer` trait. Entities with this trait gain energy when infected.
+- [x] Implemented `is_shelter_dweller` trait. Entities with this trait treat `shelter` terrain as a shelter, gaining increased defense and energy recovery.
+- [x] Fixed `is_snow_dancer` missing mutation logic.
+- [x] Implemented `is_detritivore` trait. Entities with this trait can directly consume post-disaster terrains like `ash` and `mud`, clearing them from the map and gaining an immediate energy boost.
 
 # Changelog
+
+## [Unreleased]
+- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_space_dweller` trait. Entities with this trait treat being in space as a shelter, gaining increased defense and energy recovery.
 
 ## [2026-07-27]
 - Implemented `is_wall_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on wall terrain.
@@ -19,7 +23,6 @@
 
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
-## [Unreleased]
 - Added `is_ice_dancer` trait allowing entities to gain energy on ice terrain.
 - Implemented `is_cave_dancer` trait. Entities with this trait gain energy when on `cave` terrain.
 - Implemented `is_day_dancer` trait. Entities with this trait gain energy during the day.
@@ -46,7 +49,6 @@
 - Implemented `is_ice_dweller` trait. Entities with this trait treat `ice` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_mud_dweller` trait. Entities with this trait treat `mud` terrain as a shelter, gaining increased defense and energy recovery.
 - Implemented `is_web_dweller` trait. Entities with this trait treat `web` terrain as a shelter, gaining increased defense and energy recovery.
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 - Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
@@ -64,8 +66,7 @@
 - Fixed `is_aquatic` inheritance logic in `engine.py`.
 - Cleaned up duplicated tests in `tests/test_engine.py`.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
+- Implemented `is_space_dweller` trait. Entities with this trait treat being in space as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Added missing visualizer tests for `has_bioluminescence` and `pack_hunter` traits.
@@ -77,73 +78,51 @@
 - Fixed flaky tests: `test_fruiting_drops_food`, `test_population_limit`, `test_hydration_loss_and_penalty`, `test_entity_pathfinding_around_obstacle` by isolating randomness.
 - Cleaned up duplicated tests in `tests/test_engine.py` (climbing, echolocation, immunity).
 - Added visualizer support and tests for `is_regenerative`, `is_immune`, `is_amphibious` traits.
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented `can_climb` trait allowing entities to traverse 'wall' terrain blocks, bypassing obstacles.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented `pack_hunter` trait. Predatory entities with this trait share their targets with nearby pack members of the same species, and gain an attack bonus during combat when multiple pack members surround the same prey.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented `has_fur` trait. Entities with fur have increased temperature tolerance in the cold, but suffer energy and movement penalties in hot environments.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
  - YYYY-MM-DD
 ### Added
 - Analyzed recent project changes (Scales trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Added `is_parasitic` trait allowing entities to attach to larger hosts and leech their energy/hydration.
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented `is_cold_blooded` trait. Entities with this trait gain an energy efficiency advantage in hot temperatures but suffer energy and movement penalties in cold temperatures.
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented `is_immune` trait. Entities can gain immunity to diseases after recovering, preventing reinfection. Immunity can also be inherited by offspring or acquired via genetic mutation.
 - Implemented aging growth mechanics where entities start out smaller when born and gradually grow to their `max_size` over time.
 - Added Aposematism trait allowing prey to be ignored by well-fed predators.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Added `has_echolocation` trait to entities. Echolocation allows entities to bypass camouflage when detecting prey or predators, and prevents their perception radius from being halved during the night.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Analyzed recent project changes (Photosynthesis trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented amphibious trait (`is_amphibious`). Entities with this trait can freely traverse both land and water tiles, opening up new movement and survival strategies.
 - Implemented Photosynthesis trait (`can_photosynthesize`). Entities with this trait gain energy during the daytime, simulating plant-like behavior.
 - Updated `CLIVisualizer` to render photosynthesizing entities as `P`.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented web building mechanics. Entities with the `can_spin_webs` trait can create web terrain.
 - Entities lacking the trait will lose all stamina when moving onto web terrain, simulating getting trapped.
 - Updated `CLIVisualizer` to render `web` terrain as `x`.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented `has_spikes` defensive trait. Entities with this trait damage attackers (reducing energy and stamina) during combat.
@@ -152,8 +131,6 @@
 - Implemented Nocturnal trait. Entities can mutate `is_nocturnal`.
 - Nocturnal entities invert their sleep cycles, sleeping during the day and being active at night.
 - Nocturnal entities retain full perception at night but have halved perception during the day.
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented stamina system. Entities have `stamina` and `max_stamina` attributes, losing stamina when moving or participating in combat, and falling asleep if it drops to 0.
@@ -163,8 +140,6 @@
 - Added test coverage in `test_engine.py` to verify hoarding behavior.
 
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented an experience and leveling system for entities. Entities gain experience by surviving days, escaping predators, or successfully hunting.
@@ -177,8 +152,6 @@
 - Added a `test_max_energy` test to ensure the energy capping works correctly during eating.
 - Implemented Oviparity/Egg-Laying mechanic. Entities can mutate the `lays_eggs` trait. When reproducing, instead of immediately spawning a child, they lay an egg (a Food object) that hatches into the offspring after aging.
 - Added a reproduction chance modifier based on intelligence. Entities with higher intelligence have a greater chance to reproduce successfully.
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented organic plant spreading allowing flora to naturally grow into patches over time.
@@ -298,8 +271,6 @@
 # Changelog
 
 - Implemented `is_poison_dweller` trait: Entities with this trait treat being poisoned as a shelter, gaining increased defense and energy recovery.
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented flight mechanics. Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water during movement and pathfinding.
@@ -325,8 +296,6 @@
 
 
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented `is_water_glider` trait. Entities with this trait consume 0 stamina when moving on water terrain.
@@ -357,8 +326,6 @@
 - Added seasonal variance to the `plant_type` of naturally spawning food (e.g. flowers in spring, berries in summer).
 - Updated `agents.md` tracking progress.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 ### Added
 - Implemented an experience system for combat interactions:
@@ -367,8 +334,6 @@
   - Predators gain larger attack/defense stat boosts when successfully hunting and eating prey.
 - Updated `agents.md` to reflect completed tasks and new steps.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
  - 2026-07-10
 ### Added
 - Implemented environmental events system in the Universe engine ('storm', 'drought').
@@ -394,8 +359,6 @@
 
 All notable changes to Project Genesis will be documented in this file.
 
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 
 - Engine: Modified `get_nearest_prey` so carnivores evaluate potential prey based on a combination of distance, size, and defense, effectively prioritizing smaller, weaker targets over slightly closer but more resilient ones.
 - Tests: Added `test_carnivore_prefers_smaller_weaker_prey` to explicitly test this targeting logic.
@@ -422,8 +385,6 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented basic energy and life cycle for entities. Entities now consume 1 energy per tick and are removed from the universe when their energy reaches 0.
 - Implemented an energy system and life cycle for entities (entities have 10 starting energy, consume 1 energy per tick, and die if energy drops to 0 or below).
 - Expanded unit tests in `tests/test_engine.py` to cover energy decay and death.
-## [Unreleased]
-- Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
  - 2026-07-08
 ### Added
 - Implemented basic energy and life cycle for entities (entities have starting energy, lose 1 per tick, and die at 0).
