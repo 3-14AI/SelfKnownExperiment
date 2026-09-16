@@ -16722,3 +16722,74 @@ class TestIsGrassWalker(unittest.TestCase):
             if has_mutated:
                 break
         self.assertTrue(has_mutated)
+
+class TestIsGrassGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.foods = []
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_grass_glider_stamina(self):
+        glider = Entity('Glider', x=1, y=1, is_grass_glider=True, stamina=50, max_stamina=50)
+        self.universe.add_entity(glider)
+        self.universe.add_terrain(Terrain(x=2, y=1, terrain_type='grass'))
+        self.universe.move_entity(glider, 1, 0)
+        self.universe.tick()
+        self.assertGreaterEqual(glider.stamina, 49)
+
+    def test_grass_glider_mutates(self):
+        parent = Entity(
+            name="Parent", x=1, y=1, energy=5000, size=15,
+            is_ageless=True, is_immune=True, is_pacifist=True,
+            is_gluttonous=True, has_blubber=True,
+            is_grass_glider=False
+        )
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+        has_mutated = False
+        for _ in range(150):
+            parent.energy = 5000
+            self.universe.tick()
+            for entity in self.universe.entities:
+                if entity.name != "Parent" and getattr(entity, 'is_grass_glider', False) is True:
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+        self.assertTrue(has_mutated)
+
+class TestIsGrassDweller(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.foods = []
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_grass_dweller_shelter(self):
+        dweller = Entity('Dweller', x=1, y=1, is_grass_dweller=True, energy=10, stamina=50, size=1, is_immune=True, is_pacifist=True, is_ageless=True, temperature_tolerance=1000, preferred_terrain='grass')
+        self.universe.add_entity(dweller)
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='grass'))
+        self.universe.tick()
+        self.assertGreaterEqual(dweller.energy, 12, 'Grass dweller should gain energy/lose less in shelter')
+
+    def test_grass_dweller_mutates(self):
+        parent = Entity(
+            name="Parent", x=1, y=1, energy=5000, size=15,
+            is_ageless=True, is_immune=True, is_pacifist=True,
+            is_gluttonous=True, has_blubber=True,
+            is_grass_dweller=False
+        )
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+        has_mutated = False
+        for _ in range(150):
+            parent.energy = 5000
+            self.universe.tick()
+            for entity in self.universe.entities:
+                if entity.name != "Parent" and getattr(entity, 'is_grass_dweller', False) is True:
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+        self.assertTrue(has_mutated)

@@ -1993,3 +1993,19 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn("ņ", output)
+
+    def test_visualize_is_grass_glider(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_grass_glider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('Ŗ', output)
+
+    def test_visualize_is_grass_dweller(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_grass_dweller=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('ŗ', output)
