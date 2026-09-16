@@ -496,3 +496,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_lava_dancer` trait. Entities with this trait gain energy when on `lava` terrain.
 - Implemented `is_wall_dancer` trait. Entities with this trait gain energy when on `wall` terrain.
 - Implemented `is_wind_dancer` trait. Entities with this trait gain energy when inside a `storm` event.
+- Added visualizer rendering (character 'œ') and tests for `is_grass_dancer` trait.
