@@ -1969,3 +1969,27 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn("œ", output)
+
+    def test_visualize_is_parasite_dancer(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_parasite_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Ŕ", output)
+
+    def test_visualize_is_sleep_dancer(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_sleep_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ŕ", output)
+
+    def test_visualize_is_poison_dancer(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_poison_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ņ", output)
