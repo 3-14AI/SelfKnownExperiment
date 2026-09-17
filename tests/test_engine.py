@@ -15577,15 +15577,21 @@ class TestIsSpringDancer(unittest.TestCase):
         self.universe.tick()
         self.assertLess(entity.energy, 14)
 
-    @unittest.skip('Flaky mock')
+
     def test_mutation_and_inheritance(self):
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, lays_eggs=True, is_spring_dancer=False)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=15, lays_eggs=True, is_spring_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
 
-        self.universe.tick()
+        for _ in range(50):
+            self.universe.tick()
+            parent.energy = 5000
+            eggs = self.universe.get_foods_at(parent.x, parent.y)
+            if eggs: break
 
-        eggs = self.universe.get_foods_at(parent.x, parent.y)
         self.assertGreater(len(eggs), 0, "No eggs were laid.")
         child = eggs[0].hatch_entity
         self.assertIsNotNone(child, "Child failed to hatch.")
@@ -15602,12 +15608,16 @@ class TestIsSpringDancer(unittest.TestCase):
 
         # We need to loop multiple ticks since reproduction relies on probability and multiple conditions.
         self.universe.mutation_chance = 1.0
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, lays_eggs=True, is_spring_dancer=False)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=15, lays_eggs=True, is_spring_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
         self.universe.add_entity(parent)
 
         found_mutant = False
-        for _ in range(50):
+        for _ in range(300):
             self.universe.tick()
+            parent.energy = 5000
             eggs = self.universe.get_foods_at(parent.x, parent.y)
             if eggs:
                 for egg in eggs:
@@ -16056,7 +16066,7 @@ class TestMudDancerTrait(unittest.TestCase):
         from src.universe.engine import Entity, Terrain
         self.universe.disease_chance = 0.0
         self.universe.event_chance = 0.0
-        e = Entity(name="test", x=1, y=1, energy=10, size=1, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_mud_dancer=True, preferred_terrain="mud", is_aquatic=True, is_gluttonous=True)
+        e = Entity(name="test", x=1, y=1, energy=10, size=1, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_mud_dancer=True, preferred_terrain="mud", is_aquatic=True, is_gluttonous=True, preferred_temperature=20, temperature_tolerance=1000)
         self.universe.add_entity(e)
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type="mud"))
         self.universe.tick()
@@ -16862,16 +16872,20 @@ class TestIsSummerDancer(unittest.TestCase):
         self.universe.tick()
         self.assertLess(entity.energy, 14)
 
-    @unittest.skip('Flaky mock')
+
     def test_mutation_and_inheritance(self):
         from src.universe.engine import Entity
         self.universe.mutation_chance = 1.0
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, lays_eggs=True, is_summer_dancer=False)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=15, lays_eggs=True, is_summer_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
         self.universe.add_entity(parent)
 
         found_mutant = False
-        for _ in range(50):
+        for _ in range(300):
             self.universe.tick()
+            parent.energy = 5000
             eggs = self.universe.get_foods_at(parent.x, parent.y)
             if eggs:
                 for egg in eggs:
@@ -16929,16 +16943,20 @@ class TestIsAutumnDancer(unittest.TestCase):
         self.universe.tick()
         self.assertLess(entity.energy, 14)
 
-    @unittest.skip('Flaky mock')
+
     def test_mutation_and_inheritance(self):
         from src.universe.engine import Entity
         self.universe.mutation_chance = 1.0
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, lays_eggs=True, is_autumn_dancer=False)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=15, lays_eggs=True, is_autumn_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
         self.universe.add_entity(parent)
 
         found_mutant = False
-        for _ in range(50):
+        for _ in range(300):
             self.universe.tick()
+            parent.energy = 5000
             eggs = self.universe.get_foods_at(parent.x, parent.y)
             if eggs:
                 for egg in eggs:
@@ -16996,16 +17014,20 @@ class TestIsWinterDancer(unittest.TestCase):
         self.universe.tick()
         self.assertLess(entity.energy, 14)
 
-    @unittest.skip('Flaky mock')
+
     def test_mutation_and_inheritance(self):
         from src.universe.engine import Entity
         self.universe.mutation_chance = 1.0
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, lays_eggs=True, is_winter_dancer=False)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=15, lays_eggs=True, is_winter_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
         self.universe.add_entity(parent)
 
         found_mutant = False
-        for _ in range(50):
+        for _ in range(300):
             self.universe.tick()
+            parent.energy = 5000
             eggs = self.universe.get_foods_at(parent.x, parent.y)
             if eggs:
                 for egg in eggs:
