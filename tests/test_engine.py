@@ -16216,9 +16216,8 @@ class TestLavaDancer(unittest.TestCase):
         # With dancer, it gains 5, so it should be initial + 5.
         self.assertGreaterEqual(entity.energy, initial_energy + 5)
 
-    @unittest.skip('Flaky - known issue from known_flaky_tests.md')
     def test_lava_dancer_mutation(self):
-        parent = Entity("Parent", x=2, y=2, energy=5000, size=50, is_lava_dancer=False, is_immune=True, is_ageless=True, stamina=50, is_gluttonous=True, has_blubber=True, preferred_terrain="lava")
+        parent = Entity("Parent", x=2, y=2, energy=5000, size=50, is_lava_dancer=False, is_immune=True, is_ageless=True, stamina=50, is_gluttonous=True, has_blubber=True, preferred_terrain="lava", is_pacifist=True)
         self.universe.add_entity(parent)
 
         # Force reproduction conditions
@@ -16227,12 +16226,14 @@ class TestLavaDancer(unittest.TestCase):
         self.universe.reproduction_cost = 10
         self.universe.disease_chance = 0.0
         self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
         self.universe.mutation_chance = 1.0
 
         has_mutated = False
         for _ in range(500):
             parent.energy = 5000
             parent.stamina = 5000
+            parent.max_stamina = 5000
             self.universe.foods = []
             self.universe.tick()
             if any(getattr(e, 'is_lava_dancer', False) for e in self.universe.entities if e is not parent):

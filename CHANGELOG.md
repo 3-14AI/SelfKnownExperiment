@@ -53,6 +53,7 @@
 - Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
+- Fixed and unskipped flaky test `test_lava_dancer_mutation` in `tests/test_engine.py`.
 - Implemented `is_shelter_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on a shelter terrain, or during events that act as a shelter.
 - Implemented `is_mud_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on mud terrain.
 - Implemented `is_drought_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'drought' event.
