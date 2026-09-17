@@ -164,7 +164,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Cleaned up a double space formatting issue in the `Entity` instantiation code.
 - [x] Implemented `is_shelter_dancer` trait. Entities with this trait gain energy when on `shelter` terrain.
 - [x] Implemented `is_web_dancer` trait. Entities with this trait gain energy when on `web` terrain.
-- [x] Implemented `is_lava_dancer` trait. Entities with this trait gain energy when on `lava` terrain.
+- [x] Implemented `is_lava_dancer` trait. Entities with this trait gain energy when on `lava` terrain. (Fixed missing tests and mutation flakiness).
 - [x] Fixed `is_ice_dancer` missing mutation logic and added missing tests.
 - [x] Implemented `is_weather_sensitive` trait. Entities with this trait double their effective perception radius and recover bonus stamina during weather events (`storm`, `blizzard`, `rain`, `snow`).
 - [x] Fixed multiple test failures and bugs in previous agent trait implementations. Fixed missing `mutation_occurred = True` flags for numerous genetic traits (`is_defensive`, `is_protective`, `is_disease_resistant`, `is_scentless`, `is_sun_tracker`, `is_hypnotic`, `is_summer_dweller`, `pack_hunter`, `is_immune`, `has_claws`, `is_sturdy`, etc). Fixed incorrect property check in `is_ash_dweller` test causing test failures.
