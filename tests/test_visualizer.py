@@ -2034,3 +2034,27 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         lines = output.split('\n')
         self.assertEqual(lines[1][1], 'p')
+
+    def test_visualize_is_space_walker(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_space_walker=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('Ŝ', output)
+
+    def test_visualize_is_space_glider(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_space_glider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('ŝ', output)
+
+    def test_visualize_is_space_dancer(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_space_dancer=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('Ş', output)

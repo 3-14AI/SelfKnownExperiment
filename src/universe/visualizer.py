@@ -571,6 +571,12 @@ class CLIVisualizer:
                         char = 'ŕ'
                     elif getattr(entity, 'is_space_dweller', False):
                         char = 'ś'
+                    elif getattr(entity, 'is_space_walker', False):
+                        char = 'Ŝ'
+                    elif getattr(entity, 'is_space_glider', False):
+                        char = 'ŝ'
+                    elif getattr(entity, 'is_space_dancer', False):
+                        char = 'Ş'
                     else:
                         char = 'E'
 

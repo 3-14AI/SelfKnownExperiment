@@ -17094,3 +17094,124 @@ class TestSpaceDweller(unittest.TestCase):
                 break
 
         self.assertTrue(mutation_occurred)
+
+class TestIsSpaceWalker(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe, Terrain
+        self.universe = Universe(width=10, height=10)
+        self.universe.foods = []
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_space_walker_stamina(self):
+        from src.universe.engine import Entity, Terrain
+        walker = Entity('Walker', x=1, y=1, is_space_walker=True, stamina=50, max_stamina=50)
+        self.universe.add_entity(walker)
+        self.universe.add_terrain(Terrain(x=2, y=1, terrain_type='space', elevation=5))
+        self.universe.move_entity(walker, 1, 0)
+        self.universe.tick()
+        self.assertGreaterEqual(walker.stamina, 49)
+
+    def test_space_walker_mutates(self):
+        from src.universe.engine import Entity
+        parent = Entity(
+            name="Parent", x=1, y=1, energy=5000, size=15,
+            is_ageless=True, is_immune=True, is_pacifist=True,
+            is_gluttonous=True, has_blubber=True,
+            is_space_walker=False
+        )
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+        has_mutated = False
+        for _ in range(150):
+            parent.energy = 5000
+            self.universe.tick()
+            for entity in self.universe.entities:
+                if entity.name != "Parent" and getattr(entity, 'is_space_walker', False) is True:
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+        self.assertTrue(has_mutated)
+
+class TestIsSpaceGlider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe, Terrain
+        self.universe = Universe(width=10, height=10)
+        self.universe.foods = []
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_space_glider_stamina(self):
+        from src.universe.engine import Entity, Terrain
+        glider = Entity('Glider', x=1, y=1, is_space_glider=True, stamina=50, max_stamina=50)
+        glider.preferred_temperature = self.universe.get_temperature_at(glider.x, glider.y)
+        glider.temperature_tolerance = 1000
+        self.universe.add_entity(glider)
+        self.universe.add_terrain(Terrain(x=2, y=1, terrain_type='space', elevation=5))
+        self.universe.move_entity(glider, 1, 0)
+        self.universe.tick()
+        self.assertGreaterEqual(glider.stamina, 49)
+
+    def test_space_glider_mutates(self):
+        from src.universe.engine import Entity
+        parent = Entity(
+            name="Parent", x=1, y=1, energy=5000, size=15,
+            is_ageless=True, is_immune=True, is_pacifist=True,
+            is_gluttonous=True, has_blubber=True,
+            is_space_glider=False
+        )
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+        has_mutated = False
+        for _ in range(150):
+            parent.energy = 5000
+            self.universe.tick()
+            for entity in self.universe.entities:
+                if entity.name != "Parent" and getattr(entity, 'is_space_glider', False) is True:
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+        self.assertTrue(has_mutated)
+
+class TestIsSpaceDancer(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe, Terrain
+        self.universe = Universe(width=10, height=10)
+        self.universe.foods = []
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_space_dancer_energy(self):
+        from src.universe.engine import Entity, Terrain
+        dancer = Entity('Dancer', x=1, y=1, is_space_dancer=True, energy=10, stamina=50, size=1, is_immune=True, is_pacifist=True, is_ageless=True, temperature_tolerance=1000, preferred_terrain='space')
+        dancer.preferred_temperature = self.universe.get_temperature_at(dancer.x, dancer.y)
+        self.universe.add_entity(dancer)
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='space'))
+        self.universe.tick()
+        self.assertGreaterEqual(dancer.energy, 12)
+
+    def test_space_dancer_mutates(self):
+        from src.universe.engine import Entity
+        parent = Entity(
+            name="Parent", x=1, y=1, energy=5000, size=15,
+            is_ageless=True, is_immune=True, is_pacifist=True,
+            is_gluttonous=True, has_blubber=True,
+            is_space_dancer=False
+        )
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+        has_mutated = False
+        for _ in range(150):
+            parent.energy = 5000
+            self.universe.tick()
+            for entity in self.universe.entities:
+                if entity.name != "Parent" and getattr(entity, 'is_space_dancer', False) is True:
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+        self.assertTrue(has_mutated)
