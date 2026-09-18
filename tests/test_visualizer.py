@@ -2017,3 +2017,20 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn('Ř', output)
+
+    def test_visualize_is_space_dweller(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity('Dweller', x=1, y=1, is_space_dweller=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        lines = output.split('\n')
+        self.assertEqual(lines[1][1], 'ś')
+
+    def test_visualize_space_terrain(self):
+        universe = Universe(width=3, height=3)
+        universe.add_terrain(Terrain(x=1, y=1, terrain_type='space'))
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        lines = output.split('\n')
+        self.assertEqual(lines[1][1], 'p')
