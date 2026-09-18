@@ -33,6 +33,8 @@ class CLIVisualizer:
                     grid[terrain.y][terrain.x] = 'Y'
                 elif terrain.terrain_type == 'cave':
                     grid[terrain.y][terrain.x] = 'c'
+                elif terrain.terrain_type == 'space':
+                    grid[terrain.y][terrain.x] = 'p'
 
         # Add food
         for food in self.universe.foods:
@@ -567,6 +569,8 @@ class CLIVisualizer:
                         char = 'Ŕ'
                     elif getattr(entity, 'is_sleep_dancer', False):
                         char = 'ŕ'
+                    elif getattr(entity, 'is_space_dweller', False):
+                        char = 'ś'
                     else:
                         char = 'E'
 
