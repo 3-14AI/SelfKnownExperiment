@@ -12,6 +12,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Implemented `is_space_walker`, `is_space_glider`, and `is_space_dancer` traits for `space` terrain interactions.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 - [x] Implemented `is_space_dweller` trait. Entities with this trait treat being in space as a shelter, gaining increased defense and energy recovery.
 
