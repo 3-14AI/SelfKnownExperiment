@@ -344,14 +344,14 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_mud_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on mud terrain.
 - [x] Implemented `is_sand_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on sand terrain.
 - [x] Implemented `is_storm_glider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event.
-- [x] Implemented `is_deep_water_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on deep-water terrain.
-- [x] Implemented `is_wall_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on wall terrain.
+- [x] Implemented `is_deep_water_walker` trait.
+- [x] Implemented `is_wall_walker` trait.
 
 - [x] Implemented `is_drought_glider` trait. Entities with this trait consume 0 stamina when moving during a 'drought' event.
 
-- [x] Implemented `is_lava_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on lava terrain.
+- [x] Implemented `is_lava_walker` trait.
 - [x] Implemented `is_lava_dweller` trait. Entities with this trait treat `lava` terrain as a shelter, gaining increased defense and energy recovery.
-- [x] Implemented `is_ice_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on ice terrain.
+- [x] Implemented `is_ice_walker` trait.
 
 - [x] Implemented `is_fire_dancer` trait. Entities with this trait gain energy and are immune to damage when inside a fire event.
 - [x] Implemented `is_snow_dancer` trait. Entities with this trait gain energy when inside a snow event.
