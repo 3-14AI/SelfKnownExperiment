@@ -393,3 +393,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_grass_glider` trait. Entities with this trait consume 0 stamina when moving on `grass` terrain.
 - [x] Implemented `is_grass_dweller` trait. Entities with this trait treat `grass` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Added visualizer rendering and test for `is_grass_walker` trait.
+- [x] Implemented `is_space_dweller` trait. Entities with this trait treat being in space as a shelter, gaining increased defense and energy recovery.

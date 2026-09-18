@@ -13,7 +13,7 @@
 
 ## [Unreleased]
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
-- Implemented `is_space_dweller` trait. Entities with this trait treat being in space as a shelter, gaining increased defense and energy recovery.
+- [x] Implemented `is_space_dweller` trait. Entities with this trait treat being in space as a shelter, gaining increased defense and energy recovery.
 
 ## [2026-07-27]
 - Implemented `is_wall_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on wall terrain.
@@ -68,7 +68,7 @@
 - Fixed `is_aquatic` inheritance logic in `engine.py`.
 - Cleaned up duplicated tests in `tests/test_engine.py`.
 
-- Implemented `is_space_dweller` trait. Entities with this trait treat being in space as a shelter, gaining increased defense and energy recovery.
+- [x] Implemented `is_space_dweller` trait. Entities with this trait treat being in space as a shelter, gaining increased defense and energy recovery.
 
 ### Added
 - Added missing visualizer tests for `has_bioluminescence` and `pack_hunter` traits.

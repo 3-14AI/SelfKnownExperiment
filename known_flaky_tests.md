@@ -7,3 +7,5 @@ The following tests are occasionally skipped using `@unittest.skip("flaky")` bec
 * `test_deep_water_dancer_mutates` in `tests/test_engine.py`
 * `test_echolocation_night_perception` in `tests/test_engine.py`
 * `test_is_toxic_combat` in `tests/test_engine.py`
+* `test_is_night_dancer_energy_gain` in `tests/test_engine.py`
+* `test_stun_dancer_mutation` in `tests/test_engine.py`
