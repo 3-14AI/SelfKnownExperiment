@@ -1,4 +1,7 @@
 ### New Features
+- [x] Implemented `is_absorbent` trait. Entities with this trait gain hydration rapidly while in water or rain.
+- [x] Implemented `is_parasite_dancer` trait. Entities with this trait gain energy while they have attached parasites.
+- [x] Implemented `is_sleep_dancer` trait. Entities with this trait gain energy while sleeping.
 - [x] Implemented `is_grass_glider` trait. Entities with this trait consume 0 stamina when moving on `grass` terrain.
 - [x] Implemented `is_grass_dweller` trait. Entities with this trait treat `grass` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_grass_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on `grass` terrain.

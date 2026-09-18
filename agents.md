@@ -397,3 +397,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_space_walker` trait.
 - [x] Implemented `is_space_glider` trait.
 - [x] Implemented `is_space_dancer` trait.
+- [x] Implemented `is_parasite_dancer` trait. Entities with this trait gain energy while they have attached parasites.
+- [x] Implemented `is_sleep_dancer` trait. Entities with this trait gain energy when sleeping.
+- [x] Implemented `is_absorbent` trait. Entities with this trait gain hydration rapidly while in water or rain.

@@ -2058,3 +2058,11 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn('Ş', output)
+
+    def test_visualize_is_absorbent(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="AbsorbentEntity", x=0, y=0, size=1, is_absorbent=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        rendered = visualizer.render()
+        self.assertIn('/', rendered)
