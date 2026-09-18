@@ -16573,6 +16573,8 @@ class TestDiseaseDancerTrait(unittest.TestCase):
             is_pacifist=True
         )
         self.universe.add_entity(parent)
+        parent.preferred_temperature = self.universe.get_temperature_at(parent.x, parent.y)
+        parent.temperature_tolerance = 1000
         self.universe.reproduction_threshold = 500
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
