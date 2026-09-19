@@ -577,6 +577,10 @@ class CLIVisualizer:
                         char = 'ŝ'
                     elif getattr(entity, 'is_space_dancer', False):
                         char = 'Ş'
+                    elif getattr(entity, 'is_symbiotic', False):
+                        char = 'ş'
+                    elif getattr(entity, 'is_hive_mind', False):
+                        char = 'ĥ'
                     else:
                         char = 'E'
 
