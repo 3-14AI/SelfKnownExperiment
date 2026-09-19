@@ -5920,12 +5920,45 @@ class TestRecklessTrait(unittest.TestCase):
 
 
 class TestIsToxic(unittest.TestCase):
-    @unittest.skip("flaky")
+
+    def test_is_toxic_inflicts_poison_during_combat_not_just_eat(self):
+        from src.universe.engine import Universe, Entity
+
+        u = Universe(width=10, height=10, food_spawn_rate=0.0)
+        u.population_limit = 100
+        u.event_chance = 0.0
+        u.localized_event_chance = 0.0
+        u.disease_chance = 0.0
+
+        predator = Entity("Predator", x=5, y=5, energy=50, diet='carnivore', target_species=["PreySpecies"])
+        predator.attack = 5
+        predator.defense = 5
+        predator.size = 2
+
+        prey = Entity("Prey", x=5, y=5, energy=50, species="PreySpecies", is_toxic=True)
+        # Ensure prey survives combat
+        prey.attack = 0
+        prey.defense = 1000
+        prey.size = 1
+
+        u.add_entity(predator)
+        u.add_entity(prey)
+
+        u.tick()
+
+        # Predator should attack prey, fail to kill it, but still get poisoned
+        self.assertTrue(prey.is_alive)
+        self.assertTrue(predator.is_alive)
+        self.assertEqual(predator.poisoned_time, 10)
+
     def test_is_toxic_combat(self):
         from src.universe.engine import Universe, Entity
 
         u = Universe(width=10, height=10, food_spawn_rate=0.0)
         u.population_limit = 100
+        u.event_chance = 0.0
+        u.localized_event_chance = 0.0
+        u.disease_chance = 0.0
 
         predator = Entity("Predator", x=5, y=5, energy=50, diet='carnivore', target_species=["PreySpecies"])
         predator.attack = 100
