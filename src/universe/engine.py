@@ -3594,6 +3594,11 @@ class Universe:
                                 prey_to_eat.hydration = max(0, prey_to_eat.hydration - 5)
                                 entity.energy = min(int(entity.max_energy * 1.5) if getattr(entity, "is_gluttonous", False) else entity.max_energy, entity.energy + 5)
                                 entity.hydration = min(entity.max_hydration, entity.hydration + 5)
+                            if getattr(prey_to_eat, 'is_toxic', False):
+                                entity.poisoned_time += 10
+                            if not getattr(entity, 'has_strong_stomach', False) and getattr(prey_to_eat, 'toxicity', 0) > entity.poison_resistance:
+                                entity.poisoned_time += (prey_to_eat.toxicity - entity.poison_resistance) * 5
+
                             if random.random() < escape_chance:
                                 # Prey escapes
                                 entity.energy = max(0, entity.energy - 1)
@@ -3614,10 +3619,6 @@ class Universe:
                                 entity.energy = min(int(entity.max_energy * 1.5) if getattr(entity, "is_gluttonous", False) else entity.max_energy, entity.energy + energy_gained)
                                 if getattr(entity, 'is_resourceful', False):
                                     entity.hydration = min(entity.max_hydration, entity.hydration + 10)
-                                if getattr(prey_to_eat, 'is_toxic', False):
-                                    entity.poisoned_time += 10
-                                if not getattr(entity, 'has_strong_stomach', False) and getattr(prey_to_eat, 'toxicity', 0) > entity.poison_resistance:
-                                    entity.poisoned_time += (prey_to_eat.toxicity - entity.poison_resistance) * 5
                                 entity.attack += 0.5
                                 entity.defense += 0.5
                                 entity.add_experience(5)
@@ -3859,6 +3860,11 @@ class Universe:
                             prey_to_eat.hydration = max(0, prey_to_eat.hydration - 5)
                             entity.energy = min(int(entity.max_energy * 1.5) if getattr(entity, "is_gluttonous", False) else entity.max_energy, entity.energy + 5)
                             entity.hydration = min(entity.max_hydration, entity.hydration + 5)
+                        if getattr(prey_to_eat, 'is_toxic', False):
+                            entity.poisoned_time += 10
+                        if not getattr(entity, 'has_strong_stomach', False) and getattr(prey_to_eat, 'toxicity', 0) > entity.poison_resistance:
+                            entity.poisoned_time += (prey_to_eat.toxicity - entity.poison_resistance) * 5
+
                         if random.random() < escape_chance:
                             # Prey escapes
                             entity.energy = max(0, entity.energy - 1)
@@ -3885,10 +3891,6 @@ class Universe:
                             entity.energy = min(int(entity.max_energy * 1.5) if getattr(entity, "is_gluttonous", False) else entity.max_energy, entity.energy + energy_gained)
                             if getattr(entity, 'is_resourceful', False):
                                 entity.hydration = min(entity.max_hydration, entity.hydration + 10)
-                            if getattr(prey_to_eat, 'is_toxic', False):
-                                entity.poisoned_time += 10
-                            if not getattr(entity, 'has_strong_stomach', False) and getattr(prey_to_eat, 'toxicity', 0) > entity.poison_resistance:
-                                entity.poisoned_time += (prey_to_eat.toxicity - entity.poison_resistance) * 5
 
                             # Gain experience/strength from eating prey
                             entity.attack += 0.5
