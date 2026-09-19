@@ -142,3 +142,11 @@
   - Fixed test determinism issues in `tests/test_engine.py` for trait mutation logic by ensuring proper energy values and survival conditions over multiple ticks.
   - Documented changes in `CHANGELOG.md` and `agents.md`.
 - **Future work:** Proceed with the next logical features specified in `agents.md`, such as additional traits or visualizer updates.
+
+### Analysis 58: Fix missing dweller traits in shelter logic
+- **Agent Intent:** Fix missing checks for `is_parasite_dweller`, `is_shelter_dweller`, and `is_grass_dweller` in shelter logic.
+- **Implementation Details:**
+  - Added missing checks for these traits to `in_shelter` and `prey_in_shelter` variables in `Universe.tick()`.
+  - This fix aligned the codebase with documentation in `agents.md` and resolved related test failures.
+  - Updated `CHANGELOG.md` to record the bugfix.
+- **Future work:** Proceed with next logical features specified in `agents.md`, such as additional traits, visualizations, or test stabilization.
