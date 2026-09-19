@@ -1611,6 +1611,9 @@ class Universe:
                 if getattr(entity, 'is_filter_feeder', False) and getattr(entity, 'is_aquatic', False):
                     if any(t.terrain_type in ['water', 'deep-water'] for t in self.get_terrains_at(entity.x, entity.y)):
                         energy_loss -= 2
+                if getattr(entity, 'is_cave_dancer', False) and any(t.terrain_type == 'cave' for t in self.get_terrains_at(entity.x, entity.y)):
+                    energy_loss -= 5
+
 
             if getattr(entity, "is_gluttonous", False):
                 energy_loss += 1
