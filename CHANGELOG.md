@@ -17,6 +17,7 @@
 
 ## [Unreleased]
 ### Added
+- Implemented `is_cave_dancer` trait. Entities with this trait gain energy when on `cave` terrain.
 - Implemented `is_space_walker`, `is_space_glider`, and `is_space_dancer` traits for `space` terrain interactions.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 - [x] Implemented `is_space_dweller` trait. Entities with this trait treat being in space as a shelter, gaining increased defense and energy recovery.
@@ -31,7 +32,6 @@
 - Implemented `is_forestal` trait. Entities with this trait gain defense (+3) during combat when positioned on forest terrain. Also added forest terrain and forestal entities support to the CLI visualizer.
 
 - Added `is_ice_dancer` trait allowing entities to gain energy on ice terrain.
-- Implemented `is_cave_dancer` trait. Entities with this trait gain energy when on `cave` terrain.
 - Implemented `is_day_dancer` trait. Entities with this trait gain energy during the day.
 - Implemented `is_lava_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on lava terrain.
 - Implemented `is_drought_glider` trait. Entities with this trait consume 0 stamina when moving during a 'drought' event.

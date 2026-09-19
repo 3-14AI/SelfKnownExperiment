@@ -369,7 +369,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_night_dancer` trait. Entities with this trait gain energy at night.
 - [x] Implemented `is_moon_dancer` trait. Entities with this trait gain energy at night.
 
-- [x] Implemented `is_cave_dancer` trait. Entities with this trait gain energy when on `cave` terrain.
+- [x] Implemented `is_cave_dancer` trait. Entities with this trait gain energy when on `cave` terrain. Fully implemented mutation logic and energy gain in `engine.py` and comprehensive tests in `test_engine.py`.
 
 - [x] Implemented `is_water_dancer` trait. Entities with this trait gain energy when on `water` terrain.
 
