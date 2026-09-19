@@ -1,4 +1,5 @@
 ### New Features
+- [x] Fixed missing dweller traits in `Universe.tick()`. `is_parasite_dweller` and `is_shelter_dweller` are now properly considered as being in shelter for entity logic, and `is_grass_dweller` correctly protects prey when on `grass` terrain.
 - [x] Implemented `is_absorbent` trait. Entities with this trait gain hydration rapidly while in water or rain.
 - [x] Implemented `is_parasite_dancer` trait. Entities with this trait gain energy while they have attached parasites.
 - [x] Implemented `is_sleep_dancer` trait. Entities with this trait gain energy while sleeping.
