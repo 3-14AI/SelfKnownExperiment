@@ -584,6 +584,8 @@ class Universe:
                 stamina_cost = 0
             if getattr(entity, 'is_dune_walker', False) and any(t.terrain_type == 'sand' for t in terrains_here):
                 stamina_cost = 0
+            if getattr(entity, 'is_marsh_strider', False) and any(t.terrain_type == 'mud' for t in terrains_here):
+                stamina_cost = 0
             if getattr(entity, 'is_water_strider', False) and any(t.terrain_type == 'water' for t in terrains_here):
                 stamina_cost = 0
             if getattr(entity, 'is_space_strider', False) and any(t.terrain_type == 'space' for t in terrains_here):
