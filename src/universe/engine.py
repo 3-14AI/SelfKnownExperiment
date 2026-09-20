@@ -17,7 +17,7 @@ class Entity:
         base = self.size * 50
         return int(base * 1.5) if getattr(self, "has_blubber", False) else base
 
-    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False, is_volcanic=False, is_forestal=False, is_desertic=False, is_social=False, is_carnivorous_plant=False, disease_vector=False, is_nocturnal_predator=False, is_scentless=False, can_sprint=False, is_vampiric=False, is_detritivore=False, can_sweat=False, has_blubber=False, is_mud_bather=False, is_filter_feeder=False, is_gluttonous=False, is_solitary=False, is_cannibalistic=False, is_ambush_predator=False, is_territorial=False, has_horns=False, is_migratory=False, is_cooperative=False, is_frugivore=False, is_agile=False, has_strong_stomach=False, is_opportunistic=False, has_thick_skin=False, has_sharp_teeth=False, is_hardy=False, is_fast_learner=False, is_playful=False, is_heavy_sleeper=False, is_patient=False, is_endurance_runner=False, is_evasive=False, is_prolific=False, is_adaptable=False, is_resourceful=False, is_vocal=False, is_nest_builder=False, is_nomadic=False, is_photosensitive=False, is_fearless=False, is_scavenger=False, is_scout=False, is_intimidating=False, is_cleaner=False, is_spiteful=False, is_sunbather=False, is_pack_mule=False, is_reckless=False, is_thief=False, is_absorbent=False, is_toxic=False, is_vibrant=False, is_arctic=False, is_fierce=False, is_lucky=False, is_telepathic=False, is_cautious=False, is_restless=False, is_vengeful=False, is_defensive=False, is_sturdy=False, is_slippery=False, can_leap=False, is_heavy=False, is_lightweight=False, is_stealthy=False, is_mimic=False, is_resilient=False, is_smelly=False, is_relentless=False, is_parasite_resistant=False, is_ruthless=False, is_protective=False, is_forager=False, is_tireless=False, is_vigilant=False, is_pacifist=False, is_farsighted=False, is_chameleon=False, is_bloodthirsty=False, is_unappetizing=False, is_introspective=False, is_frenzied=False, is_sun_tracker=False, is_hypnotic=False, is_tracker=False, is_empathic=False, is_contagious=False, is_arboreal=False, is_stargazer=False, is_sure_footed=False, is_dust_bather=False, is_magnetic=False, is_drought_resistant=False, is_moon_bather=False, is_storm_chaser=False, is_shadow_stalker=False, is_pyrophilic=False, is_desperate=False, is_iron_willed=False, is_frost_walker=False, is_marsh_strider=False, is_dune_walker=False, is_water_strider=False, is_web_walker=False, is_ash_walker=False, is_wind_glider=False, is_forest_walker=False, is_rain_dancer=False, is_blizzard_glider=False, is_seismic_sensitive=False, is_mud_glider=False, is_drought_strider=False, is_earthquake_glider=False, is_volcanic_glider=False, is_ice_glider=False, is_day_glider=False, is_night_glider=False, is_snow_glider=False, is_deep_water_glider=False, is_ash_glider=False, is_spring_glider=False, is_summer_glider=False, is_autumn_glider=False, is_winter_glider=False, is_wall_glider=False, is_rain_glider=False, is_sand_glider=False, is_fire_glider=False, is_web_glider=False, is_forest_glider=False, is_water_glider=False, is_shelter_glider=False, is_mountain_walker=False, is_mountain_glider=False, is_mountain_dweller=False, is_sand_dweller=False, is_forest_dweller=False, is_water_dweller=False, is_ice_dweller=False, is_ash_dweller=False, is_snow_dweller=False, is_mud_dweller=False, is_web_dweller=False, is_deep_water_dweller=False, is_cave_dweller=False, is_wall_dweller=False, is_cave_glider=False, is_cave_walker=False, is_blizzard_dweller=False, is_storm_dweller=False, is_day_dweller=False, is_night_dweller=False, is_spring_dweller=False, is_summer_dweller=False, is_autumn_dweller=False, is_winter_dweller=False, is_drought_dweller=False, is_earthquake_dweller=False, is_volcanic_dweller=False, is_fire_dweller=False, is_rain_dweller=False, is_disease_dweller=False, is_poison_dweller=False, is_venom_resistant=False, is_ageless=False, is_disease_resistant=False, is_parasite_dweller=False, is_stun_dweller=False, is_sleep_dweller=False, is_snow_walker=False, is_blizzard_walker=False, is_storm_walker=False, is_rain_walker=False, is_volcanic_walker=False, is_earthquake_walker=False, is_fire_walker=False, is_drought_walker=False, is_mud_walker=False, is_sand_walker=False, is_water_walker=False, is_storm_glider=False, is_ice_walker=False, is_lava_walker=False, is_lava_glider=False, is_night_walker=False, is_deep_water_walker=False, is_wall_walker=False, is_day_walker=False, is_spring_walker=False, is_summer_walker=False, is_autumn_walker=False, is_winter_walker=False, is_shelter_walker=False, is_drought_glider=False, is_lava_dweller=False, is_space_dweller=False, is_shelter_dweller=False, is_fire_dancer=False, is_snow_dancer=False, is_storm_dancer=False, is_blizzard_dancer=False, is_earthquake_dancer=False, is_volcanic_dancer=False, is_drought_dancer=False, is_spring_dancer=False, is_summer_dancer=False, is_autumn_dancer=False, is_winter_dancer=False, is_day_dancer=False, is_night_dancer=False, is_moon_dancer=False, is_weather_sensitive=False, is_sand_dancer=False, is_cave_dancer=False, is_water_dancer=False, is_forest_dancer=False, is_ash_dancer=False, is_mud_dancer=False, is_ice_dancer=False, is_mountain_dancer=False, is_deep_water_dancer=False, is_lava_dancer=False, is_wall_dancer=False, is_web_dancer=False, is_shelter_dancer=False, is_wind_dancer=False, is_stun_dancer=False, is_poison_dancer=False, is_parasite_dancer=False, is_sleep_dancer=False, is_disease_dancer=False, is_grass_dancer=False, is_grass_walker=False, is_grass_glider=False, is_grass_dweller=False, is_space_walker=False, is_space_glider=False, is_space_dancer=False, is_symbiotic=False, is_hive_mind=False):
+    def __init__(self, name, x=0, y=0, energy=10, age=0, max_age=50, perception_radius=10, diet='herbivore', preferred_temperature=20, temperature_tolerance=40, is_infected=False, infection_time=0, species=None, symbiotic_with=None, attack=1, defense=1, preferred_terrain=None, size=1, intelligence=1, inventory=None, target_species=None, target_plants=None, generation=0, mutations=0, hydration=50, max_hydration=50, is_sleeping=False, is_aquatic=False, is_flying=False, toxicity=0, poison_resistance=0, poisoned_time=0, camouflage=0.0, vision_type='normal', can_hibernate=False, lays_eggs=False, level=1, experience=0, can_hoard=False, max_stamina=50, stamina=50, is_nocturnal=False, can_burrow=False, has_spikes=False, can_spin_webs=False, is_venomous=False, can_photosynthesize=False, is_amphibious=False, has_shell=False, has_echolocation=False, is_aposematic=False, is_fruiting=False, is_immune=False, is_cold_blooded=False, is_electric=False, stunned_time=0, is_regenerative=False, has_claws=False, is_parasitic=False, has_scales=False, has_fur=False, can_climb=False, pack_hunter=False, has_bioluminescence=False, is_volcanic=False, is_forestal=False, is_desertic=False, is_social=False, is_carnivorous_plant=False, disease_vector=False, is_nocturnal_predator=False, is_scentless=False, can_sprint=False, is_vampiric=False, is_detritivore=False, can_sweat=False, has_blubber=False, is_mud_bather=False, is_filter_feeder=False, is_gluttonous=False, is_solitary=False, is_cannibalistic=False, is_ambush_predator=False, is_territorial=False, has_horns=False, is_migratory=False, is_cooperative=False, is_frugivore=False, is_agile=False, has_strong_stomach=False, is_opportunistic=False, has_thick_skin=False, has_sharp_teeth=False, is_hardy=False, is_fast_learner=False, is_playful=False, is_heavy_sleeper=False, is_patient=False, is_endurance_runner=False, is_evasive=False, is_prolific=False, is_adaptable=False, is_resourceful=False, is_vocal=False, is_nest_builder=False, is_nomadic=False, is_photosensitive=False, is_fearless=False, is_scavenger=False, is_scout=False, is_intimidating=False, is_cleaner=False, is_spiteful=False, is_sunbather=False, is_pack_mule=False, is_reckless=False, is_thief=False, is_absorbent=False, is_toxic=False, is_vibrant=False, is_arctic=False, is_fierce=False, is_lucky=False, is_telepathic=False, is_cautious=False, is_restless=False, is_vengeful=False, is_defensive=False, is_sturdy=False, is_slippery=False, can_leap=False, is_heavy=False, is_lightweight=False, is_stealthy=False, is_mimic=False, is_resilient=False, is_smelly=False, is_relentless=False, is_parasite_resistant=False, is_ruthless=False, is_protective=False, is_forager=False, is_tireless=False, is_vigilant=False, is_pacifist=False, is_farsighted=False, is_chameleon=False, is_bloodthirsty=False, is_unappetizing=False, is_introspective=False, is_frenzied=False, is_sun_tracker=False, is_hypnotic=False, is_tracker=False, is_empathic=False, is_contagious=False, is_arboreal=False, is_stargazer=False, is_sure_footed=False, is_dust_bather=False, is_magnetic=False, is_drought_resistant=False, is_moon_bather=False, is_storm_chaser=False, is_shadow_stalker=False, is_pyrophilic=False, is_desperate=False, is_iron_willed=False, is_frost_walker=False, is_marsh_strider=False, is_dune_walker=False, is_water_strider=False, is_web_walker=False, is_ash_walker=False, is_wind_glider=False, is_forest_walker=False, is_rain_dancer=False, is_blizzard_glider=False, is_seismic_sensitive=False, is_mud_glider=False, is_drought_strider=False, is_earthquake_glider=False, is_volcanic_glider=False, is_ice_glider=False, is_day_glider=False, is_night_glider=False, is_snow_glider=False, is_deep_water_glider=False, is_ash_glider=False, is_spring_glider=False, is_summer_glider=False, is_autumn_glider=False, is_winter_glider=False, is_wall_glider=False, is_rain_glider=False, is_sand_glider=False, is_fire_glider=False, is_web_glider=False, is_forest_glider=False, is_water_glider=False, is_shelter_glider=False, is_mountain_walker=False, is_mountain_glider=False, is_mountain_dweller=False, is_sand_dweller=False, is_forest_dweller=False, is_water_dweller=False, is_ice_dweller=False, is_ash_dweller=False, is_snow_dweller=False, is_mud_dweller=False, is_web_dweller=False, is_deep_water_dweller=False, is_cave_dweller=False, is_wall_dweller=False, is_cave_glider=False, is_cave_walker=False, is_blizzard_dweller=False, is_storm_dweller=False, is_day_dweller=False, is_night_dweller=False, is_spring_dweller=False, is_summer_dweller=False, is_autumn_dweller=False, is_winter_dweller=False, is_drought_dweller=False, is_earthquake_dweller=False, is_volcanic_dweller=False, is_fire_dweller=False, is_rain_dweller=False, is_disease_dweller=False, is_poison_dweller=False, is_venom_resistant=False, is_ageless=False, is_disease_resistant=False, is_parasite_dweller=False, is_stun_dweller=False, is_sleep_dweller=False, is_snow_walker=False, is_blizzard_walker=False, is_storm_walker=False, is_rain_walker=False, is_volcanic_walker=False, is_earthquake_walker=False, is_fire_walker=False, is_drought_walker=False, is_mud_walker=False, is_sand_walker=False, is_water_walker=False, is_storm_glider=False, is_ice_walker=False, is_lava_walker=False, is_lava_glider=False, is_night_walker=False, is_deep_water_walker=False, is_wall_walker=False, is_day_walker=False, is_spring_walker=False, is_summer_walker=False, is_autumn_walker=False, is_winter_walker=False, is_shelter_walker=False, is_drought_glider=False, is_lava_dweller=False, is_space_dweller=False, is_shelter_dweller=False, is_fire_dancer=False, is_snow_dancer=False, is_storm_dancer=False, is_blizzard_dancer=False, is_earthquake_dancer=False, is_volcanic_dancer=False, is_drought_dancer=False, is_spring_dancer=False, is_summer_dancer=False, is_autumn_dancer=False, is_winter_dancer=False, is_day_dancer=False, is_night_dancer=False, is_moon_dancer=False, is_weather_sensitive=False, is_sand_dancer=False, is_cave_dancer=False, is_water_dancer=False, is_forest_dancer=False, is_ash_dancer=False, is_mud_dancer=False, is_ice_dancer=False, is_mountain_dancer=False, is_deep_water_dancer=False, is_lava_dancer=False, is_wall_dancer=False, is_web_dancer=False, is_shelter_dancer=False, is_wind_dancer=False, is_stun_dancer=False, is_poison_dancer=False, is_parasite_dancer=False, is_sleep_dancer=False, is_disease_dancer=False, is_grass_dancer=False, is_grass_walker=False, is_grass_glider=False, is_grass_dweller=False, is_space_walker=False, is_space_glider=False, is_space_dancer=False, is_symbiotic=False, is_hive_mind=False, is_sand_strider=False, is_ash_strider=False, is_snow_strider=False, is_ice_strider=False, is_lava_strider=False, is_forest_strider=False, is_grass_strider=False, is_wall_strider=False, is_web_strider=False, is_mountain_strider=False, is_cave_strider=False, is_deep_water_strider=False, is_space_strider=False):
         self.is_mud_dweller = is_mud_dweller
         self.is_web_dweller = is_web_dweller
         self.is_deep_water_dweller = is_deep_water_dweller
@@ -177,6 +177,19 @@ class Entity:
         self.is_marsh_strider = is_marsh_strider
         self.is_dune_walker = is_dune_walker
         self.is_water_strider = is_water_strider
+        self.is_space_strider = is_space_strider
+        self.is_deep_water_strider = is_deep_water_strider
+        self.is_cave_strider = is_cave_strider
+        self.is_mountain_strider = is_mountain_strider
+        self.is_web_strider = is_web_strider
+        self.is_wall_strider = is_wall_strider
+        self.is_grass_strider = is_grass_strider
+        self.is_forest_strider = is_forest_strider
+        self.is_lava_strider = is_lava_strider
+        self.is_ice_strider = is_ice_strider
+        self.is_snow_strider = is_snow_strider
+        self.is_ash_strider = is_ash_strider
+        self.is_sand_strider = is_sand_strider
         self.is_web_walker = is_web_walker
         self.is_ash_walker = is_ash_walker
         self.is_wind_glider = is_wind_glider
@@ -486,12 +499,12 @@ class Universe:
             raise ValueError(f"Movement out of bounds: ({new_x}, {new_y})")
 
         leaping = False
-        if not self.is_passable(new_x, new_y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)):
+        if not self.is_passable(new_x, new_y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)):
             if getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5:
                 # Try leaping over
                 leap_x, leap_y = new_x + dx, new_y + dy
                 if 0 <= leap_x < self.width and 0 <= leap_y < self.height:
-                    if self.is_passable(leap_x, leap_y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)):
+                    if self.is_passable(leap_x, leap_y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)):
                         new_x, new_y = leap_x, leap_y
                         leaping = True
                     else:
@@ -571,6 +584,32 @@ class Universe:
                 stamina_cost = 0
             if getattr(entity, 'is_water_strider', False) and any(t.terrain_type == 'water' for t in terrains_here):
                 stamina_cost = 0
+            if getattr(entity, 'is_space_strider', False) and any(t.terrain_type == 'space' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_deep_water_strider', False) and any(t.terrain_type == 'deep-water' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_cave_strider', False) and any(t.terrain_type == 'cave' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_mountain_strider', False) and any(t.terrain_type == 'mountain' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_web_strider', False) and any(t.terrain_type == 'web' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_wall_strider', False) and any(t.terrain_type == 'wall' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_grass_strider', False) and any(t.terrain_type == 'grass' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_forest_strider', False) and any(t.terrain_type == 'forest' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_lava_strider', False) and any(t.terrain_type == 'lava' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_ice_strider', False) and any(t.terrain_type == 'ice' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_snow_strider', False) and any(t.terrain_type == 'snow' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_ash_strider', False) and any(t.terrain_type == 'ash' for t in terrains_here):
+                stamina_cost = 0
+            if getattr(entity, 'is_sand_strider', False) and any(t.terrain_type == 'sand' for t in terrains_here):
+                stamina_cost = 0
             if getattr(entity, 'is_web_walker', False) and any(t.terrain_type == 'web' for t in terrains_here):
                 stamina_cost = 0
             if getattr(entity, 'is_ash_walker', False) and any(t.terrain_type == 'ash' for t in terrains_here):
@@ -615,7 +654,7 @@ class Universe:
             if not getattr(entity, 'is_tireless', False):
                 entity.stamina = max(0, entity.stamina - stamina_cost)
 
-        if any(t.terrain_type == 'web' for t in terrains_here) and not getattr(entity, 'can_spin_webs', False) and not getattr(entity, 'is_web_walker', False) and not getattr(entity, 'is_web_glider', False):
+        if any(t.terrain_type == 'web' for t in terrains_here) and not getattr(entity, 'can_spin_webs', False) and not getattr(entity, 'is_web_walker', False) and not getattr(entity, 'is_web_glider', False) and not getattr(entity, 'is_web_strider', False):
             if hasattr(entity, 'stamina'):
                 if getattr(entity, 'is_slippery', False) and random.random() < 0.5:
                     pass  # slipped away
@@ -625,9 +664,9 @@ class Universe:
     def get_terrains_at(self, x, y):
         return [t for t in self.terrains if t.x == x and t.y == y]
 
-    def is_passable(self, x, y, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False, is_water_strider=False):
+    def is_passable(self, x, y, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False, is_water_strider=False, is_wall_strider=False, is_deep_water_strider=False, is_web_strider=False):
         terrains_here = self.get_terrains_at(x, y)
-        if not is_flying and not is_climbing and any(t.terrain_type == 'wall' for t in terrains_here):
+        if not is_flying and not is_climbing and not is_wall_strider and any(t.terrain_type == 'wall' for t in terrains_here):
             return False
         is_water = any(t.terrain_type in ['water', 'deep-water'] for t in terrains_here)
         if is_flying:
@@ -635,6 +674,8 @@ class Universe:
         if is_amphibious:
             is_deep_water = any(t.terrain_type == 'deep-water' for t in terrains_here)
             return not is_deep_water
+        if is_deep_water_strider and any(t.terrain_type == 'deep-water' for t in terrains_here):
+            return True
         if is_water_strider and is_water and not any(t.terrain_type == 'deep-water' for t in terrains_here):
             return True
         if is_aquatic:
@@ -649,7 +690,7 @@ class Universe:
             raise ValueError(f"Terrain out of bounds: ({terrain.x}, {terrain.y})")
         self.terrains.append(terrain)
 
-    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False, can_leap=False, is_water_strider=False):
+    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False, can_leap=False, is_water_strider=False, is_wall_strider=False, is_deep_water_strider=False, is_web_strider=False):
         from collections import deque
         queue = deque([(start_x, start_y, [])])
         visited = {(start_x, start_y)}
@@ -677,13 +718,13 @@ class Universe:
                             visited.add((new_x, new_y))
                             queue.append((new_x, new_y, path + [(dx, dy)]))
                         else:
-                            if self.is_passable(new_x, new_y, is_aquatic, is_flying, is_amphibious, is_climbing, is_water_strider=is_water_strider):
+                            if self.is_passable(new_x, new_y, is_aquatic, is_flying, is_amphibious, is_climbing, is_water_strider=is_water_strider, is_wall_strider=is_wall_strider, is_deep_water_strider=is_deep_water_strider, is_web_strider=is_web_strider):
                                 visited.add((new_x, new_y))
                                 queue.append((new_x, new_y, path + [(dx, dy)]))
                             elif can_leap:
                                 leap_x, leap_y = new_x + dx, new_y + dy
                                 if (leap_x, leap_y) not in visited and 0 <= leap_x < self.width and 0 <= leap_y < self.height:
-                                    if self.is_passable(leap_x, leap_y, is_aquatic, is_flying, is_amphibious, is_climbing, is_water_strider=is_water_strider):
+                                    if self.is_passable(leap_x, leap_y, is_aquatic, is_flying, is_amphibious, is_climbing, is_water_strider=is_water_strider, is_wall_strider=is_wall_strider, is_deep_water_strider=is_deep_water_strider, is_web_strider=is_web_strider):
                                         visited.add((leap_x, leap_y))
                                         # Only add the leap destination. If the path reaches target, it will return path
                                         # but the movement system currently processes 1 step dx, dy.
@@ -751,7 +792,7 @@ class Universe:
                     for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
                         nx, ny = t.x + dx, t.y + dy
                         if 0 <= nx < self.width and 0 <= ny < self.height:
-                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)) if entity else not any(ta.terrain_type in ['wall', 'water', 'deep-water'] for ta in self.get_terrains_at(nx, ny)):
+                            if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)) if entity else not any(ta.terrain_type in ['wall', 'water', 'deep-water'] for ta in self.get_terrains_at(nx, ny)):
                                 dist_to_adj = abs(nx - x) + abs(ny - y)
                                 if dist_to_adj < min_dist:
                                     min_dist = dist_to_adj
@@ -1764,6 +1805,19 @@ class Universe:
                     child_is_marsh_strider = getattr(entity, 'is_marsh_strider', False)
                     child_is_dune_walker = getattr(entity, 'is_dune_walker', False)
                     child_is_water_strider = getattr(entity, 'is_water_strider', False)
+                    child_is_space_strider = getattr(entity, 'is_space_strider', False)
+                    child_is_deep_water_strider = getattr(entity, 'is_deep_water_strider', False)
+                    child_is_cave_strider = getattr(entity, 'is_cave_strider', False)
+                    child_is_mountain_strider = getattr(entity, 'is_mountain_strider', False)
+                    child_is_web_strider = getattr(entity, 'is_web_strider', False)
+                    child_is_wall_strider = getattr(entity, 'is_wall_strider', False)
+                    child_is_grass_strider = getattr(entity, 'is_grass_strider', False)
+                    child_is_forest_strider = getattr(entity, 'is_forest_strider', False)
+                    child_is_lava_strider = getattr(entity, 'is_lava_strider', False)
+                    child_is_ice_strider = getattr(entity, 'is_ice_strider', False)
+                    child_is_snow_strider = getattr(entity, 'is_snow_strider', False)
+                    child_is_ash_strider = getattr(entity, 'is_ash_strider', False)
+                    child_is_sand_strider = getattr(entity, 'is_sand_strider', False)
                     child_is_web_walker = getattr(entity, 'is_web_walker', False)
                     child_is_ash_walker = getattr(entity, 'is_ash_walker', False)
                     child_is_wind_glider = getattr(entity, 'is_wind_glider', False)
@@ -2042,6 +2096,45 @@ class Universe:
                         mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_is_water_strider = not child_is_water_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_space_strider = not child_is_space_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_deep_water_strider = not child_is_deep_water_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_cave_strider = not child_is_cave_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_mountain_strider = not child_is_mountain_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_web_strider = not child_is_web_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_wall_strider = not child_is_wall_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_grass_strider = not child_is_grass_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_forest_strider = not child_is_forest_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_lava_strider = not child_is_lava_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_ice_strider = not child_is_ice_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_snow_strider = not child_is_snow_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_ash_strider = not child_is_ash_strider
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_sand_strider = not child_is_sand_strider
                         mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_is_web_walker = not child_is_web_walker
@@ -3029,7 +3122,7 @@ class Universe:
 
                 # Update entity memory with visible obstacles
                 for t in self.terrains:
-                    if not self.is_passable(t.x, t.y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)) and (abs(t.x - entity.x) + abs(t.y - entity.y)) <= effective_perception:
+                    if not self.is_passable(t.x, t.y, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)) and (abs(t.x - entity.x) + abs(t.y - entity.y)) <= effective_perception:
                         entity.memory.add((t.x, t.y))
 
                 if getattr(entity, 'is_scout', False) and entity.memory:
@@ -3170,10 +3263,10 @@ class Universe:
                                 entity.y = best_host.y
                                 can_move = False
                             else:
-                                path = self.find_path(entity.x, entity.y, best_host.x, best_host.y, max_distance=actual_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                path = self.find_path(entity.x, entity.y, best_host.x, best_host.y, max_distance=actual_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                 if path:
                                     next_step = path[0]
-                                    if self.is_passable(next_step[0], next_step[1], getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)):
+                                    if self.is_passable(next_step[0], next_step[1], getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)):
                                         entity.x, entity.y = next_step
                                         entity.stamina = max(0, getattr(entity, 'stamina', 50) - 1)
                                 can_move = False # we handled movement
@@ -3206,7 +3299,7 @@ class Universe:
                                 try:
                                     # Basic bounds/terrain check before moving
                                     if 0 <= nx < self.width and 0 <= ny < self.height:
-                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + dx * 2, entity.y + dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + dx * 2, entity.y + dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))):
                                             dist_to_predator = abs(nx - px) + abs(ny - py)
                                             if dist_to_predator > max_dist:
                                                 max_dist = dist_to_predator
@@ -3225,7 +3318,7 @@ class Universe:
                             if entity.hydration <= entity.max_hydration / 2:
                                 nearest_water = self.get_nearest_water(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                                 if nearest_water:
-                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -3237,7 +3330,7 @@ class Universe:
                             if not moved_for_water:
                                 nearest_food = self.get_nearest_food(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                                 if nearest_food:
-                                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                    path = self.find_path(entity.x, entity.y, nearest_food.x, nearest_food.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -3251,7 +3344,7 @@ class Universe:
                                         center_x = sum(e.x for e in flockmates) // len(flockmates)
                                         center_y = sum(e.y for e in flockmates) // len(flockmates)
                                         if center_x != entity.x or center_y != entity.y:
-                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                             if path and len(path) > 0:
                                                 dx, dy = path[0]
                                                 try:
@@ -3262,7 +3355,7 @@ class Universe:
                                         # Migration behavior
                                         target_y = self.height - 1 if self.current_season in ['autumn', 'winter'] else 0
                                         if entity.y != target_y:
-                                            path = self.find_path(entity.x, entity.y, entity.x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                            path = self.find_path(entity.x, entity.y, entity.x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                             if path and len(path) > 0:
                                                 dx, dy = path[0]
                                                 try:
@@ -3324,7 +3417,7 @@ class Universe:
                                 nx, ny = entity.x + dx, entity.y + dy
                                 try:
                                     if 0 <= nx < self.width and 0 <= ny < self.height:
-                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + dx * 2, entity.y + dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))):
+                                        if self.is_passable(nx, ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + dx * 2, entity.y + dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))):
                                             dist_to_predator = abs(nx - px) + abs(ny - py)
                                             if dist_to_predator > max_dist:
                                                 max_dist = dist_to_predator
@@ -3342,7 +3435,7 @@ class Universe:
                             if entity.hydration <= entity.max_hydration / 2:
                                 nearest_water = self.get_nearest_water(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                                 if nearest_water:
-                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                    path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -3395,7 +3488,7 @@ class Universe:
                                             best_flank_dist = float('inf')
                                             for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
                                                 fx, fy = target_to_chase.x + dx, target_to_chase.y + dy
-                                                if self.is_passable(fx, fy, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)):
+                                                if self.is_passable(fx, fy, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)):
                                                     if not any(e.x == fx and e.y == fy for e in pack_mates):
                                                         dist = abs(entity.x - fx) + abs(entity.y - fy)
                                                         if dist < best_flank_dist:
@@ -3404,7 +3497,7 @@ class Universe:
                                             if best_flank:
                                                 target_x, target_y = best_flank
 
-                                    path = self.find_path(entity.x, entity.y, target_x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                    path = self.find_path(entity.x, entity.y, target_x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
@@ -3432,7 +3525,7 @@ class Universe:
                                                     step_dx = 0
                                             check_nx = entity.x + step_dx
                                             check_ny = entity.y + step_dy
-                                            if self.is_passable(check_nx, check_ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + step_dx * 2, entity.y + step_dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))):
+                                            if self.is_passable(check_nx, check_ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + step_dx * 2, entity.y + step_dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))):
                                                 best_scent = self.scent_trails[(nx, ny)]
                                                 best_pos = (step_dx, step_dy)
                                     if best_pos:
@@ -3447,7 +3540,7 @@ class Universe:
                                             center_x = sum(e.x for e in flockmates) // len(flockmates)
                                             center_y = sum(e.y for e in flockmates) // len(flockmates)
                                             if center_x != entity.x or center_y != entity.y:
-                                                path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                                path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                                 if path and len(path) > 0:
                                                     dx, dy = path[0]
                                                     try:
@@ -3458,7 +3551,7 @@ class Universe:
                                             # Migration behavior
                                             target_y = self.height - 1 if self.current_season in ['autumn', 'winter'] else 0
                                             if entity.y != target_y:
-                                                path = self.find_path(entity.x, entity.y, entity.x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                                path = self.find_path(entity.x, entity.y, entity.x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                                 if path and len(path) > 0:
                                                     dx, dy = path[0]
                                                     try:
@@ -3540,6 +3633,32 @@ class Universe:
                             if getattr(prey_to_eat, 'is_forestal', False) and any(t.terrain_type == 'forest' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
                                 effective_defense += 3
                             if getattr(prey_to_eat, 'is_marsh_strider', False) and any(t.terrain_type == 'mud' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_space_strider', False) and any(t.terrain_type == 'space' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_deep_water_strider', False) and any(t.terrain_type == 'deep-water' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_cave_strider', False) and any(t.terrain_type == 'cave' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_mountain_strider', False) and any(t.terrain_type == 'mountain' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_web_strider', False) and any(t.terrain_type == 'web' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_wall_strider', False) and any(t.terrain_type == 'wall' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_grass_strider', False) and any(t.terrain_type == 'grass' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_forest_strider', False) and any(t.terrain_type == 'forest' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_lava_strider', False) and any(t.terrain_type == 'lava' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_ice_strider', False) and any(t.terrain_type == 'ice' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_snow_strider', False) and any(t.terrain_type == 'snow' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_ash_strider', False) and any(t.terrain_type == 'ash' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                                effective_defense += 2
+                            if getattr(prey_to_eat, 'is_sand_strider', False) and any(t.terrain_type == 'sand' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
                                 effective_defense += 2
                             if getattr(prey_to_eat, 'has_shell', False):
                                 effective_defense += 5
@@ -3668,7 +3787,7 @@ class Universe:
                         if entity.hydration <= entity.max_hydration / 2:
                             nearest_water = self.get_nearest_water(entity.x, entity.y, max_distance=effective_perception, entity=entity)
                             if nearest_water:
-                                path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                path = self.find_path(entity.x, entity.y, nearest_water.x, nearest_water.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                 if path and len(path) > 0:
                                     dx, dy = path[0]
                                     try:
@@ -3700,7 +3819,7 @@ class Universe:
                                         best_flank_dist = float('inf')
                                         for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
                                             fx, fy = nearest_prey.x + dx, nearest_prey.y + dy
-                                            if self.is_passable(fx, fy, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)):
+                                            if self.is_passable(fx, fy, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)):
                                                 if not any(e.x == fx and e.y == fy for e in pack_mates):
                                                     dist = abs(entity.x - fx) + abs(entity.y - fy)
                                                     if dist < best_flank_dist:
@@ -3709,7 +3828,7 @@ class Universe:
                                         if best_flank:
                                             target_x, target_y = best_flank
 
-                                path = self.find_path(entity.x, entity.y, target_x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                path = self.find_path(entity.x, entity.y, target_x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                 if path and len(path) > 0:
                                     dx, dy = path[0]
                                     try:
@@ -3735,7 +3854,7 @@ class Universe:
                                                 step_dx = 0
                                         check_nx = entity.x + step_dx
                                         check_ny = entity.y + step_dy
-                                        if self.is_passable(check_nx, check_ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + step_dx * 2, entity.y + step_dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))):
+                                        if self.is_passable(check_nx, check_ny, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False)) or (getattr(entity, 'can_leap', False) and getattr(entity, 'stamina', 0) >= 5 and self.is_passable(entity.x + step_dx * 2, entity.y + step_dy * 2, getattr(entity, 'is_aquatic', False), getattr(entity, 'is_flying', False), getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))):
                                             best_scent = self.scent_trails[(nx, ny)]
                                             best_pos = (step_dx, step_dy)
                                 if best_pos:
@@ -3750,7 +3869,7 @@ class Universe:
                                         center_x = sum(e.x for e in flockmates) // len(flockmates)
                                         center_y = sum(e.y for e in flockmates) // len(flockmates)
                                         if center_x != entity.x or center_y != entity.y:
-                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                            path = self.find_path(entity.x, entity.y, center_x, center_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                             if path and len(path) > 0:
                                                 dx, dy = path[0]
                                                 try:
@@ -3761,7 +3880,7 @@ class Universe:
                                         # Migration behavior
                                         target_y = self.height - 1 if self.current_season in ['autumn', 'winter'] else 0
                                         if entity.y != target_y:
-                                            path = self.find_path(entity.x, entity.y, entity.x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False))
+                                            path = self.find_path(entity.x, entity.y, entity.x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False))
                                             if path and len(path) > 0:
                                                 dx, dy = path[0]
                                                 try:
@@ -3809,6 +3928,32 @@ class Universe:
                         if getattr(prey_to_eat, 'is_territorial', False):
                             effective_defense += 2
                         if getattr(prey_to_eat, 'is_marsh_strider', False) and any(t.terrain_type == 'mud' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_space_strider', False) and any(t.terrain_type == 'space' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_deep_water_strider', False) and any(t.terrain_type == 'deep-water' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_cave_strider', False) and any(t.terrain_type == 'cave' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_mountain_strider', False) and any(t.terrain_type == 'mountain' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_web_strider', False) and any(t.terrain_type == 'web' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_wall_strider', False) and any(t.terrain_type == 'wall' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_grass_strider', False) and any(t.terrain_type == 'grass' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_forest_strider', False) and any(t.terrain_type == 'forest' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_lava_strider', False) and any(t.terrain_type == 'lava' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_ice_strider', False) and any(t.terrain_type == 'ice' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_snow_strider', False) and any(t.terrain_type == 'snow' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_ash_strider', False) and any(t.terrain_type == 'ash' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
+                            effective_defense += 2
+                        if getattr(prey_to_eat, 'is_sand_strider', False) and any(t.terrain_type == 'sand' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
                             effective_defense += 2
                         if getattr(prey_to_eat, 'has_shell', False):
                             effective_defense += 5
