@@ -2074,3 +2074,11 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn("Œ", output)
+
+    def test_is_marsh_strider_visualizer(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", is_marsh_strider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('Ł', output)

@@ -12055,11 +12055,14 @@ class TestIsFrostWalkerLogic(unittest.TestCase):
         self.assertEqual(entity.stamina, 50, "Stamina should not decrease when a frost walker moves on snow or ice.")
 
 class TestIsMarshStriderMutation(unittest.TestCase):
-    @unittest.skip('flaky')
     def test_is_marsh_strider_mutation(self):
-        universe = Universe(width=10, height=10)
+        universe = Universe(width=10, height=10, reproduction_threshold=20, reproduction_cost=10)
         universe.mutation_chance = 1.0
-        parent = Entity(name="parent", x=5, y=5, energy=50, age=10, size=1, is_marsh_strider=False)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        # High energy and low reproduction_threshold guarantees reproduction
+        parent = Entity(name="parent", x=5, y=5, energy=5000, max_age=100, age=10, size=20, is_marsh_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
         universe.add_entity(parent)
 
         from unittest import mock
@@ -12067,8 +12070,8 @@ class TestIsMarshStriderMutation(unittest.TestCase):
             universe.tick()
 
         children = [e for e in universe.entities if "child" in e.name]
-        pass # Removed due to flaky behavior
-        self.assertTrue(children[0].is_marsh_strider)
+        self.assertGreater(len(children), 0, "A child should have been born")
+        self.assertTrue(getattr(children[0], 'is_marsh_strider', False), "Child should have mutated is_marsh_strider")
 
 class TestIsMarshStriderLogic(unittest.TestCase):
     def test_is_marsh_strider_stamina(self):

@@ -490,3 +490,5 @@ All notable changes to Project Genesis will be documented in this file.
 - Added visualizer rendering (character 'œ') and tests for `is_grass_dancer` trait.
 - [x] Added missing unit tests for `is_summer_dancer`, `is_autumn_dancer`, and `is_winter_dancer` traits.
 - [x] Fixed flaky mutation tests in `tests/test_engine.py` (`is_hive_mind`, `is_symbiotic`, `is_mountain_dancer`, `is_ice_dancer`, `is_ash_dancer`, `is_deep_water_dancer`) by ensuring high parent energy, low reproduction threshold, and disabled environmental events to allow deterministic trait verification.
+
+- [x] Implemented `is_marsh_strider` trait. Entities with this trait consume no stamina when moving on mud terrain and gain a defense bonus while on mud. Unskipped and fixed the flaky mutation test.
