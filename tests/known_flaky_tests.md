@@ -1,0 +1,3 @@
+- `test_is_sand_dweller` in `tests/test_engine.py`
+- `test_is_scavenger_mutation` in `tests/test_engine.py`
+- `test_mud_dancer_energy_gain` in `tests/test_engine.py`
