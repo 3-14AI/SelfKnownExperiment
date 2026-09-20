@@ -415,3 +415,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_cave_strider` trait. Entities with this trait consume 0 stamina when moving on cave terrain and gain a defense bonus while on cave.
 - [x] Implemented `is_deep_water_strider` trait. Entities with this trait consume 0 stamina when moving on deep-water terrain and gain a defense bonus while on deep-water.
 - [x] Implemented `is_space_strider` trait. Entities with this trait consume 0 stamina when moving on space terrain and gain a defense bonus while on space.
+- [x] Implemented `is_shelter_strider` trait. Entities with this trait consume 0 stamina when moving on shelter terrain and gain a defense bonus while on shelter.
