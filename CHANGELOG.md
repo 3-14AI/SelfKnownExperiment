@@ -17,6 +17,19 @@
 
 ## [Unreleased]
 ### Added
+- Implemented `is_sand_strider` trait. Entities with this trait consume 0 stamina when moving on sand terrain and gain a defense bonus while on sand.
+- Implemented `is_ash_strider` trait. Entities with this trait consume 0 stamina when moving on ash terrain and gain a defense bonus while on ash.
+- Implemented `is_snow_strider` trait. Entities with this trait consume 0 stamina when moving on snow terrain and gain a defense bonus while on snow.
+- Implemented `is_ice_strider` trait. Entities with this trait consume 0 stamina when moving on ice terrain and gain a defense bonus while on ice.
+- Implemented `is_lava_strider` trait. Entities with this trait consume 0 stamina when moving on lava terrain and gain a defense bonus while on lava.
+- Implemented `is_forest_strider` trait. Entities with this trait consume 0 stamina when moving on forest terrain and gain a defense bonus while on forest.
+- Implemented `is_grass_strider` trait. Entities with this trait consume 0 stamina when moving on grass terrain and gain a defense bonus while on grass.
+- Implemented `is_wall_strider` trait. Entities with this trait consume 0 stamina when moving on wall terrain and gain a defense bonus while on wall.
+- Implemented `is_web_strider` trait. Entities with this trait consume 0 stamina when moving on web terrain and gain a defense bonus while on web.
+- Implemented `is_mountain_strider` trait. Entities with this trait consume 0 stamina when moving on mountain terrain and gain a defense bonus while on mountain.
+- Implemented `is_cave_strider` trait. Entities with this trait consume 0 stamina when moving on cave terrain and gain a defense bonus while on cave.
+- Implemented `is_deep_water_strider` trait. Entities with this trait consume 0 stamina when moving on deep-water terrain and gain a defense bonus while on deep-water.
+- Implemented `is_space_strider` trait. Entities with this trait consume 0 stamina when moving on space terrain and gain a defense bonus while on space.
 - Implemented `is_cave_dancer` trait. Entities with this trait gain energy when on `cave` terrain.
 - Implemented `is_space_walker`, `is_space_glider`, and `is_space_dancer` traits for `space` terrain interactions.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.

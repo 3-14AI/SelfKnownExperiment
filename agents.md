@@ -402,3 +402,16 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_absorbent` trait. Entities with this trait gain hydration rapidly while in water or rain.
 - [x] Implemented `is_hive_mind` trait. Entities with this trait form a collective consciousness, allowing low-energy members to draw energy from healthy members within their perception radius to ensure the survival of the hive.
 - [x] Fixed flaky mutation tests in `tests/test_engine.py` (`is_hive_mind`, `is_symbiotic`, `is_mountain_dancer`, `is_ice_dancer`, `is_ash_dancer`, `is_deep_water_dancer`) by ensuring high parent energy, low reproduction threshold, and disabled environmental events to allow deterministic trait verification.
+- [x] Implemented `is_sand_strider` trait. Entities with this trait consume 0 stamina when moving on sand terrain and gain a defense bonus while on sand.
+- [x] Implemented `is_ash_strider` trait. Entities with this trait consume 0 stamina when moving on ash terrain and gain a defense bonus while on ash.
+- [x] Implemented `is_snow_strider` trait. Entities with this trait consume 0 stamina when moving on snow terrain and gain a defense bonus while on snow.
+- [x] Implemented `is_ice_strider` trait. Entities with this trait consume 0 stamina when moving on ice terrain and gain a defense bonus while on ice.
+- [x] Implemented `is_lava_strider` trait. Entities with this trait consume 0 stamina when moving on lava terrain and gain a defense bonus while on lava.
+- [x] Implemented `is_forest_strider` trait. Entities with this trait consume 0 stamina when moving on forest terrain and gain a defense bonus while on forest.
+- [x] Implemented `is_grass_strider` trait. Entities with this trait consume 0 stamina when moving on grass terrain and gain a defense bonus while on grass.
+- [x] Implemented `is_wall_strider` trait. Entities with this trait consume 0 stamina when moving on wall terrain and gain a defense bonus while on wall.
+- [x] Implemented `is_web_strider` trait. Entities with this trait consume 0 stamina when moving on web terrain and gain a defense bonus while on web.
+- [x] Implemented `is_mountain_strider` trait. Entities with this trait consume 0 stamina when moving on mountain terrain and gain a defense bonus while on mountain.
+- [x] Implemented `is_cave_strider` trait. Entities with this trait consume 0 stamina when moving on cave terrain and gain a defense bonus while on cave.
+- [x] Implemented `is_deep_water_strider` trait. Entities with this trait consume 0 stamina when moving on deep-water terrain and gain a defense bonus while on deep-water.
+- [x] Implemented `is_space_strider` trait. Entities with this trait consume 0 stamina when moving on space terrain and gain a defense bonus while on space.
