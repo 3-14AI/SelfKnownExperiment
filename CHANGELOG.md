@@ -83,6 +83,8 @@
 - Added visualizer support for `has_bioluminescence` (rendered as 'l').
 
 ### Fixed
+- Fixed `is_disease_dancer` missing energy recovery logic when infected.
+
 - Fixed flaky tests: `test_fruiting_drops_food`, `test_population_limit`, `test_hydration_loss_and_penalty`, `test_entity_pathfinding_around_obstacle` by isolating randomness.
 - Cleaned up duplicated tests in `tests/test_engine.py` (climbing, echolocation, immunity).
 - Added visualizer support and tests for `is_regenerative`, `is_immune`, `is_amphibious` traits.

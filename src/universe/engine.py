@@ -1638,6 +1638,9 @@ class Universe:
                     energy_loss -= 5
 
 
+                if getattr(entity, 'is_disease_dancer', False) and getattr(entity, 'is_infected', False):
+                    energy_loss -= 5
+
             if getattr(entity, "is_gluttonous", False):
                 energy_loss += 1
             entity.energy = max(0, entity.energy - energy_loss)
