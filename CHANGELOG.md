@@ -17,6 +17,7 @@
 
 ## [Unreleased]
 ### Added
+- Implemented `is_shelter_strider` trait. Entities with this trait consume 0 stamina when moving on shelter terrain and gain a defense bonus while on shelter.
 - Implemented `is_sand_strider` trait. Entities with this trait consume 0 stamina when moving on sand terrain and gain a defense bonus while on sand.
 - Implemented `is_ash_strider` trait. Entities with this trait consume 0 stamina when moving on ash terrain and gain a defense bonus while on ash.
 - Implemented `is_snow_strider` trait. Entities with this trait consume 0 stamina when moving on snow terrain and gain a defense bonus while on snow.

@@ -2066,3 +2066,11 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         rendered = visualizer.render()
         self.assertIn('/', rendered)
+
+    def test_visualize_is_shelter_strider(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_shelter_strider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Œ", output)

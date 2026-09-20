@@ -17502,3 +17502,51 @@ class TestHiveMind(unittest.TestCase):
         children = [e for e in self.universe.entities if e != parent]
         self.assertGreater(len(children), 0)
         self.assertTrue(getattr(children[0], 'is_hive_mind', False))
+
+class TestShelterStrider(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10, food_spawn_rate=0)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 1000
+
+    def test_is_shelter_strider_movement(self):
+        from src.universe.engine import Entity, Terrain
+        e = Entity("ShelterStrider", x=0, y=0, energy=100, size=1, max_age=100, intelligence=1, is_shelter_strider=True, max_stamina=100, stamina=100)
+        self.universe.add_terrain(Terrain(x=1, y=0, terrain_type='shelter'))
+        self.universe.add_entity(e)
+        self.universe.move_entity(e, 1, 0)
+        self.assertEqual(e.stamina, 100)
+
+    def test_is_shelter_strider_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_shelter_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        parent.preferred_temperature = self.universe.get_temperature_at(1, 1)
+        parent.temperature_tolerance = 1000
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        self.universe.add_entity(parent)
+
+        import random
+        real_randint = random.randint
+        real_random = random.random
+
+        def mocked_randint(a, b): return 1
+        def mocked_random(): return 0.01
+
+        random.randint = mocked_randint
+        random.random = mocked_random
+
+        try:
+            self.universe.tick()
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        children = [e for e in self.universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(getattr(children[0], 'is_shelter_strider', False))

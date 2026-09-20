@@ -551,6 +551,8 @@ class CLIVisualizer:
                         char = 'Ŏ'
                     elif getattr(entity, 'is_web_dancer', False):
                         char = 'ŏ'
+                    elif getattr(entity, 'is_shelter_strider', False):
+                        char = 'Œ'
                     elif getattr(entity, 'is_wind_dancer', False):
                         char = 'Ő'
                     elif getattr(entity, 'is_winter_dancer', False):
