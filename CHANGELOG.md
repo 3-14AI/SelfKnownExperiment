@@ -473,5 +473,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_wind_dancer` trait. Entities with this trait gain energy when inside a `storm` event.
 - Added visualizer rendering (character 'œ') and tests for `is_grass_dancer` trait.
 - [x] Added missing unit tests for `is_summer_dancer`, `is_autumn_dancer`, and `is_winter_dancer` traits.
-- [x] Implemented `is_hive_mind` trait. Entities with this trait form a collective consciousness, allowing low-energy members to draw energy from healthy members within their perception radius to ensure the survival of the hive.
-- [x] Implemented `is_hive_mind` trait. Entities with this trait form a collective consciousness, allowing low-energy members to draw energy from healthy members within their perception radius to ensure the survival of the hive.
+- [x] Fixed flaky mutation tests in `tests/test_engine.py` (`is_hive_mind`, `is_symbiotic`, `is_mountain_dancer`, `is_ice_dancer`, `is_ash_dancer`, `is_deep_water_dancer`) by ensuring high parent energy, low reproduction threshold, and disabled environmental events to allow deterministic trait verification.

@@ -5687,7 +5687,12 @@ class TestIsAdaptable(unittest.TestCase):
 
     def test_is_resourceful_prey_hydration(self):
         universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
         e = Entity("Resourceful", x=0, y=0, size=2, hydration=10, max_hydration=50, is_resourceful=True, energy=50, stamina=50, max_stamina=50, age=10, diet='carnivore')
+        e.preferred_temperature = universe.get_temperature_at(0, 0)
+        e.temperature_tolerance = 1000
         universe.time = 1
         universe.add_entity(e)
         prey = Entity("Prey", x=0, y=0, size=1, energy=1, attack=0, defense=0)
@@ -5722,7 +5727,12 @@ class TestIsAdaptable(unittest.TestCase):
 
     def test_is_resourceful_prey_hydration(self):
         universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
         e = Entity("Resourceful", x=0, y=0, size=2, hydration=10, max_hydration=50, is_resourceful=True, energy=50, stamina=50, max_stamina=50, age=10, diet='carnivore')
+        e.preferred_temperature = universe.get_temperature_at(0, 0)
+        e.temperature_tolerance = 1000
         universe.time = 1
         universe.add_entity(e)
         prey = Entity("Prey", x=0, y=0, size=1, energy=1, attack=0, defense=0)
@@ -16081,19 +16091,32 @@ class TestIsAshDancer(unittest.TestCase):
 
     def test_ash_dancer_gains_energy_on_ash(self):
         e = Entity(name="test", x=1, y=1, energy=10, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_ash_dancer=True, size=1)
+        e.preferred_temperature = self.universe.get_temperature_at(1, 1)
+        e.temperature_tolerance = 1000
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
         self.universe.add_entity(e)
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type="ash"))
         self.universe.tick()
         self.assertTrue(e.energy > 10)
 
     def test_ash_dancer_mutates(self):
-        parent = Entity(name="parent", x=1, y=1, energy=100, is_ash_dancer=True)
+        parent = Entity(name="parent", x=1, y=1, energy=5000, size=20, is_ash_dancer=True, is_gluttonous=True, has_blubber=True, is_immune=True, is_pacifist=True, is_ageless=True)
+        parent.preferred_temperature = self.universe.get_temperature_at(1, 1)
+        parent.temperature_tolerance = 1000
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        self.universe.food_spawn_chance = 0.0
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
 
         has_mutated = False
-        for _ in range(50):
+        for _ in range(150):
             self.universe.tick()
+            parent.energy = 5000
             for e in self.universe.entities:
                 if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_ash_dancer', False) == False:
                     has_mutated = True
@@ -16150,16 +16173,23 @@ class TestIsIceDancer(unittest.TestCase):
         self.universe.tick()
         self.assertTrue(e.energy > 10)
 
-    @unittest.skip('Flaky mutation test')
     def test_ice_dancer_mutation(self):
         from src.universe.engine import Entity
-        parent = Entity(name="parent", x=1, y=1, energy=100, is_ice_dancer=True)
+        parent = Entity(name="parent", x=1, y=1, energy=5000, size=20, is_ice_dancer=True, is_gluttonous=True, has_blubber=True, is_immune=True, is_pacifist=True, is_ageless=True)
+        parent.preferred_temperature = self.universe.get_temperature_at(1, 1)
+        parent.temperature_tolerance = 1000
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        self.universe.food_spawn_chance = 0.0
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
 
         has_mutated = False
-        for _ in range(50):
+        for _ in range(150):
             self.universe.tick()
+            parent.energy = 5000
             for e in self.universe.entities:
                 if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_ice_dancer', False) == False:
                     has_mutated = True
@@ -16186,20 +16216,26 @@ class TestIsMountainDancer(unittest.TestCase):
         self.assertGreater(entity.energy, old_energy)
 
     def test_mountain_dancer_mutation(self):
-        parent = Entity(name="parent", x=1, y=1, energy=100, is_mountain_dancer=True, size=5)
+        parent = Entity(name="parent", x=1, y=1, energy=5000, size=20, is_mountain_dancer=True, is_gluttonous=True, has_blubber=True, is_immune=True, is_pacifist=True, is_ageless=True)
+        parent.preferred_temperature = self.universe.get_temperature_at(1, 1)
+        parent.temperature_tolerance = 1000
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
         self.universe.add_entity(parent)
-        self.universe.food_spawn_chance = 0.0
+        self.universe.mutation_chance = 1.0
 
         has_mutated = False
-        for _ in range(50):
+        for _ in range(150):
             self.universe.tick()
+            parent.energy = 5000
             for e in self.universe.entities:
-                if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_mountain_dancer', False) == False:
+                if e.generation > 0 and not getattr(e, 'is_mountain_dancer', True):
                     has_mutated = True
                     break
             if has_mutated:
                 break
-
         self.assertTrue(has_mutated)
 
 class TestDeepWaterDancer(unittest.TestCase):
@@ -16226,18 +16262,39 @@ class TestDeepWaterDancer(unittest.TestCase):
         self.assertTrue(entity.energy > non_dancer.energy, f"Deep water dancer energy {entity.energy} should be > {non_dancer.energy}")
 
     def test_deep_water_dancer_mutates(self):
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_gluttonous=True, has_blubber=True, is_deep_water_dancer=False)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=20, is_gluttonous=True, has_blubber=True, is_deep_water_dancer=False, is_immune=True, is_pacifist=True, is_ageless=True)
+        parent.preferred_temperature = self.universe.get_temperature_at(5, 5)
+        parent.temperature_tolerance = 1000
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        self.universe.food_spawn_chance = 0.0
         self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0 # Force mutation
 
-        has_mutated = False
-        for _ in range(50):
+        import random
+        # Save real random
+        real_randint = random.randint
+        real_random = random.random
+
+        def fake_random():
+            return 0.0 # Force mutation
+
+        def fake_randint(a, b):
+            return real_randint(a, b)
+
+        random.randint = fake_randint
+        random.random = fake_random
+
+        try:
             self.universe.tick()
-            if any(getattr(e, 'is_deep_water_dancer', False) for e in self.universe.entities if e is not parent):
-                has_mutated = True
-                break
+        finally:
+            random.randint = real_randint
+            random.random = real_random
 
-        self.assertTrue(has_mutated, "Trait is_deep_water_dancer failed to mutate")
+        children = [e for e in self.universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(getattr(children[0], 'is_deep_water_dancer', False))
 
 
 class TestLavaDancer(unittest.TestCase):
@@ -16903,7 +16960,7 @@ class TestIsSummerDancer(unittest.TestCase):
         entity.preferred_temperature = 30
         entity.temperature_tolerance = 1000
         self.universe.add_entity(entity)
-        self.universe.time = self.universe.season_length # summer
+        self.universe.time =  self.universe.season_length # summer
 
         self.universe.tick()
 
@@ -17345,12 +17402,16 @@ class TestSymbiotic(unittest.TestCase):
         self.assertEqual(e1.energy, 48) # loses 0 base energy per tick + 2 transferred = 2 lost
         self.assertEqual(e2.energy, 12) # loses 0 base energy + gains 2 transferred = net +2
 
-    @unittest.skip('Flaky mutation test')
     def test_is_symbiotic_mutation(self):
         from src.universe.engine import Entity
-        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_symbiotic=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True)
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_symbiotic=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        parent.preferred_temperature = self.universe.get_temperature_at(1, 1)
+        parent.temperature_tolerance = 1000
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
         self.universe.add_entity(parent)
-        self.universe.reproduction_threshold = 1000
+        self.universe.reproduction_threshold = 500
 
         import random
         # Save real random
@@ -17404,12 +17465,16 @@ class TestHiveMind(unittest.TestCase):
         # e2 loses 1 base energy, donates 5 = net -6
         self.assertEqual(e2.energy, 34) # 40 - 5 (transfer) - 1 (base loss)
 
-    @unittest.skip('Flaky mutation test')
     def test_is_hive_mind_mutation(self):
         from src.universe.engine import Entity
-        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_hive_mind=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True)
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_hive_mind=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        parent.preferred_temperature = self.universe.get_temperature_at(1, 1)
+        parent.temperature_tolerance = 1000
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
         self.universe.add_entity(parent)
-        self.universe.reproduction_threshold = 1000
+        self.universe.reproduction_threshold = 500
 
         import random
         # Save real random
