@@ -375,6 +375,8 @@ class CLIVisualizer:
                         char = 'β'
                     elif getattr(entity, 'is_drought_strider', False):
                         char = 'Ð'
+                    elif getattr(entity, 'is_storm_strider', False):
+                        char = 'Ϟ'
                     elif getattr(entity, 'is_earthquake_glider', False):
                         char = 'Ç'
                     elif getattr(entity, 'is_volcanic_glider', False):
