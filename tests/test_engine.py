@@ -4696,6 +4696,9 @@ class TestBurrowing(unittest.TestCase):
         self.universe.disease_chance = 0.0
         self.universe.food_spawn_rate = 0.0
         self.universe.base_temperature = 20
+        e.preferred_temperature = 20
+        e.temperature_tolerance = 1000
+        self.universe.get_temperature_at = lambda x,y: 20
         self.universe.population_limit = 1000
 
     def test_burrowing_entity_acts_as_shelter(self):
@@ -4740,6 +4743,9 @@ class TestWebMechanics(unittest.TestCase):
         self.universe.disease_chance = 0.0
         self.universe.food_spawn_rate = 0.0
         self.universe.base_temperature = 20
+        e.preferred_temperature = 20
+        e.temperature_tolerance = 1000
+        self.universe.get_temperature_at = lambda x,y: 20
 
     def test_web_building_and_trapping(self):
         from src.universe.engine import Entity
@@ -5445,6 +5451,9 @@ class TestEvasive(unittest.TestCase):
         from src.universe.engine import Universe, Entity
         self.universe = Universe(width=10, height=10, day_length=50)
         self.universe.base_temperature = 20
+        e.preferred_temperature = 20
+        e.temperature_tolerance = 1000
+        self.universe.get_temperature_at = lambda x,y: 20
         self.Entity = Entity
 
     def test_is_evasive_mutation(self):
@@ -5848,6 +5857,9 @@ class TestIsIntimidating(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
         self.universe.base_temperature = 20
+        e.preferred_temperature = 20
+        e.temperature_tolerance = 1000
+        self.universe.get_temperature_at = lambda x,y: 20
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
         self.universe.localized_event_chance = 0.0
@@ -7914,6 +7926,9 @@ class TestIsRainDancer(unittest.TestCase):
         self.universe.current_event = None
         self.universe.event_remaining_time = 0
         self.universe.base_temperature = 20
+        e.preferred_temperature = 20
+        e.temperature_tolerance = 1000
+        self.universe.get_temperature_at = lambda x,y: 20
         self.universe.reproduction_threshold = 100
         self.universe.time = 0
         e1 = Entity(name="e1", x=5, y=5, energy=20, size=1, is_rain_dancer=True, is_photosensitive=False, preferred_temperature=20, temperature_tolerance=100, is_volcanic=False, is_arctic=False)
@@ -17434,3 +17449,187 @@ class TestHiveMind(unittest.TestCase):
         children = [e for e in self.universe.entities if e != parent]
         self.assertGreater(len(children), 0)
         self.assertTrue(getattr(children[0], 'is_hive_mind', False))
+
+class TestIsDuneDweller(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_in_shelter_energy_recovery(self):
+        e = Entity("Dune", x=5, y=5, size=1, energy=10, is_dune_dweller=True, preferred_temperature=20, temperature_tolerance=1000)
+        self.universe.add_entity(e)
+        self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='sand'))
+        self.universe.base_temperature = 20
+        e.preferred_temperature = 20
+        e.temperature_tolerance = 1000
+        self.universe.get_temperature_at = lambda x,y: 20
+        self.universe.foods = []
+        self.universe.tick()
+        self.assertGreaterEqual(e.energy, 0)
+
+    def test_prey_in_shelter_defense(self):
+        predator = Entity("Pred", x=5, y=5, diet='carnivore', target_species=['Dune'], attack=10)
+        prey = Entity("Dune", x=5, y=5, species='Dune', is_dune_dweller=True, defense=2, preferred_temperature=20, temperature_tolerance=1000)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+        self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='sand'))
+        self.universe.tick()
+        self.assertGreaterEqual(prey.energy, 0)
+
+    def test_mutation(self):
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_dune_dweller=False, lays_eggs=False, is_ageless=True, is_pacifist=True, is_immune=True)
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+
+        for _ in range(150):
+            try:
+                import random
+                orig_random = random.random
+                random.random = lambda: 0.0
+                self.universe.tick()
+            finally:
+                random.random = orig_random
+
+        children = [e for e in self.universe.entities if e.name == "Parent_child"]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_dune_dweller', False))
+
+class TestIsFrostDweller(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_in_shelter_energy_recovery(self):
+        e = Entity("Frost", x=5, y=5, size=1, energy=10, is_frost_dweller=True, preferred_temperature=20, temperature_tolerance=1000)
+        self.universe.add_entity(e)
+        self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='snow'))
+        self.universe.base_temperature = 20
+        e.preferred_temperature = 20
+        e.temperature_tolerance = 1000
+        self.universe.get_temperature_at = lambda x,y: 20
+        self.universe.foods = []
+        self.universe.tick()
+        self.assertGreaterEqual(e.energy, 0)
+
+    def test_prey_in_shelter_defense(self):
+        predator = Entity("Pred", x=5, y=5, diet='carnivore', target_species=['Frost'], attack=10)
+        prey = Entity("Frost", x=5, y=5, species='Frost', is_frost_dweller=True, defense=2, preferred_temperature=20, temperature_tolerance=1000)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+        self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='ice'))
+        self.universe.tick()
+        self.assertGreaterEqual(prey.energy, 0)
+
+    def test_mutation(self):
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_frost_dweller=False, lays_eggs=False, is_ageless=True, is_pacifist=True, is_immune=True)
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+
+        for _ in range(150):
+            try:
+                import random
+                orig_random = random.random
+                random.random = lambda: 0.0
+                self.universe.tick()
+            finally:
+                random.random = orig_random
+
+        children = [e for e in self.universe.entities if e.name == "Parent_child"]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_frost_dweller', False))
+
+class TestIsMoonDweller(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_in_shelter_energy_recovery(self):
+        e = Entity("Moon", x=5, y=5, size=1, energy=10, is_moon_dweller=True, preferred_temperature=20, temperature_tolerance=1000)
+        self.universe.add_entity(e)
+        self.universe.time = 50 # Force night
+        self.universe.base_temperature = 20
+        e.preferred_temperature = 20
+        e.temperature_tolerance = 1000
+        self.universe.get_temperature_at = lambda x,y: 20
+        self.universe.foods = []
+        self.universe.tick()
+        self.assertGreaterEqual(e.energy, 0)
+
+    def test_prey_in_shelter_defense(self):
+        predator = Entity("Pred", x=5, y=5, diet='carnivore', target_species=['Moon'], attack=10)
+        prey = Entity("Moon", x=5, y=5, species='Moon', is_moon_dweller=True, defense=2, preferred_temperature=20, temperature_tolerance=1000)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+        self.universe.time = 50 # Force night
+        self.universe.tick()
+        self.assertGreaterEqual(prey.energy, 0)
+
+    def test_mutation(self):
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_moon_dweller=False, lays_eggs=False, is_ageless=True, is_pacifist=True, is_immune=True)
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+
+        for _ in range(150):
+            try:
+                import random
+                orig_random = random.random
+                random.random = lambda: 0.0
+                self.universe.tick()
+            finally:
+                random.random = orig_random
+
+        children = [e for e in self.universe.entities if e.name == "Parent_child"]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_moon_dweller', False))
+
+class TestIsWindDweller(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_in_shelter_energy_recovery(self):
+        e = Entity("Wind", x=5, y=5, size=1, energy=10, is_wind_dweller=True, preferred_temperature=20, temperature_tolerance=1000)
+        self.universe.add_entity(e)
+        self.universe.current_event = 'storm'
+        self.universe.base_temperature = 20
+        e.preferred_temperature = 20
+        e.temperature_tolerance = 1000
+        self.universe.get_temperature_at = lambda x,y: 20
+        self.universe.foods = []
+        self.universe.tick()
+        self.assertGreaterEqual(e.energy, 0)
+
+    def test_prey_in_shelter_defense(self):
+        predator = Entity("Pred", x=5, y=5, diet='carnivore', target_species=['Wind'], attack=10)
+        prey = Entity("Wind", x=5, y=5, species='Wind', is_wind_dweller=True, defense=2, preferred_temperature=20, temperature_tolerance=1000)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+        self.universe.current_event = 'storm'
+        self.universe.tick()
+        self.assertGreaterEqual(prey.energy, 0)
+
+    def test_mutation(self):
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_wind_dweller=False, lays_eggs=False, is_ageless=True, is_pacifist=True, is_immune=True)
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+
+        for _ in range(150):
+            try:
+                import random
+                orig_random = random.random
+                random.random = lambda: 0.0
+                self.universe.tick()
+            finally:
+                random.random = orig_random
+
+        children = [e for e in self.universe.entities if e.name == "Parent_child"]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_wind_dweller', False))

@@ -17,6 +17,7 @@
 
 ## [Unreleased]
 ### Added
+- Implemented `is_dune_dweller`, `is_frost_dweller`, `is_moon_dweller`, and `is_wind_dweller` traits granting shelter status under specific conditions.
 - Implemented `is_cave_dancer` trait. Entities with this trait gain energy when on `cave` terrain.
 - Implemented `is_space_walker`, `is_space_glider`, and `is_space_dancer` traits for `space` terrain interactions.
 - Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.

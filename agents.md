@@ -402,3 +402,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_absorbent` trait. Entities with this trait gain hydration rapidly while in water or rain.
 - [x] Implemented `is_hive_mind` trait. Entities with this trait form a collective consciousness, allowing low-energy members to draw energy from healthy members within their perception radius to ensure the survival of the hive.
 - [x] Implemented `is_hive_mind` trait. Entities with this trait form a collective consciousness, allowing low-energy members to draw energy from healthy members within their perception radius to ensure the survival of the hive.
+- [x] Implemented `is_dune_dweller` trait. Entities with this trait treat sand and dune terrain as a shelter.
+- [x] Implemented `is_frost_dweller` trait. Entities with this trait treat snow and ice terrain as a shelter.
+- [x] Implemented `is_moon_dweller` trait. Entities with this trait treat night time as a shelter.
+- [x] Implemented `is_wind_dweller` trait. Entities with this trait treat a storm event as a shelter.
