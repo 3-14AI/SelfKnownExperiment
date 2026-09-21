@@ -418,3 +418,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_space_strider` trait. Entities with this trait consume 0 stamina when moving on space terrain and gain a defense bonus while on space. (Fixed missing mutation logic)
 - [x] Implemented `is_storm_strider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event and gain a defense bonus while inside a storm.
 - [x] Implemented `is_shelter_strider` trait. Entities with this trait consume 0 stamina when moving on shelter terrain and gain a defense bonus while on shelter.
+- [x] Implemented `is_mud_strider` trait. Entities with this trait consume 0 stamina when moving on mud terrain and gain a defense bonus while on mud.

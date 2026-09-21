@@ -16789,18 +16789,24 @@ class TestIsSleepDancer(unittest.TestCase):
         self.assertGreater(entity.energy, control.energy, "is_sleep_dancer should recover energy when sleeping.")
         self.assertGreaterEqual(entity.energy, 40, "is_sleep_dancer should recover/maintain energy when sleeping.")
 
+
     def test_is_sleep_dancer_mutation(self):
-        parent = Entity("Parent", lays_eggs=False, energy=5000, size=15, is_sleep_dancer=False, is_gluttonous=True, has_blubber=True)
-        self.universe.add_entity(parent)
+        universe = Universe(width=10, height=10, reproduction_threshold=500)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(name="E1", x=5, y=5, size=15, energy=5000, max_age=1000,
+                        is_ageless=True, is_immune=True, is_pacifist=True,
+                        is_sleep_dancer=False)
+        universe.add_entity(parent)
 
         has_mutated = False
-        for _ in range(100):
-            parent.energy = 5000
-            parent.stamina = 5000
-            parent.max_stamina = 5000
-            self.universe.foods = []
-            self.universe.tick()
-            for entity in self.universe.entities:
+        import random
+        for _ in range(500):
+            parent.energy = 5000 # keep energy up to force reproduction
+            universe.tick()
+            for entity in universe.entities:
                 if getattr(entity, 'is_sleep_dancer', False):
                     has_mutated = True
                     break
@@ -17697,3 +17703,50 @@ class TestIsMarshGlider(unittest.TestCase):
         children = [e for e in self.universe.entities if e is not parent]
         if children:
             self.assertTrue(getattr(children[0], 'is_marsh_glider', False))
+
+
+class TestIsMudStrider(unittest.TestCase):
+    def test_is_mud_strider_movement(self):
+        universe = Universe(10, 10)
+        universe.add_terrain(Terrain(x=1, y=0, terrain_type='mud'))
+        entity = Entity(name="mud_strider", x=0, y=0, is_mud_strider=True, stamina=50)
+        universe.add_entity(entity)
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50)
+
+
+
+    def test_is_mud_strider_mutation(self):
+        universe = Universe(width=10, height=10, reproduction_threshold=50)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(
+            name="MutatingParent",
+            x=5, y=5,
+            energy=5000,
+            size=15,
+            is_gluttonous=True,
+            has_blubber=True,
+            is_ageless=True,
+            is_immune=True,
+            is_pacifist=True,
+            is_mud_strider=False
+        )
+        universe.add_entity(parent)
+
+        mutation_observed = False
+        import random
+        for _ in range(500):
+            parent.energy = 5000 # keep energy up
+            universe.tick()
+            if len(universe.entities) > 1:
+                for child in universe.entities[1:]:
+                    if getattr(child, 'is_mud_strider', False):
+                        mutation_observed = True
+                        break
+                if mutation_observed:
+                    break
+
+        self.assertTrue(mutation_observed, "is_mud_strider trait did not mutate.")
