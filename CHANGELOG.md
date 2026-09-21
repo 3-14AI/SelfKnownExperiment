@@ -504,3 +504,5 @@ All notable changes to Project Genesis will be documented in this file.
 - [x] Fixed flaky mutation tests in `tests/test_engine.py` (`is_hive_mind`, `is_symbiotic`, `is_mountain_dancer`, `is_ice_dancer`, `is_ash_dancer`, `is_deep_water_dancer`) by ensuring high parent energy, low reproduction threshold, and disabled environmental events to allow deterministic trait verification.
 
 - [x] Implemented `is_marsh_strider` trait. Entities with this trait consume no stamina when moving on mud terrain and gain a defense bonus while on mud. Unskipped and fixed the flaky mutation test.
+- Engine: Implemented `is_earthquake_strider` trait. Entities with this trait consume 0 stamina when moving during an 'earthquake' event and gain a defense bonus while inside an earthquake. Added visualizer character 'ē'.
+- Tests: Added unit tests and visualizer tests for `is_earthquake_strider`.

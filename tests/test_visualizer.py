@@ -2122,3 +2122,11 @@ class TestCLIVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('ḿ', output)
+
+    def test_visualize_is_earthquake_strider(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="EQStrider", x=5, y=5, is_earthquake_strider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ē", output)
