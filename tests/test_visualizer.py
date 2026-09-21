@@ -3,6 +3,22 @@ from src.universe.engine import Universe, Entity, Food, Terrain
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+    def test_visualize_is_blizzard_strider(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_blizzard_strider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('Ź', output)
+
+    def test_visualize_is_drought_strider(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("DroughtStrider", x=0, y=0, is_drought_strider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ð', output)
+
     def test_visualize_is_spring_dancer(self):
         universe = Universe(10, 10)
         entity = Entity(name="SpringDancer", x=5, y=5, is_spring_dancer=True)

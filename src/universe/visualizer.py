@@ -403,6 +403,8 @@ class CLIVisualizer:
                         char = 'ā'
                     elif getattr(entity, 'is_blizzard_glider', False):
                         char = 'Ă'
+                    elif getattr(entity, 'is_blizzard_strider', False):
+                        char = 'Ź'
                     elif getattr(entity, 'is_cave_glider', False):
                         char = 'ă'
                     elif getattr(entity, 'is_day_dweller', False):

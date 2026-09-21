@@ -16,6 +16,9 @@
 # Changelog
 
 ## [Unreleased]
+### New Features
+- Implemented `is_blizzard_strider` trait. Entities with this trait consume 0 stamina when moving during a 'blizzard' event and gain a defense bonus.
+
 ### Added
 - Fixed missing mutation logic and added missing visualizer tests for `is_grass_strider`.
 - Fixed missing mutation logic for `is_space_strider`.

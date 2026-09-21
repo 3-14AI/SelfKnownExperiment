@@ -13,4 +13,5 @@ The following tests are occasionally skipped using `@unittest.skip("flaky")` bec
 * `test_is_heavy_sleeper_awake_behavior` in `tests/test_engine.py`
 
 * `test_grass_dweller_mutates` in `tests/test_engine.py`
-* `test_is_shelter_dweller_logic` in `tests/test_engine.py`
+* `test_is_shelter_dweller_logic` in `tests/test_engine.py`- test_nocturnal_sleep_cycle: fails occasionally due to engine stamina logic.
+- test_blizzard_dancer_gains_energy_in_blizzard: fails occasionally.
