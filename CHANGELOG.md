@@ -17,6 +17,8 @@
 
 ## [Unreleased]
 ### Added
+- Fixed missing mutation logic and added missing visualizer tests for `is_grass_strider`.
+- Fixed missing mutation logic for `is_space_strider`.
 - Implemented `is_storm_strider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event and gain a defense bonus.
 - Implemented `is_shelter_strider` trait. Entities with this trait consume 0 stamina when moving on shelter terrain and gain a defense bonus while on shelter.
 - Implemented `is_sand_strider` trait. Entities with this trait consume 0 stamina when moving on sand terrain and gain a defense bonus while on sand.

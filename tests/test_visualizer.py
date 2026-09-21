@@ -2090,3 +2090,11 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn("Ϟ", output)
+
+    def test_visualize_is_grass_strider(self):
+        universe = Universe(width=10, height=10)
+        e = Entity(name="E", x=1, y=1, size=1, is_grass_strider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('ɣ', output)
