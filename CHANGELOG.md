@@ -386,6 +386,12 @@
 
 All notable changes to Project Genesis will be documented in this file.
 
+## [2026-09-21]
+### Added
+- Engine: Implemented `is_marsh_glider` trait. Entities with this trait consume 0 stamina when moving on mud terrain.
+- Tests: Added tests for `is_marsh_glider` movement and mutation.
+
+
 
 - Engine: Modified `get_nearest_prey` so carnivores evaluate potential prey based on a combination of distance, size, and defense, effectively prioritizing smaller, weaker targets over slightly closer but more resilient ones.
 - Tests: Added `test_carnivore_prefers_smaller_weaker_prey` to explicitly test this targeting logic.
