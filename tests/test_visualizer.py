@@ -2098,3 +2098,11 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn('ɣ', output)
+
+    def test_visualize_is_marsh_glider(self):
+        universe = Universe(1, 1)
+        entity = Entity("E1", 0, 0, size=1, is_marsh_glider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ḿ', output)
