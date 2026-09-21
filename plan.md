@@ -1,10 +1,13 @@
-1. **Analyze project changes and agent actions**:
-   - Parse `git log` and `git diff` for the recent commits (specifically the `is_blizzard_strider` feature and other recent changes).
-   - Review changes made to `CHANGELOG.md`, `agents.md`, and `analytics/current_analysis.md`.
-2. **Write analysis report**:
-   - Create a new entry in `analytics/current_analysis.md` summarizing the recent actions, the intent behind them, and what was implemented.
-   - The analysis will be written in Russian as requested by the user prompt.
-3. **Pre-commit checks**:
-   - Complete pre commit steps to make sure proper testing, verifications, reviews and reflections are done.
-4. **Submit changes**:
-   - Submit the updated analysis document.
+1. **Implement `is_earthquake_strider` trait.**
+   - In `src/universe/engine.py`, add `is_earthquake_strider=child_is_earthquake_strider` to `Entity.__init__`.
+   - Update `stamina_cost` calculation in `Universe.move_entity()` to consume 0 stamina during an `earthquake` event for entities with this trait.
+   - Update `effective_defense` calculation in `Universe.tick()` to add `+2` defense during an `earthquake` event for entities with this trait.
+2. **Implement `is_earthquake_strider` visualizer rendering.**
+   - In `src/universe/visualizer.py`, assign a unique character (e.g., `'ē'`) for entities with the `is_earthquake_strider` trait.
+3. **Add tests for `is_earthquake_strider`.**
+   - Add unit tests in `tests/test_engine.py` for stamina cost, defense bonus, and mutation logic.
+   - Add a rendering test in `tests/test_visualizer.py`.
+4. **Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.**
+   - Ensure all tests pass successfully.
+5. **Submit the change.**
+   - Once verified, document the change in `CHANGELOG.md` and `agents.md` and submit.

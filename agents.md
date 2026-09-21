@@ -419,3 +419,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_storm_strider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event and gain a defense bonus while inside a storm.
 - [x] Implemented `is_shelter_strider` trait. Entities with this trait consume 0 stamina when moving on shelter terrain and gain a defense bonus while on shelter.
 - [x] Implemented `is_blizzard_strider` trait. Entities with this trait consume 0 stamina when moving during a 'blizzard' event and gain a defense bonus while inside a blizzard.
+- [x] Implemented `is_earthquake_strider` trait. Entities with this trait consume 0 stamina when moving during an 'earthquake' event and gain a defense bonus while inside an earthquake.
