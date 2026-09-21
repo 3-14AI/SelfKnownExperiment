@@ -408,12 +408,12 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_ice_strider` trait. Entities with this trait consume 0 stamina when moving on ice terrain and gain a defense bonus while on ice.
 - [x] Implemented `is_lava_strider` trait. Entities with this trait consume 0 stamina when moving on lava terrain and gain a defense bonus while on lava.
 - [x] Implemented `is_forest_strider` trait. Entities with this trait consume 0 stamina when moving on forest terrain and gain a defense bonus while on forest.
-- [x] Implemented `is_grass_strider` trait. Entities with this trait consume 0 stamina when moving on grass terrain and gain a defense bonus while on grass.
+- [x] Implemented `is_grass_strider` trait. Entities with this trait consume 0 stamina when moving on grass terrain and gain a defense bonus while on grass. (Fixed missing mutation logic and added missing visualizer tests)
 - [x] Implemented `is_wall_strider` trait. Entities with this trait consume 0 stamina when moving on wall terrain and gain a defense bonus while on wall.
 - [x] Implemented `is_web_strider` trait. Entities with this trait consume 0 stamina when moving on web terrain and gain a defense bonus while on web.
 - [x] Implemented `is_mountain_strider` trait. Entities with this trait consume 0 stamina when moving on mountain terrain and gain a defense bonus while on mountain.
 - [x] Implemented `is_cave_strider` trait. Entities with this trait consume 0 stamina when moving on cave terrain and gain a defense bonus while on cave.
 - [x] Implemented `is_deep_water_strider` trait. Entities with this trait consume 0 stamina when moving on deep-water terrain and gain a defense bonus while on deep-water.
-- [x] Implemented `is_space_strider` trait. Entities with this trait consume 0 stamina when moving on space terrain and gain a defense bonus while on space.
+- [x] Implemented `is_space_strider` trait. Entities with this trait consume 0 stamina when moving on space terrain and gain a defense bonus while on space. (Fixed missing mutation logic)
 - [x] Implemented `is_storm_strider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event and gain a defense bonus while inside a storm.
 - [x] Implemented `is_shelter_strider` trait. Entities with this trait consume 0 stamina when moving on shelter terrain and gain a defense bonus while on shelter.
