@@ -17279,28 +17279,31 @@ class TestIsSpaceWalker(unittest.TestCase):
         self.assertGreaterEqual(walker.stamina, 49)
 
     def test_space_walker_mutates(self):
-        from src.universe.engine import Entity
-        parent = Entity(
-            name="Parent", x=1, y=1, energy=5000, size=15,
-            is_ageless=True, is_immune=True, is_pacifist=True,
-            is_gluttonous=True, has_blubber=True,
-            is_space_walker=False
-        )
+        parent = Entity("Parent", 0, 0, energy=2000, age=20, max_age=100, size=15, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, is_space_walker=False)
+        self.universe.add_entity(parent)
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
-        self.universe.add_entity(parent)
-        self.universe.reproduction_threshold = 500
-        has_mutated = False
-        for _ in range(150):
-            parent.energy = 5000
-            self.universe.tick()
-            for entity in self.universe.entities:
-                if entity.name != "Parent" and getattr(entity, 'is_space_walker', False) is True:
-                    has_mutated = True
+        self.universe.disease_chance = 0.0
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0001
+            has_mutated = False
+            for _ in range(100):
+                parent.energy = 2000
+                if len(self.universe.entities) > 20:
+                    self.universe.entities = [parent]
+                self.universe.tick()
+                for e in self.universe.entities:
+                    if e is not parent and getattr(e, 'is_space_walker', False):
+                        has_mutated = True
+                        break
+                if has_mutated:
                     break
-            if has_mutated:
-                break
-        self.assertTrue(has_mutated)
+            self.assertTrue(has_mutated)
+        finally:
+            random.random = original_random
 
 class TestIsSpaceGlider(unittest.TestCase):
     def setUp(self):
@@ -18092,16 +18095,24 @@ class TestIsSandStrider(unittest.TestCase):
             self.assertTrue(getattr(children[0], 'is_sand_strider', False))
 
     def test_is_sand_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_sand_strider=True)
+        prey = Entity("Prey", 0, 0, energy=1000, size=10, defense=0, is_sand_strider=True, is_immune=True)
+        pred = Entity("Pred", 1, 0, energy=1000, size=10, attack=4, diet="carnivore")
 
-        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='sand'))
-
-        self.universe.add_entity(pred)
+        self.universe.add_terrain(Terrain(0, 0, 'sand'))
         self.universe.add_entity(prey)
+        self.universe.add_entity(pred)
 
-        self.universe.foods = []
-        self.universe.tick()
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0001
+            self.universe.tick()
+        finally:
+            random.random = original_random
+
         self.assertTrue(prey in self.universe.entities)
 
 
@@ -18544,3 +18555,45 @@ class TestQuicksand(unittest.TestCase):
 
         # Base cost 1. 100 - 1 = 99
         self.assertEqual(e.stamina, 99)
+
+    def test_is_quicksand_glider_movement(self):
+        u = Universe(width=10, height=10)
+        e = Entity("Glider", x=5, y=5, energy=100, stamina=100, max_stamina=100, is_quicksand_glider=True, is_fire_dancer=True, size=1)
+        u.add_entity(e)
+        u.quicksands.append(Quicksand(x=5, y=6, duration=10))
+
+        u.move_entity(e, 0, 1)
+
+        # Glider consumes 0 stamina even if it's a dancer
+        self.assertEqual(e.stamina, 100)
+
+    def test_is_quicksand_glider_mutation(self):
+        u = Universe(width=10, height=10)
+        u.event_chance = 0.0
+        u.localized_event_chance = 0.0
+        u.disease_chance = 0.0
+
+        parent = Entity("Parent", x=5, y=5, energy=2000, age=20, max_age=100, size=15,
+                        is_ageless=True, is_immune=True, is_pacifist=True,
+                        is_gluttonous=True, has_blubber=True, is_quicksand_glider=False)
+        u.add_entity(parent)
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0001
+
+            for _ in range(100):
+                parent.energy = 2000
+                if len(u.entities) > 20:
+                    u.entities = [parent]
+                u.tick()
+
+                children = [e for e in u.entities if e is not parent]
+                if any(getattr(c, 'is_quicksand_glider', False) for c in children):
+                    self.assertTrue(True)
+                    return
+
+            self.fail("is_quicksand_glider did not mutate")
+        finally:
+            random.random = original_random

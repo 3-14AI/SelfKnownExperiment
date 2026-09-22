@@ -17,6 +17,10 @@
 
 ## [Unreleased]
 ### New Features
+### Added
+- Implemented `is_quicksand_glider` trait. Entities with this trait consume 0 stamina when moving on quicksand terrain, bypassing the standard penalty. Added genetic mutation and visualizer support (rendered as 'Q').
+
+
 - Implemented `is_blizzard_strider` trait. Entities with this trait consume 0 stamina when moving during a 'blizzard' event and gain a defense bonus.
 
 ### Added
