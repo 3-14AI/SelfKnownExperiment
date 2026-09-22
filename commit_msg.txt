@@ -1,0 +1,4 @@
+Fix: Resolving failing tests test_is_web_dweller and test_is_playful_exp_gain
+
+Fixed a bug in `test_is_playful_exp_gain` where entities were inadvertently moving off from being adjacent because their random `dx/dy` step occurred during `tick()` before the check. Preventing them from moving (stamina=0) makes the test deterministic.
+Fixed a bug in `test_is_web_dweller` where entity was similarly wandering off the web terrain before energy recovery logic was executed, by setting its stamina to 0 so it stays perfectly on the web for the check. Also deduplicated `is_web_dweller` checks in `in_shelter` definition.

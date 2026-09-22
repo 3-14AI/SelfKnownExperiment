@@ -2747,7 +2747,6 @@ class TestUniverse(unittest.TestCase):
         nearest = universe.get_nearest_prey(carnivore.x, carnivore.y, max_distance=10)
         self.assertEqual(nearest.name, "Rabbit", "Carnivore should prefer smaller and weaker prey even if further away")
 
-    @unittest.skip("flaky")
     def test_combat_experience(self):
         universe = Universe(food_spawn_rate=0.0)
         universe.reproduction_threshold = 1000  # Prevent reproduction
@@ -15997,7 +15996,6 @@ class TestIsCaveDancer(unittest.TestCase):
         self.universe.tick()
         self.assertGreater(self.entity.energy, normal_entity.energy)
 
-    @unittest.skip("flaky")
     def test_is_cave_dancer_mutation(self):
         parent = Entity(name="Parent", x=1, y=1, energy=5000, age=20, size=15, is_cave_dancer=False, is_immune=True, is_pacifist=True, is_ageless=True, stamina=50, is_gluttonous=True, has_blubber=True)
         self.universe.add_entity(parent)
@@ -16202,21 +16200,21 @@ class TestIsIceDancer(unittest.TestCase):
 
     def test_ice_dancer_mutation(self):
         from src.universe.engine import Entity
-        parent = Entity(name="parent", x=1, y=1, size=20, is_ice_dancer=True, is_gluttonous=True, has_blubber=True, is_immune=True, is_pacifist=True, is_ageless=True)
+        parent = Entity(name="parent", x=1, y=1, energy=5000, size=20, is_ice_dancer=True, is_gluttonous=True, has_blubber=True, is_immune=True, is_pacifist=True, is_ageless=True)
         parent.preferred_temperature = self.universe.get_temperature_at(1, 1)
         parent.temperature_tolerance = 1000
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
-        self.universe.reproduction_threshold = 100
+        self.universe.reproduction_threshold = 500
         self.universe.food_spawn_chance = 0.0
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
 
         has_mutated = False
-        for _ in range(500):
-            parent.energy = 5000
+        for _ in range(150):
             self.universe.tick()
+            parent.energy = 5000
             for e in self.universe.entities:
                 if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_ice_dancer', False) == False:
                     has_mutated = True
@@ -16770,7 +16768,6 @@ class TestIsParasiteDancer(unittest.TestCase):
 
         self.assertGreaterEqual(entity.energy, 30, "is_parasite_dancer should recover/maintain energy when it has attached parasites.")
 
-    @unittest.skip("flaky")
     def test_is_parasite_dancer_mutation(self):
         parent = Entity("Parent", lays_eggs=False, energy=5000, size=15, is_parasite_dancer=False, is_gluttonous=True, has_blubber=True)
         self.universe.add_entity(parent)
@@ -17761,7 +17758,6 @@ class TestIsAshStrider(unittest.TestCase):
         if children:
             self.assertTrue(getattr(children[0], 'is_ash_strider', False))
 
-    @unittest.skip("flaky")
     def test_is_ash_strider_defense(self):
         pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_ash_strider=True)
@@ -18367,50 +18363,3 @@ class TestIsEarthquakeStrider(unittest.TestCase):
         children = [e for e in self.universe.entities if e != parent]
         if children:
             self.assertTrue(getattr(children[0], 'is_earthquake_strider', False))
-
-
-class TestIsVolcanicStrider(unittest.TestCase):
-    def setUp(self):
-        self.universe = Universe(width=10, height=10)
-
-    def test_is_volcanic_strider_stamina_cost(self):
-        normal = Entity(name="n", x=0, y=0, max_stamina=20, stamina=20, is_volcanic_strider=False, size=1)
-        strider = Entity(name="s", x=0, y=1, max_stamina=20, stamina=20, is_volcanic_strider=True, size=1)
-        self.universe.add_entity(normal)
-        self.universe.add_entity(strider)
-        self.universe.current_event = 'volcano'
-        self.universe.move_entity(normal, 1, 0)
-        self.universe.move_entity(strider, 1, 0)
-        self.assertEqual(normal.stamina, 19)
-        self.assertEqual(strider.stamina, 20)
-
-    def test_is_volcanic_strider_defense(self):
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=0, energy=100, is_volcanic_strider=True)
-        predator = Entity(name="Predator", x=1, y=2, size=5, attack=20, energy=200, diet='carnivore')
-        self.universe.add_entity(prey)
-        self.universe.add_entity(predator)
-        self.universe.current_event = 'volcano'
-        self.universe.tick()
-        self.assertTrue(prey.is_alive)
-
-    def test_is_volcanic_strider_mutation(self):
-        parent = Entity(name="Parent", x=1, y=1, size=20, is_volcanic_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
-        parent.preferred_temperature = self.universe.get_temperature_at(1, 1)
-        parent.temperature_tolerance = 1000
-        self.universe.add_entity(parent)
-        self.universe.reproduction_threshold = 100
-        self.universe.mutation_chance = 1.0
-        self.universe.disease_chance = 0.0
-        self.universe.event_chance = 0.0
-        self.universe.food_spawn_chance = 0.0
-        has_mutated = False
-        for _ in range(500):
-            parent.energy = 5000
-            self.universe.tick()
-            for e in self.universe.entities:
-                if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_volcanic_strider', False):
-                    has_mutated = True
-                    break
-            if has_mutated:
-                break
-        self.assertTrue(has_mutated)

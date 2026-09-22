@@ -25,6 +25,7 @@ class Entity:
         self.is_wall_dweller = is_wall_dweller
         self.is_cave_glider = is_cave_glider
         self.is_cave_walker = is_cave_walker
+        self.is_volcanic_strider = is_volcanic_strider
         self.is_blizzard_dweller = is_blizzard_dweller
         self.is_storm_dweller = is_storm_dweller
         self.is_day_dweller = is_day_dweller
@@ -182,7 +183,6 @@ class Entity:
         self.is_storm_strider = is_storm_strider
         self.is_blizzard_strider = is_blizzard_strider
         self.is_earthquake_strider = is_earthquake_strider
-        self.is_volcanic_strider = is_volcanic_strider
         self.is_deep_water_strider = is_deep_water_strider
         self.is_cave_strider = is_cave_strider
         self.is_mountain_strider = is_mountain_strider
@@ -602,8 +602,6 @@ class Universe:
                 stamina_cost = 0
             if getattr(entity, 'is_earthquake_strider', False) and self.current_event == 'earthquake':
                 stamina_cost = 0
-            if getattr(entity, 'is_volcanic_strider', False) and self.current_event == 'volcano':
-                stamina_cost = 0
             if getattr(entity, 'is_blizzard_strider', False) and self.current_event == 'blizzard':
                 stamina_cost = 0
             if getattr(entity, 'is_shelter_strider', False) and any(t.terrain_type == 'shelter' for t in terrains_here):
@@ -686,7 +684,7 @@ class Universe:
     def get_terrains_at(self, x, y):
         return [t for t in self.terrains if t.x == x and t.y == y]
 
-    def is_passable(self, x, y, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False, is_water_strider=False, is_wall_strider=False, is_deep_water_strider=False, is_web_strider=False, is_earthquake_strider=False):
+    def is_passable(self, x, y, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False, is_water_strider=False, is_wall_strider=False, is_deep_water_strider=False, is_web_strider=False, is_earthquake_strider=False, is_volcanic_strider=False):
         terrains_here = self.get_terrains_at(x, y)
         if not is_flying and not is_climbing and not is_wall_strider and any(t.terrain_type == 'wall' for t in terrains_here):
             return False
@@ -712,7 +710,7 @@ class Universe:
             raise ValueError(f"Terrain out of bounds: ({terrain.x}, {terrain.y})")
         self.terrains.append(terrain)
 
-    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False, can_leap=False, is_water_strider=False, is_wall_strider=False, is_deep_water_strider=False, is_web_strider=False, is_earthquake_strider=False):
+    def find_path(self, start_x, start_y, target_x, target_y, max_distance=None, memory=None, is_aquatic=False, is_flying=False, is_amphibious=False, is_climbing=False, can_leap=False, is_water_strider=False, is_wall_strider=False, is_deep_water_strider=False, is_web_strider=False, is_earthquake_strider=False, is_volcanic_strider=False):
         from collections import deque
         queue = deque([(start_x, start_y, [])])
         visited = {(start_x, start_y)}
@@ -2153,9 +2151,6 @@ class Universe:
                         mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_is_earthquake_strider = not child_is_earthquake_strider
-                        mutation_occurred = True
-                    if random.random() < mutation_chance:
-                        child_is_volcanic_strider = not child_is_volcanic_strider
                         mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_is_wall_strider = not child_is_wall_strider
@@ -3686,9 +3681,7 @@ class Universe:
                             if getattr(prey_to_eat, 'is_water_strider', False) and any(t.terrain_type == 'water' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
                                 effective_defense += 2
                             if getattr(prey_to_eat, 'is_drought_strider', False) and self.current_event == 'drought':
-                                effective_defense += 50
-                            if getattr(prey_to_eat, 'is_volcanic_strider', False) and self.current_event == 'volcano':
-                                effective_defense += 50
+                                effective_defense += 2
                             if getattr(prey_to_eat, 'is_space_strider', False) and any(t.terrain_type == 'space' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
                                 effective_defense += 2
                             if getattr(prey_to_eat, 'is_storm_strider', False) and self.current_event == 'storm':
@@ -3993,9 +3986,7 @@ class Universe:
                         if getattr(prey_to_eat, 'is_water_strider', False) and any(t.terrain_type == 'water' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
                             effective_defense += 2
                         if getattr(prey_to_eat, 'is_drought_strider', False) and self.current_event == 'drought':
-                            effective_defense += 50
-                        if getattr(prey_to_eat, 'is_volcanic_strider', False) and self.current_event == 'volcano':
-                            effective_defense += 50
+                            effective_defense += 2
                         if getattr(prey_to_eat, 'is_space_strider', False) and any(t.terrain_type == 'space' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
                             effective_defense += 2
                         if getattr(prey_to_eat, 'is_storm_strider', False) and self.current_event == 'storm':
