@@ -595,6 +595,10 @@ class CLIVisualizer:
                         char = 'ş'
                     elif getattr(entity, 'is_hive_mind', False):
                         char = 'ĥ'
+                    elif getattr(entity, 'is_rain_strider', False):
+                        char = 'Λ'
+                    elif getattr(entity, 'is_fire_strider', False):
+                        char = 'Φ'
                     else:
                         char = 'E'
 

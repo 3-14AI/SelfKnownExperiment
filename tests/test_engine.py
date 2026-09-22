@@ -18416,3 +18416,101 @@ class TestIsVolcanicStrider(unittest.TestCase):
         children = [e for e in self.universe.entities if e != parent]
         if children:
             self.assertTrue(getattr(children[0], 'is_volcanic_strider', False))
+
+class TestIsRainStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_rain_strider_stamina_cost(self):
+        from src.universe.engine import LocalizedEvent
+        self.universe.entities = []
+        normal = Entity(name="n", x=5, y=5, max_stamina=20, stamina=20, is_rain_strider=False, size=1)
+        strider = Entity(name="s", x=5, y=6, max_stamina=20, stamina=20, is_rain_strider=True, size=1)
+        self.universe.add_entity(normal)
+        self.universe.add_entity(strider)
+
+        event = LocalizedEvent('rain', 5, 5, radius=3, duration=10)
+        self.universe.localized_events.append(event)
+
+        self.universe.move_entity(normal, 0, 1)
+        self.universe.move_entity(strider, 0, 1)
+
+        self.assertTrue(strider.stamina >= normal.stamina)
+        self.assertEqual(strider.stamina, 20) # 0 cost
+
+    def test_is_rain_strider_defense(self):
+        from src.universe.engine import LocalizedEvent
+        event = LocalizedEvent('rain', 1, 1, radius=3, duration=10)
+        self.universe.localized_events.append(event)
+
+        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_rain_strider=True)
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+        self.universe.tick()
+        self.assertTrue(prey in self.universe.entities)
+
+    def test_is_rain_strider_mutation(self):
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+
+
+        from unittest import mock
+        with mock.patch("random.random", return_value=0.0001):
+            parent = Entity(name="p", x=0, y=0, size=15, energy=1000, is_rain_strider=False, lays_eggs=False, age=5)
+            self.universe.add_entity(parent)
+            self.universe.tick()
+            children = [e for e in self.universe.entities if e != parent]
+            self.assertTrue(any(getattr(child, 'is_rain_strider', False) for child in children))
+
+class TestIsFireStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_fire_strider_stamina_cost(self):
+        from src.universe.engine import LocalizedEvent
+        self.universe.entities = []
+        normal = Entity(name="n", x=5, y=5, max_stamina=20, stamina=20, is_fire_strider=False, size=1)
+        strider = Entity(name="s", x=5, y=6, max_stamina=20, stamina=20, is_fire_strider=True, size=1)
+        self.universe.add_entity(normal)
+        self.universe.add_entity(strider)
+
+        event = LocalizedEvent('fire', 5, 5, radius=3, duration=10)
+        self.universe.localized_events.append(event)
+
+        self.universe.move_entity(normal, 0, 1)
+        self.universe.move_entity(strider, 0, 1)
+
+        self.assertTrue(strider.stamina >= normal.stamina)
+        self.assertEqual(strider.stamina, 20) # 0 cost
+
+    def test_is_fire_strider_defense(self):
+        from src.universe.engine import LocalizedEvent
+        event = LocalizedEvent('fire', 1, 1, radius=3, duration=10)
+        self.universe.localized_events.append(event)
+
+        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_fire_strider=True, is_fire_dancer=True)
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+        self.universe.tick()
+        self.assertTrue(prey in self.universe.entities)
+
+    def test_is_fire_strider_mutation(self):
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+
+
+        from unittest import mock
+        with mock.patch("random.random", return_value=0.0001):
+            parent = Entity(name="p", x=0, y=0, size=15, energy=1000, is_fire_strider=False, lays_eggs=False, age=5)
+            self.universe.add_entity(parent)
+            self.universe.tick()
+            children = [e for e in self.universe.entities if e != parent]
+            self.assertTrue(any(getattr(child, 'is_fire_strider', False) for child in children))
