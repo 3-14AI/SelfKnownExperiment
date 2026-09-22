@@ -506,3 +506,6 @@ All notable changes to Project Genesis will be documented in this file.
 - [x] Implemented `is_marsh_strider` trait. Entities with this trait consume no stamina when moving on mud terrain and gain a defense bonus while on mud. Unskipped and fixed the flaky mutation test.
 - Engine: Implemented `is_earthquake_strider` trait. Entities with this trait consume 0 stamina when moving during an 'earthquake' event and gain a defense bonus while inside an earthquake. Added visualizer character 'ē'.
 - Tests: Added unit tests and visualizer tests for `is_earthquake_strider`.
+- Engine: Implemented `is_volcanic_strider` trait. Entities with this trait consume 0 stamina when moving during a 'volcano' event and gain a defense bonus while inside a volcano. Added visualizer character 'ṽ'.
+- Tests: Fixed flaky mutation logic for `is_ice_dancer`.
+- Tests: Added unit tests and visualizer tests for `is_volcanic_strider`.
