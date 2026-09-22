@@ -514,3 +514,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Tests: Fixed flaky mutation logic for `is_ice_dancer`.
 - Tests: Added unit tests and visualizer tests for `is_volcanic_strider`.
 - Implemented `is_quicksand_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on quicksand terrain. Added genetic mutation and visualizer support (rendered as '©').
+- Implemented `is_quicksand_glider` trait. Entities with this trait consume 0 stamina when moving on quicksand. Added genetic mutation and visualizer support (rendered as 'Q').
