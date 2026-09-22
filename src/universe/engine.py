@@ -402,6 +402,12 @@ class Entity:
     def is_alive(self):
         return self.energy > 0 and (getattr(self, 'is_ageless', False) or self.age <= self.max_age)
 
+class Quicksand:
+    def __init__(self, x, y, duration):
+        self.x = x
+        self.y = y
+        self.duration = duration
+
 class LocalizedEvent:
     def __init__(self, event_type, x, y, radius, duration):
         self.event_type = event_type
@@ -448,6 +454,7 @@ class Universe:
         self.localized_events = []
         self.localized_event_chance = 0.02
         self.scent_trails = {}
+        self.quicksands = []
         self.disease_chance = disease_chance
 
     @property
@@ -679,6 +686,11 @@ class Universe:
                 stamina_cost = 0
             if getattr(entity, 'is_web_glider', False) and any(t.terrain_type == 'web' for t in terrains_here):
                 stamina_cost = 0
+            if any(q.x == new_x and q.y == new_y for q in self.quicksands):
+                # If entity has any trait ending in _dancer
+                is_dancer = any(trait.endswith('_dancer') and getattr(entity, trait, False) for trait in dir(entity))
+                if is_dancer:
+                    stamina_cost += 10
             if not getattr(entity, 'is_tireless', False):
                 entity.stamina = max(0, entity.stamina - stamina_cost)
 
@@ -913,6 +925,26 @@ class Universe:
         return flockmates
 
     def tick(self):
+        # Age, move, and remove expired quicksands
+        self.quicksands = [q for q in self.quicksands if q.duration > 0]
+        for q in self.quicksands:
+            q.duration -= 1
+            if random.random() < 0.5:
+                dx, dy = random.choice([(0, 1), (0, -1), (1, 0), (-1, 0)])
+                nx, ny = q.x + dx, q.y + dy
+                if 0 <= nx < self.width and 0 <= ny < self.height:
+                    # Move only if empty
+                    if not any(t.x == nx and t.y == ny for t in self.terrains) and not any(other.x == nx and other.y == ny for other in self.quicksands if other != q):
+                        q.x = nx
+                        q.y = ny
+
+        # Spawn new quicksands (2% chance)
+        if random.random() < 0.02:
+            x, y = random.randint(0, self.width - 1), random.randint(0, self.height - 1)
+            # Only spawn on empty coordinates (no terrain and no other quicksand)
+            if not any(t.x == x and t.y == y for t in self.terrains) and not any(q.x == x and q.y == y for q in self.quicksands):
+                self.quicksands.append(Quicksand(x, y, duration=random.randint(10, 30)))
+
         self.time += 1
 
         current_season = self.current_season
