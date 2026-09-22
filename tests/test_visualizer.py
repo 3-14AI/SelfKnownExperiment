@@ -2138,3 +2138,19 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn("ṽ", output)
+
+    def test_visualize_is_rain_strider(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="RainStrider", x=5, y=5, is_rain_strider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Λ", output)
+
+    def test_visualize_is_fire_strider(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="FireStrider", x=5, y=5, is_fire_strider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("Φ", output)
