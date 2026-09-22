@@ -605,6 +605,8 @@ class CLIVisualizer:
                         char = 'Λ'
                     elif getattr(entity, 'is_fire_strider', False):
                         char = 'Φ'
+                    elif getattr(entity, 'is_quicksand_glider', False):
+                        char = 'Q'
                     else:
                         char = 'E'
 

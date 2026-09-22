@@ -424,3 +424,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_rain_strider` trait. Entities with this trait consume 0 stamina when moving during a 'rain' event and gain a defense bonus while inside a rain event.
 - [x] Implemented `is_fire_strider` trait. Entities with this trait consume 0 stamina when moving during a 'fire' event and gain a defense bonus while inside a fire event.
 - [x] Implement quicksand
+- [ ] Implement `is_quicksand_glider` trait. Entities with this trait consume 0 stamina when moving on quicksand.
