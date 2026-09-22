@@ -18597,3 +18597,54 @@ class TestQuicksand(unittest.TestCase):
             self.fail("is_quicksand_glider did not mutate")
         finally:
             random.random = original_random
+
+    def test_is_quicksand_walker_movement(self):
+        u = Universe(width=10, height=10)
+        e = Entity("Walker", x=5, y=5, energy=100, stamina=100, max_stamina=100, is_quicksand_walker=True, is_fire_dancer=True, size=1)
+        u.add_entity(e)
+        u.quicksands.append(Quicksand(x=5, y=6, duration=10))
+        # Add elevation so we can test the elevation bypass
+        u.terrains.append(Terrain(x=5, y=6, elevation=2, terrain_type='sand'))
+
+        u.move_entity(e, 0, 1)
+
+        # Base cost 1. Elevation cost should be bypassed by the walker trait + quicksand.
+        # But wait, dancers get +10 cost from quicksand. Since is_fire_dancer is True, cost is 1 (base) + 10 (dancer) = 11.
+        # Elevation +2 is bypassed!
+        # Stamina = 100 - 11 = 89
+        self.assertEqual(e.stamina, 89)
+
+        # Move to regular terrain with elevation
+        u.terrains.append(Terrain(x=5, y=7, elevation=4, terrain_type='sand'))
+        u.move_entity(e, 0, 1)
+
+        # Base cost 1. Elevation cost = 4 - 2 = 2.
+        # Not on quicksand, so trait doesn't help with elevation.
+        # Stamina = 89 - 1 - 2 = 86
+        self.assertEqual(e.stamina, 86)
+
+    def test_is_quicksand_walker_mutation(self):
+        parent = Entity("Parent", x=5, y=5, energy=5000, max_age=1000, age=10,
+                        is_quicksand_walker=False, is_ageless=True, size=50)
+        u = Universe(width=10, height=10)
+        u.add_entity(parent)
+
+        u.event_chance = 0.0
+        u.localized_event_chance = 0.0
+        u.disease_chance = 0.0
+
+        mutation_found = False
+        for _ in range(200):
+            if len(u.entities) > 50:
+                u.entities = [parent]
+            parent.energy = 5000
+            u.tick()
+
+            for e in list(u.entities):
+                if e != parent and getattr(e, 'is_quicksand_walker', False):
+                    mutation_found = True
+                    break
+            if mutation_found:
+                break
+
+        self.assertTrue(mutation_found, "is_quicksand_walker did not mutate")

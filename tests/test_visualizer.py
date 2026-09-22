@@ -3,6 +3,16 @@ from src.universe.engine import Universe, Entity, Food, Terrain, Quicksand
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+
+    def test_visualize_is_quicksand_walker(self):
+        universe = Universe(width=10, height=10)
+        visualizer = CLIVisualizer(universe)
+        e = Entity("Test", 0, 0, energy=100, is_quicksand_walker=True)
+        universe.add_entity(e)
+        universe.quicksands.append(Quicksand(x=0, y=0, duration=10))
+        out = visualizer.render()
+        self.assertIn('©', out)
+
     def test_visualize_is_blizzard_strider(self):
         universe = Universe(width=10, height=10)
         entity = Entity("Test", x=1, y=1, is_blizzard_strider=True)
