@@ -1,5 +1,5 @@
 import unittest
-from src.universe.engine import Universe, Entity, Food, Terrain
+from src.universe.engine import Universe, Entity, Food, Terrain, Quicksand
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
@@ -2154,3 +2154,10 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn("Φ", output)
+
+    def test_visualize_quicksand(self):
+        universe = Universe(width=10, height=10)
+        universe.quicksands.append(Quicksand(x=0, y=0, duration=10))
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('⊗', output)

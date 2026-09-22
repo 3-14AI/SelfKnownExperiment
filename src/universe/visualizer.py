@@ -6,6 +6,12 @@ class CLIVisualizer:
         # Create an empty grid
         grid = [['.' for _ in range(self.universe.width)] for _ in range(self.universe.height)]
 
+        # Add quicksand
+        if hasattr(self.universe, 'quicksands'):
+            for q in self.universe.quicksands:
+                if 0 <= q.x < self.universe.width and 0 <= q.y < self.universe.height:
+                    grid[q.y][q.x] = '[93m⊗[0m'
+
         # Add terrain
         for terrain in self.universe.terrains:
             if 0 <= terrain.x < self.universe.width and 0 <= terrain.y < self.universe.height:
