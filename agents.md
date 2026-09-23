@@ -427,3 +427,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implement `is_quicksand_glider` trait. Entities with this trait consume 0 stamina when moving on quicksand.
 - [x] Implement `is_quicksand_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on quicksand terrain. Fixed flaky mutation tests for glider and walker traits and fixed test name collision.
 - [x] Implemented `is_quicksand_dweller` trait. Entities with this trait treat `quicksand` terrain as a shelter, gaining increased defense and energy recovery. Rendered as 'õ' in CLI visualizer.
+- [x] Implement `is_quicksand_dancer` trait. Entities with this trait gain energy when on quicksand terrain.
