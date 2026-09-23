@@ -611,6 +611,10 @@ class CLIVisualizer:
                         char = 'Q'
                     elif getattr(entity, 'is_quicksand_walker', False):
                         char = '©'
+                    elif getattr(entity, 'is_quicksand_dweller', False):
+                        char = 'õ'
+                    elif getattr(entity, 'is_quicksand_strider', False):
+                        char = 'Ö'
                     else:
                         char = 'E'
 
