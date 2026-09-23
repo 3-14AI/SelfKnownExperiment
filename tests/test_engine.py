@@ -18556,6 +18556,7 @@ class TestQuicksand(unittest.TestCase):
         # Base cost 1. 100 - 1 = 99
         self.assertEqual(e.stamina, 99)
 
+class TestQuicksandGlider(unittest.TestCase):
     def test_is_quicksand_glider_movement(self):
         u = Universe(width=10, height=10)
         e = Entity("Glider", x=5, y=5, energy=100, stamina=100, max_stamina=100, is_quicksand_glider=True, is_fire_dancer=True, size=1)
@@ -18598,6 +18599,7 @@ class TestQuicksand(unittest.TestCase):
         finally:
             random.random = original_random
 
+class TestQuicksandWalker(unittest.TestCase):
     def test_is_quicksand_walker_movement(self):
         u = Universe(width=10, height=10)
         e = Entity("Walker", x=5, y=5, energy=100, stamina=100, max_stamina=100, is_quicksand_walker=True, is_fire_dancer=True, size=1)
