@@ -1860,6 +1860,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn("ŀ", output)
 
+    def test_visualize_is_mud_strider(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="TestEntity", x=5, y=5, is_mud_strider=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('μ', output)
+
     def test_visualize_is_marsh_strider(self):
         universe = Universe(10, 10)
         entity = Entity(name="TestEntity", x=5, y=5, is_marsh_strider=True)
