@@ -21,3 +21,4 @@ The following tests are occasionally skipped using `@unittest.skip("flaky")` bec
 
 * `test_is_tracker_scent_detection` in `tests/test_engine.py`
 * `test_is_opportunistic_herbivore_eats_meat` in `tests/test_engine.py`
+- `test_omnivore_seeks_and_eats_food` in `TestUniverse`
