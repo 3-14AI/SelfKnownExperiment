@@ -18686,3 +18686,57 @@ class TestQuicksandDancer(unittest.TestCase):
             if mutation_occurred:
                 break
         self.assertTrue(mutation_occurred)
+
+class TestMudStrider(unittest.TestCase):
+    def test_is_mud_strider_stamina(self):
+        universe = Universe(width=10, height=10)
+        universe.terrains = []
+        universe.add_terrain(Terrain(x=5, y=5, terrain_type='mud'))
+        universe.add_terrain(Terrain(x=6, y=5, terrain_type='mud'))
+
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_mud_strider=True)
+        universe.add_entity(entity)
+
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50, "Stamina should not decrease on mud for mud striders")
+
+    def test_is_mud_strider_defense(self):
+        universe = Universe(width=10, height=10)
+        universe.terrains = []
+        universe.add_terrain(Terrain(x=5, y=5, terrain_type='mud'))
+
+        predator = Entity(name="pred", x=5, y=5, size=2, diet='carnivore', attack=5)
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=1, is_mud_strider=True)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Predator attack = 5
+        # Prey defense = 1 (base) + 2 (bonus) = 3
+        # Escape chance = 3 / (5 + 3) = 0.375
+        from unittest import mock
+        import random
+        original_random = random.random
+        def mock_random(): return 0.35
+        random.random = mock_random
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
+        self.assertIn(prey, universe.entities)
+
+    def test_is_mud_strider_mutation(self):
+        universe = Universe(width=10, height=10, reproduction_threshold=20, reproduction_cost=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity(name="parent", x=5, y=5, energy=5000, max_age=100, age=10, size=20, is_mud_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if "child" in e.name]
+        self.assertGreater(len(children), 0, "A child should have been born")
+        self.assertTrue(getattr(children[0], 'is_mud_strider', False), "Child should have mutated is_mud_strider")

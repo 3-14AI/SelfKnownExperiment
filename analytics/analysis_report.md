@@ -2151,3 +2151,11 @@ Implemented is_rain_walker trait.
   - Добавлены тесты для `Quicksand` в `tests/test_engine.py` и `tests/test_visualizer.py`.
   - Исправлено несколько нестабильных тестов.
 - **Дальнейшие шаги**: Продолжить реализацию оставшихся задач в `agents.md`, улучшение существующих механик или добавление новых типов угроз и местности.
+
+### Analysis 121: Implement is_mud_strider
+**Overview:** Implemented the `is_mud_strider` trait for entities.
+**Changes Made:**
+- Добавлено свойство `is_mud_strider` для сущностей, позволяющее не тратить выносливость при перемещении по грязи и получать бонус к защите.
+- Обновлена логика `Universe.move_entity()` и `Universe.tick()`.
+- Добавлено отображение `μ` для `is_mud_strider` в CLI.
+- Добавлены тесты в `test_engine.py` и `test_visualizer.py`.
