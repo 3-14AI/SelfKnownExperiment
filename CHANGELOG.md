@@ -18,6 +18,7 @@
 ## [Unreleased]
 ### New Features
 ### Added
+- Implemented `is_quicksand_dancer` trait. Entities with this trait gain energy when on quicksand terrain.
 - Implemented `is_quicksand_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on quicksand terrain. Added genetic mutation and visualizer support (rendered as 'W').
 - Implemented `is_quicksand_glider` trait. Entities with this trait consume 0 stamina when moving on quicksand terrain, bypassing the standard penalty. Added genetic mutation and visualizer support (rendered as 'Q').
 

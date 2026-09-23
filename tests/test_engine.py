@@ -16250,24 +16250,21 @@ class TestIsMountainDancer(unittest.TestCase):
         self.assertGreater(entity.energy, old_energy)
 
     def test_mountain_dancer_mutation(self):
-        parent = Entity(name="parent", x=1, y=1, energy=5000, size=20, is_mountain_dancer=True, is_gluttonous=True, has_blubber=True, is_immune=True, is_pacifist=True, is_ageless=True)
-        parent.preferred_temperature = self.universe.get_temperature_at(1, 1)
-        parent.temperature_tolerance = 1000
+        parent = Entity('parent', x=5, y=5, energy=1000, size=15, is_mountain_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
         self.universe.reproduction_threshold = 500
-        self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0
 
         has_mutated = False
-        for _ in range(150):
-            self.universe.tick()
-            parent.energy = 5000
+        for _ in range(200):
             if len(self.universe.entities) > 20:
                 self.universe.entities = [parent]
+            parent.energy = 1000
+            self.universe.tick()
             for e in self.universe.entities:
-                if e.generation > 0 and not getattr(e, 'is_mountain_dancer', True):
+                if e is not parent and getattr(e, 'is_mountain_dancer', False):
                     has_mutated = True
                     break
             if has_mutated:
@@ -18651,3 +18648,41 @@ class TestQuicksandWalker(unittest.TestCase):
                 break
 
         self.assertTrue(mutation_found, "is_quicksand_walker did not mutate")
+
+class TestQuicksandDancer(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_quicksand_dancer_energy_gain(self):
+        e = Entity('dancer', x=5, y=5, size=1, energy=10, is_quicksand_dancer=True, preferred_temperature=20, temperature_tolerance=1000)
+        self.universe.add_entity(e)
+        self.universe.quicksands.append(Quicksand(5, 5, 10))
+        self.universe.foods = []
+
+        initial_energy = e.energy
+        self.universe.tick()
+
+        # Base energy loss = 1, Energy gain from dancer = 5
+        self.assertEqual(e.energy, initial_energy - 1 + 5)
+
+    def test_is_quicksand_dancer_mutation(self):
+        parent = Entity('parent', x=5, y=5, energy=1000, size=15, is_quicksand_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+
+        mutation_occurred = False
+        for _ in range(200):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            parent.energy = 1000
+            self.universe.tick()
+            for e in self.universe.entities:
+                if e is not parent and getattr(e, 'is_quicksand_dancer', False):
+                    mutation_occurred = True
+                    break
+            if mutation_occurred:
+                break
+        self.assertTrue(mutation_occurred)

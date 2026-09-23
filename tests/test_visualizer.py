@@ -4,6 +4,14 @@ from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
 
+    def test_visualize_is_quicksand_dancer(self):
+        universe = Universe(width=10, height=10)
+        visualizer = CLIVisualizer(universe)
+        e = Entity('dancer', x=5, y=5, is_quicksand_dancer=True)
+        universe.add_entity(e)
+        output = visualizer.render()
+        self.assertIn('¿', output)
+
     def test_visualize_is_quicksand_walker(self):
         universe = Universe(width=10, height=10)
         visualizer = CLIVisualizer(universe)
