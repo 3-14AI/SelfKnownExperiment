@@ -429,3 +429,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_quicksand_dweller` trait. Entities with this trait treat `quicksand` terrain as a shelter, gaining increased defense and energy recovery. Rendered as 'õ' in CLI visualizer.
 - [x] Implement `is_quicksand_dancer` trait. Entities with this trait gain energy when on quicksand terrain.
 - [x] Implement `is_quicksand_strider` trait. Entities with this trait consume 0 stamina when moving on quicksand terrain and gain a defense bonus while on quicksand.
+- [x] Implement `is_mud_strider` trait. Entities with this trait consume 0 stamina when moving on mud terrain and gain a defense bonus while on mud.

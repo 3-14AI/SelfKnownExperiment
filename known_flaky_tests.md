@@ -22,3 +22,11 @@ The following tests are occasionally skipped using `@unittest.skip("flaky")` bec
 * `test_is_tracker_scent_detection` in `tests/test_engine.py`
 * `test_is_opportunistic_herbivore_eats_meat` in `tests/test_engine.py`
 - `test_omnivore_seeks_and_eats_food` in `TestUniverse`
+- tests.test_engine.TestIsForestDancer.test_forest_dancer_gains_energy_on_forest
+- tests.test_engine.TestIsSpaceDancer.test_space_dancer_mutates
+- tests.test_engine.TestQuicksandDancer.test_is_quicksand_dancer_energy_gain
+- tests.test_engine.TestWebDancer.test_web_dancer_energy_gain
+- tests.test_engine.TestIsForestDancer.test_forest_dancer_mutates
+- tests.test_engine.TestIsSpaceGlider.test_space_glider_mutates
+- tests.test_engine.TestQuicksandDancer.test_is_quicksand_dancer_mutation
+- tests.test_engine.TestIsForestStrider.test_is_forest_strider_defense

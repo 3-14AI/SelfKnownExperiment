@@ -2187,3 +2187,11 @@ class TestCLIVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('⊗', output)
+
+    def test_visualize_is_mud_strider(self):
+        universe = Universe(width=10, height=10)
+        e = Entity(name="ms", x=5, y=5, is_mud_strider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('Ø', output)
