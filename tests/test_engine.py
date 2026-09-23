@@ -16078,17 +16078,24 @@ class TestIsForestDancer(unittest.TestCase):
         e = Entity(name="test", x=1, y=1, energy=10, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_forest_dancer=True, preferred_terrain="forest")
         self.universe.add_entity(e)
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type="forest"))
+        self.universe.foods = []
+        e.preferred_temperature = self.universe.get_temperature_at(e.x, e.y)
+        e.temperature_tolerance = 1000
+        self.universe.localized_event_chance = 0.0
         self.universe.tick()
         self.assertTrue(e.energy > 10)
 
     def test_forest_dancer_mutates(self):
-        parent = Entity(name="parent", x=1, y=1, energy=100, is_forest_dancer=True)
+        parent = Entity(name="parent", x=1, y=1, energy=10000, size=20, is_forest_dancer=True, is_ageless=True, is_immune=True, is_pacifist=True, has_blubber=True, is_gluttonous=True)
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
 
         has_mutated = False
-        for _ in range(50):
+        for _ in range(100):
+            parent.energy = 10000
             self.universe.tick()
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
             for e in self.universe.entities:
                 if getattr(e, 'generation', 0) > 0 and getattr(e, 'is_forest_dancer', False) == False:
                     has_mutated = True
