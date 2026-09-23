@@ -2187,3 +2187,11 @@ class TestCLIVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('⊗', output)
+
+    def test_visualize_is_marsh_dweller(self):
+        universe = Universe(10, 10)
+        e = Entity("test", 1, 1, is_marsh_dweller=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('ɱ', output)

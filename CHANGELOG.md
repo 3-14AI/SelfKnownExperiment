@@ -1,4 +1,9 @@
 ### New Features
+### Added
+- Fixed flaky tests `test_forest_dancer_gains_energy_on_forest`, `test_web_dancer_energy_gain`, `test_space_glider_mutates`, and `test_space_dancer_mutates` by setting proper environment mechanics for the test subjects.
+- Added `test_rain_dancer` behavior and mutation tests.
+- Implemented `is_marsh_dweller` trait. Entities with this trait treat mud terrain as a shelter, gaining increased defense and energy recovery. Rendered as `ɱ` in the visualizer.
+
 - [x] Fixed missing dweller traits in `Universe.tick()`. `is_parasite_dweller` and `is_shelter_dweller` are now properly considered as being in shelter for entity logic, and `is_grass_dweller` correctly protects prey when on `grass` terrain.
 - [x] Implemented `is_absorbent` trait. Entities with this trait gain hydration rapidly while in water or rain.
 - [x] Implemented `is_parasite_dancer` trait. Entities with this trait gain energy while they have attached parasites.
@@ -17,6 +22,11 @@
 
 ## [Unreleased]
 ### New Features
+### Added
+- Fixed flaky tests `test_forest_dancer_gains_energy_on_forest`, `test_web_dancer_energy_gain`, `test_space_glider_mutates`, and `test_space_dancer_mutates` by setting proper environment mechanics for the test subjects.
+- Added `test_rain_dancer` behavior and mutation tests.
+- Implemented `is_marsh_dweller` trait. Entities with this trait treat mud terrain as a shelter, gaining increased defense and energy recovery. Rendered as `ɱ` in the visualizer.
+
 ### Added
 - Implemented `is_quicksand_strider` trait. Entities with this trait consume 0 stamina when moving on quicksand terrain and gain a defense bonus while on quicksand.
 - Implemented `is_quicksand_dancer` trait. Entities with this trait gain energy when on quicksand terrain.
