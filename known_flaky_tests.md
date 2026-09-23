@@ -30,3 +30,4 @@ The following tests are occasionally skipped using `@unittest.skip("flaky")` bec
 - tests.test_engine.TestIsSpaceGlider.test_space_glider_mutates
 - tests.test_engine.TestQuicksandDancer.test_is_quicksand_dancer_mutation
 - tests.test_engine.TestIsForestStrider.test_is_forest_strider_defense
+- tests.test_engine.TestCautious.test_is_cautious_flee
