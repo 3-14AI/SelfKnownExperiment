@@ -2211,3 +2211,19 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn('ŭ', output)
+
+    def test_visualize_is_day_strider(self):
+        universe = Universe(width=10, height=10)
+        e = Entity('daystrider', x=5, y=5, is_day_strider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('☼', output)
+
+    def test_visualize_is_night_strider(self):
+        universe = Universe(width=10, height=10)
+        e = Entity('nightstrider', x=5, y=5, is_night_strider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('★', output)

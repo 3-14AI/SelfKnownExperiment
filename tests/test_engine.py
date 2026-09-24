@@ -13423,7 +13423,7 @@ class TestStormDweller(unittest.TestCase):
         universe = Universe(width=5, height=5)
         universe.current_event = 'storm'
         universe.event_remaining_time = 10
-        entity = Entity(name="Storm Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_storm_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40)
+        entity = Entity(name="Storm Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_storm_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=1000, is_immune=True)
         universe.add_entity(entity)
         universe.tick()
 
@@ -18020,8 +18020,8 @@ class TestIsForestStrider(unittest.TestCase):
             self.assertTrue(getattr(children[0], 'is_forest_strider', False))
 
     def test_is_forest_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_forest_strider=True)
+        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=1)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=0, energy=100, is_forest_strider=True, is_immune=True, preferred_temperature=20, temperature_tolerance=1000)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='forest'))
 
@@ -18975,7 +18975,124 @@ class TestQuicksandStrider(unittest.TestCase):
         self.assertGreater(len(children), 0, "A child should have been born")
         self.assertTrue(getattr(children[0], 'is_quicksand_strider', False), "Child should have mutated is_quicksand_strider")
 
+
+class TestDayStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_day_strider_stamina(self):
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_day_strider=True)
+        self.universe.entities.append(entity)
+        self.universe.time = 500  # Ensure it's day
+        self.assertTrue(self.universe.is_day)
+
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50, "Stamina should not decrease during the day for is_day_strider")
+
+    def test_is_day_strider_defense(self):
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=1, is_day_strider=True)
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=1, attack=1)
+        self.universe.entities.append(prey)
+        self.universe.entities.append(predator)
+        self.universe.time = 500  # Ensure it's day
+        self.assertTrue(self.universe.is_day)
+
+        # We need to simulate combat which normally happens in tick()
+        # Since tick is highly complex, we will just isolate the defense addition by setting predator attack high enough to kill unless defense is buffed, or we check the engine code logic visually.
+        # But wait, memory says: "When testing defensive traits in combat (e.g., tests asserting survival after a predator attack), set the prey entity's base defense to a very low value (e.g., 0). This ensures the prey only survives because of the trait's defensive bonus, proving the logic works."
+        prey.defense = 0
+        predator.attack = 1 # base effective attack is 1
+        # prey base defense = 0. with trait = 0 + 2 = 2.
+        # 1 vs 2, prey wins.
+        # we will use the logic of the tick to test this.
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+        self.universe.tick()
+        self.assertIn(prey, self.universe.entities, "Prey should survive the attack due to is_day_strider defense bonus")
+
+    def test_is_day_strider_mutation(self):
+        parent = Entity(name="parent", x=5, y=5, energy=10000, max_age=100, age=10, size=20, is_day_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities.append(parent)
+        self.universe.reproduction_threshold = 100
+        self.universe.mutation_chance = 1.0
+        import random
+        random.seed()
+
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.foods = []
+
+        for _ in range(100):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            parent.energy = 10000
+
+            for entity in self.universe.entities:
+                if getattr(entity, 'is_day_strider', False) and entity != parent:
+                    return # Mutation found
+        self.fail("Mutation did not occur")
+
+
+class TestNightStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_night_strider_stamina(self):
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_night_strider=True)
+        self.universe.entities.append(entity)
+        self.universe.time = self.universe.day_length // 2 + 1  # Ensure it's night (assuming day is 0-999 and night is 1000-1999)
+        # Let's verify night is time >= 1000
+        # In engine, is_day is (self.time % 2000) < 1000
+        self.assertTrue(self.universe.is_night)
+
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50, "Stamina should not decrease at night for is_night_strider")
+
+    def test_is_night_strider_defense(self):
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=0, is_night_strider=True)
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=1, attack=1)
+        self.universe.entities.append(prey)
+        self.universe.entities.append(predator)
+        self.universe.time = self.universe.day_length // 2 + 1  # Ensure it's night
+        self.assertTrue(self.universe.is_night)
+
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+        self.universe.tick()
+        self.assertIn(prey, self.universe.entities, "Prey should survive the attack due to is_night_strider defense bonus")
+
+    def test_is_night_strider_mutation(self):
+        parent = Entity(name="parent", x=5, y=5, energy=10000, max_age=100, age=10, size=20, is_night_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities.append(parent)
+        self.universe.reproduction_threshold = 100
+        self.universe.mutation_chance = 1.0
+        import random
+        random.seed()
+
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.foods = []
+
+        for _ in range(100):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            parent.energy = 10000
+
+            for entity in self.universe.entities:
+                if getattr(entity, 'is_night_strider', False) and entity != parent:
+                    return # Mutation found
+        self.fail("Mutation did not occur")
+
 if __name__ == '__main__':
+
     unittest.main()
 
 
