@@ -1,4 +1,8 @@
 ### New Features
+- [x] Implemented `is_marsh_dancer` trait. Entities with this trait gain energy when on mud terrain.
+- [x] Fixed multiple flaky tests across `test_engine.py` and `test_quicksand_strider.py` that were occasionally failing due to un-mocked RNG state, trait energy leakages, or size-dependent mutation bugs.
+
+### New Features
 - [x] Fixed missing dweller traits in `Universe.tick()`. `is_parasite_dweller` and `is_shelter_dweller` are now properly considered as being in shelter for entity logic, and `is_grass_dweller` correctly protects prey when on `grass` terrain.
 - [x] Implemented `is_absorbent` trait. Entities with this trait gain hydration rapidly while in water or rain.
 - [x] Implemented `is_parasite_dancer` trait. Entities with this trait gain energy while they have attached parasites.

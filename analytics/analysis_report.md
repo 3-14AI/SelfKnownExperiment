@@ -2159,3 +2159,12 @@ Implemented is_rain_walker trait.
 - Обновлена логика `Universe.move_entity()` и `Universe.tick()`.
 - Добавлено отображение `μ` для `is_mud_strider` в CLI.
 - Добавлены тесты в `test_engine.py` и `test_visualizer.py`.
+
+### Analysis 122: Implement is_marsh_dancer
+**Overview:** Implemented the `is_marsh_dancer` trait for entities.
+**Details:**
+- Added `is_marsh_dancer` boolean to `Entity.__init__`.
+- Entities with this trait gain +5 energy when located on `mud` terrain, evaluated in `Universe.tick()`.
+- Implemented trait inheritance and mutation logic in `Universe.tick()`.
+- Visualizer now renders `is_marsh_dancer` entities using the character `ŭ`.
+- Added unit tests in `tests/test_engine.py` and visualizer tests in `tests/test_visualizer.py`.

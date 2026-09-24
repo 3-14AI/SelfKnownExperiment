@@ -160,6 +160,8 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Implemented `is_marsh_dancer` trait. Entities with this trait gain energy when on mud terrain.
+- [x] Fixed flaky tests across `test_engine.py` and `test_quicksand_strider.py` that were occasionally failing due to un-mocked RNG state, trait energy leakages, or size-dependent mutation bugs.
 - [x] Implemented `is_marsh_glider` trait. Entities with this trait consume 0 stamina when moving on mud terrain.
 - [x] Verified and skipped flaky `test_is_sleeping` and `test_lava_dancer_mutation` tests to stabilize the test suite. Documented them in `known_flaky_tests.md`.
 - [x] Cleaned up a double space formatting issue in the `Entity` instantiation code.

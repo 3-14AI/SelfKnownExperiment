@@ -549,6 +549,8 @@ class CLIVisualizer:
                         char = 'Ń'
                     elif getattr(entity, 'is_mud_dancer', False):
                         char = 'ń'
+                    elif getattr(entity, 'is_marsh_dancer', False):
+                        char = 'ŭ'
                     elif getattr(entity, 'is_night_dancer', False):
                         char = 'Ņ'
                     elif getattr(entity, 'is_poison_dancer', False):
