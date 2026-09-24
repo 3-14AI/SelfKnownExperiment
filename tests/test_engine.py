@@ -18740,3 +18740,81 @@ class TestMudStrider(unittest.TestCase):
         children = [e for e in universe.entities if "child" in e.name]
         self.assertGreater(len(children), 0, "A child should have been born")
         self.assertTrue(getattr(children[0], 'is_mud_strider', False), "Child should have mutated is_mud_strider")
+
+
+class TestQuicksandStrider(unittest.TestCase):
+    def test_is_quicksand_strider_stamina(self):
+        from src.universe.engine import Quicksand
+        universe = Universe(width=10, height=10)
+        universe.terrains = []
+        universe.quicksands.append(Quicksand(x=5, y=5, duration=10))
+        universe.quicksands.append(Quicksand(x=6, y=5, duration=10))
+
+        universe.add_terrain(Terrain(x=5, y=5, terrain_type='sand'))
+        universe.add_terrain(Terrain(x=6, y=5, terrain_type='sand'))
+
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_quicksand_strider=True)
+        universe.add_entity(entity)
+
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50, "Stamina should not decrease on quicksand for quicksand striders")
+
+    def test_is_quicksand_strider_defense(self):
+        from src.universe.engine import Quicksand
+        universe = Universe(width=10, height=10)
+        universe.terrains = []
+
+        predator = Entity(name="pred", x=5, y=5, size=2, diet='carnivore', attack=5)
+        # Low defense to ensure the bonus makes the difference
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=10, defense=0, is_quicksand_strider=True)
+        # Needs is_immune to survive quicksand damage
+        prey.is_immune = True
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Adding quicksand
+        # Wait, the quicksand check uses any(q.x == prey.x and q.y == prey.y for q in universe.quicksands)
+        # But quicksand moves in universe.tick() if random.random() < 0.5. Since we set it to 0.25, it WILL move!
+        # If it moves, it won't be at 5,5 anymore! That's why the defense bonus isn't being applied during combat.
+
+        # How to fix: mock random such that the first call is 0.9 (quicksand doesn't move), and the second is 0.25 (prey escapes).
+        # Actually random.random is used all over tick. Let's just create multiple quicksands so even if it moves, there's one at 5,5.
+
+        universe.quicksands.append(Quicksand(x=5, y=5, duration=100))
+        universe.quicksands.append(Quicksand(x=4, y=5, duration=100))
+        universe.quicksands.append(Quicksand(x=6, y=5, duration=100))
+        universe.quicksands.append(Quicksand(x=5, y=4, duration=100))
+        universe.quicksands.append(Quicksand(x=5, y=6, duration=100))
+
+        # Let's mock random so we can control the outcome properly
+        from unittest import mock
+
+        # We need escape chance to be > mocked random value
+        # effective defense = 0 + 2 = 2
+        # attack = 5
+        # escape chance = 2 / 7 = 0.285
+        with mock.patch('random.random', return_value=0.25):
+            universe.tick()
+
+        self.assertIn(prey, universe.entities, "is_quicksand_strider should increase escape chance")
+
+    def test_is_quicksand_strider_mutation(self):
+        universe = Universe(width=10, height=10, reproduction_threshold=20, reproduction_cost=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity(name="parent", x=5, y=5, energy=5000, max_age=100, age=10, size=20, is_quicksand_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if "child" in e.name]
+        self.assertGreater(len(children), 0, "A child should have been born")
+        self.assertTrue(getattr(children[0], 'is_quicksand_strider', False), "Child should have mutated is_quicksand_strider")
+
+if __name__ == '__main__':
+    unittest.main()
