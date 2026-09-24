@@ -2204,7 +2204,16 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('⊗', output)
 
+    def test_visualize_is_marsh_dweller(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity(name="Marsh Dweller", x=1, y=1, is_marsh_dweller=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('ŵ', output)
+
     def test_visualize_is_marsh_dancer(self):
+
         universe = Universe(width=10, height=10)
         e = Entity('dancer', x=5, y=5, is_marsh_dancer=True)
         universe.add_entity(e)
