@@ -630,6 +630,14 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('$', output)
 
 
+    def test_visualize_is_quicksand_strider(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="e", x=5, y=5, is_quicksand_strider=True, size=2)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('Ö', output)
+
     def test_visualize_is_quicksand_glider(self):
         universe = Universe(width=10, height=10)
         visualizer = CLIVisualizer(universe)

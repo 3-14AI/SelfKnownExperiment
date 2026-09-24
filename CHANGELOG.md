@@ -18,6 +18,7 @@
 ## [Unreleased]
 ### New Features
 ### Added
+- Added missing genetic mutation unit test and visualizer test for `is_quicksand_strider` trait.
 - Implemented `is_mud_strider` trait. Entities with this trait consume 0 stamina when moving on mud terrain and gain a defense bonus while on mud.
 - Implemented `is_quicksand_strider` trait. Entities with this trait consume 0 stamina when moving on quicksand terrain and gain a defense bonus while on quicksand.
 - Implemented `is_quicksand_dancer` trait. Entities with this trait gain energy when on quicksand terrain.
