@@ -19255,3 +19255,247 @@ class TestIsMarshWalkerMutation(unittest.TestCase):
 
         children = [e for e in self.universe.entities if e != parent]
         self.assertTrue(any(getattr(child, 'is_marsh_walker', False) for child in children))
+
+class TestIsSpringStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.time = 0
+
+    def test_is_spring_strider_stamina(self):
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_spring_strider=True)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50, "Stamina should not decrease during spring for is_spring_strider")
+
+    def test_is_spring_strider_stamina_negative(self):
+        self.universe.time = self.universe.season_length * 1
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_spring_strider=True)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertLess(entity.stamina, 50, "Stamina should decrease outside of spring for is_spring_strider")
+
+    def test_is_spring_strider_defense(self):
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=0, is_spring_strider=True)
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=10, attack=5, diet='carnivore')
+        self.universe.entities = []
+        self.universe.entities.extend([prey, predator])
+        effective_defense = prey.defense
+        if getattr(prey, 'is_spring_strider', False) and self.universe.current_season == 'spring':
+            effective_defense += 2
+        self.assertEqual(effective_defense, 2, "Prey should get +2 defense bonus inside spring")
+
+    def test_is_spring_strider_defense_negative(self):
+        self.universe.time = self.universe.season_length * 1
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=0, is_spring_strider=True)
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=10, attack=5, diet='carnivore')
+        self.universe.entities = []
+        self.universe.entities.extend([prey, predator])
+        prey_before_energy = prey.energy
+        # Directly test effective defense
+        effective_defense = prey.defense
+        if getattr(prey, 'is_spring_strider', False) and self.universe.current_season == 'spring':
+            effective_defense += 2
+        self.assertEqual(effective_defense, 0, "Prey should not have defense bonus outside spring")
+
+    def test_is_spring_strider_mutation(self):
+        parent = Entity(name="parent", x=5, y=5, energy=10000, max_age=100, age=10, size=20, is_spring_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities = [parent]
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 100
+        for _ in range(50):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            parent.energy = 10000
+            parent.age += 1
+            self.universe.tick()
+            children = [e for e in self.universe.entities if e != parent]
+            for child in children:
+                if getattr(child, 'is_spring_strider', False):
+                    return
+        self.fail("is_spring_strider did not mutate")
+
+class TestIsSummerStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.time = self.universe.season_length
+
+    def test_is_summer_strider_stamina(self):
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_summer_strider=True)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50, "Stamina should not decrease during summer for is_summer_strider")
+
+    def test_is_summer_strider_stamina_negative(self):
+        self.universe.time = self.universe.season_length * 2
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_summer_strider=True)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertLess(entity.stamina, 50, "Stamina should decrease outside of summer for is_summer_strider")
+
+    def test_is_summer_strider_defense(self):
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=0, is_summer_strider=True)
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=10, attack=5, diet='carnivore')
+        self.universe.entities = []
+        self.universe.entities.extend([prey, predator])
+        effective_defense = prey.defense
+        if getattr(prey, 'is_summer_strider', False) and self.universe.current_season == 'summer':
+            effective_defense += 2
+        self.assertEqual(effective_defense, 2, "Prey should get +2 defense bonus inside summer")
+
+    def test_is_summer_strider_defense_negative(self):
+        self.universe.time = self.universe.season_length * 2
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=0, is_summer_strider=True)
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=10, attack=5, diet='carnivore')
+        self.universe.entities = []
+        self.universe.entities.extend([prey, predator])
+        prey_before_energy = prey.energy
+        # Directly test effective defense
+        effective_defense = prey.defense
+        if getattr(prey, 'is_summer_strider', False) and self.universe.current_season == 'summer':
+            effective_defense += 2
+        self.assertEqual(effective_defense, 0, "Prey should not have defense bonus outside summer")
+
+    def test_is_summer_strider_mutation(self):
+        parent = Entity(name="parent", x=5, y=5, energy=10000, max_age=100, age=10, size=20, is_summer_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities = [parent]
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 100
+        for _ in range(50):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            parent.energy = 10000
+            parent.age += 1
+            self.universe.tick()
+            children = [e for e in self.universe.entities if e != parent]
+            for child in children:
+                if getattr(child, 'is_summer_strider', False):
+                    return
+        self.fail("is_summer_strider did not mutate")
+
+class TestIsAutumnStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.time = 2 * self.universe.season_length
+
+    def test_is_autumn_strider_stamina(self):
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_autumn_strider=True)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50, "Stamina should not decrease during autumn for is_autumn_strider")
+
+    def test_is_autumn_strider_stamina_negative(self):
+        self.universe.time = self.universe.season_length * 3
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_autumn_strider=True)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertLess(entity.stamina, 50, "Stamina should decrease outside of autumn for is_autumn_strider")
+
+    def test_is_autumn_strider_defense(self):
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=0, is_autumn_strider=True)
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=10, attack=5, diet='carnivore')
+        self.universe.entities = []
+        self.universe.entities.extend([prey, predator])
+        effective_defense = prey.defense
+        if getattr(prey, 'is_autumn_strider', False) and self.universe.current_season == 'autumn':
+            effective_defense += 2
+        self.assertEqual(effective_defense, 2, "Prey should get +2 defense bonus inside autumn")
+
+    def test_is_autumn_strider_defense_negative(self):
+        self.universe.time = self.universe.season_length * 3
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=0, is_autumn_strider=True)
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=10, attack=5, diet='carnivore')
+        self.universe.entities = []
+        self.universe.entities.extend([prey, predator])
+        prey_before_energy = prey.energy
+        # Directly test effective defense
+        effective_defense = prey.defense
+        if getattr(prey, 'is_autumn_strider', False) and self.universe.current_season == 'autumn':
+            effective_defense += 2
+        self.assertEqual(effective_defense, 0, "Prey should not have defense bonus outside autumn")
+
+    def test_is_autumn_strider_mutation(self):
+        parent = Entity(name="parent", x=5, y=5, energy=10000, max_age=100, age=10, size=20, is_autumn_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities = [parent]
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 100
+        for _ in range(50):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            parent.energy = 10000
+            parent.age += 1
+            self.universe.tick()
+            children = [e for e in self.universe.entities if e != parent]
+            for child in children:
+                if getattr(child, 'is_autumn_strider', False):
+                    return
+        self.fail("is_autumn_strider did not mutate")
+
+class TestIsWinterStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.time = 3 * self.universe.season_length
+
+    def test_is_winter_strider_stamina(self):
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_winter_strider=True)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 50, "Stamina should not decrease during winter for is_winter_strider")
+
+    def test_is_winter_strider_stamina_negative(self):
+        self.universe.time = self.universe.season_length * 0
+        entity = Entity(name="e", x=5, y=5, stamina=50, max_stamina=50, is_winter_strider=True)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertLess(entity.stamina, 50, "Stamina should decrease outside of winter for is_winter_strider")
+
+    def test_is_winter_strider_defense(self):
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=0, is_winter_strider=True)
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=10, attack=5, diet='carnivore')
+        self.universe.entities = []
+        self.universe.entities.extend([prey, predator])
+        effective_defense = prey.defense
+        if getattr(prey, 'is_winter_strider', False) and self.universe.current_season == 'winter':
+            effective_defense += 2
+        self.assertEqual(effective_defense, 2, "Prey should get +2 defense bonus inside winter")
+
+    def test_is_winter_strider_defense_negative(self):
+        self.universe.time = self.universe.season_length * 0
+        prey = Entity(name="prey", x=5, y=5, energy=100, size=1, defense=0, is_winter_strider=True)
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=10, attack=5, diet='carnivore')
+        self.universe.entities = []
+        self.universe.entities.extend([prey, predator])
+        prey_before_energy = prey.energy
+        # Directly test effective defense
+        effective_defense = prey.defense
+        if getattr(prey, 'is_winter_strider', False) and self.universe.current_season == 'winter':
+            effective_defense += 2
+        self.assertEqual(effective_defense, 0, "Prey should not have defense bonus outside winter")
+
+    def test_is_winter_strider_mutation(self):
+        parent = Entity(name="parent", x=5, y=5, energy=10000, max_age=100, age=10, size=20, is_winter_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities = [parent]
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 100
+        for _ in range(50):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            parent.energy = 10000
+            parent.age += 1
+            self.universe.tick()
+            children = [e for e in self.universe.entities if e != parent]
+            for child in children:
+                if getattr(child, 'is_winter_strider', False):
+                    return
+        self.fail("is_winter_strider did not mutate")

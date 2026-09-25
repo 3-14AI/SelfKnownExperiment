@@ -1,5 +1,0 @@
-Fix flaky tests for dancer and strider traits
-
-- Fixed flaky mutation tests for `is_space_dancer` and `is_quicksand_strider` by providing sufficient parent energy, size limits, and entity count caps to ensure survival and mutation.
-- Fixed flaky energy gain tests for `is_forest_dancer`, `is_web_dancer`, and `is_quicksand_dancer` by fixing the RNG seed, disabling event and disease leakage, and ensuring entities do not wander out of bounds via stamina depletion.
-- These updates stabilize the full `python3 run_tests.py` suite.
