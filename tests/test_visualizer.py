@@ -2157,6 +2157,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('ɣ', output)
 
+    def test_visualize_is_marsh_walker(self):
+        universe = Universe(1, 1)
+        entity = Entity("E1", 0, 0, size=1, is_marsh_walker=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ẁ', output)
+
     def test_visualize_is_marsh_glider(self):
         universe = Universe(1, 1)
         entity = Entity("E1", 0, 0, size=1, is_marsh_glider=True)
