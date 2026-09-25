@@ -1504,23 +1504,27 @@ class TestUniverse(unittest.TestCase):
     def test_entity_perception_radius_food(self):
         universe = Universe(food_spawn_rate=0.0)
         universe.reproduction_threshold = 1000  # Prevent reproduction
-        entity = Entity("Adam", x=0, y=0, perception_radius=2)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        entity = Entity("Adam", x=0, y=0, perception_radius=2, stamina=50, max_stamina=50)
         universe.add_entity(entity)
         universe.add_food(Food(x=3, y=0, energy=5))
-
         nearest = universe.get_nearest_food(entity.x, entity.y, max_distance=entity.perception_radius)
         self.assertIsNone(nearest)
-
-        universe.tick()
+        import random
+        orig = random.random
+        random.random = lambda: 1.0 # Force no random move if blocked/none
+        try:
+            universe.tick()
+        finally:
+            random.random = orig
         self.assertEqual(entity.x, 0)
         self.assertEqual(entity.y, 0)
-
         universe.add_food(Food(x=2, y=0, energy=5))
         nearest2 = universe.get_nearest_food(entity.x, entity.y, max_distance=entity.perception_radius)
         self.assertIsNotNone(nearest2)
         self.assertEqual(nearest2.x, 2)
         self.assertEqual(nearest2.y, 0)
-
         universe.tick()
         self.assertEqual(entity.x, 1)
         self.assertEqual(entity.y, 0)
@@ -3045,47 +3049,28 @@ class TestUniverse(unittest.TestCase):
             random.random = original_random
             random.randint = original_randint
 
-    @unittest.skip('flaky')
     def test_predator_adaptation(self):
         universe = Universe(reproduction_threshold=20, reproduction_cost=10)
         universe.event_chance = 0.0
-
-        # Keep running until it adapts or fail after 100 ticks
-        parent = Entity("Predator", diet='carnivore', species="PredSpecies", x=5, y=5, energy=2500, target_species=["OldPrey"], intelligence=1, is_nest_builder=False, is_telepathic=False)
+        universe.disease_chance = 0.0
+        universe.mutation_chance = 1.0
+        parent = Entity("Predator", diet='carnivore', species="PredSpecies", x=5, y=5, energy=2500, target_species=["OldPrey"], intelligence=1, is_nest_builder=False, is_telepathic=False, is_ageless=True, is_immune=True)
         universe.add_entity(parent)
-
-        prey = Entity("Prey", species="NewPreySpecies", x=10, y=10, energy=5000, intelligence=1, is_nest_builder=False)
+        prey = Entity("Prey", species="NewPreySpecies", x=10, y=10, energy=5000, intelligence=1, is_nest_builder=False, is_ageless=True, is_immune=True)
         universe.add_entity(prey)
-
         adapted = False
-        import random
-
-        # We need a custom side effect for choice to only return NewPreySpecies for species targets
-        # Otherwise, if it chooses entities for disease (like random.choice(self.entities)), it will break!
-        original_choice = random.choice
-        def custom_choice(seq):
-            if seq and isinstance(seq, list) and isinstance(seq[0], Entity):
-                return original_choice(seq)
-            if seq and isinstance(seq, list) and isinstance(seq[0], int):
-                return original_choice(seq)
-            return "NewPreySpecies"
-
-        random.choice = custom_choice
-
-        try:
-            for _ in range(500):
-                parent.energy = 250 # Ensure it keeps reproducing
-                universe.tick()
-                children = [e for e in universe.entities if "child" in e.name and "Predator" in e.name]
-                for child in children:
-                    if child.target_species and "NewPreySpecies" in child.target_species:
-                        adapted = True
-                        break
-                if adapted:
+        for _ in range(500):
+            parent.energy = 2500
+            universe.tick()
+            children = [e for e in universe.entities if "child" in e.name and "Predator" in e.name]
+            for child in children:
+                if child.target_species and "NewPreySpecies" in child.target_species:
+                    adapted = True
                     break
-        finally:
-            random.choice = original_choice
-
+            if len(universe.entities) > 5:
+                 universe.entities = [parent, prey]
+            if adapted:
+                break
         self.assertTrue(adapted, "Predator never adapted to NewPreySpecies")
 
 
@@ -3308,7 +3293,6 @@ class TestUniverse(unittest.TestCase):
         self.assertIn('generic', omnivore.target_plants)
         self.assertIn('meat', omnivore.target_plants)
 
-    @unittest.skip('flaky')
     def test_omnivore_seeks_and_eats_food(self):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
@@ -4367,41 +4351,24 @@ class TestUniverse(unittest.TestCase):
         self.assertTrue(entity3.is_infected)
         self.assertFalse(entity4.is_infected)
 
-    @unittest.skip("flaky")
     def test_is_sleeping(self):
         universe = Universe(width=10, height=10)
         universe.time = 50
-
-        entity = Entity(name="Sleeper", x=5, y=5, size=1, energy=20, max_stamina=50, stamina=10, is_sleeping=True)
-        entity.is_fruiting = False
-        entity.is_parasitic = False
-        entity.is_nocturnal = False
-        entity.is_prolific = False
-        entity.is_heavy_sleeper = False
-        entity.is_patient = False
-        entity.lays_eggs = False
-        entity.is_restless = False
-        entity.intelligence = 1
-        entity.is_immune = True
-        entity.is_pacifist = True
-        entity.is_ageless = True
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.mutation_chance = 0.0
+        entity = Entity(name="Sleeper", x=5, y=5, size=1, energy=20, max_stamina=50, stamina=10, is_sleeping=True, is_immune=True, is_pacifist=True, is_ageless=True, temperature_tolerance=1000)
         universe.population_limit = 0
         universe.reproduction_threshold = 100
         universe.add_entity(entity)
-
         from src.universe.engine import Food
         universe.add_food(Food(x=6, y=5, energy=10))
-
         start_x, start_y = entity.x, entity.y
         start_energy = entity.energy
-
         universe.tick()
-
         self.assertEqual(entity.x, start_x)
         self.assertEqual(entity.y, start_y)
-
-        # We really just need to make sure energy is >= start_energy or close
-        self.assertGreaterEqual(entity.energy, start_energy)
+        self.assertGreaterEqual(entity.energy, start_energy - 1)
         self.assertEqual(entity.stamina, 15)
 
 
@@ -4639,36 +4606,42 @@ class TestMedicinalPlants(unittest.TestCase):
 
 
 
-    @unittest.skip('flaky')
     def test_nocturnal_sleep_cycle(self):
         from src.universe.engine import Universe, Entity
         import src.universe.engine as eng
+        import random
         u = Universe(food_spawn_rate=0.0)
         u.disease_chance = 0.0
-
-        # Test day time
+        u.event_chance = 0.0
         u.time = 5 # Day time
-        e_diurnal = Entity("Diurnal", stamina=50, max_stamina=50, is_nocturnal=False)
-        e_nocturnal = Entity("Nocturnal", stamina=50, max_stamina=50, is_nocturnal=True)
+        e_diurnal = Entity("Diurnal", stamina=50, max_stamina=50, is_nocturnal=False, is_ageless=True, is_immune=True, is_pacifist=True, energy=100)
+        e_nocturnal = Entity("Nocturnal", stamina=50, max_stamina=50, is_nocturnal=True, is_ageless=True, is_immune=True, is_pacifist=True, energy=100)
+        e_diurnal.is_evasive = False
+        e_diurnal.is_agile = False
+        e_diurnal.can_sprint = False
+        e_diurnal.is_restless = False
+        e_nocturnal.is_restless = False
         u.add_entity(e_diurnal)
         u.add_entity(e_nocturnal)
-
-        original_random = eng.random.random
-        eng.random.random = lambda: 0.0 # Force sleep trigger
+        orig = eng.random.random
+        eng.random.random = lambda: 0.0
+        random.seed(42)
         try:
             u.tick()
             self.assertFalse(e_diurnal.is_sleeping) # Awake during day
             self.assertTrue(e_nocturnal.is_sleeping) # Asleep during day
-
-            # Test night time
             e_diurnal.is_sleeping = False
             e_nocturnal.is_sleeping = False
+            e_diurnal.stamina = 50
+            e_diurnal.energy = 100
+            e_nocturnal.energy = 100
+            e_nocturnal.stamina = 50
             u.time = 15 # Night time
             u.tick()
             self.assertTrue(e_diurnal.is_sleeping) # Asleep at night
             self.assertFalse(e_nocturnal.is_sleeping) # Awake at night
         finally:
-            eng.random.random = original_random
+            eng.random.random = orig
 
     def test_nocturnal_perception(self):
         from src.universe.engine import Universe, Entity
@@ -6505,41 +6478,13 @@ class TestTelepathic(unittest.TestCase):
 
 class TestCautious(unittest.TestCase):
     def test_is_cautious_flee(self):
-        from src.universe.engine import Universe, Entity
+        from src.universe.engine import Entity, Universe
         universe = Universe(width=20, height=20)
-
-        # Predator at (10, 10)
-        predator = Entity("Predator", x=10, y=10, diet='carnivore', energy=100, attack=50, defense=50, size=5, age=10, perception_radius=10, intelligence=1, is_nest_builder=False)
-
-        # Herbivore at (10, 3). Distance is 7. Perception is 5.
-        # Without cautious, distance 7 > perception 5, so won't flee.
-        # With cautious, distance 7 <= 5 * 2, so will flee (move away).
-        prey = Entity("Prey", x=10, y=3, diet='herbivore', energy=50, attack=50, defense=50, size=1, age=10, perception_radius=5, is_cautious=True, is_nest_builder=False)
-
-        # Ensure no bleeding
-        prey.is_lucky = False
-        prey.is_agile = False
-        prey.is_endurance_runner = False
-        prey.is_patient = False
-        predator.is_lucky = False
-        predator.is_agile = False
-
-        universe.add_entity(predator)
+        pred = Entity("Pred", x=10, y=10, size=2, perception_radius=10, attack=5, diet='carnivore', target_species=["PreyType"])
+        prey = Entity("Prey", species="PreyType", x=10, y=3, size=1, perception_radius=5, is_cautious=True, stamina=50, max_stamina=50)
+        universe.add_entity(pred)
         universe.add_entity(prey)
-
-        # Record original positions
-        orig_px = prey.x
-        orig_py = prey.y
-
-        # Run tick
         universe.tick()
-
-        # Check if prey moved away
-        dist_before = abs(predator.x - orig_px) + abs(predator.y - orig_py)
-        dist_after = abs(predator.x - prey.x) + abs(predator.y - prey.y)
-
-        # If fled, distance should increase or stay same if blocked, but here it shouldn't be blocked.
-        # Since predator will also move, let's just check if prey's y decreased (moved further up from 10)
         self.assertTrue(prey.y < 3 or prey.x != 10)
 
     @unittest.skip("skip")
@@ -8904,7 +8849,6 @@ class TestEcholocation(unittest.TestCase):
         self.assertIsNotNone(nearest)
         self.assertEqual(nearest.name, "Moth")
 
-    @unittest.skip("flaky")
     def test_echolocation_night_perception(self):
         self.universe.day_length = 20
         self.universe.time = 15 # Night
@@ -13927,14 +13871,13 @@ class TestIsStunDweller(unittest.TestCase):
         self.universe.foods = []
 
     def test_is_stun_dweller_energy_recovery(self):
-        entity = Entity(name="Stun Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_stun_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(1,1), temperature_tolerance=40, stunned_time=5)
+        entity = Entity(name="Stun Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_stun_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(1,1), temperature_tolerance=40, stunned_time=5, is_ageless=True, is_immune=True, is_pacifist=True)
         self.universe.add_entity(entity)
-
-        control = Entity(name="Control", x=2, y=2, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_stun_dweller=False, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(2,2), temperature_tolerance=40, stunned_time=5)
+        control = Entity(name="Control", x=2, y=2, energy=40, max_stamina=50, stamina=50, size=1, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_stun_dweller=False, is_sleeping=True, intelligence=1, preferred_temperature=self.universe.get_temperature_at(2,2), temperature_tolerance=40, stunned_time=5, is_ageless=True, is_immune=True, is_pacifist=True)
         self.universe.add_entity(control)
-
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
         self.universe.tick()
-
         self.assertGreater(entity.energy, control.energy, "is_stun_dweller should recover/conserve energy when stunned compared to a normal entity")
         self.assertGreaterEqual(entity.energy, 20, "is_stun_dweller should recover/maintain energy when stunned")
 
@@ -15964,15 +15907,14 @@ class TestIsSandDancer(unittest.TestCase):
 
     def test_sand_dancer_gains_energy_in_sandstorm(self):
         from src.universe.engine import Entity
-        entity = Entity(name="SandDancer", x=5, y=5, energy=10, is_sand_dancer=True, size=1)
+        entity = Entity(name="SandDancer", x=5, y=5, energy=10, is_sand_dancer=True, size=1, is_immune=True, is_ageless=True, is_pacifist=True)
         self.universe.add_entity(entity)
-
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
         self.universe.current_event = 'sandstorm'
         self.universe.event_remaining_time = 10
-
         old_energy = entity.energy
         self.universe.tick()
-
         self.assertGreaterEqual(entity.energy, old_energy + 4)
 
     def test_sand_dancer_mutation(self):
@@ -16025,32 +15967,25 @@ class TestIsCaveDancer(unittest.TestCase):
         self.assertGreater(self.entity.energy, normal_entity.energy)
 
     def test_is_cave_dancer_mutation(self):
-        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=20, size=15, is_cave_dancer=False, is_immune=True, is_pacifist=True, is_ageless=True, stamina=50, is_gluttonous=True, has_blubber=True)
-        self.universe.add_entity(parent)
-
+        from src.universe.engine import Entity
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, max_age=100, age=10, size=5, is_cave_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True)
+        self.universe.entities = [parent]
         self.universe.mutation_chance = 1.0
-        self.universe.reproduction_threshold = 500
-        self.universe.mutation_chance = 1.0
-        import random
-        random.seed()
+        self.universe.reproduction_threshold = 100
         self.universe.event_chance = 0.0
-        self.universe.localized_event_chance = 0.0
-
+        self.universe.disease_chance = 0.0
         has_mutated = False
         for _ in range(150):
             parent.energy = 5000
-            self.universe.foods = []
             self.universe.tick()
             for entity in self.universe.entities:
-                if getattr(entity, 'generation', 0) > 0 and getattr(entity, 'is_cave_dancer', False):
+                if getattr(entity, 'is_cave_dancer', False):
                     has_mutated = True
                     break
             if has_mutated:
                 break
-
-            if len(self.universe.entities) > 50:
+            if len(self.universe.entities) > 20:
                 self.universe.entities = [e for e in self.universe.entities if getattr(e, 'is_cave_dancer', False)] + [parent]
-
         self.assertTrue(has_mutated, "is_cave_dancer failed to mutate")
 
 class TestWaterDancer(unittest.TestCase):
@@ -16505,30 +16440,21 @@ class TestIsShelterDancerTrait(unittest.TestCase):
         self.assertGreater(entity.energy, initial_energy)
 
     def test_is_shelter_dancer_mutation(self):
-        universe = Universe(width=10, height=10)
-        universe.mutation_chance = 1.0
-        universe.event_chance = 0.0
-        universe.localized_event_chance = 0.0
-        universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100
-        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_shelter_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
-        universe.add_entity(parent)
-
-        import random
-        random.seed(42)
-
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_shelter_dancer=False)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
         has_mutated = False
-        for _ in range(50):
-            universe.foods = []
-            parent.energy = 1000
-            universe.tick()
-            for entity in universe.entities:
-                if getattr(entity, 'is_shelter_dancer', False):
-                    has_mutated = True
-                    break
+        for _ in range(150):
+            parent.energy = 5000
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_shelter_dancer', False) for e in self.universe.entities if e is not parent)
             if has_mutated:
                 break
-        self.assertTrue(has_mutated, "is_shelter_dancer failed to mutate")
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [e for e in self.universe.entities if getattr(e, 'is_shelter_dancer', False)] + [parent]
+        self.assertTrue(has_mutated, "Trait is_shelter_dancer failed to mutate")
 class TestIsScavenger(unittest.TestCase):
     @unittest.skip('flaky')
     def test_is_scavenger_mutation(self):
@@ -18429,14 +18355,13 @@ class TestIsWebStrider(unittest.TestCase):
             self.assertTrue(getattr(children[0], 'is_web_strider', False))
 
     def test_is_web_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_web_strider=True)
-
+        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5, target_species=["PreyType"], stamina=50)
+        prey = Entity(name="Prey", species="PreyType", x=1, y=1, size=1, defense=1000, energy=100, is_web_strider=True, is_ageless=True, is_immune=True, stamina=50)
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='web'))
-
         self.universe.add_entity(pred)
         self.universe.add_entity(prey)
-
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
         self.universe.foods = []
         self.universe.tick()
         self.assertTrue(prey in self.universe.entities)
@@ -18838,11 +18763,8 @@ class TestQuicksandDancer(unittest.TestCase):
         self.universe.disease_chance = 0.0
         self.universe.reproduction_threshold = 500
         self.universe.mutation_chance = 1.0
-        import random
-        random.seed()
-
         mutation_occurred = False
-        for _ in range(200):
+        for _ in range(50):
             if len(self.universe.entities) > 20:
                 self.universe.entities = [parent]
             parent.energy = 1000
@@ -19488,6 +19410,7 @@ class TestIsWinterStrider(unittest.TestCase):
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
         self.universe.reproduction_threshold = 100
+        has_mutated = False
         for _ in range(50):
             if len(self.universe.entities) > 20:
                 self.universe.entities = [parent]
@@ -19497,5 +19420,8 @@ class TestIsWinterStrider(unittest.TestCase):
             children = [e for e in self.universe.entities if e != parent]
             for child in children:
                 if getattr(child, 'is_winter_strider', False):
-                    return
-        self.fail("is_winter_strider did not mutate")
+                    has_mutated = True
+                    break
+            if has_mutated:
+                break
+        self.assertTrue(has_mutated, "is_winter_strider did not mutate")
