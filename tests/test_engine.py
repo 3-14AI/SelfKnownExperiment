@@ -19192,3 +19192,66 @@ class TestIsMarshDweller(unittest.TestCase):
                 break
 
         self.assertTrue(mutation_occurred)
+
+class TestIsMarshWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.add_terrain(Terrain(x=0, y=0, elevation=0, terrain_type='mud'))
+        self.universe.add_terrain(Terrain(x=0, y=1, elevation=2, terrain_type='mud'))
+
+        self.universe.add_terrain(Terrain(x=1, y=0, elevation=0, terrain_type='water'))
+        self.universe.add_terrain(Terrain(x=1, y=1, elevation=2, terrain_type='water'))
+
+    def test_is_marsh_walker_mud(self):
+        walker = Entity(name="Walker", x=0, y=0, max_stamina=100, stamina=50, is_marsh_walker=True, energy=100, size=1)
+        self.universe.add_entity(walker)
+
+        self.universe.move_entity(walker, 0, 1)
+        # Base movement = 1. Elevation diff = +2. Since is_marsh_walker on mud, diff is ignored. Total = 1.
+        self.assertEqual(walker.stamina, 49)
+
+    def test_is_marsh_walker_water(self):
+        walker = Entity(name="Walker", x=1, y=0, max_stamina=100, stamina=50, is_marsh_walker=True, energy=100, size=1, is_amphibious=True)
+        self.universe.add_entity(walker)
+
+        self.universe.move_entity(walker, 0, 1)
+        # Base movement = 1. Elevation diff = +2. Since is_marsh_walker on water, diff is ignored. Total = 1.
+        self.assertEqual(walker.stamina, 49)
+
+    def test_is_marsh_walker_normal(self):
+        normal = Entity(name="Normal", x=0, y=0, max_stamina=100, stamina=50, is_marsh_walker=False, energy=100, size=1)
+        self.universe.add_entity(normal)
+
+        self.universe.move_entity(normal, 0, 1)
+        # Base movement = 1. Elevation diff = +2. Total = 3.
+        self.assertEqual(normal.stamina, 47)
+
+
+class TestIsMarshWalkerMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe()
+
+    def test_is_marsh_walker_mutation(self):
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.mutation_chance = 1.0
+
+        parent = Entity(name="Parent", x=1, y=1, energy=100, size=1, is_marsh_walker=False, max_age=100, age=10, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 50
+        self.universe.reproduction_cost = 10
+
+        for _ in range(50):
+            parent.energy = 5000
+            self.universe.tick()
+
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+
+            children = [e for e in self.universe.entities if e != parent]
+            if any(getattr(child, 'is_marsh_walker', False) for child in children):
+                break
+
+        children = [e for e in self.universe.entities if e != parent]
+        self.assertTrue(any(getattr(child, 'is_marsh_walker', False) for child in children))
