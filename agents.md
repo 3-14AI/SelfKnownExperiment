@@ -160,6 +160,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Fixed flaky tests `test_is_sleeping`, `test_nocturnal_sleep_cycle`, `test_echolocation_night_perception`, `test_predator_adaptation`, `test_is_winter_strider_mutation`, `test_entity_perception_radius_food`, `test_sand_dancer_gains_energy_in_sandstorm`, and `test_is_web_strider_defense` and unskipped them to ensure robust test coverage.
 - [x] Implemented `is_day_strider` and `is_night_strider` traits. Entities with these traits consume 0 stamina and gain a defense bonus during the day or night respectively.
 - [x] Implemented `is_marsh_dancer` trait. Entities with this trait gain energy when on mud terrain.
 - [x] Fixed flaky tests across `test_engine.py` and `test_quicksand_strider.py` that were occasionally failing due to un-mocked RNG state, trait energy leakages, or size-dependent mutation bugs.
