@@ -543,6 +543,14 @@ class CLIVisualizer:
                         char = '☼'
                     elif getattr(entity, 'is_night_strider', False):
                         char = '★'
+                    elif getattr(entity, 'is_spring_strider', False):
+                        char = '①'
+                    elif getattr(entity, 'is_summer_strider', False):
+                        char = '②'
+                    elif getattr(entity, 'is_autumn_strider', False):
+                        char = '③'
+                    elif getattr(entity, 'is_winter_strider', False):
+                        char = '④'
                     elif getattr(entity, 'is_mud_strider', False):
                         char = 'μ'
                     elif getattr(entity, 'is_marsh_glider', False):

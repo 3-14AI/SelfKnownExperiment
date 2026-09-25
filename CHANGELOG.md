@@ -525,3 +525,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_quicksand_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on quicksand terrain. Added genetic mutation and visualizer support (rendered as '©').
 - Implemented `is_quicksand_glider` trait. Entities with this trait consume 0 stamina when moving on quicksand. Added genetic mutation and visualizer support (rendered as 'Q').
 - Implemented `is_quicksand_dweller` trait. Entities with this trait treat `quicksand` terrain as a shelter, gaining increased defense and energy recovery. Rendered as 'õ' in CLI visualizer.
+- Implemented `is_spring_strider`, `is_summer_strider`, `is_autumn_strider`, and `is_winter_strider` traits. Entities with these traits consume 0 stamina when moving during their respective season and gain a defense bonus while inside that season.

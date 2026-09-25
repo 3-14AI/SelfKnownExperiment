@@ -2244,3 +2244,35 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn('★', output)
+
+    def test_visualize_is_spring_strider(self):
+        universe = Universe(width=10, height=10)
+        e = Entity('springstrider', x=5, y=5, is_spring_strider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('①', output)
+
+    def test_visualize_is_summer_strider(self):
+        universe = Universe(width=10, height=10)
+        e = Entity('summerstrider', x=5, y=5, is_summer_strider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('②', output)
+
+    def test_visualize_is_autumn_strider(self):
+        universe = Universe(width=10, height=10)
+        e = Entity('autumnstrider', x=5, y=5, is_autumn_strider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('③', output)
+
+    def test_visualize_is_winter_strider(self):
+        universe = Universe(width=10, height=10)
+        e = Entity('winterstrider', x=5, y=5, is_winter_strider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('④', output)
