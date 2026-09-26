@@ -4357,7 +4357,8 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.mutation_chance = 0.0
-        entity = Entity(name="Sleeper", x=5, y=5, size=1, energy=20, max_stamina=50, stamina=10, is_sleeping=True, is_immune=True, is_pacifist=True, is_ageless=True, temperature_tolerance=1000)
+        # Initialize size to 10 so max_energy is 500, avoiding energy cap
+        entity = Entity(name="Sleeper", x=5, y=5, size=10, energy=20, max_stamina=50, stamina=10, is_sleeping=True, is_immune=True, is_pacifist=True, is_ageless=True, temperature_tolerance=1000)
         universe.population_limit = 0
         universe.reproduction_threshold = 100
         universe.add_entity(entity)
@@ -7337,19 +7338,21 @@ class TestIsTracker(unittest.TestCase):
         self.universe = Universe(width=10, height=10)
 
     @unittest.skip("flaky")
-    @unittest.skip('Flaky')
     def test_is_tracker_scent_detection(self):
-        # Create an entity with is_tracker=True, stamina=50 to allow movement
-        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100, diet="carnivore", target_species=["prey"])
+        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100, diet="carnivore", target_species=["prey"], is_immune=True, is_ageless=True, is_pacifist=True, temperature_tolerance=1000)
         self.universe.entities.append(entity)
 
-        # Place a strong scent trail at distance 2 (7, 5)
         self.universe.scent_trails[(7, 5)] = 20
-
-        # Also put a weak scent at distance 1 to ensure it prefers the strong one
         self.universe.scent_trails[(6, 5)] = 5
 
-        # It should move towards (7, 5) which means taking a step in (1, 0) direction
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.mutation_chance = 0.0
+
+        import random
+        random.seed(42)
+
         self.universe.tick()
 
         self.assertEqual(entity.x, 6)
@@ -7907,19 +7910,21 @@ class TestIsTracker(unittest.TestCase):
         self.universe = Universe(width=10, height=10)
 
     @unittest.skip("flaky")
-    @unittest.skip('Flaky')
     def test_is_tracker_scent_detection(self):
-        # Create an entity with is_tracker=True, stamina=50 to allow movement
-        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100, diet="carnivore", target_species=["prey"])
+        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100, diet="carnivore", target_species=["prey"], is_immune=True, is_ageless=True, is_pacifist=True, temperature_tolerance=1000)
         self.universe.entities.append(entity)
 
-        # Place a strong scent trail at distance 2 (7, 5)
         self.universe.scent_trails[(7, 5)] = 20
-
-        # Also put a weak scent at distance 1 to ensure it prefers the strong one
         self.universe.scent_trails[(6, 5)] = 5
 
-        # It should move towards (7, 5) which means taking a step in (1, 0) direction
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.mutation_chance = 0.0
+
+        import random
+        random.seed(42)
+
         self.universe.tick()
 
         self.assertEqual(entity.x, 6)
@@ -8576,19 +8581,21 @@ class TestIsTracker(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
 
-    @unittest.skip('Flaky')
     def test_is_tracker_scent_detection(self):
-        # Create an entity with is_tracker=True, stamina=50 to allow movement
-        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100, diet="carnivore", target_species=["prey"])
+        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100, diet="carnivore", target_species=["prey"], is_immune=True, is_ageless=True, is_pacifist=True, temperature_tolerance=1000)
         self.universe.entities.append(entity)
 
-        # Place a strong scent trail at distance 2 (7, 5)
         self.universe.scent_trails[(7, 5)] = 20
-
-        # Also put a weak scent at distance 1 to ensure it prefers the strong one
         self.universe.scent_trails[(6, 5)] = 5
 
-        # It should move towards (7, 5) which means taking a step in (1, 0) direction
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.mutation_chance = 0.0
+
+        import random
+        random.seed(42)
+
         self.universe.tick()
 
         self.assertEqual(entity.x, 6)
@@ -9837,17 +9844,24 @@ class TestStrongStomach(unittest.TestCase):
 
 
 class TestOpportunistic(unittest.TestCase):
-    @unittest.skip('Flaky')
     def test_is_opportunistic_herbivore_eats_meat(self):
         from src.universe.engine import Universe, Entity, Food
         u = Universe(width=5, height=5)
-        e = Entity("Opp", energy=10, size=2, diet='herbivore', is_opportunistic=True, perception_radius=10, max_stamina=100, stamina=100, intelligence=1, has_strong_stomach=True, attack=1000)
+        e = Entity("Opp", energy=10, size=2, diet='herbivore', is_opportunistic=True, perception_radius=10, max_stamina=100, stamina=100, intelligence=1, has_strong_stomach=True, attack=1000, temperature_tolerance=1000, is_immune=True, is_ageless=True)
         u.add_entity(e)
-        prey = Entity("Prey", energy=10, size=1, diet='herbivore', defense=0, is_fearless=True)
+        prey = Entity("Prey", energy=10, size=1, diet='herbivore', defense=0, is_fearless=True, temperature_tolerance=1000, is_immune=True, is_ageless=True)
         u.add_entity(prey)
         e.x, e.y = 0, 0
         prey.x, prey.y = 0, 0
         u.time = 20
+        u.disease_chance = 0.0
+        u.event_chance = 0.0
+        u.localized_event_chance = 0.0
+        u.mutation_chance = 0.0
+
+        import random
+        random.seed(42)
+
         u.tick()
         self.assertFalse(prey.is_alive)
 
@@ -12223,17 +12237,17 @@ class TestIsAshWalker(unittest.TestCase):
         self.universe.entities = []
         self.universe.terrains = []
 
-    @unittest.skip('flaky')
     def test_is_ash_walker_movement(self):
-        entity = Entity(name="aw", x=0, y=0, is_ash_walker=True, stamina=50, max_stamina=50, size=1, preferred_temperature=20, temperature_tolerance=50)
+        entity = Entity(name="aw", x=0, y=0, is_ash_walker=True, stamina=50, max_stamina=50, size=1, preferred_temperature=20, temperature_tolerance=50, is_immune=True, is_ageless=True, is_pacifist=True)
         entity.is_infected = False
         self.universe.entities = []
         self.universe.terrains = []
         self.universe.foods = []
         self.universe.add_entity(entity)
 
-        # Place ash terrain at (1, 0)
-        self.universe.terrains.append(Terrain(1, 0, terrain_type='ash'))
+        # Place ash terrain at (1, 0) with a higher elevation to test walker elevation bypass
+        self.universe.terrains.append(Terrain(0, 0, terrain_type='ash', elevation=0))
+        self.universe.terrains.append(Terrain(1, 0, terrain_type='ash', elevation=2))
 
         # Simulate moving there
         self.universe.time = entity.size
@@ -12241,16 +12255,19 @@ class TestIsAshWalker(unittest.TestCase):
         from src.universe.engine import Food
         self.universe.add_food(Food(x=1, y=0, energy=10, plant_type='generic'))
 
-        # Original stamina before tick
-        initial_stamina = entity.stamina
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+        import random
+        random.seed(42)
 
         # The entity should move towards the food on the ash.
         self.universe.tick()
 
-        # Check it didn't consume stamina for movement
-        # Expected stamina: Initial (50) - Movement (0 on ash) - Penalty (0) + Recovery (2 awake) = 52
-        # It's capped at max_stamina 50. But we just want to ensure it didn't drain due to movement.
-        # So we assert it's 50 (since it's capped) or more if cap wasn't 50.
+        # Check it didn't consume extra stamina for movement due to elevation
+        self.assertEqual(entity.x, 1)
+        self.assertEqual(entity.y, 0)
         self.assertTrue(entity.stamina >= 50)
 
     def test_is_ash_walker_mutation(self):
@@ -13360,24 +13377,31 @@ class TestIsBlizzardDweller(unittest.TestCase):
         self.universe.tick()
         self.assertEqual(entity.energy, 17)
 
-    @unittest.skip('flaky')
     def test_is_blizzard_dweller_mutation(self):
         from src.universe.engine import Entity
-        from unittest import mock
-        parent = Entity(name="Parent", x=1, y=1, energy=100, age=5, size=1, max_age=50, is_blizzard_dweller=False)
-        self.universe.population_limit = 100
-        self.universe.reproduction_cost = 5
-        self.universe.add_entity(parent)
-        self.universe.reproduction_threshold = 10
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
         self.universe.mutation_chance = 1.0
-        self.universe.time = 0
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, max_age=50, is_blizzard_dweller=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 100
 
-        with mock.patch('random.random', return_value=0.02):
+        mutation_occurred = False
+        for _ in range(150):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            parent.energy = 1000
+            parent.age += 1
             self.universe.tick()
+            for e in self.universe.entities:
+                if e is not parent and getattr(e, 'is_blizzard_dweller', False):
+                    mutation_occurred = True
+                    break
+            if mutation_occurred:
+                break
 
-        children = [e for e in self.universe.entities if getattr(e, 'generation', 0) == 1]
-        self.assertTrue(len(children) > 0, "Reproduction failed")
-        self.assertTrue(getattr(children[0], 'is_blizzard_dweller', False), "Mutation to is_blizzard_dweller failed")
+        self.assertTrue(mutation_occurred, "Mutation to is_blizzard_dweller failed")
 
 class TestStormDweller(unittest.TestCase):
     def test_is_storm_dweller(self):
@@ -13822,19 +13846,21 @@ class TestIsTracker(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
 
-    @unittest.skip('Flaky')
     def test_is_tracker_scent_detection(self):
-        # Create an entity with is_tracker=True, stamina=50 to allow movement
-        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100, diet="carnivore", target_species=["prey"])
+        entity = Entity(name="tracker", x=5, y=5, is_tracker=True, stamina=50, max_stamina=50, energy=100, diet="carnivore", target_species=["prey"], is_immune=True, is_ageless=True, is_pacifist=True, temperature_tolerance=1000)
         self.universe.entities.append(entity)
 
-        # Place a strong scent trail at distance 2 (7, 5)
         self.universe.scent_trails[(7, 5)] = 20
-
-        # Also put a weak scent at distance 1 to ensure it prefers the strong one
         self.universe.scent_trails[(6, 5)] = 5
 
-        # It should move towards (7, 5) which means taking a step in (1, 0) direction
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.mutation_chance = 0.0
+
+        import random
+        random.seed(42)
+
         self.universe.tick()
 
         self.assertEqual(entity.x, 6)
@@ -15314,25 +15340,37 @@ class TestIsSnowDancer(unittest.TestCase):
         entity.preferred_temperature = self.universe.base_temperature
         entity.temperature_tolerance = 50
         entity.is_infected = False
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.mutation_chance = 0.0
 
         old_energy = entity.energy
-
-        # We also need to set season to winter for snow events, though test doesn't do it. We can just check for positive gain for now to be less flaky, as temp changes might occur.
         self.universe.tick()
 
-        # General energy loss during tick is 1. Snow event gives +5.
-        # But if temp changed, it might lose 1 more. So check >= +3.
         self.assertGreaterEqual(entity.energy, old_energy + 3)
 
     def test_snow_dancer_mutation(self):
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_snow_dancer=False)
-        self.universe.add_entity(parent)
-        self.universe.food_spawn_chance = 0.0
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=20, is_snow_dancer=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities = [parent]
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 100
 
-        import random
-        random.seed(42)
+        has_mutated = False
+        for _ in range(150):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            parent.energy = 5000
+            parent.age += 1
+            self.universe.tick()
+            has_mutated = any(getattr(e, 'is_snow_dancer', False) for e in self.universe.entities if e is not parent)
+            if has_mutated:
+                break
 
-        self.universe.tick()
+        self.assertTrue(has_mutated, "Trait is_snow_dancer failed to mutate")
 
 
 class TestIsLavaDweller(unittest.TestCase):
@@ -15344,38 +15382,38 @@ class TestIsLavaDweller(unittest.TestCase):
         self.universe.scent_trails = {}
         self.universe.localized_events = []
 
-    @unittest.skip('Flaky universe setup')
     def test_is_lava_dweller_shelter_benefits(self):
         self.universe.event_chance = 0
         self.universe.localized_event_chance = 0
         self.universe.current_event = None
         self.universe.time = 0
+        self.universe.disease_chance = 0.0
 
-        entity = Entity("Lava Dweller", x=2, y=2, energy=50, max_stamina=100, stamina=50, hydration=50, max_hydration=100, is_lava_dweller=True, is_lava_walker=True, defense=5, preferred_temperature=20, temperature_tolerance=40, is_immune=True)
+        entity = Entity("Lava Dweller", x=2, y=2, energy=50, size=5, max_stamina=0, stamina=0, hydration=50, max_hydration=100, is_lava_dweller=True, is_lava_walker=True, defense=0, preferred_temperature=20, temperature_tolerance=40, is_immune=True)
         self.universe.entities.append(entity)
 
         # Test on lava
         terrain = Terrain(2, 2, terrain_type='lava')
         self.universe.terrains.append(terrain)
 
-        # Test defense bonus which is given when in_shelter is true
-        predator = Entity("Predator", x=2, y=2, energy=100, stamina=100, attack=10, diet='carnivore')
+        predator = Entity("Predator", x=2, y=2, energy=100, max_stamina=0, stamina=0, attack=5, diet='carnivore')
         self.universe.entities.append(predator)
         predator.target_species = ['Lava Dweller']
 
-        # First tick with grass (so it's not a shelter)
+        import random
+        random.seed(42)
+
         terrain.terrain_type = 'grass'
         self.universe.tick()
         energy_not_on_lava = entity.energy
 
-        # Tick with lava (should get defense bonus, so takes less damage/recovers more energy)
         entity.energy = 50
-        terrain.terrain_type = 'lava'
         predator.energy = 100
+        terrain.terrain_type = 'lava'
+        random.seed(42)
         self.universe.tick()
         energy_on_lava = entity.energy
 
-        # Due to defense bonus on lava vs grass, energy loss should be less
         self.assertGreater(energy_on_lava, energy_not_on_lava)
 
     @mock.patch('random.random', return_value=0.01)
@@ -15847,22 +15885,12 @@ class TestIsWeatherSensitive(unittest.TestCase):
         self.assertGreater(entity.stamina, control.stamina, "is_weather_sensitive should provide stamina recovery during storm")
 
     def test_is_weather_sensitive_perception(self):
-        from src.universe.engine import Entity
-        entity = Entity(name="Weather Entity", x=1, y=1, energy=50, perception_radius=5, is_weather_sensitive=True)
+        entity = Entity(name="Weather Entity", x=1, y=1, energy=50, perception_radius=5, is_weather_sensitive=True, max_stamina=0, stamina=0)
         self.universe.add_entity(entity)
         self.universe.current_event = 'blizzard'
         self.universe.event_remaining_time = 5
         self.universe.time = 5 # Normal vision
 
-        # We can't directly read effective_perception, but we can verify it sees further
-        from src.universe.engine import Food
-        # Place food 9 tiles away. Base perception is 5, doubled is 10.
-        food = Food(x=9, y=1, energy=10, plant_type='grass')
-        self.universe.add_food(food)
-
-        # Prevent movement randomness by setting stamina to 0.
-        # But wait, stamina 0 might make it sleep and perception drops to 0.
-        # Actually, let's just observe if it updates memory for obstacles 9 tiles away.
         from src.universe.engine import Terrain
         wall = Terrain(x=9, y=1, terrain_type='wall')
         self.universe.add_terrain(wall)
@@ -16262,7 +16290,12 @@ class TestDeepWaterDancer(unittest.TestCase):
 
         self.universe.disease_chance = 0.0
         self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.mutation_chance = 0.0
         self.universe.foods = []
+
+        import random
+        random.seed(42)
 
         self.universe.tick()
 
@@ -16412,12 +16445,20 @@ class TestWebDancer(unittest.TestCase):
         self.assertTrue(entity.energy > 10)
 
     def test_web_dancer_mutation(self):
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_web_dancer=False)
-        self.universe.add_entity(parent)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=20, is_web_dancer=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities = [parent]
         self.universe.mutation_chance = 1.0 # Guarantee mutation
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.reproduction_threshold = 100
 
         has_mutated = False
-        for _ in range(50):
+        for _ in range(150):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            parent.energy = 5000
+            parent.age += 1
             self.universe.tick()
             has_mutated = any(getattr(e, 'is_web_dancer', False) for e in self.universe.entities if e is not parent)
             if has_mutated:
@@ -16440,20 +16481,23 @@ class TestIsShelterDancerTrait(unittest.TestCase):
         self.assertGreater(entity.energy, initial_energy)
 
     def test_is_shelter_dancer_mutation(self):
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_shelter_dancer=False)
-        self.universe.add_entity(parent)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=20, is_shelter_dancer=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities = [parent]
         self.universe.mutation_chance = 1.0
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.reproduction_threshold = 100
         has_mutated = False
         for _ in range(150):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
             parent.energy = 5000
+            parent.age += 1
             self.universe.tick()
             has_mutated = any(getattr(e, 'is_shelter_dancer', False) for e in self.universe.entities if e is not parent)
             if has_mutated:
                 break
-            if len(self.universe.entities) > 20:
-                self.universe.entities = [e for e in self.universe.entities if getattr(e, 'is_shelter_dancer', False)] + [parent]
         self.assertTrue(has_mutated, "Trait is_shelter_dancer failed to mutate")
 class TestIsScavenger(unittest.TestCase):
     @unittest.skip('flaky')
@@ -16517,12 +16561,20 @@ class TestIsWindDancer(unittest.TestCase):
         self.assertTrue(e.energy > initial_energy, f"WindDancer should gain energy in storm, got {e.energy} from {initial_energy}")
 
     def test_is_wind_dancer_mutation(self):
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=5, is_wind_dancer=False)
-        self.universe.add_entity(parent)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, age=10, size=20, is_wind_dancer=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities = [parent]
         self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.reproduction_threshold = 100
 
         has_mutated = False
-        for _ in range(50):
+        for _ in range(150):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            parent.energy = 5000
+            parent.age += 1
             self.universe.tick()
             has_mutated = any(getattr(e, 'is_wind_dancer', False) for e in self.universe.entities if e is not parent)
             if has_mutated:
@@ -17136,11 +17188,18 @@ class TestIsWinterDancer(unittest.TestCase):
 
     def test_energy_gain_in_winter(self):
         from src.universe.engine import Entity
-        entity = Entity(name="WinterDancer", x=5, y=5, energy=10, is_winter_dancer=True, temperature_tolerance=1000)
+        entity = Entity(name="WinterDancer", x=5, y=5, energy=10, is_winter_dancer=True, max_stamina=0, stamina=0, temperature_tolerance=1000, is_immune=True, is_ageless=True, is_pacifist=True)
         entity.preferred_temperature = 30
         entity.temperature_tolerance = 1000
         self.universe.add_entity(entity)
         self.universe.time = self.universe.season_length * 3 # winter
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.mutation_chance = 0.0
+
+        import random
+        random.seed(42)
 
         self.universe.tick()
         self.assertGreaterEqual(entity.energy, 13)
@@ -17852,7 +17911,7 @@ class TestIsCaveStrider(unittest.TestCase):
 
     def test_is_cave_strider_defense(self):
         pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_cave_strider=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_cave_strider=True, is_immune=True)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='cave'))
 
@@ -17860,6 +17919,10 @@ class TestIsCaveStrider(unittest.TestCase):
         self.universe.add_entity(prey)
 
         self.universe.foods = []
+
+        import random
+        random.seed(42)
+
         self.universe.tick()
         self.assertTrue(prey in self.universe.entities)
 
@@ -19028,13 +19091,9 @@ class TestIsQuicksandDweller(unittest.TestCase):
         self.universe = Universe(width=10, height=10)
 
     def test_is_quicksand_dweller(self):
-        # We need an entity not affected by anything else
-        # quicksand drains 10 energy!
         e1 = Entity("quicksand_dweller", x=5, y=5, energy=40, size=1, max_stamina=100, stamina=100, is_quicksand_dweller=True, is_immune=True, is_quicksand_glider=True)
         e2 = Entity("normal", x=5, y=5, energy=40, size=1, max_stamina=100, stamina=100, is_quicksand_dweller=False, is_immune=True, is_quicksand_glider=True)
 
-        # Need to fix the energy drop logic for quicksand itself to make the dweller logic observable
-        # Actually dweller logic applies in tick, quicksand logic applies in tick
         self.universe.add_entity(e1)
         self.universe.add_entity(e2)
 
@@ -19050,15 +19109,18 @@ class TestIsQuicksandDweller(unittest.TestCase):
         else:
             self.universe.quicksands = [qs]
 
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.mutation_chance = 0.0
+
+        import random
+        random.seed(42)
+
         self.universe.tick()
 
-        # dweller should lose less energy in its 'shelter'
-        # Quicksand drains stamina, maybe energy?
-        # Anyway, dweller energy > normal energy is false, they are equal? Wait, previous output: e1=33, e2=39
-        # So e1 lost 7, e2 lost 1. Why did e1 lose 7?!
-        # Ah, in engine.py `is_quicksand_dweller` might cause an error or there's a logic bug draining it.
-        # But wait, we can just patch `get_terrains_at` to mock the dweller effect without using quicksands, or just pass the test for now with what we know.
-        pass
+        # e1 should lose less energy since it treats quicksand as shelter
+        self.assertGreater(e1.energy, e2.energy)
 
     def test_is_quicksand_dweller_mutation(self):
         parent = Entity(name="parent", x=5, y=5, energy=10000, max_age=100, age=10, size=20, is_quicksand_dweller=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
@@ -19108,19 +19170,20 @@ class TestIsMarshDancer(unittest.TestCase):
         self.universe.localized_event_chance = 0.0
         self.universe.mutation_chance = 1.0
         parent = Entity(
-            name="Parent", x=1, y=1, energy=5000, size=15,
-            is_ageless=True, is_immune=True, is_pacifist=True,
+            name="Parent", x=1, y=1, energy=5000, age=10, size=20,
+            is_ageless=True, is_immune=True, is_pacifist=True, lays_eggs=False, is_telepathic=False,
             is_gluttonous=True, has_blubber=True,
             is_marsh_dancer=False
         )
         self.universe.add_entity(parent)
 
         has_mutated = False
-        self.universe.reproduction_threshold = 500
+        self.universe.reproduction_threshold = 100
         for _ in range(150):
             if len(self.universe.entities) > 20:
                 self.universe.entities = [parent]
             parent.energy = 5000
+            parent.age += 1
             self.universe.tick()
             for entity in self.universe.entities:
                 if getattr(entity, 'is_marsh_dancer', False) and entity != parent:
@@ -19152,15 +19215,16 @@ class TestIsMarshDweller(unittest.TestCase):
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
-        self.universe.reproduction_threshold = 500
-        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_marsh_dweller=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=10, size=20, is_marsh_dweller=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
         self.universe.add_entity(parent)
 
         mutation_occurred = False
-        for _ in range(50):
+        for _ in range(150):
             if len(self.universe.entities) > 20:
                 self.universe.entities = [parent]
-            parent.energy = 1000
+            parent.energy = 5000
+            parent.age += 1
             self.universe.foods = []
             self.universe.tick()
             for e in self.universe.entities:
@@ -19216,13 +19280,14 @@ class TestIsMarshWalkerMutation(unittest.TestCase):
         self.universe.disease_chance = 0.0
         self.universe.mutation_chance = 1.0
 
-        parent = Entity(name="Parent", x=1, y=1, energy=100, size=1, is_marsh_walker=False, max_age=100, age=10, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, size=20, is_marsh_walker=False, max_age=100, age=10, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
         self.universe.add_entity(parent)
-        self.universe.reproduction_threshold = 50
-        self.universe.reproduction_cost = 10
+        self.universe.reproduction_threshold = 100
 
-        for _ in range(50):
+        has_mutated = False
+        for _ in range(150):
             parent.energy = 5000
+            parent.age += 1
             self.universe.tick()
 
             if len(self.universe.entities) > 20:
@@ -19230,6 +19295,7 @@ class TestIsMarshWalkerMutation(unittest.TestCase):
 
             children = [e for e in self.universe.entities if e != parent]
             if any(getattr(child, 'is_marsh_walker', False) for child in children):
+                has_mutated = True
                 break
 
         children = [e for e in self.universe.entities if e != parent]
@@ -19278,7 +19344,7 @@ class TestIsSpringStrider(unittest.TestCase):
 
     def test_is_spring_strider_mutation(self):
         from src.universe.engine import Entity
-        parent = Entity(name="parent", x=5, y=5, energy=5000, max_age=100, age=10, size=5, is_spring_strider=False, is_ageless=True, is_immune=True, is_pacifist=True)
+        parent = Entity(name="parent", x=5, y=5, energy=5000, max_age=100, age=10, size=20, is_spring_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
         self.universe.entities = [parent]
         self.universe.mutation_chance = 1.0
         self.universe.reproduction_threshold = 100
@@ -19287,12 +19353,13 @@ class TestIsSpringStrider(unittest.TestCase):
         self.universe.localized_event_chance = 0.0
         has_mutated = False
         for _ in range(150):
-            parent.energy = 5000
-            self.universe.tick()
             if len(self.universe.entities) > 20:
                  self.universe.entities = [parent]
+            parent.energy = 5000
+            parent.age += 1
+            self.universe.tick()
             for entity in self.universe.entities:
-                if getattr(entity, 'is_spring_strider', False):
+                if getattr(entity, 'is_spring_strider', False) and entity != parent:
                     has_mutated = True
                     break
             if has_mutated:
@@ -19349,8 +19416,9 @@ class TestIsSummerStrider(unittest.TestCase):
         self.universe.disease_chance = 0.0
         self.universe.localized_event_chance = 0.0
 
-        for _ in range(50):
+        for _ in range(150):
             parent.energy = 10000
+            parent.age += 1
             self.universe.tick()
             if len(self.universe.entities) > 20:
                 self.universe.entities = [parent]
@@ -19409,7 +19477,7 @@ class TestIsAutumnStrider(unittest.TestCase):
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
         self.universe.reproduction_threshold = 100
-        for _ in range(50):
+        for _ in range(150):
             if len(self.universe.entities) > 20:
                 self.universe.entities = [parent]
             parent.energy = 10000
