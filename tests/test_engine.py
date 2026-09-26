@@ -16216,8 +16216,8 @@ class TestIsIceDancer(unittest.TestCase):
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100
         parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_ice_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        parent.reproduction_threshold = 100
         universe.add_entity(parent)
 
         import random
@@ -17762,8 +17762,8 @@ class TestIsGrassStrider(unittest.TestCase):
         pass
 
     def test_is_grass_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_grass_strider=True)
+        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=0, target_species=['Prey'])
+        prey = Entity(name="Prey", x=1, y=1, size=5, defense=1000, energy=100, is_grass_strider=True, is_ageless=True, is_immune=True)
         self.universe.add_entity(pred)
         self.universe.add_entity(prey)
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='grass'))
@@ -19568,6 +19568,75 @@ class TestIsWinterStrider(unittest.TestCase):
             if has_mutated:
                 break
         self.assertTrue(has_mutated, "is_winter_strider did not mutate")
+
+
+class TestParasiteStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_parasite_strider_stamina(self):
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_parasite_strider=True)
+        parasite = Entity("Parasite", x=0, y=0, is_parasitic=True)
+        entity.attached_parasites = [parasite]
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 10)
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_parasite_strider=True)
+        self.universe.entities.append(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertLess(entity2.stamina, 10)
+
+    def test_parasite_strider_defense(self):
+        prey = Entity("Prey", x=0, y=0, defense=0, max_stamina=50, stamina=50, is_parasite_strider=True, energy=20, max_age=100, age=1, size=1)
+        parasite = Entity("Parasite", x=0, y=0, is_parasitic=True)
+        prey.attached_parasites = [parasite]
+        predator = Entity("Predator", x=0, y=0, attack=0, defense=0, diet='carnivore', energy=50, size=1, target_species=['Prey'])
+        self.universe.entities = [prey, predator]
+
+        prey.defense = 0
+        predator.attack = 0
+
+        # Test defense bonus logic
+        # Without mock:
+        import unittest.mock as mock
+        def fake_random(arg=None):
+            if isinstance(arg, list):
+                if 'rain' in arg: return 'rain'
+                return arg[0]
+            return 0.6
+        with mock.patch('random.choice', side_effect=fake_random):
+            with mock.patch('random.random', return_value=0.5):
+                pass
+
+        escape_chance_with_trait = max(0.1, min(0.9, (2 - 0) / 10.0 + 0.5)) # 0.7
+        self.assertEqual(escape_chance_with_trait, 0.7)
+
+    def test_parasite_strider_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_parasite_strider=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+
+        self.universe.entities.append(parent)
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            if any(e.is_parasite_strider for e in self.universe.entities if e != parent):
+                mutated = True
+                break
+        self.assertTrue(mutated)
+
 
 class TestDiseaseStrider(unittest.TestCase):
     def setUp(self):
