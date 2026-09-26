@@ -503,6 +503,8 @@ All notable changes to Project Genesis will be documented in this file.
 
 - Implemented `is_mud_dancer` trait. Entities with this trait gain energy when on `mud` terrain.
 
+- [x] Implemented `is_parasite_strider` trait. Entities with this trait consume no stamina when moving while they have attached parasites and gain a defense bonus while they have attached parasites.
+
 ## Next Steps
 - [x] Fixed and unskipped flaky mutation tests for seasonal dancer traits (`is_spring_dancer`, `is_summer_dancer`, `is_autumn_dancer`, `is_winter_dancer`) by ensuring entities survive long enough to reproduce and removing test state leakage.
 
