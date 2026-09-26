@@ -438,3 +438,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_night_dweller` trait. Entities with this trait treat night as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_marsh_dweller` trait. Entities with this trait treat `mud` or `water` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_spring_strider`, `is_summer_strider`, `is_autumn_strider`, `is_winter_strider` traits.
+- [x] Implemented `is_disease_strider` trait. Entities with this trait consume no stamina when moving while infected and gain a defense bonus while infected.

@@ -19484,3 +19484,57 @@ class TestIsWinterStrider(unittest.TestCase):
             if has_mutated:
                 break
         self.assertTrue(has_mutated, "is_winter_strider did not mutate")
+
+class TestDiseaseStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+
+    def test_disease_strider_stamina(self):
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_disease_strider=True, is_infected=True)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 10)
+
+        # Uninfected entity consumes stamina
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_disease_strider=True, is_infected=False)
+        self.universe.entities.append(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertLess(entity2.stamina, 10)
+
+    def test_disease_strider_defense(self):
+        prey = Entity("Prey", x=0, y=0, defense=0, max_stamina=50, stamina=50, is_disease_strider=True, is_infected=True, energy=20, max_age=100, age=1)
+        predator = Entity("Predator", x=0, y=0, attack=1, max_stamina=50, stamina=50, energy=20, max_age=100, age=1, target_species="Prey")
+        self.universe.entities.extend([prey, predator])
+
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+        # Manually trigger combat
+        self.universe.tick()
+        # Prey should survive due to +2 defense from is_disease_strider making defense=2, taking 0 damage from attack=1
+        self.assertGreater(prey.energy, 0)
+        self.assertTrue(prey.is_alive)
+
+    def test_disease_strider_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_disease_strider=False)
+        parent.age = 10 # ensure can reproduce
+        parent.reproduction_threshold = 10
+        self.universe.entities.append(parent)
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+        mutated = False
+        for _ in range(50): # increase tries
+            parent.energy = 1000 # keep energy high
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+
+            mutated = any(e.is_disease_strider for e in self.universe.entities if e != parent)
+            if mutated:
+                break
+
+        self.assertTrue(mutated)
