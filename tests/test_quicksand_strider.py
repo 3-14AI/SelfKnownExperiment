@@ -35,23 +35,22 @@ class TestQuicksandStrider(unittest.TestCase):
         self.assertEqual(entity2.stamina, 50)
 
     def test_quicksand_strider_mutation(self):
-        parent = Entity(name="Parent", x=5, y=5, energy=10000, size=100, is_ageless=True, is_immune=True, is_pacifist=True, is_quicksand_strider=False, age=5, is_gluttonous=True, has_blubber=True)
+        parent = Entity(name="Parent", x=5, y=5, energy=10000, size=20, is_ageless=True, is_immune=True, is_pacifist=True, is_quicksand_strider=False, age=5, is_gluttonous=True, has_blubber=True, lays_eggs=False, is_telepathic=False)
         self.universe.entities.append(parent)
-        self.universe.reproduction_threshold = 500
+        self.universe.reproduction_threshold = 100
         self.universe.mutation_chance = 1.0 # Guarantee mutation
-        import random
-        random.seed()
 
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.foods = []
 
-        for _ in range(100):
+        for _ in range(150):
             if len(self.universe.entities) > 20:
                 self.universe.entities = [parent]
-            self.universe.tick()
             parent.energy = 10000
+            parent.age += 1
+            self.universe.tick()
 
             for entity in self.universe.entities:
                 if getattr(entity, 'is_quicksand_strider', False) and entity != parent:
