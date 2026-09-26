@@ -22,6 +22,8 @@
 ## [Unreleased]
 ### New Features
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Added missing genetic mutation unit test and visualizer test for `is_quicksand_strider` trait.
 - Implemented `is_mud_strider` trait. Entities with this trait consume 0 stamina when moving on mud terrain and gain a defense bonus while on mud.
 - Implemented `is_quicksand_strider` trait. Entities with this trait consume 0 stamina when moving on quicksand terrain and gain a defense bonus while on quicksand.
@@ -33,6 +35,8 @@
 - Implemented `is_blizzard_strider` trait. Entities with this trait consume 0 stamina when moving during a 'blizzard' event and gain a defense bonus.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Fixed missing mutation logic and added missing visualizer tests for `is_grass_strider`.
 - Fixed missing mutation logic for `is_space_strider`.
 - Implemented `is_storm_strider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event and gain a defense bonus.
@@ -92,6 +96,8 @@
 - Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Fixed and unskipped flaky test `test_lava_dancer_mutation` in `tests/test_engine.py`.
 - Implemented `is_shelter_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on a shelter terrain, or during events that act as a shelter.
 - Implemented `is_mud_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on mud terrain.
@@ -110,6 +116,8 @@
 - [x] Implemented `is_space_dweller` trait. Entities with this trait treat being in space as a shelter, gaining increased defense and energy recovery.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Added missing visualizer tests for `has_bioluminescence` and `pack_hunter` traits.
 - Implemented `has_bioluminescence` trait. Entities with this trait bypass night vision penalties for themselves, but are easily spotted by predators at night.
 - Added testing for `has_bioluminescence` in `test_engine.py` to verify perception behaviors.
@@ -123,59 +131,85 @@
 - Added visualizer support and tests for `is_regenerative`, `is_immune`, `is_amphibious` traits.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented `can_climb` trait allowing entities to traverse 'wall' terrain blocks, bypassing obstacles.
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented `pack_hunter` trait. Predatory entities with this trait share their targets with nearby pack members of the same species, and gain an attack bonus during combat when multiple pack members surround the same prey.
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented `has_fur` trait. Entities with fur have increased temperature tolerance in the cold, but suffer energy and movement penalties in hot environments.
 
  - YYYY-MM-DD
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Analyzed recent project changes (Scales trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 - Added `is_parasitic` trait allowing entities to attach to larger hosts and leech their energy/hydration.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented `is_cold_blooded` trait. Entities with this trait gain an energy efficiency advantage in hot temperatures but suffer energy and movement penalties in cold temperatures.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented `is_immune` trait. Entities can gain immunity to diseases after recovering, preventing reinfection. Immunity can also be inherited by offspring or acquired via genetic mutation.
 - Implemented aging growth mechanics where entities start out smaller when born and gradually grow to their `max_size` over time.
 - Added Aposematism trait allowing prey to be ignored by well-fed predators.
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Added `has_echolocation` trait to entities. Echolocation allows entities to bypass camouflage when detecting prey or predators, and prevents their perception radius from being halved during the night.
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Analyzed recent project changes (Photosynthesis trait) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented amphibious trait (`is_amphibious`). Entities with this trait can freely traverse both land and water tiles, opening up new movement and survival strategies.
 - Implemented Photosynthesis trait (`can_photosynthesize`). Entities with this trait gain energy during the daytime, simulating plant-like behavior.
 - Updated `CLIVisualizer` to render photosynthesizing entities as `P`.
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented web building mechanics. Entities with the `can_spin_webs` trait can create web terrain.
 - Entities lacking the trait will lose all stamina when moving onto web terrain, simulating getting trapped.
 - Updated `CLIVisualizer` to render `web` terrain as `x`.
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented `has_spikes` defensive trait. Entities with this trait damage attackers (reducing energy and stamina) during combat.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented Nocturnal trait. Entities can mutate `is_nocturnal`.
 - Nocturnal entities invert their sleep cycles, sleeping during the day and being active at night.
 - Nocturnal entities retain full perception at night but have halved perception during the day.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented stamina system. Entities have `stamina` and `max_stamina` attributes, losing stamina when moving or participating in combat, and falling asleep if it drops to 0.
 - Implemented Hoarding Mechanics. Entities can now mutate a `can_hoard` trait.
 - Entities with this trait will collect and store excess food in their inventory when their energy is near maximum and they have free capacity.
@@ -185,6 +219,8 @@
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented an experience and leveling system for entities. Entities gain experience by surviving days, escaping predators, or successfully hunting.
 - Entities level up upon reaching experience thresholds, gaining attack, defense, and full energy restoration.
 - Updated `CLIVisualizer` to render entities of level 3 or higher with uppercase characters.
@@ -197,26 +233,36 @@
 - Added a reproduction chance modifier based on intelligence. Entities with higher intelligence have a greater chance to reproduce successfully.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented organic plant spreading allowing flora to naturally grow into patches over time.
 - Implemented hibernation mechanics allowing entities to preserve energy and hydration during winter if they possess the `can_hibernate` trait.
 - Analyzed recent project changes (Flight, Pack Hunting, Food Spoilage, Vision, Toxicity) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented Pack Hunting and Herd Defense mechanics where nearby entities of the same species contribute to attack and defense during combat.
 - Implemented a food spoilage and rotting system where food ages over time and eventually disappears.
 - Food spoilage rates are affected by local temperatures: food rots faster in extreme heat (> 25) and is preserved (stops rotting) in freezing temperatures (<= 0).
 - Meat from corpses now has a shorter lifespan than regular plants before rotting away.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented `vision_type` trait for entities.
 - Entities with `night_vision` do not suffer from perception radius reduction during the night.
 - Entities can genetically inherit and mutate their vision type between normal and night_vision.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented `camouflage` trait for entities, which reduces the distance at which they can be detected by other entities.
 - Entities can genetically inherit and mutate camouflage up to a maximum of 80% (0.8).
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented toxicity and poison mechanics where food and entities can be toxic.
 - Entities consuming toxic food or prey become poisoned and lose extra energy.
 - Entities can genetically inherit and mutate poison resistance and toxicity.
@@ -224,6 +270,8 @@
 
 ## [2026-07-18]
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Analyzed recent project changes (Omnivores, Sleep Mechanism, Deep-water Biome) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
 ## [2026-07-18]
@@ -231,6 +279,8 @@
 
 ## [2026-07-17]
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented omnivore diet, allowing entities to consume both food (plants/meat) and prey.
 - Omnivores will flee from predators, seek water, and balance hunting for prey vs foraging for food based on proximity.
 - Updated `CLIVisualizer` to render omnivores as 'O' (or 'Q' if infected).
@@ -246,6 +296,8 @@
 
 ## [2026-07-16]
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented a system where entities can heal or recover energy over time when in a shelter
 - Implemented complex ecosystem dependencies including specialized diets for carnivores and herbivores.
 - Analyzed recent project changes (Experience, Intelligence, Tool Crafting, Diet Mutation, Preferred Terrain) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
@@ -255,18 +307,24 @@
 
 ## [2026-07-15]
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Expanded entity genetics: Entities now have a chance to mutate their `diet` (e.g., from 'herbivore' to 'carnivore' or vice versa) during reproduction.
 - Added `test_diet_mutation` in `tests/test_engine.py` to isolate and verify the diet mutation logic.
 
 ## [2026-07-15]
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented biome-specific entity behavior by adding `preferred_terrain` attribute to entities.
 - Entities thriving on their preferred terrain receive reduced energy loss.
 - Entities situated outside their preferred terrain (if specified) suffer an additional energy loss penalty.
 - Updated `agents.md` to reflect task completion.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Analyzed recent project changes (Disease, Scent Trails, Communication, Combat, Symbiosis, Disasters) and updated `analytics/analysis_report.md` and `analytics/current_analysis.md`.
 
 - Added attack and defense attributes to Entity class, mutation logic for these traits, and probabilistic combat resolution when carnivores hunt prey.
@@ -316,10 +374,14 @@
 - Implemented `is_poison_dweller` trait: Entities with this trait treat being poisoned as a shelter, gaining increased defense and energy recovery.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented flight mechanics. Entities can mutate an `is_flying` trait allowing them to bypass impassable terrain like walls and water during movement and pathfinding.
 
 ## [2026-07-14]
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented a disease system where spontaneous outbreaks can infect entities.
 - Added disease spread logic allowing infected entities to transmit the disease to nearby entities.
 - Implemented energy drain penalties and a recovery system for infected entities.
@@ -327,11 +389,15 @@
 
 ## [2026-07-13] - Agent
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Added seasonal mechanics to the engine (Spring, Summer, Autumn, Winter) affecting food spawn rates and terrain (water freezes to ice in winter).
 
 ## [2026-07-13] - Entity Memory
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Entity instances now maintain a `memory` set to store known obstacle coordinates.
 - Entities automatically observe and remember obstacles (walls, water) within their perception radius during each tick.
 - The pathfinding algorithm (`find_path`) now uses an entity's memory to avoid routing through remembered obstacles, even if those obstacles are currently outside the entity's perception radius.
@@ -341,6 +407,8 @@
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented `is_water_glider` trait. Entities with this trait consume 0 stamina when moving on water terrain.
 - Implemented `is_forest_glider` trait. Entities with this trait consume 0 stamina when moving on forest terrain.
 - Implemented `is_fire_glider` trait. Entities with this trait consume 0 stamina when moving during a 'fire' event.
@@ -348,11 +416,15 @@
 - Refactored `Universe.tick` to calculate a whole integer spawn count and use a fractional chance for an additional food item, correctly simulating rates like 1.5 food/tick.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented Hydration System. Entities now lose hydration over time, and suffer energy penalties if dehydrated.
 - Entities can drink from adjacent water terrain to restore hydration.
 - Updated Entity AI to seek out and pathfind to water when their hydration is critically low (<= 50%).
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented shelter building mechanics. Intelligent entities with enough energy can construct shelters on their terrain.
 - Shelters provide environmental protection by negating energy drain penalties from storms and blizzards.
 - Shelters increase entities' temperature tolerance, allowing them to survive in extreme climates.
@@ -361,6 +433,8 @@
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented complex seasonal weather system.
 - Added seasonal variance to global event probabilities (e.g. blizzards only in winter, droughts only in summer).
 - Added global `blizzard` event which severely reduces temperature and increases entity energy decay.
@@ -371,6 +445,8 @@
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented an experience system for combat interactions:
   - Entities gain attack/defense stats when surviving encounters with predators (escaping).
   - Predators gain attack stats when failing to capture prey (learning from failure).
@@ -379,6 +455,8 @@
 
  - 2026-07-10
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented environmental events system in the Universe engine ('storm', 'drought').
 - Storms double entity energy decay, and droughts temporarily halt food spawning.
 - Updated `CLIVisualizer` to display the currently active event and its remaining duration.
@@ -396,6 +474,8 @@
 
 ## [2026-07-09]
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Entity AI behavior: Entities now actively seek out the nearest food source and move towards it each tick instead of remaining stationary.
 - Support logic `get_nearest_food` added to the `Universe` class.
 - Automated tests covering the food-seeking behavior.
@@ -404,6 +484,8 @@ All notable changes to Project Genesis will be documented in this file.
 
 ## [2026-09-21]
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Engine: Implemented `is_marsh_glider` trait. Entities with this trait consume 0 stamina when moving on mud terrain.
 - Tests: Added tests for `is_marsh_glider` movement and mutation.
 
@@ -413,16 +495,22 @@ All notable changes to Project Genesis will be documented in this file.
 - Tests: Added `test_carnivore_prefers_smaller_weaker_prey` to explicitly test this targeting logic.
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Entity `size` attribute which scales energy consumption per tick.
 - Entity movement speed is now inversely proportional to their `size`.
 - Entity `size` can mutate during reproduction.
 - Introduced entity temperature preferences and tolerances, leading to increased energy loss in unfavorable climates.
 - Enabled inheritance and mutation of temperature traits in offspring entities.
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented group behavior / flocking for entities. When no food or prey is nearby, entities will naturally move towards the center of mass of nearby entities sharing their diet.
 
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Analyzed project changes and agent actions (AI behavior, reproduction, aging) and updated the results in `analytics/analysis_report.md`.
 - Implemented an aging system for entities. Entities now age each tick and will naturally die if their age exceeds their `max_age`.
 - Added tests for the new aging system in `tests/test_engine.py`.
@@ -436,12 +524,16 @@ All notable changes to Project Genesis will be documented in this file.
 - Expanded unit tests in `tests/test_engine.py` to cover energy decay and death.
  - 2026-07-08
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented basic energy and life cycle for entities (entities have starting energy, lose 1 per tick, and die at 0).
 - Wrote tests for energy consumption and death logic in `tests/test_engine.py`.
 - Updated `agents.md` tracking progress.
 
 ## [Previous] - 2026-07-07
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Analyzed project changes and agent actions and added the results to `analytics/analysis_report.md`.
 - Implemented a 2D spatial system in `src/universe/engine.py` (coordinates for Entity, width/height and positioning/movement bounds logic for Universe).
 - Added `get_entities_at(x, y)` to Universe to query entity locations.
@@ -449,6 +541,8 @@ All notable changes to Project Genesis will be documented in this file.
 
 ## [Previous] - YYYY-MM-DD
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Added an analytics directory and an analysis report detailing project evolution and agent actions in `analytics/analysis_report.md`.
 - Bootstrapped project structure with `src/` and `tests/` directories.
 - Implemented core `Universe` and `Entity` classes in `src/universe/engine.py`.
@@ -458,6 +552,8 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented species evolution system based on accumulated genetic mutations
 
 ### Added
+- Added `is_day_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the day.
+- Added `is_night_strider` trait: Entities use 0 stamina to move and gain +10 combat defense during the night.
 - Implemented `is_scout` trait. Entities with this trait explore the terrain and share their memory of obstacles with nearby flockmates, simulating a scouting behavior that aids in collective pathfinding.
 - Implemented `is_spring_glider` trait. Entities with this trait consume 0 stamina when moving during the 'spring' season.
 - Implemented `is_forest_dweller` trait. Entities with this trait treat forest terrain as a shelter, gaining increased defense and energy recovery.

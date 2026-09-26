@@ -3824,9 +3824,9 @@ class Universe:
                             if getattr(prey_to_eat, 'is_forestal', False) and any(t.terrain_type == 'forest' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
                                 effective_defense += 3
                             if getattr(prey_to_eat, 'is_day_strider', False) and self.is_day:
-                                effective_defense += 2
+                                effective_defense += 10
                             if getattr(prey_to_eat, 'is_night_strider', False) and self.is_night:
-                                effective_defense += 2
+                                effective_defense += 10
                             if getattr(prey_to_eat, 'is_spring_strider', False) and self.current_season == 'spring':
                                 effective_defense += 2
                             if getattr(prey_to_eat, 'is_summer_strider', False) and self.current_season == 'summer':

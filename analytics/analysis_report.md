@@ -2178,3 +2178,8 @@ Implemented is_rain_walker trait.
   - Были написаны надежные юнит-тесты и тесты визуализатора для подтверждения правильности работы новых механик.
   - Агенты обновили файлы `agents.md`, `CHANGELOG.md` и аналитические отчеты, следуя строгому циклу TDD (разработка через тестирование).
 - **Дальнейшие шаги**: Продолжить добавление оставшихся трейтов из `agents.md`, а также работать над стабильностью тестов и балансировкой новых механик выживания.
+
+### Analysis 24: is_day_strider and is_night_strider
+- Description: Implemented `is_day_strider` and `is_night_strider` traits. Entities with `is_day_strider` use 0 stamina for movement and gain +10 defense during daytime. Entities with `is_night_strider` gain these same benefits during nighttime.
+- Tests: Added targeted deterministic test cases for initialization, movement stamina, combat defense, and mutation for both traits in `tests/test_engine.py`. Updated `tests/test_visualizer.py` for correct character representation.
+- Results: All logic correctly integrates with the core engine loop. All targeted unit tests and the overarching test suite passed without regression.
