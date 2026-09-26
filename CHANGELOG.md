@@ -529,3 +529,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_quicksand_dweller` trait. Entities with this trait treat `quicksand` terrain as a shelter, gaining increased defense and energy recovery. Rendered as 'õ' in CLI visualizer.
 - Implemented `is_spring_strider`, `is_summer_strider`, `is_autumn_strider`, and `is_winter_strider` traits. Entities with these traits consume 0 stamina when moving during their respective season and gain a defense bonus while inside that season.
 - [x] Implemented `is_poison_strider` trait. Entities with this trait consume no stamina when moving while poisoned and gain a defense bonus while poisoned.
+- [x] Implemented `is_stun_strider` trait. Entities with this trait consume no stamina when moving while stunned and gain a defense bonus while stunned.

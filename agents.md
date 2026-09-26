@@ -440,3 +440,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_spring_strider`, `is_summer_strider`, `is_autumn_strider`, `is_winter_strider` traits.
 - [x] Implemented `is_disease_strider` trait. Entities with this trait consume no stamina when moving while infected and gain a defense bonus while infected.
 - [x] Implemented `is_poison_strider` trait. Entities with this trait consume no stamina when moving while poisoned and gain a defense bonus while poisoned.
+- [x] Implemented `is_stun_strider` trait. Entities with this trait consume no stamina when moving while stunned and gain a defense bonus while stunned.

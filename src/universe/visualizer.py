@@ -605,6 +605,8 @@ class CLIVisualizer:
                         char = 'Ò'
                     elif getattr(entity, 'is_parasite_strider', False):
                         char = '¶'
+                    elif getattr(entity, 'is_stun_strider', False):
+                        char = 'ũ'
                     elif getattr(entity, 'is_grass_dancer', False):
                         char = 'œ'
                     elif getattr(entity, 'is_grass_glider', False):
