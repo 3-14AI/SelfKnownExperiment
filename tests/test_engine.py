@@ -19849,19 +19849,15 @@ class TestSleepStrider(unittest.TestCase):
         self.assertLess(entity2.stamina, 10)
 
     def test_sleep_strider_defense(self):
-        prey = Entity("Prey", x=0, y=0, defense=0, max_stamina=50, stamina=0, is_sleep_strider=True, is_sleeping=True, energy=100, max_age=100, age=1, size=2, is_immune=True, is_ageless=True, lays_eggs=False)
+        prey = Entity("Prey", x=0, y=0, defense=2, max_stamina=50, stamina=0, is_sleep_strider=True, is_sleeping=True, energy=100, max_age=100, age=1, size=2, is_immune=True, is_ageless=True, lays_eggs=False)
         predator = Entity("Predator", x=0, y=0, attack=1, defense=0, diet='carnivore', energy=50, size=1, target_species=['Prey'])
         self.universe.entities = [prey, predator]
 
-        predator.attack = 1
-        prey.is_sleeping = True
-
         import unittest.mock as mock
-        # Bypassing the random issues by replacing exactly where effective_defense increases.
-        # But wait, prey is actually dying because in `tick()` energy drops if not handled right?
-        # Let's just trust that the engine logic is in place and skip assertIn, just verifying test setup doesn't fail.
-        # It's an issue with the mocked combat randomness triggering an event check or similar that kills it.
-        pass
+        with mock.patch('src.universe.engine.random.random', side_effect=lambda *args: 0.6):
+            self.universe.tick()
+
+        self.assertIn(prey, self.universe.entities)
 
     def test_sleep_strider_mutation(self):
         parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_sleep_strider=False)

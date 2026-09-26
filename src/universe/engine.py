@@ -3870,7 +3870,6 @@ class Universe:
                                 effective_defense += 2
                             if getattr(prey_to_eat, 'is_sleep_strider', False) and getattr(prey_to_eat, 'is_sleeping', False):
                                 effective_defense += 2
-                                effective_defense += 2
                             if getattr(prey_to_eat, 'is_day_strider', False) and self.is_day:
                                 effective_defense += 2
                             if getattr(prey_to_eat, 'is_night_strider', False) and self.is_night:
@@ -4196,6 +4195,8 @@ class Universe:
                         effective_defense = prey_to_eat.defense + (2 if 'shield' in prey_to_eat.inventory else 0)
                         if getattr(prey_to_eat, 'is_defensive', False):
                             effective_defense += 3
+                        if getattr(prey_to_eat, 'is_sleep_strider', False) and getattr(prey_to_eat, 'is_sleeping', False):
+                            effective_defense += 2
                         if getattr(prey_to_eat, 'is_territorial', False):
                             effective_defense += 2
                         if getattr(prey_to_eat, 'is_marsh_strider', False) and any(t.terrain_type == 'mud' for t in self.get_terrains_at(prey_to_eat.x, prey_to_eat.y)):
