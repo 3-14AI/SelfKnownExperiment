@@ -2286,6 +2286,14 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('õ', output)
 
 
+    def test_visualize_is_sleep_strider(self):
+        universe = Universe(1, 1)
+        vis = CLIVisualizer(universe)
+        entity = Entity("Test", x=0, y=0, size=2, is_sleep_strider=True)
+        universe.entities.append(entity)
+        output = vis.render()
+        self.assertIn('Ū', output)
+
     def test_visualize_is_parasite_strider(self):
         universe = Universe(1, 1)
         entity = Entity("Test", x=0, y=0, size=2, is_parasite_strider=True)
