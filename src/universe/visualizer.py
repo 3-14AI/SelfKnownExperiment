@@ -599,6 +599,16 @@ class CLIVisualizer:
                         char = 'ő'
                     elif getattr(entity, 'is_disease_dancer', False):
                         char = 'Œ'
+                    elif getattr(entity, 'is_disease_walker', False):
+                        char = 'Û'
+                    elif getattr(entity, 'is_poison_walker', False):
+                        char = 'Ü'
+                    elif getattr(entity, 'is_parasite_walker', False):
+                        char = 'Ý'
+                    elif getattr(entity, 'is_stun_walker', False):
+                        char = 'Þ'
+                    elif getattr(entity, 'is_sleep_walker', False):
+                        char = 'ß'
                     elif getattr(entity, 'is_disease_strider', False):
                         char = 'Ñ'
                     elif getattr(entity, 'is_poison_strider', False):

@@ -2317,3 +2317,46 @@ class TestCLIVisualizer(unittest.TestCase):
         universe.entities.append(entity)
         output = vis.render()
         self.assertIn('Ñ', output)
+
+    def test_visualize_is_disease_walker(self):
+        universe = Universe(1, 1)
+        vis = CLIVisualizer(universe)
+        entity = Entity("Test", x=0, y=0, size=2, is_disease_walker=True)
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('Û', output)
+
+    def test_visualize_is_poison_walker(self):
+        universe = Universe(1, 1)
+        vis = CLIVisualizer(universe)
+        entity = Entity("Test", x=0, y=0, size=2, is_poison_walker=True)
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('Ü', output)
+
+    def test_visualize_is_parasite_walker(self):
+        universe = Universe(1, 1)
+        vis = CLIVisualizer(universe)
+        entity = Entity("Test", x=0, y=0, size=2, is_parasite_walker=True)
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('Ý', output)
+
+    def test_visualize_is_stun_walker(self):
+        universe = Universe(1, 1)
+        vis = CLIVisualizer(universe)
+        entity = Entity("Test", x=0, y=0, size=2, is_stun_walker=True)
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('Þ', output)
+
+    def test_visualize_is_sleep_walker(self):
+        universe = Universe(1, 1)
+        vis = CLIVisualizer(universe)
+        entity = Entity("Test", x=0, y=0, size=2, is_sleep_walker=True)
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('ß', output)
+
+if __name__ == '__main__':
+    unittest.main()

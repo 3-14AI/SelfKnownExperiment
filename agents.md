@@ -442,3 +442,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_disease_strider` trait. Entities with this trait consume no stamina when moving while infected and gain a defense bonus while infected.
 - [x] Implemented `is_poison_strider` trait. Entities with this trait consume no stamina when moving while poisoned and gain a defense bonus while poisoned.
 - [x] Implemented `is_stun_strider` trait. Entities with this trait consume no stamina when moving while stunned and gain a defense bonus while stunned.
+- [x] Implemented `is_disease_walker`, `is_poison_walker`, `is_parasite_walker`, `is_stun_walker`, and `is_sleep_walker` traits. Entities with these traits do not consume extra stamina from elevation changes when experiencing their respective statuses (infected, poisoned, parasitized, stunned, sleeping).
