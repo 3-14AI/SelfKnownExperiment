@@ -18616,11 +18616,13 @@ class TestIsRainStrider(unittest.TestCase):
         event = LocalizedEvent('rain', 1, 1, radius=3, duration=10)
         self.universe.localized_events.append(event)
 
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_rain_strider=True)
+        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=0, target_species=['Prey'])
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=0, energy=100, is_rain_strider=True, is_immune=True, is_ageless=True, lays_eggs=False)
         self.universe.add_entity(pred)
         self.universe.add_entity(prey)
-        self.universe.tick()
+        import unittest.mock as mock
+        with mock.patch('src.universe.engine.random.random', side_effect=lambda *args: 0.6):
+            self.universe.tick()
         self.assertTrue(prey in self.universe.entities)
 
     def test_is_rain_strider_mutation(self):
@@ -19880,4 +19882,190 @@ class TestSleepStrider(unittest.TestCase):
                 mutated = True
                 break
 
+        self.assertTrue(mutated)
+
+class TestDiseaseWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        import random
+        random.seed(42)
+
+    def test_disease_walker_stamina(self):
+        self.universe.add_terrain(Terrain(x=1, y=0, elevation=2, terrain_type='sand'))
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_disease_walker=True, is_infected=True, is_agile=False)
+        self.universe.add_entity(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 9) # base cost 1, no extra from elevation
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_disease_walker=False, is_infected=True, is_agile=False)
+        self.universe.add_entity(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertEqual(entity2.stamina, 7) # base cost 1 + 2 elevation = 3, stamina left 7
+
+    def test_disease_walker_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_disease_walker=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            if any(e.is_disease_walker for e in self.universe.entities if e != parent):
+                mutated = True
+                break
+        self.assertTrue(mutated)
+
+class TestPoisonWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_poison_walker_stamina(self):
+        self.universe.add_terrain(Terrain(x=1, y=0, elevation=2, terrain_type='sand'))
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_poison_walker=True, poisoned_time=5, is_agile=False)
+        self.universe.add_entity(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 9)
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_poison_walker=False, poisoned_time=5, is_agile=False)
+        self.universe.add_entity(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertEqual(entity2.stamina, 7)
+
+    def test_poison_walker_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_poison_walker=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            if any(e.is_poison_walker for e in self.universe.entities if e != parent):
+                mutated = True
+                break
+        self.assertTrue(mutated)
+
+class TestParasiteWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_parasite_walker_stamina(self):
+        self.universe.add_terrain(Terrain(x=1, y=0, elevation=2, terrain_type='sand'))
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_parasite_walker=True, is_agile=False)
+        parasite = Entity("Parasite", x=0, y=0, is_parasitic=True)
+        entity.attached_parasites = [parasite]
+        self.universe.add_entity(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 9)
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_parasite_walker=False, is_agile=False)
+        entity2.attached_parasites = [parasite]
+        self.universe.add_entity(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertEqual(entity2.stamina, 7)
+
+    def test_parasite_walker_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_parasite_walker=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            if any(e.is_parasite_walker for e in self.universe.entities if e != parent):
+                mutated = True
+                break
+        self.assertTrue(mutated)
+
+class TestStunWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_stun_walker_stamina(self):
+        self.universe.add_terrain(Terrain(x=1, y=0, elevation=2, terrain_type='sand'))
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_stun_walker=True, stunned_time=2, is_agile=False)
+        self.universe.add_entity(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 9)
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_stun_walker=False, stunned_time=2, is_agile=False)
+        self.universe.add_entity(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertEqual(entity2.stamina, 7)
+
+    def test_stun_walker_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_stun_walker=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            if any(e.is_stun_walker for e in self.universe.entities if e != parent):
+                mutated = True
+                break
+        self.assertTrue(mutated)
+
+class TestSleepWalker(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_sleep_walker_stamina(self):
+        self.universe.add_terrain(Terrain(x=1, y=0, elevation=2, terrain_type='sand'))
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_sleep_walker=True, is_sleeping=True, is_agile=False)
+        self.universe.add_entity(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 9)
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_sleep_walker=False, is_sleeping=True, is_agile=False)
+        self.universe.add_entity(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertEqual(entity2.stamina, 7)
+
+    def test_sleep_walker_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_sleep_walker=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            if any(e.is_sleep_walker for e in self.universe.entities if e != parent):
+                mutated = True
+                break
         self.assertTrue(mutated)
