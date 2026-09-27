@@ -444,6 +444,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_stun_strider` trait. Entities with this trait consume no stamina when moving while stunned and gain a defense bonus while stunned.
 - [x] Implemented `is_disease_walker`, `is_poison_walker`, `is_parasite_walker`, `is_stun_walker`, and `is_sleep_walker` traits. Entities with these traits do not consume extra stamina from elevation changes when experiencing their respective statuses (infected, poisoned, parasitized, stunned, sleeping).
 - [x] Stabilized flaky mutation tests for `is_disease_glider`, `is_poison_glider`, `is_parasite_glider`, `is_stun_glider`, `is_sleep_glider`, `is_disease_walker`, `is_poison_walker`, `is_parasite_walker`, `is_stun_walker`, and `is_sleep_walker`.
+- [x] Implemented `is_parasite_strider` trait. Entities with this trait consume no stamina when moving while they have attached parasites and gain a defense bonus while they have attached parasites.
 
 ### Summary of Latest Flaky Test Fixes:
 - **`test_rain_mud_and_washing`**: Re-enabled. Flakiness caused by nested `random.randint` loops that consumed unpredictable amounts of mock side-effects based on how many `events` and `foods` were randomly generated. Fixed by rigorously tracking and responding to mock counts specifically for the duration of the event generation and subsequent rain logic, bypassing interference.
