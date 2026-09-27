@@ -796,8 +796,6 @@ class Universe:
             return not is_water
 
     def add_terrain(self, terrain):
-        if terrain.x < 0 or terrain.x >= self.width or terrain.y < 0 or terrain.y >= self.height:
-            return
         if not (0 <= terrain.x < self.width and 0 <= terrain.y < self.height):
             raise ValueError(f"Terrain out of bounds: ({terrain.x}, {terrain.y})")
         self.terrains.append(terrain)
