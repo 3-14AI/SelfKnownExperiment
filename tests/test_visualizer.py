@@ -2358,5 +2358,87 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('ß', output)
 
+
+    def test_visualize_is_poison_strider(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_poison_strider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ò', output)
+
+    def test_visualize_is_disease_strider(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_disease_strider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ñ', output)
+
+    def test_visualize_is_stun_strider(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_stun_strider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ũ', output)
+
+    def test_visualize_is_parasite_strider(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_parasite_strider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('¶', output)
+
+    def test_visualize_is_sleep_strider(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_sleep_strider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ū', output)
+
+
+    def test_visualize_is_disease_glider(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_disease_glider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Đ', output)
+
+    def test_visualize_is_poison_glider(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_poison_glider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ē', output)
+
+    def test_visualize_is_parasite_glider(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_parasite_glider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ė', output)
+
+    def test_visualize_is_stun_glider(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_stun_glider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ę', output)
+
+    def test_visualize_is_sleep_glider(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_sleep_glider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ě', output)
+
 if __name__ == '__main__':
     unittest.main()
