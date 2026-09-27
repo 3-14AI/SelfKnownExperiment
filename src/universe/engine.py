@@ -3928,6 +3928,8 @@ class Universe:
                                 effective_defense += 2
                             if getattr(prey_to_eat, 'is_stun_strider', False) and getattr(prey_to_eat, 'stunned_time', 0) > 0:
                                 effective_defense += 2
+                            if getattr(prey_to_eat, 'is_parasite_strider', False) and len(getattr(prey_to_eat, 'attached_parasites', [])) > 0:
+                                effective_defense += 2
                             if getattr(prey_to_eat, 'is_sleep_strider', False) and getattr(prey_to_eat, 'is_sleeping', False):
                                 effective_defense += 2
                             if getattr(prey_to_eat, 'is_day_strider', False) and self.is_day:
