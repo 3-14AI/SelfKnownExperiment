@@ -19906,23 +19906,45 @@ class TestDiseaseWalker(unittest.TestCase):
         self.assertEqual(entity2.stamina, 7) # base cost 1 + 2 elevation = 3, stamina left 7
 
     def test_disease_walker_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_disease_walker=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-        self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_disease_walker=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
 
-        mutated = False
-        for _ in range(50):
+        import random
+        import unittest.mock
+
+        has_mutated = False
+        for _ in range(150):
+            universe.foods = []
             parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            if any(e.is_disease_walker for e in self.universe.entities if e != parent):
-                mutated = True
-                break
-        self.assertTrue(mutated)
 
+            if len(universe.entities) > 10:
+                universe.entities = [parent]
+
+            original_choice = random.choice
+            original_random = random.random
+
+            def mock_choice(seq):
+                if isinstance(seq, list) and 'is_disease_walker' in seq:
+                    return 'is_disease_walker'
+                return original_choice(seq)
+
+            def mock_random():
+                return 0.0
+
+            with unittest.mock.patch('random.choice', side_effect=mock_choice), unittest.mock.patch('random.random', side_effect=mock_random):
+                universe.tick()
+
+            has_mutated = any(e.is_disease_walker for e in universe.entities if e != parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated)
 class TestPoisonWalker(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(10, 10)
@@ -19943,22 +19965,45 @@ class TestPoisonWalker(unittest.TestCase):
         self.assertEqual(entity2.stamina, 7)
 
     def test_poison_walker_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_poison_walker=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-        self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0
-        mutated = False
-        for _ in range(50):
-            parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            if any(e.is_poison_walker for e in self.universe.entities if e != parent):
-                mutated = True
-                break
-        self.assertTrue(mutated)
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_poison_walker=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
 
+        import random
+        import unittest.mock
+
+        has_mutated = False
+        for _ in range(150):
+            universe.foods = []
+            parent.energy = 1000
+
+            if len(universe.entities) > 10:
+                universe.entities = [parent]
+
+            original_choice = random.choice
+            original_random = random.random
+
+            def mock_choice(seq):
+                if isinstance(seq, list) and 'is_poison_walker' in seq:
+                    return 'is_poison_walker'
+                return original_choice(seq)
+
+            def mock_random():
+                return 0.0
+
+            with unittest.mock.patch('random.choice', side_effect=mock_choice), unittest.mock.patch('random.random', side_effect=mock_random):
+                universe.tick()
+
+            has_mutated = any(e.is_poison_walker for e in universe.entities if e != parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated)
 class TestParasiteWalker(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(10, 10)
@@ -19982,22 +20027,45 @@ class TestParasiteWalker(unittest.TestCase):
         self.assertEqual(entity2.stamina, 7)
 
     def test_parasite_walker_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_parasite_walker=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-        self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0
-        mutated = False
-        for _ in range(50):
-            parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            if any(e.is_parasite_walker for e in self.universe.entities if e != parent):
-                mutated = True
-                break
-        self.assertTrue(mutated)
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_parasite_walker=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
 
+        import random
+        import unittest.mock
+
+        has_mutated = False
+        for _ in range(150):
+            universe.foods = []
+            parent.energy = 1000
+
+            if len(universe.entities) > 10:
+                universe.entities = [parent]
+
+            original_choice = random.choice
+            original_random = random.random
+
+            def mock_choice(seq):
+                if isinstance(seq, list) and 'is_parasite_walker' in seq:
+                    return 'is_parasite_walker'
+                return original_choice(seq)
+
+            def mock_random():
+                return 0.0
+
+            with unittest.mock.patch('random.choice', side_effect=mock_choice), unittest.mock.patch('random.random', side_effect=mock_random):
+                universe.tick()
+
+            has_mutated = any(e.is_parasite_walker for e in universe.entities if e != parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated)
 class TestStunWalker(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(10, 10)
@@ -20018,22 +20086,45 @@ class TestStunWalker(unittest.TestCase):
         self.assertEqual(entity2.stamina, 7)
 
     def test_stun_walker_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_stun_walker=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-        self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0
-        mutated = False
-        for _ in range(50):
-            parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            if any(e.is_stun_walker for e in self.universe.entities if e != parent):
-                mutated = True
-                break
-        self.assertTrue(mutated)
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_stun_walker=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
 
+        import random
+        import unittest.mock
+
+        has_mutated = False
+        for _ in range(150):
+            universe.foods = []
+            parent.energy = 1000
+
+            if len(universe.entities) > 10:
+                universe.entities = [parent]
+
+            original_choice = random.choice
+            original_random = random.random
+
+            def mock_choice(seq):
+                if isinstance(seq, list) and 'is_stun_walker' in seq:
+                    return 'is_stun_walker'
+                return original_choice(seq)
+
+            def mock_random():
+                return 0.0
+
+            with unittest.mock.patch('random.choice', side_effect=mock_choice), unittest.mock.patch('random.random', side_effect=mock_random):
+                universe.tick()
+
+            has_mutated = any(e.is_stun_walker for e in universe.entities if e != parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated)
 class TestSleepWalker(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(10, 10)
@@ -20054,22 +20145,45 @@ class TestSleepWalker(unittest.TestCase):
         self.assertEqual(entity2.stamina, 7)
 
     def test_sleep_walker_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_sleep_walker=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-        self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0
-        mutated = False
-        for _ in range(50):
-            parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            if any(e.is_sleep_walker for e in self.universe.entities if e != parent):
-                mutated = True
-                break
-        self.assertTrue(mutated)
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_sleep_walker=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
 
+        import random
+        import unittest.mock
+
+        has_mutated = False
+        for _ in range(150):
+            universe.foods = []
+            parent.energy = 1000
+
+            if len(universe.entities) > 10:
+                universe.entities = [parent]
+
+            original_choice = random.choice
+            original_random = random.random
+
+            def mock_choice(seq):
+                if isinstance(seq, list) and 'is_sleep_walker' in seq:
+                    return 'is_sleep_walker'
+                return original_choice(seq)
+
+            def mock_random():
+                return 0.0
+
+            with unittest.mock.patch('random.choice', side_effect=mock_choice), unittest.mock.patch('random.random', side_effect=mock_random):
+                universe.tick()
+
+            has_mutated = any(e.is_sleep_walker for e in universe.entities if e != parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated)
 class TestIsDiseaseGlider(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
@@ -20089,23 +20203,45 @@ class TestIsDiseaseGlider(unittest.TestCase):
         self.assertLess(entity2.stamina, 10)
 
     def test_disease_glider_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_disease_glider=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-        self.universe.entities.append(parent)
-        self.universe.mutation_chance = 1.0
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_disease_glider=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
 
-        mutated = False
-        for _ in range(50):
+        import random
+        import unittest.mock
+
+        has_mutated = False
+        for _ in range(150):
+            universe.foods = []
             parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            mutated = any(e.is_disease_glider for e in self.universe.entities if e != parent)
-            if mutated:
-                break
-        self.assertTrue(mutated)
 
+            if len(universe.entities) > 10:
+                universe.entities = [parent]
+
+            original_choice = random.choice
+            original_random = random.random
+
+            def mock_choice(seq):
+                if isinstance(seq, list) and 'is_disease_glider' in seq:
+                    return 'is_disease_glider'
+                return original_choice(seq)
+
+            def mock_random():
+                return 0.0
+
+            with unittest.mock.patch('random.choice', side_effect=mock_choice), unittest.mock.patch('random.random', side_effect=mock_random):
+                universe.tick()
+
+            has_mutated = any(e.is_disease_glider for e in universe.entities if e != parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated)
 class TestIsPoisonGlider(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
@@ -20125,23 +20261,45 @@ class TestIsPoisonGlider(unittest.TestCase):
         self.assertLess(entity2.stamina, 10)
 
     def test_poison_glider_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_poison_glider=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-        self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_poison_glider=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
 
-        mutated = False
-        for _ in range(50):
+        import random
+        import unittest.mock
+
+        has_mutated = False
+        for _ in range(150):
+            universe.foods = []
             parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            mutated = any(e.is_poison_glider for e in self.universe.entities if e != parent)
-            if mutated:
-                break
-        self.assertTrue(mutated)
 
+            if len(universe.entities) > 10:
+                universe.entities = [parent]
+
+            original_choice = random.choice
+            original_random = random.random
+
+            def mock_choice(seq):
+                if isinstance(seq, list) and 'is_poison_glider' in seq:
+                    return 'is_poison_glider'
+                return original_choice(seq)
+
+            def mock_random():
+                return 0.0
+
+            with unittest.mock.patch('random.choice', side_effect=mock_choice), unittest.mock.patch('random.random', side_effect=mock_random):
+                universe.tick()
+
+            has_mutated = any(e.is_poison_glider for e in universe.entities if e != parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated)
 class TestIsParasiteGlider(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
@@ -20163,23 +20321,45 @@ class TestIsParasiteGlider(unittest.TestCase):
         self.assertLess(entity2.stamina, 10)
 
     def test_parasite_glider_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_parasite_glider=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-        self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_parasite_glider=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
 
-        mutated = False
-        for _ in range(50):
+        import random
+        import unittest.mock
+
+        has_mutated = False
+        for _ in range(150):
+            universe.foods = []
             parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            mutated = any(e.is_parasite_glider for e in self.universe.entities if e != parent)
-            if mutated:
-                break
-        self.assertTrue(mutated)
 
+            if len(universe.entities) > 10:
+                universe.entities = [parent]
+
+            original_choice = random.choice
+            original_random = random.random
+
+            def mock_choice(seq):
+                if isinstance(seq, list) and 'is_parasite_glider' in seq:
+                    return 'is_parasite_glider'
+                return original_choice(seq)
+
+            def mock_random():
+                return 0.0
+
+            with unittest.mock.patch('random.choice', side_effect=mock_choice), unittest.mock.patch('random.random', side_effect=mock_random):
+                universe.tick()
+
+            has_mutated = any(e.is_parasite_glider for e in universe.entities if e != parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated)
 class TestIsStunGlider(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
@@ -20199,23 +20379,45 @@ class TestIsStunGlider(unittest.TestCase):
         self.assertLess(entity2.stamina, 10)
 
     def test_stun_glider_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_stun_glider=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-        self.universe.entities.append(parent)
-        self.universe.mutation_chance = 1.0
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_stun_glider=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
 
-        mutated = False
-        for _ in range(50):
+        import random
+        import unittest.mock
+
+        has_mutated = False
+        for _ in range(150):
+            universe.foods = []
             parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            mutated = any(e.is_stun_glider for e in self.universe.entities if e != parent)
-            if mutated:
-                break
-        self.assertTrue(mutated)
 
+            if len(universe.entities) > 10:
+                universe.entities = [parent]
+
+            original_choice = random.choice
+            original_random = random.random
+
+            def mock_choice(seq):
+                if isinstance(seq, list) and 'is_stun_glider' in seq:
+                    return 'is_stun_glider'
+                return original_choice(seq)
+
+            def mock_random():
+                return 0.0
+
+            with unittest.mock.patch('random.choice', side_effect=mock_choice), unittest.mock.patch('random.random', side_effect=mock_random):
+                universe.tick()
+
+            has_mutated = any(e.is_stun_glider for e in universe.entities if e != parent)
+            if has_mutated:
+                break
+
+        self.assertTrue(has_mutated)
 class TestIsSleepGlider(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
@@ -20235,19 +20437,42 @@ class TestIsSleepGlider(unittest.TestCase):
         self.assertLess(entity2.stamina, 10)
 
     def test_sleep_glider_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_sleep_glider=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-        self.universe.add_entity(parent)
-        self.universe.mutation_chance = 1.0
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_sleep_glider=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
 
-        mutated = False
-        for _ in range(50):
+        import random
+        import unittest.mock
+
+        has_mutated = False
+        for _ in range(150):
+            universe.foods = []
             parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            mutated = any(e.is_sleep_glider for e in self.universe.entities if e != parent)
-            if mutated:
+
+            if len(universe.entities) > 10:
+                universe.entities = [parent]
+
+            original_choice = random.choice
+            original_random = random.random
+
+            def mock_choice(seq):
+                if isinstance(seq, list) and 'is_sleep_glider' in seq:
+                    return 'is_sleep_glider'
+                return original_choice(seq)
+
+            def mock_random():
+                return 0.0
+
+            with unittest.mock.patch('random.choice', side_effect=mock_choice), unittest.mock.patch('random.random', side_effect=mock_random):
+                universe.tick()
+
+            has_mutated = any(e.is_sleep_glider for e in universe.entities if e != parent)
+            if has_mutated:
                 break
-        self.assertTrue(mutated)
+
+        self.assertTrue(has_mutated)
