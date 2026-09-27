@@ -5269,8 +5269,8 @@ class TestSprint(unittest.TestCase):
 
         # Non-sweating entity suffers heat penalty (energy loss +1)
         # Sweating entity doesn't suffer heat penalty, but loses extra hydration
-        normal = Entity("Normal", x=1, y=1, energy=50, size=1, age=100, max_age=200, can_sweat=False, preferred_temperature=20, temperature_tolerance=5, hydration=50, max_hydration=50, intelligence=1, diet='herbivore')
-        sweaty = Entity("Sweaty", x=2, y=2, energy=50, size=1, age=100, max_age=200, can_sweat=True, preferred_temperature=20, temperature_tolerance=5, hydration=50, max_hydration=50, intelligence=1, diet='herbivore')
+        normal = Entity("Normal", x=1, y=1, energy=50, size=1, age=100, max_age=200, can_sweat=False, is_immune=True, preferred_temperature=20, temperature_tolerance=5, hydration=50, max_hydration=50, intelligence=1, diet='herbivore')
+        sweaty = Entity("Sweaty", x=2, y=2, energy=50, size=1, age=100, max_age=200, can_sweat=True, is_immune=True, preferred_temperature=20, temperature_tolerance=5, hydration=50, max_hydration=50, intelligence=1, diet='herbivore')
 
         normal.is_sleeping = False
         sweaty.is_sleeping = False
@@ -20067,5 +20067,187 @@ class TestSleepWalker(unittest.TestCase):
             self.universe.tick()
             if any(e.is_sleep_walker for e in self.universe.entities if e != parent):
                 mutated = True
+                break
+        self.assertTrue(mutated)
+
+class TestIsDiseaseGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_disease_glider_stamina(self):
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_disease_glider=True, is_infected=True)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 10)
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_disease_glider=True, is_infected=False)
+        self.universe.entities.append(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertLess(entity2.stamina, 10)
+
+    def test_disease_glider_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_disease_glider=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+        self.universe.entities.append(parent)
+        self.universe.mutation_chance = 1.0
+
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            mutated = any(e.is_disease_glider for e in self.universe.entities if e != parent)
+            if mutated:
+                break
+        self.assertTrue(mutated)
+
+class TestIsPoisonGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_poison_glider_stamina(self):
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_poison_glider=True, poisoned_time=10)
+        self.universe.add_entity(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 10)
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_poison_glider=True, poisoned_time=0)
+        self.universe.add_entity(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertLess(entity2.stamina, 10)
+
+    def test_poison_glider_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_poison_glider=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            mutated = any(e.is_poison_glider for e in self.universe.entities if e != parent)
+            if mutated:
+                break
+        self.assertTrue(mutated)
+
+class TestIsParasiteGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_parasite_glider_stamina(self):
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_parasite_glider=True)
+        entity.attached_parasites = ['parasite']
+        self.universe.add_entity(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 10)
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_parasite_glider=True)
+        entity2.attached_parasites = []
+        self.universe.add_entity(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertLess(entity2.stamina, 10)
+
+    def test_parasite_glider_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_parasite_glider=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            mutated = any(e.is_parasite_glider for e in self.universe.entities if e != parent)
+            if mutated:
+                break
+        self.assertTrue(mutated)
+
+class TestIsStunGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_stun_glider_stamina(self):
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_stun_glider=True, stunned_time=2)
+        self.universe.entities.append(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 10)
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_stun_glider=True, stunned_time=0)
+        self.universe.entities.append(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertLess(entity2.stamina, 10)
+
+    def test_stun_glider_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_stun_glider=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+        self.universe.entities.append(parent)
+        self.universe.mutation_chance = 1.0
+
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            mutated = any(e.is_stun_glider for e in self.universe.entities if e != parent)
+            if mutated:
+                break
+        self.assertTrue(mutated)
+
+class TestIsSleepGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_sleep_glider_stamina(self):
+        entity = Entity("Test", x=0, y=0, max_stamina=50, stamina=10, is_sleep_glider=True, is_sleeping=True)
+        self.universe.add_entity(entity)
+        self.universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, 10)
+
+        entity2 = Entity("Test2", x=0, y=0, max_stamina=50, stamina=10, is_sleep_glider=True, is_sleeping=False)
+        self.universe.add_entity(entity2)
+        self.universe.move_entity(entity2, 1, 0)
+        self.assertLess(entity2.stamina, 10)
+
+    def test_sleep_glider_mutation(self):
+        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_sleep_glider=False)
+        parent.age = 10
+        parent.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        mutated = False
+        for _ in range(50):
+            parent.energy = 1000
+            if len(self.universe.entities) > 10:
+                self.universe.entities = [parent]
+            self.universe.tick()
+            mutated = any(e.is_sleep_glider for e in self.universe.entities if e != parent)
+            if mutated:
                 break
         self.assertTrue(mutated)
