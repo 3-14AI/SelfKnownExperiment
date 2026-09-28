@@ -2449,6 +2449,16 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('Ï', output)
 
+
+    def test_visualize_is_forest_predator(self):
+        universe = Universe(1, 1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_forest_predator=True)
+        entity.level = 3
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Í', output)
+
     def test_visualize_is_space_predator(self):
         universe = Universe(width=1, height=1)
         entity = Entity(name="E", x=0, y=0, size=5, is_space_predator=True)
