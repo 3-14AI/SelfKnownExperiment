@@ -760,7 +760,7 @@ class Universe:
                     stamina_cost = 0
                 else:
                     # If entity has any trait ending in _dancer
-                    is_dancer = any(trait.endswith('_dancer') and getattr(entity, trait, False) for trait in dir(entity))
+                    is_dancer = any(trait.endswith('_dancer') and getattr(entity, trait, False) for trait in dir(entity) if trait != 'is_quicksand_dancer')
                     if is_dancer:
                         stamina_cost += 10
             if not getattr(entity, 'is_tireless', False):

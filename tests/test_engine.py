@@ -20464,3 +20464,63 @@ class TestIsSleepGlider(unittest.TestCase):
                 break
 
         self.assertTrue(has_mutated)
+
+class TestIsDancerQuicksandPenalty(unittest.TestCase):
+    def test_is_dancer_quicksand_penalty(self):
+        from src.universe.engine import Entity, Universe
+        universe = Universe(width=10, height=10)
+        e1 = Entity("Dancer", x=0, y=0, is_ash_dancer=True, max_stamina=100, stamina=100)
+        e2 = Entity("NotDancer", x=0, y=0, max_stamina=100, stamina=100)
+
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+        universe.quicksands.append(type('Quicksand', (), {'x': 1, 'y': 0})())
+
+        # Base move cost is 1. Quicksand adds 5. Total = 6.
+        # _dancer trait adds 10 on quicksand. Total = 16.
+        universe.move_entity(e1, 1, 0)
+        universe.move_entity(e2, 1, 0)
+
+        self.assertEqual(e1.stamina, 89, "Entity with _dancer trait should incur +10 stamina penalty on quicksand")
+        self.assertEqual(e2.stamina, 99, "Normal entity should only incur base quicksand stamina penalty")
+
+        # Test quicksand_dancer avoids penalty
+        e3 = Entity("QuicksandDancer", x=0, y=0, is_quicksand_dancer=True, max_stamina=100, stamina=100)
+        universe.add_entity(e3)
+        universe.move_entity(e3, 1, 0)
+        self.assertEqual(e3.stamina, 99, "is_quicksand_dancer should not incur +10 penalty")
+
+class TestCannibalTarget(unittest.TestCase):
+    def test_cannibal_target(self):
+        from src.universe.engine import Entity, Universe
+        universe = Universe(width=10, height=10)
+        e1 = Entity("HungryCannibal", x=0, y=0, energy=10, max_stamina=100, stamina=100, is_cannibalistic=True, species="Bird", diet='carnivore')
+        e2 = Entity("Prey1", x=0, y=0, energy=100, species="Bird")
+        e3 = Entity("Prey2", x=0, y=0, energy=100, species="Snake", diet='herbivore')
+
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+        universe.add_entity(e3)
+
+        target = universe.get_nearest_prey(0, 0, max_distance=10, entity=e1)
+        self.assertIsNotNone(target)
+        self.assertIn(target.name, ["Prey1", "Prey2"])
+
+class TestCannibalHungry(unittest.TestCase):
+    def test_cannibal_hungry(self):
+        from src.universe.engine import Entity, Universe
+        universe = Universe(width=10, height=10)
+        e1 = Entity("HungryCannibal", x=0, y=0, energy=10, max_stamina=100, stamina=100, is_cannibalistic=True, species="Bird", diet='herbivore')
+        e2 = Entity("Prey1", x=0, y=0, energy=100, species="Bird")
+        e3 = Entity("Prey2", x=0, y=0, energy=100, species="Snake", diet='herbivore')
+
+        universe.add_entity(e1)
+        universe.add_entity(e2)
+        universe.add_entity(e3)
+
+        preys = universe.get_preys_at(0, 0, entity=e1)
+        self.assertEqual(len(preys), 2)
+
+        preys_names = [p.name for p in preys]
+        self.assertIn("Prey1", preys_names)
+        self.assertIn("Prey2", preys_names)
