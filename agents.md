@@ -447,4 +447,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_strider` trait. Entities with this trait consume no stamina when moving while they have attached parasites and gain a defense bonus while they have attached parasites.
 - [x] Implemented `is_sleep_strider` trait. Entities with this trait consume no stamina when moving while sleeping and gain a defense bonus while sleeping.
 - [x] Реализован трейт `is_space_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на местности типа `space`.
-- [ ] Implemented `is_cave_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `cave` terrain.
+- [x] Implemented `is_cave_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `cave` terrain.
