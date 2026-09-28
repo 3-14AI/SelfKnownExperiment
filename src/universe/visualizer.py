@@ -272,6 +272,8 @@ class CLIVisualizer:
                         char = '∑'
                     elif getattr(entity, 'is_cave_predator', False):
                         char = 'Ï'
+                    elif getattr(entity, 'is_forest_predator', False):
+                        char = 'Í'
                     elif getattr(entity, 'is_cannibalistic', False):
                         char = 'J'
                     elif getattr(entity, 'is_solitary', False):

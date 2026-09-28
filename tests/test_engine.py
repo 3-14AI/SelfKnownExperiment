@@ -20622,3 +20622,45 @@ class TestIsCavePredator(unittest.TestCase):
                     break
 
         self.assertTrue(has_mutated, "is_cave_predator trait did not mutate")
+
+
+    def test_is_forest_predator_combat_bonus(self):
+        """Entities with is_forest_predator gain 1.5x attack on forest terrain"""
+        forest1 = Terrain(x=5, y=5, terrain_type='forest')
+        forest2 = Terrain(x=5, y=6, terrain_type='forest')
+
+        predator = Entity("Predator", x=5, y=5, diet='carnivore', energy=50, attack=10, is_forest_predator=True)
+        # Without multiplier: effective attack = 10
+        # With multiplier: effective attack = 15
+
+        prey = Entity("Prey", x=5, y=6, energy=50, defense=12)
+        # Without multiplier, predator attack (10) < prey defense (12), prey escapes
+        # With multiplier, predator attack (15) > prey defense (12), prey is killed
+
+        self.universe.terrains.extend([forest1, forest2])
+        self.universe.entities.extend([predator, prey])
+
+        import unittest.mock
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.6):
+            self.universe.tick()
+
+        self.assertNotIn(prey, self.universe.entities, "is_forest_predator should give 1.5x attack bonus and kill the prey")
+
+    def test_is_forest_predator_mutation(self):
+        parent = Entity("Parent", x=1, y=1, energy=1000, age=10, max_age=100, size=5, is_forest_predator=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 100
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        import unittest.mock
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            for _ in range(50):
+                self.universe.tick()
+                if len(self.universe.entities) > 20:
+                    self.universe.entities = [parent]
+                if any(getattr(e, 'is_forest_predator', False) for e in self.universe.entities if e != parent):
+                    has_mutated = True
+                    break
+
+        self.assertTrue(has_mutated, "is_forest_predator trait did not mutate")

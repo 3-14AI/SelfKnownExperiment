@@ -532,3 +532,4 @@ All notable changes to Project Genesis will be documented in this file.
 - [x] Implemented `is_stun_strider` trait. Entities with this trait consume no stamina when moving while stunned and gain a defense bonus while stunned.
 - Реализован трейт `is_sleep_strider`. Сущности с этим трейтом не тратят выносливость при движении во время сна и получают бонус к защите во время сна.
 - Реализован трейт `is_space_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на местности типа `space`.
+- Implemented `is_forest_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `forest` terrain.
