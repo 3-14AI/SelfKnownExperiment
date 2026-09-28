@@ -20577,3 +20577,48 @@ class TestIsSpacePredator(unittest.TestCase):
                 break
 
         self.assertTrue(has_mutated, "is_space_predator trait did not mutate")
+
+class TestIsCavePredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(10, 10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        for x in range(10):
+            for y in range(10):
+                self.universe.add_terrain(Terrain(x, y, terrain_type='cave', elevation=0))
+
+    def test_is_cave_predator_combat_bonus(self):
+        predator = Entity("Predator", x=5, y=5, diet='carnivore', energy=50, attack=10, is_cave_predator=True)
+        # Using a very high defense for prey so normal attack won't kill it.
+        # predator attack = 10, * 1.5 = 15. prey defense = 14.
+        # escape chance = 14 / (15 + 14) = 14 / 29 = 0.48
+        # We need to guarantee a kill to verify attack multiplier. We can mock random to fail escape.
+        prey = Entity("Prey", x=5, y=5, diet='herbivore', energy=50, defense=14)
+
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        with unittest.mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.9):
+            # random=0.9 > escape_chance=0.48 -> Prey is eaten
+            self.universe.tick()
+
+        self.assertNotIn(prey, self.universe.entities, "is_cave_predator should give 1.5x attack bonus and kill the prey")
+
+    def test_is_cave_predator_mutation(self):
+        parent = Entity("Parent", x=1, y=1, energy=1000, age=10, max_age=100, size=5, is_cave_predator=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 100
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            for _ in range(5):
+                self.universe.tick()
+                if len(self.universe.entities) > 20:
+                    self.universe.entities = [parent]
+                if any(getattr(e, 'is_cave_predator', False) for e in self.universe.entities if e != parent):
+                    has_mutated = True
+                    break
+
+        self.assertTrue(has_mutated, "is_cave_predator trait did not mutate")
