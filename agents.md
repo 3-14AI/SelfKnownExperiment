@@ -445,3 +445,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_disease_walker`, `is_poison_walker`, `is_parasite_walker`, `is_stun_walker`, and `is_sleep_walker` traits. Entities with these traits do not consume extra stamina from elevation changes when experiencing their respective statuses (infected, poisoned, parasitized, stunned, sleeping).
 - [x] Stabilized flaky mutation tests for `is_disease_glider`, `is_poison_glider`, `is_parasite_glider`, `is_stun_glider`, `is_sleep_glider`, `is_disease_walker`, `is_poison_walker`, `is_parasite_walker`, `is_stun_walker`, and `is_sleep_walker`.
 - [x] Implemented `is_parasite_strider` trait. Entities with this trait consume no stamina when moving while they have attached parasites and gain a defense bonus while they have attached parasites.
+- [x] Implemented `is_sleep_strider` trait. Entities with this trait consume no stamina when moving while sleeping and gain a defense bonus while sleeping.
+- [x] Реализован трейт `is_space_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на местности типа `space`.

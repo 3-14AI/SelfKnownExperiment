@@ -268,6 +268,8 @@ class CLIVisualizer:
                         char = 'x'
                     elif getattr(entity, 'is_ambush_predator', False):
                         char = 'm'
+                    elif getattr(entity, 'is_space_predator', False):
+                        char = '∑'
                     elif getattr(entity, 'is_cannibalistic', False):
                         char = 'J'
                     elif getattr(entity, 'is_solitary', False):

@@ -20524,3 +20524,56 @@ class TestCannibalHungry(unittest.TestCase):
         preys_names = [p.name for p in preys]
         self.assertIn("Prey1", preys_names)
         self.assertIn("Prey2", preys_names)
+
+
+class TestIsSpacePredator(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_is_space_predator_combat_bonus(self):
+        from src.universe.engine import Entity, Terrain
+        import unittest.mock
+
+        # Add space terrain
+        self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='space'))
+
+        predator = Entity("Predator", x=5, y=5, diet='carnivore', energy=50, attack=10, is_space_predator=True)
+        prey = Entity("Prey", x=5, y=5, diet='herbivore', energy=50, defense=10, is_fearless=True, is_immune=True)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        # The predator has attack 10, prey has defense 10. Normally attack/defense >= 1.0 needed.
+        # But predator should get 1.5x multiplier on space terrain: 10 * 1.5 = 15.0
+        # 15 / 10 = 1.5 > 1.0, so the predator kills the prey.
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.5):
+            self.universe.tick()
+
+        self.assertNotIn(prey, self.universe.entities, "is_space_predator should give 1.5x attack bonus and kill the prey")
+
+    def test_is_space_predator_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock
+
+        parent = Entity("Parent", x=1, y=1, energy=1000, age=10, max_age=100, size=5, is_space_predator=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0
+
+        has_mutated = False
+
+        for _ in range(150):
+            if len(self.universe.entities) > 20:
+                self.universe.entities = [parent]
+            parent.energy = 1000
+
+            with unittest.mock.patch('random.random', return_value=0.0):
+                self.universe.tick()
+
+            if any(getattr(e, 'is_space_predator', False) for e in self.universe.entities if e != parent):
+                has_mutated = True
+                break
+
+        self.assertTrue(has_mutated, "is_space_predator trait did not mutate")

@@ -2440,5 +2440,13 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('Ě', output)
 
+    def test_visualize_is_space_predator(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_space_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('∑', output)
+
 if __name__ == '__main__':
     unittest.main()
