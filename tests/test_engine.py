@@ -20708,3 +20708,39 @@ class TestMountainPredator(unittest.TestCase):
         children = [e for e in self.universe.entities if e != parent]
         self.assertTrue(len(children) > 0, "A child should have been born")
         self.assertTrue(getattr(children[0], 'is_mountain_predator', False), "Child should have mutated to be a mountain predator")
+
+class TestDeepWaterPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(3, 3)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_deep_water_predator_combat_bonus(self):
+        for x in range(3):
+            for y in range(3):
+                self.universe.add_terrain(Terrain(x, y, 'deep-water'))
+
+        predator = Entity("DeepWaterPredator", x=1, y=1, is_deep_water_predator=True, energy=30, attack=10, max_stamina=100, stamina=100, size=2, diet='carnivore')
+        prey = Entity("Prey", x=1, y=1, energy=10, defense=5, max_stamina=100, stamina=100, size=1)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.6):
+            self.universe.tick()
+
+        self.assertNotIn(prey, self.universe.entities, "Prey should have been killed.")
+        self.assertGreater(predator.energy, 30, "Predator should have gained energy from eating prey.")
+
+    def test_deep_water_predator_mutation(self):
+        self.universe.mutation_chance = 1.0
+        parent = Entity("Parent", x=1, y=1, is_deep_water_predator=False, energy=100, is_immune=True, lays_eggs=False, size=1)
+        parent.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e is not parent]
+        self.assertGreater(len(children), 0, "Reproduction should have occurred.")
+        self.assertTrue(any(getattr(child, 'is_deep_water_predator', False) for child in children), "Trait should have mutated to True.")

@@ -2477,5 +2477,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('ã', output.lower(), "Level 1 entity with is_mountain_predator should render as 'ã'")
 
+    def test_is_deep_water_predator_rendering(self):
+        universe = Universe(1, 1)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("DeepWaterPredatorEntity", x=0, y=0, size=1)
+        entity.is_deep_water_predator = True
+        universe.entities.append(entity)
+        output = visualizer.render()
+        self.assertIn('õ', output.lower(), "Level 1 entity with is_deep_water_predator should render as 'õ'")
+
 if __name__ == '__main__':
     unittest.main()
