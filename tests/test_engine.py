@@ -20796,3 +20796,73 @@ class TestSandPredator(unittest.TestCase):
         self.assertTrue(len(children) > 0, "No child was born")
         child = children[0]
         self.assertTrue(getattr(child, 'is_sand_predator', False), "Child did not inherit/mutate is_sand_predator")
+
+
+class TestSnowPredator(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(3, 3)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_snow_predator_attack_bonus(self):
+        from src.universe.engine import Terrain, Entity
+        import unittest.mock
+
+        for x in range(3):
+            for y in range(3):
+                self.universe.terrains.append(Terrain(x, y, terrain_type='snow', elevation=1))
+
+        predator = Entity("SnowPredator", x=1, y=1, energy=50, diet='carnivore', size=2, attack=50, is_snow_predator=True)
+        prey = Entity("Prey", x=1, y=1, energy=1000, diet='herbivore', size=20, defense=1)
+        predator.is_relentless = True
+
+        self.universe.entities = [predator, prey]
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            self.universe.tick()
+
+        boosted_damage = 1000 - prey.energy
+
+        self.universe.terrains.clear()
+        for x in range(3):
+            for y in range(3):
+                self.universe.terrains.append(Terrain(x, y, terrain_type='snow', elevation=1))
+
+        predator_std = Entity("Predator", x=1, y=1, energy=50, diet='carnivore', size=2, attack=50, is_snow_predator=False)
+        predator_std.is_relentless = True
+        prey_std = Entity("Prey", x=1, y=1, energy=1000, diet='herbivore', size=20, defense=1)
+
+        self.universe.entities = [predator_std, prey_std]
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            self.universe.tick()
+
+        std_damage = 1000 - prey_std.energy
+
+        self.assertGreater(boosted_damage, std_damage)
+        self.assertEqual(boosted_damage - std_damage, 12)
+
+    def test_is_snow_predator_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock
+
+        parent = Entity("parent", x=1, y=1, energy=500, size=1, is_snow_predator=False, is_ageless=True, is_immune=True, lays_eggs=False)
+        parent.reproduction_threshold = 20
+        self.universe.entities = [parent]
+        self.universe.mutation_chance = 1.0
+
+        mate = Entity("mate", x=1, y=1, energy=500, size=1, is_snow_predator=False, is_ageless=True, is_immune=True, lays_eggs=False)
+        mate.reproduction_threshold = 20
+        self.universe.entities.append(mate)
+
+        def mock_random():
+            return 0.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', side_effect=mock_random):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e not in (parent, mate)]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_snow_predator)
