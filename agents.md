@@ -454,3 +454,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Реализован трейт `is_water_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на местности типа `water`.
 - [x] Implemented `is_sand_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `sand` terrain.
 - [x] Стабилизирован нестабильный тест `test_is_water_dweller` путем инициализации `stamina=0` для предотвращения случайного ухода сущности с водной территории во время шага симуляции.
+- [x] Implemented `is_snow_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `snow` terrain.
