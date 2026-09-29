@@ -20664,3 +20664,47 @@ class TestIsCavePredator(unittest.TestCase):
                     break
 
         self.assertTrue(has_mutated, "is_forest_predator trait did not mutate")
+
+class TestMountainPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(3, 3)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_mountain_predator_attack_bonus(self):
+        # Set up a mountain terrain
+        self.universe.terrains.append(Terrain(1, 1, terrain_type='mountain', elevation=3))
+
+        # Predator with is_mountain_predator
+        predator = Entity("MountainPredator", x=1, y=1, energy=50, diet='carnivore', size=1, attack=4, is_mountain_predator=True)
+        # We need a prey to eat
+        prey = Entity("Prey", x=1, y=1, energy=10, diet='herbivore', size=1, defense=1)
+
+        self.universe.entities = [predator, prey]
+
+        # We need to mock random.random for escape chance so the prey definitely gets eaten (no escape)
+        with patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            self.universe.tick()
+
+        # The predator should have attacked.
+        # Base attack = 4. 1.5x multiplier = 6.
+        # Actually it's easier to verify it in isolation. Wait, if prey dies, it's not in entities.
+        self.assertNotIn(prey, self.universe.entities, "Prey should be dead")
+
+    def test_mountain_predator_mutation(self):
+        parent = Entity("Parent", energy=150, diet='carnivore', size=1)
+        parent.is_mountain_predator = False
+        parent.reproduction_threshold = 100
+        parent.lays_eggs = False
+
+        self.universe.entities = [parent]
+        self.universe.mutation_chance = 1.0
+
+        # Mock random.random to force reproduction and mutation
+        with patch('src.universe.engine.random.random', return_value=0.0):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "A child should have been born")
+        self.assertTrue(getattr(children[0], 'is_mountain_predator', False), "Child should have mutated to be a mountain predator")

@@ -2467,5 +2467,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('∑', output)
 
+
+    def test_is_mountain_predator_rendering(self):
+        universe = Universe(1, 1)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("MountainPredatorEntity", x=0, y=0, size=1)
+        entity.is_mountain_predator = True
+        universe.entities.append(entity)
+        output = visualizer.render()
+        self.assertIn('ã', output.lower(), "Level 1 entity with is_mountain_predator should render as 'ã'")
+
 if __name__ == '__main__':
     unittest.main()
