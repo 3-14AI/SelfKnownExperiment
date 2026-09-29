@@ -2486,5 +2486,27 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('õ', output.lower(), "Level 1 entity with is_deep_water_predator should render as 'õ'")
 
+    def test_is_water_predator_rendering(self):
+        universe = Universe(1, 1)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("WaterPredatorEntity", x=0, y=0, size=1)
+        entity.is_water_predator = True
+        universe.entities.append(entity)
+        # Note: the visualizer applies char.upper() if level >= 3. It applies char directly if level < 3.
+        # So for level=1 or level=2, it just renders the original char which is 'Ë'.
+        # We also want to assert hibernating uses lower().
+
+        entity.level = 1
+        output = visualizer.render()
+        self.assertIn('Ë', output)
+
+        entity.level = 3
+        output = visualizer.render()
+        self.assertIn('Ë', output) # upper() on 'Ë' is 'Ë'
+
+        entity.is_hibernating = True
+        output = visualizer.render()
+        self.assertIn('ë', output)
+
 if __name__ == '__main__':
     unittest.main()
