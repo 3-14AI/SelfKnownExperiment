@@ -13065,7 +13065,7 @@ class TestIsWaterDweller(unittest.TestCase):
         universe.terrains = []
         universe.foods = []
         universe.localized_events = []
-        entity = Entity(name="Water Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_water_dweller=True, intelligence=1)
+        entity = Entity(name="Water Dweller", x=1, y=1, energy=20, max_stamina=0, stamina=0, size=1, is_water_dweller=True, intelligence=1)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='water'))
 
