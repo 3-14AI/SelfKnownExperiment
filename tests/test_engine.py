@@ -18476,10 +18476,11 @@ class TestIsBlizzardStrider(unittest.TestCase):
         children = [e for e in self.universe.entities if e != parent]
         if children:
             self.assertTrue(getattr(children[0], 'is_blizzard_strider', False))
-    def test_is_blizzard_strider_defense(self):
+    @unittest.mock.patch('src.universe.engine.random.random', return_value=0.0)
+    def test_is_blizzard_strider_defense(self, mock_random):
         self.universe.current_event = 'blizzard'
         pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_blizzard_strider=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_blizzard_strider=True, is_ageless=True, max_stamina=100, stamina=100)
         self.universe.add_entity(pred)
         self.universe.add_entity(prey)
         self.universe.foods = []
