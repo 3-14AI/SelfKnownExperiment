@@ -449,3 +449,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Реализован трейт `is_space_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на местности типа `space`.
 - [x] Implemented `is_cave_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `cave` terrain.
 - [x] Implemented `is_forest_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `forest` terrain.
+- [x] Implemented `is_mountain_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `mountain` terrain.

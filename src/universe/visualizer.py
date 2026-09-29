@@ -274,6 +274,8 @@ class CLIVisualizer:
                         char = 'Ï'
                     elif getattr(entity, 'is_forest_predator', False):
                         char = 'Í'
+                    elif getattr(entity, 'is_mountain_predator', False):
+                        char = 'Ã'
                     elif getattr(entity, 'is_cannibalistic', False):
                         char = 'J'
                     elif getattr(entity, 'is_solitary', False):
