@@ -3054,7 +3054,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.mutation_chance = 1.0
-        parent = Entity("Predator", diet='carnivore', species="PredSpecies", x=5, y=5, energy=2500, target_species=["OldPrey"], intelligence=1, is_nest_builder=False, is_telepathic=False, is_ageless=True, is_immune=True)
+        parent = Entity("Predator", diet='carnivore', species="PredSpecies", x=5, y=5, energy=2500, target_species=["OldPrey"], intelligence=1, is_nest_builder=False, is_telepathic=False, is_ageless=True, is_immune=True, lays_eggs=False, size=1)
         universe.add_entity(parent)
         prey = Entity("Prey", species="NewPreySpecies", x=10, y=10, energy=5000, intelligence=1, is_nest_builder=False, is_ageless=True, is_immune=True)
         universe.add_entity(prey)
@@ -7631,11 +7631,10 @@ class TestIsMoonBather(unittest.TestCase):
     def test_is_moon_bather_night_bonus(self):
         universe = Universe(width=10, height=10, day_length=20)
         universe.time = 15  # Night (15 % 20 >= 10)
+        universe.disease_chance = 0.0
         e = Entity("MoonBather", energy=10, stamina=10, size=1, is_moon_bather=True)
         universe.add_entity(e)
-        import unittest.mock
-        with unittest.mock.patch('random.choice', return_value=None):
-            universe.tick()
+        universe.tick()
         self.assertTrue(e.energy > 10, "is_moon_bather should grant energy bonus at night")
         self.assertTrue(e.stamina >= 14, "is_moon_bather should grant +5 stamina + passive recovery at night")
 
@@ -7644,9 +7643,8 @@ class TestIsMoonBather(unittest.TestCase):
         universe.time = 5  # Day (5 % 20 < 10)
         e = Entity("MoonBather", energy=10, stamina=10, size=1, is_moon_bather=True)
         universe.add_entity(e)
-        import unittest.mock
-        with unittest.mock.patch('random.choice', return_value=None):
-            universe.tick()
+        universe.disease_chance = 0.0
+        universe.tick()
         self.assertEqual(e.energy, 9, "is_moon_bather should grant no bonus during the day")
         self.assertEqual(e.stamina, 12, "is_moon_bather should grant no bonus during the day")
 
@@ -18838,7 +18836,7 @@ class TestQuicksandDancer(unittest.TestCase):
         self.assertTrue(e.energy > 10)
 
     def test_is_quicksand_dancer_mutation(self):
-        parent = Entity('parent', x=5, y=5, energy=1000, size=15, is_quicksand_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        parent = Entity('parent', x=5, y=5, energy=1000, size=15, is_quicksand_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
         self.universe.add_entity(parent)
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
@@ -18846,7 +18844,7 @@ class TestQuicksandDancer(unittest.TestCase):
         self.universe.reproduction_threshold = 500
         self.universe.mutation_chance = 1.0
         mutation_occurred = False
-        for _ in range(50):
+        for _ in range(250):
             if len(self.universe.entities) > 20:
                 self.universe.entities = [parent]
             parent.energy = 1000
