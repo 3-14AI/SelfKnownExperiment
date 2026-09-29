@@ -450,3 +450,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_cave_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `cave` terrain.
 - [x] Implemented `is_forest_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `forest` terrain.
 - [x] Implemented `is_mountain_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `mountain` terrain.
+- [x] Implemented `is_deep_water_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `deep-water` terrain.
