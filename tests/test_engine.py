@@ -20745,3 +20745,54 @@ class TestDeepWaterPredator(unittest.TestCase):
         children = [e for e in self.universe.entities if e is not parent]
         self.assertGreater(len(children), 0, "Reproduction should have occurred.")
         self.assertTrue(any(getattr(child, 'is_deep_water_predator', False) for child in children), "Trait should have mutated to True.")
+
+class TestSandPredator(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(3, 3)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    def test_sand_predator_attack_bonus(self):
+        from src.universe.engine import Terrain, Entity
+        import unittest.mock
+
+        # Set up a sand terrain
+        self.universe.terrains.append(Terrain(1, 1, terrain_type='sand', elevation=1))
+
+        # Predator with is_sand_predator
+        predator = Entity("SandPredator", x=1, y=1, energy=50, diet='carnivore', size=1, attack=4, is_sand_predator=True)
+        # We need a prey to eat
+        prey = Entity("Prey", x=1, y=1, energy=10, diet='herbivore', size=1, defense=1)
+
+        self.universe.entities = [predator, prey]
+
+        # Mock random.random for escape chance so the prey gets eaten
+        with unittest.mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            self.universe.tick()
+
+        # Prey should be dead
+        self.assertNotIn(prey, self.universe.entities)
+        self.assertIn(predator, self.universe.entities)
+
+        # The predator should have gained energy from eating
+        self.assertGreater(predator.energy, 50 - predator.size)
+
+    def test_is_sand_predator_mutation(self):
+        from src.universe.engine import Entity
+        import unittest.mock
+
+        self.universe.mutation_chance = 1.0
+        parent = Entity("Parent", x=1, y=1, energy=100, max_age=100, size=1, lays_eggs=False)
+        parent.reproduction_threshold = 10
+        self.universe.add_entity(parent)
+
+        # Mock random.choice to always pick is_sand_predator from attributes during reproduction
+        with unittest.mock.patch('random.random', side_effect=lambda: 0.0):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.generation == 1]
+        self.assertTrue(len(children) > 0, "No child was born")
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_sand_predator', False), "Child did not inherit/mutate is_sand_predator")
