@@ -457,3 +457,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_snow_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `snow` terrain.
 - [x] Stabilized flaky tests test_is_moon_bather_night_bonus, test_is_quicksand_dancer_mutation, and test_predator_adaptation by ensuring deterministic initial state and correct reproduction configuration.
 - [x] Implemented `is_ice_predator`, `is_ash_predator`, `is_mud_predator`, and `is_grass_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking on their respective terrains.
+
+- [x] Implemented `is_lava_predator`, `is_wall_predator`, `is_web_predator`, and `is_shelter_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking on their respective terrains.
