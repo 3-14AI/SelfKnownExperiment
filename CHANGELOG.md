@@ -23,6 +23,7 @@
 ## [Unreleased]
 ### New Features
 ### Added
+- Implemented `is_ice_predator`, `is_ash_predator`, `is_mud_predator`, and `is_grass_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking on their respective terrains.
 - `is_deep_water_predator` trait: Entities with this trait gain an attack multiplier of 1.5x when attacking on `deep-water` terrain.
 - Added missing genetic mutation unit test and visualizer test for `is_quicksand_strider` trait.
 - Implemented `is_mud_strider` trait. Entities with this trait consume 0 stamina when moving on mud terrain and gain a defense bonus while on mud.
