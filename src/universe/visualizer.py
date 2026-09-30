@@ -280,6 +280,18 @@ class CLIVisualizer:
                         char = 'Õ'
                     elif getattr(entity, 'is_water_predator', False):
                         char = 'Ë'
+                    elif getattr(entity, 'is_ice_predator', False):
+                        char = 'Î'
+                    elif getattr(entity, 'is_ash_predator', False):
+                        char = 'Ä'
+                    elif getattr(entity, 'is_mud_predator', False):
+                        char = 'M'
+                    elif getattr(entity, 'is_grass_predator', False):
+                        char = 'G'
+                    elif getattr(entity, 'is_sand_predator', False):
+                        char = 'Ö'
+                    elif getattr(entity, 'is_snow_predator', False):
+                        char = 'E'
                     elif getattr(entity, 'is_cannibalistic', False):
                         char = 'J'
                     elif getattr(entity, 'is_solitary', False):

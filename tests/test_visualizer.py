@@ -2486,6 +2486,60 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('õ', output.lower(), "Level 1 entity with is_deep_water_predator should render as 'õ'")
 
+    def test_is_sand_predator_rendering(self):
+        universe = Universe(1, 1)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("SandPredatorEntity", x=0, y=0, size=1)
+        entity.is_sand_predator = True
+        universe.entities.append(entity)
+        output = visualizer.render()
+        self.assertIn('ö', output.lower(), "Level 1 entity with is_sand_predator should render as 'ö'")
+
+    def test_is_snow_predator_rendering(self):
+        universe = Universe(1, 1)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("SnowPredatorEntity", x=0, y=0, size=1)
+        entity.is_snow_predator = True
+        universe.entities.append(entity)
+        output = visualizer.render()
+        self.assertIn('e', output.lower(), "Level 1 entity with is_snow_predator should render as 'e'")
+
+    def test_is_ice_predator_rendering(self):
+        universe = Universe(1, 1)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("IcePredatorEntity", x=0, y=0, size=1)
+        entity.is_ice_predator = True
+        universe.entities.append(entity)
+        output = visualizer.render()
+        self.assertIn('î', output.lower(), "Level 1 entity with is_ice_predator should render as 'î'")
+
+    def test_is_ash_predator_rendering(self):
+        universe = Universe(1, 1)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("AshPredatorEntity", x=0, y=0, size=1)
+        entity.is_ash_predator = True
+        universe.entities.append(entity)
+        output = visualizer.render()
+        self.assertIn('ä', output.lower(), "Level 1 entity with is_ash_predator should render as 'ä'")
+
+    def test_is_mud_predator_rendering(self):
+        universe = Universe(1, 1)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("MudPredatorEntity", x=0, y=0, size=1)
+        entity.is_mud_predator = True
+        universe.entities.append(entity)
+        output = visualizer.render()
+        self.assertIn('m', output.lower(), "Level 1 entity with is_mud_predator should render as 'm'")
+
+    def test_is_grass_predator_rendering(self):
+        universe = Universe(1, 1)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("GrassPredatorEntity", x=0, y=0, size=1)
+        entity.is_grass_predator = True
+        universe.entities.append(entity)
+        output = visualizer.render()
+        self.assertIn('g', output.lower(), "Level 1 entity with is_grass_predator should render as 'g'")
+
     def test_is_water_predator_rendering(self):
         universe = Universe(1, 1)
         visualizer = CLIVisualizer(universe)
