@@ -7644,7 +7644,8 @@ class TestIsMoonBather(unittest.TestCase):
         e = Entity("MoonBather", energy=10, stamina=10, size=1, is_moon_bather=True)
         universe.add_entity(e)
         universe.disease_chance = 0.0
-        universe.tick()
+        with mock.patch('src.universe.engine.random.random', return_value=0.5):
+            universe.tick()
         self.assertEqual(e.energy, 9, "is_moon_bather should grant no bonus during the day")
         self.assertEqual(e.stamina, 12, "is_moon_bather should grant no bonus during the day")
 
@@ -21025,3 +21026,49 @@ class TestSnowPredator(unittest.TestCase):
         children = [e for e in self.universe.entities if e not in (parent, mate)]
         self.assertTrue(len(children) > 0)
         self.assertTrue(children[0].is_snow_predator)
+
+class TestQuicksandPredator(unittest.TestCase):
+    def test_is_quicksand_predator_combat(self):
+        universe = Universe(3, 3)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.quicksands.append(type('Quicksand', (), {'x': 1, 'y': 1, 'duration': 100})())
+
+        predator = Entity("QuicksandPredator", x=1, y=1, is_quicksand_predator=True, energy=30, attack=10, max_stamina=100, stamina=100, size=1, diet='carnivore', is_immune=True, is_relentless=True)
+        prey = Entity("Prey", x=1, y=1, energy=20, defense=0, max_stamina=0, stamina=0, size=1, is_immune=True, temperature_tolerance=100)
+
+        universe.entities = [predator, prey]
+
+        def side_effect(*args, **kwargs):
+            return 0.0
+
+        with mock.patch('src.universe.engine.random.random', side_effect=side_effect):
+            universe.tick()
+
+        self.assertLess(prey.energy, 12, "Predator did not deal the correct 1.5x damage multiplier on quicksand")
+
+    def test_is_quicksand_predator_mutation(self):
+        universe = Universe(3, 3)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+
+        parent = Entity("Parent", x=1, y=1, energy=100, max_stamina=100, stamina=100, size=2, is_immune=True, lays_eggs=False)
+        parent.reproduction_threshold = 50
+        parent.is_quicksand_predator = False
+
+        universe.entities = [parent]
+
+        original_choice = mock.patch('src.universe.engine.random.choice').start()
+        original_choice.side_effect = lambda x: 'is_quicksand_predator' if isinstance(x, list) and 'is_quicksand_predator' in x else (x[0] if isinstance(x, list) else x)
+
+        with mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        mock.patch.stopall()
+
+        offspring = [e for e in universe.entities if e is not parent]
+        self.assertGreater(len(offspring), 0, "Reproduction failed")
+        self.assertTrue(getattr(offspring[0], 'is_quicksand_predator', False), "is_quicksand_predator trait did not mutate correctly")
