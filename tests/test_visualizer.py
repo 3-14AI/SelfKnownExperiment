@@ -2468,6 +2468,14 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('∑', output)
 
 
+    def test_visualize_is_quicksand_predator(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_quicksand_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ξ', output)
+
     def test_is_mountain_predator_rendering(self):
         universe = Universe(1, 1)
         visualizer = CLIVisualizer(universe)
