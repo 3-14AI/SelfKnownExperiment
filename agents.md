@@ -463,3 +463,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_day_predator` and `is_night_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during the day or night, respectively.
 
 - [x] Stabilized flaky mutation tests for `is_parasite_dancer`, `is_grass_walker`, and `is_blizzard_strider`.
+- [x] Implemented visualizer rendering for missing predator traits (`is_day_predator`, `is_night_predator`, `is_spring_predator`, `is_summer_predator`, `is_autumn_predator`, and `is_winter_predator`) in `CLIVisualizer`.

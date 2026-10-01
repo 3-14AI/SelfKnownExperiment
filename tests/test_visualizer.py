@@ -2628,6 +2628,43 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('ᾫ', output)
 
+
+    def test_visualize_is_day_predator(self):
+        universe = Universe(1, 1)
+        universe.add_entity(Entity("Test", 0, 0, is_day_predator=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('Ұ', vis.render())
+
+    def test_visualize_is_night_predator(self):
+        universe = Universe(1, 1)
+        universe.add_entity(Entity("Test", 0, 0, is_night_predator=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('ұ', vis.render())
+
+    def test_visualize_is_spring_predator(self):
+        universe = Universe(1, 1)
+        universe.add_entity(Entity("Test", 0, 0, is_spring_predator=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('Ҳ', vis.render())
+
+    def test_visualize_is_summer_predator(self):
+        universe = Universe(1, 1)
+        universe.add_entity(Entity("Test", 0, 0, is_summer_predator=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('ҳ', vis.render())
+
+    def test_visualize_is_autumn_predator(self):
+        universe = Universe(1, 1)
+        universe.add_entity(Entity("Test", 0, 0, is_autumn_predator=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('Ҵ', vis.render())
+
+    def test_visualize_is_winter_predator(self):
+        universe = Universe(1, 1)
+        universe.add_entity(Entity("Test", 0, 0, is_winter_predator=True))
+        vis = CLIVisualizer(universe)
+        self.assertIn('ҵ', vis.render())
+
     def test_visualize_is_shelter_predator(self):
         universe = Universe(width=1, height=1)
         entity = Entity(name="E", x=0, y=0, size=5, is_shelter_predator=True)
