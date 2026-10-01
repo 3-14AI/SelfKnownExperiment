@@ -2603,5 +2603,38 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('E', output)
 
 
+
+    def test_visualize_is_lava_predator(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_lava_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ᾩ', output)
+
+    def test_visualize_is_wall_predator(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_wall_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ᾪ', output)
+
+    def test_visualize_is_web_predator(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_web_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ᾫ', output)
+
+    def test_visualize_is_shelter_predator(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="E", x=0, y=0, size=5, is_shelter_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ᾬ', output)
+
 if __name__ == '__main__':
     unittest.main()

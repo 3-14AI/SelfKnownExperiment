@@ -286,6 +286,14 @@ class CLIVisualizer:
                         char = 'Ä'
                     elif getattr(entity, 'is_mud_predator', False):
                         char = 'M'
+                    elif getattr(entity, 'is_lava_predator', False):
+                        char = 'ᾩ'
+                    elif getattr(entity, 'is_wall_predator', False):
+                        char = 'ᾪ'
+                    elif getattr(entity, 'is_web_predator', False):
+                        char = 'ᾫ'
+                    elif getattr(entity, 'is_shelter_predator', False):
+                        char = 'ᾬ'
                     elif getattr(entity, 'is_grass_predator', False):
                         char = 'G'
                     elif getattr(entity, 'is_sand_predator', False):
