@@ -460,3 +460,4 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_lava_predator`, `is_wall_predator`, `is_web_predator`, and `is_shelter_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking on their respective terrains.
 - [x] Implemented `is_spring_predator`, `is_summer_predator`, `is_autumn_predator`, and `is_winter_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during their respective seasons.
+- [x] Implemented `is_day_predator` and `is_night_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during the day or night, respectively.
