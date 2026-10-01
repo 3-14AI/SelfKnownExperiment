@@ -294,6 +294,18 @@ class CLIVisualizer:
                         char = 'ᾫ'
                     elif getattr(entity, 'is_shelter_predator', False):
                         char = 'ᾬ'
+                    elif getattr(entity, 'is_day_predator', False):
+                        char = 'Ұ'
+                    elif getattr(entity, 'is_night_predator', False):
+                        char = 'ұ'
+                    elif getattr(entity, 'is_spring_predator', False):
+                        char = 'Ҳ'
+                    elif getattr(entity, 'is_summer_predator', False):
+                        char = 'ҳ'
+                    elif getattr(entity, 'is_autumn_predator', False):
+                        char = 'Ҵ'
+                    elif getattr(entity, 'is_winter_predator', False):
+                        char = 'ҵ'
                     elif getattr(entity, 'is_grass_predator', False):
                         char = 'G'
                     elif getattr(entity, 'is_sand_predator', False):

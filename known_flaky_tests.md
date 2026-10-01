@@ -9,3 +9,4 @@
 - `test_is_cave_dancer_mutation` (test_engine.TestIsCaveDancer)
 
 - `test_is_resilient_stun_recovery` (test_engine.TestIsResilient)
+- `test_grass_glider_mutates` in `tests/test_engine.py`: Failed intermittently with `AssertionError: False is not true`. Flaky mutation test.
