@@ -2562,5 +2562,46 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('ë', output)
 
+
+    def test_visualize_is_spring_predator(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=3, height=3)
+        entity = Entity('Test', x=1, y=1, is_spring_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('E', output)
+
+
+    def test_visualize_is_summer_predator(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=3, height=3)
+        entity = Entity('Test', x=1, y=1, is_summer_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('E', output)
+
+
+    def test_visualize_is_autumn_predator(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=3, height=3)
+        entity = Entity('Test', x=1, y=1, is_autumn_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('E', output)
+
+
+    def test_visualize_is_winter_predator(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=3, height=3)
+        entity = Entity('Test', x=1, y=1, is_winter_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('E', output)
+
+
 if __name__ == '__main__':
     unittest.main()

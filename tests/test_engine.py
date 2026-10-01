@@ -16985,7 +16985,7 @@ class TestIsGrassGlider(unittest.TestCase):
             name="Parent", x=1, y=1, energy=5000, size=15,
             is_ageless=True, is_immune=True, is_pacifist=True,
             is_gluttonous=True, has_blubber=True,
-            is_grass_glider=False
+            is_grass_glider=False, lays_eggs=False
         )
         self.universe.add_entity(parent)
         self.universe.reproduction_threshold = 500
@@ -21072,3 +21072,194 @@ class TestQuicksandPredator(unittest.TestCase):
         offspring = [e for e in universe.entities if e is not parent]
         self.assertGreater(len(offspring), 0, "Reproduction failed")
         self.assertTrue(getattr(offspring[0], 'is_quicksand_predator', False), "is_quicksand_predator trait did not mutate correctly")
+
+class TestIsSpringPredator(unittest.TestCase):
+    def test_is_spring_predator(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.event_chance = 0
+        universe.entities = []
+        universe.terrains = []
+        universe.foods = []
+        universe.localized_events = []
+        universe.time = universe.season_length * 0  # Spring
+
+        predator = Entity(name="Spring Predator", x=1, y=1, energy=50, diet="carnivore", max_stamina=50, stamina=50, size=2, is_spring_predator=True, intelligence=1, attack=2, defense=1)
+        prey = Entity(name="Prey", x=1, y=1, energy=50, size=1, max_stamina=50, stamina=50, defense=1, intelligence=1, camouflage=0.0)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Prevent wandering
+        predator.max_stamina = 0
+        predator.stamina = 0
+        prey.max_stamina = 0
+        prey.stamina = 0
+
+        # We force an escape failure
+        with unittest.mock.patch('random.random', return_value=0.99):
+            universe.tick()
+
+        # Attack should be 1.5x. Original attack=2 * size(2) = 4. 4 * 1.5 = 6.
+        # Defense = 1 * size(1) = 1.
+        # Damage = 6 - 1 = 5.
+        # Original prey energy = 50. Expected prey energy <= 45.
+        self.assertLess(prey.energy, 46, "is_spring_predator should gain 1.5x attack during spring")
+
+    @unittest.mock.patch('random.random')
+    def test_is_spring_predator_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        mock_random.return_value = 0.02
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=20, is_ageless=True, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_spring_predator=False)
+        universe.add_entity(parent)
+        parent.energy = 100
+        parent.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.mutation_chance = 1.0
+
+        universe.tick()
+
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_spring_predator', False) for child in children), "is_spring_predator should be capable of mutating in children")
+
+
+class TestIsSummerPredator(unittest.TestCase):
+    def test_is_summer_predator(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.event_chance = 0
+        universe.entities = []
+        universe.terrains = []
+        universe.foods = []
+        universe.localized_events = []
+        universe.time = universe.season_length * 1  # Summer
+
+        predator = Entity(name="Summer Predator", x=1, y=1, energy=50, diet="carnivore", max_stamina=50, stamina=50, size=2, is_summer_predator=True, intelligence=1, attack=2, defense=1)
+        prey = Entity(name="Prey", x=1, y=1, energy=50, size=1, max_stamina=50, stamina=50, defense=1, intelligence=1, camouflage=0.0)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Prevent wandering
+        predator.max_stamina = 0
+        predator.stamina = 0
+        prey.max_stamina = 0
+        prey.stamina = 0
+
+        # We force an escape failure
+        with unittest.mock.patch('random.random', return_value=0.99):
+            universe.tick()
+
+        self.assertLess(prey.energy, 46, "is_summer_predator should gain 1.5x attack during summer")
+
+    @unittest.mock.patch('random.random')
+    def test_is_summer_predator_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        mock_random.return_value = 0.02
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=20, is_ageless=True, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_summer_predator=False)
+        universe.add_entity(parent)
+        parent.energy = 100
+        parent.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.mutation_chance = 1.0
+
+        universe.tick()
+
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_summer_predator', False) for child in children), "is_summer_predator should be capable of mutating in children")
+
+
+class TestIsAutumnPredator(unittest.TestCase):
+    def test_is_autumn_predator(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.event_chance = 0
+        universe.entities = []
+        universe.terrains = []
+        universe.foods = []
+        universe.localized_events = []
+        universe.time = universe.season_length * 2  # Autumn
+
+        predator = Entity(name="Autumn Predator", x=1, y=1, energy=50, diet="carnivore", max_stamina=50, stamina=50, size=2, is_autumn_predator=True, intelligence=1, attack=2, defense=1)
+        prey = Entity(name="Prey", x=1, y=1, energy=50, size=1, max_stamina=50, stamina=50, defense=1, intelligence=1, camouflage=0.0)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Prevent wandering
+        predator.max_stamina = 0
+        predator.stamina = 0
+        prey.max_stamina = 0
+        prey.stamina = 0
+
+        # We force an escape failure
+        with unittest.mock.patch('random.random', return_value=0.99):
+            universe.tick()
+
+        self.assertLess(prey.energy, 46, "is_autumn_predator should gain 1.5x attack during autumn")
+
+    @unittest.mock.patch('random.random')
+    def test_is_autumn_predator_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        mock_random.return_value = 0.02
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=20, is_ageless=True, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_autumn_predator=False)
+        universe.add_entity(parent)
+        parent.energy = 100
+        parent.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.mutation_chance = 1.0
+
+        universe.tick()
+
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_autumn_predator', False) for child in children), "is_autumn_predator should be capable of mutating in children")
+
+
+class TestIsWinterPredator(unittest.TestCase):
+    def test_is_winter_predator(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        universe = Universe(width=10, height=10, population_limit=0)
+        universe.event_chance = 0
+        universe.entities = []
+        universe.terrains = []
+        universe.foods = []
+        universe.localized_events = []
+        universe.time = universe.season_length * 3  # Winter
+
+        predator = Entity(name="Winter Predator", x=1, y=1, energy=50, diet="carnivore", max_stamina=50, stamina=50, size=2, is_winter_predator=True, intelligence=1, attack=2, defense=1)
+        prey = Entity(name="Prey", x=1, y=1, energy=50, size=1, max_stamina=50, stamina=50, defense=1, intelligence=1, camouflage=0.0)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Prevent wandering
+        predator.max_stamina = 0
+        predator.stamina = 0
+        prey.max_stamina = 0
+        prey.stamina = 0
+
+        # We force an escape failure
+        with unittest.mock.patch('random.random', return_value=0.99):
+            universe.tick()
+
+        self.assertLess(prey.energy, 46, "is_winter_predator should gain 1.5x attack during winter")
+
+    @unittest.mock.patch('random.random')
+    def test_is_winter_predator_mutation(self, mock_random):
+        from src.universe.engine import Universe, Entity
+        mock_random.return_value = 0.02
+        universe = Universe(width=10, height=10, population_limit=100)
+        parent = Entity(name="Parent", x=1, y=1, energy=50, size=20, is_ageless=True, lays_eggs=False, is_parasitic=False, is_vampiric=False, is_winter_predator=False)
+        universe.add_entity(parent)
+        parent.energy = 100
+        parent.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.mutation_chance = 1.0
+
+        universe.tick()
+
+        children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
+        self.assertTrue(len(children) > 0, "Reproduction failed")
+        self.assertTrue(any(getattr(child, 'is_winter_predator', False) for child in children), "is_winter_predator should be capable of mutating in children")
