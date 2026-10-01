@@ -536,3 +536,5 @@ All notable changes to Project Genesis will be documented in this file.
 - Реализован трейт `is_sleep_strider`. Сущности с этим трейтом не тратят выносливость при движении во время сна и получают бонус к защите во время сна.
 - Реализован трейт `is_space_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на местности типа `space`.
 - Implemented `is_forest_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `forest` terrain.
+
+- [x] Implemented `is_spring_predator`, `is_summer_predator`, `is_autumn_predator`, and `is_winter_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during their respective seasons.
