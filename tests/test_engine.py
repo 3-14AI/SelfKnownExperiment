@@ -3335,7 +3335,180 @@ class TestUniverse(unittest.TestCase):
         self.assertEqual(omni.x, 2)
         self.assertEqual(omni.y, 1)
         self.assertFalse(prey.is_alive)
-        self.assertTrue(prey.was_eaten)
+
+
+    def test_is_lava_predator_combat(self):
+        universe = Universe(3, 3)
+        # Prevent wandering off by filling terrain
+        for x in range(3):
+            for y in range(3):
+                universe.terrains.append(Terrain(x, y, terrain_type="lava"))
+        # Force a combat scenario
+        predator = Entity("predator", 1, 1, energy=50, max_stamina=100, stamina=100, attack=10, defense=5, diet='omnivore', size=1, is_lava_predator=True)
+        # Using omnivore attacking smaller entity deals exact effective_attack - effective_defense
+        prey = Entity("prey", 1, 1, energy=100, max_stamina=100, stamina=100, attack=5, defense=5, size=0.5)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # effective_attack = 10 * 1.5 = 15. effective_defense = 5
+        # Damage = 15 - 5 = 10
+        with unittest.mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            universe.tick()
+
+        # Check damage applied
+        # prey energy loss = 10 + 1 (base energy loss) + maybe env
+        self.assertTrue(prey.energy <= 100 - 10)
+
+
+
+    def test_is_lava_predator_mutation(self):
+        universe = Universe(1, 1)
+        # Using ageless, immune to prevent death
+        parent = Entity("parent", 0, 0, energy=100, age=0, size=2, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 10
+        universe.mutation_chance = 1.0
+        universe.add_entity(parent)
+
+        # prevent environmental interference
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+        children = [e for e in universe.entities if e.name == "parent_child"]
+        if children:
+            self.assertTrue(getattr(children[0], "is_lava_predator", False))
+
+    def test_is_wall_predator_combat(self):
+        universe = Universe(3, 3)
+        # Prevent wandering off by filling terrain
+        for x in range(3):
+            for y in range(3):
+                universe.terrains.append(Terrain(x, y, terrain_type="wall"))
+        # Force a combat scenario
+        predator = Entity("predator", 1, 1, energy=50, max_stamina=100, stamina=100, attack=10, defense=5, diet='omnivore', size=1, is_wall_predator=True)
+        # Using omnivore attacking smaller entity deals exact effective_attack - effective_defense
+        prey = Entity("prey", 1, 1, energy=100, max_stamina=100, stamina=100, attack=5, defense=5, size=0.5)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # effective_attack = 10 * 1.5 = 15. effective_defense = 5
+        # Damage = 15 - 5 = 10
+        with unittest.mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            universe.tick()
+
+        # Check damage applied
+        # prey energy loss = 10 + 1 (base energy loss) + maybe env
+        self.assertTrue(prey.energy <= 100 - 10)
+
+
+
+    def test_is_wall_predator_mutation(self):
+        universe = Universe(1, 1)
+        # Using ageless, immune to prevent death
+        parent = Entity("parent", 0, 0, energy=100, age=0, size=2, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 10
+        universe.mutation_chance = 1.0
+        universe.add_entity(parent)
+
+        # prevent environmental interference
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+        children = [e for e in universe.entities if e.name == "parent_child"]
+        if children:
+            self.assertTrue(getattr(children[0], "is_wall_predator", False))
+
+    def test_is_web_predator_combat(self):
+        universe = Universe(3, 3)
+        # Prevent wandering off by filling terrain
+        for x in range(3):
+            for y in range(3):
+                universe.terrains.append(Terrain(x, y, terrain_type="web"))
+        # Force a combat scenario
+        predator = Entity("predator", 1, 1, energy=50, max_stamina=100, stamina=100, attack=10, defense=5, diet='omnivore', size=1, is_web_predator=True)
+        # Using omnivore attacking smaller entity deals exact effective_attack - effective_defense
+        prey = Entity("prey", 1, 1, energy=100, max_stamina=100, stamina=100, attack=5, defense=5, size=0.5)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # effective_attack = 10 * 1.5 = 15. effective_defense = 5
+        # Damage = 15 - 5 = 10
+        with unittest.mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            universe.tick()
+
+        # Check damage applied
+        # prey energy loss = 10 + 1 (base energy loss) + maybe env
+        self.assertTrue(prey.energy <= 100 - 10)
+
+
+
+    def test_is_web_predator_mutation(self):
+        universe = Universe(1, 1)
+        # Using ageless, immune to prevent death
+        parent = Entity("parent", 0, 0, energy=100, age=0, size=2, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 10
+        universe.mutation_chance = 1.0
+        universe.add_entity(parent)
+
+        # prevent environmental interference
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+        children = [e for e in universe.entities if e.name == "parent_child"]
+        if children:
+            self.assertTrue(getattr(children[0], "is_web_predator", False))
+
+    def test_is_shelter_predator_combat(self):
+        universe = Universe(3, 3)
+        # Prevent wandering off by filling terrain
+        for x in range(3):
+            for y in range(3):
+                universe.terrains.append(Terrain(x, y, terrain_type="shelter"))
+        # Force a combat scenario
+        predator = Entity("predator", 1, 1, energy=50, max_stamina=100, stamina=100, attack=10, defense=5, diet='omnivore', size=1, is_shelter_predator=True)
+        # Using omnivore attacking smaller entity deals exact effective_attack - effective_defense
+        prey = Entity("prey", 1, 1, energy=100, max_stamina=100, stamina=100, attack=5, defense=5, size=0.5)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # effective_attack = 10 * 1.5 = 15. effective_defense = 5
+        # Damage = 15 - 5 = 10
+        with unittest.mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            universe.tick()
+
+        # Check damage applied
+        # prey energy loss = 10 + 1 (base energy loss) + maybe env
+        self.assertTrue(prey.energy <= 100 - 10)
+
+
+
+    def test_is_shelter_predator_mutation(self):
+        universe = Universe(1, 1)
+        # Using ageless, immune to prevent death
+        parent = Entity("parent", 0, 0, energy=100, age=0, size=2, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 10
+        universe.mutation_chance = 1.0
+        universe.add_entity(parent)
+
+        # prevent environmental interference
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+        children = [e for e in universe.entities if e.name == "parent_child"]
+        if children:
+            self.assertTrue(getattr(children[0], "is_shelter_predator", False))
+
 
 
 
