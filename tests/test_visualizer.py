@@ -2681,5 +2681,30 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('ᾬ', output)
 
+
+    def test_visualize_is_disease_predator(self):
+        universe = Universe(1, 1)
+        entity = Entity("Predator", x=0, y=0, level=3, is_disease_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Θ', output)
+
+    def test_visualize_is_poison_predator(self):
+        universe = Universe(1, 1)
+        entity = Entity("Predator", x=0, y=0, level=3, is_poison_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ψ', output)
+
+    def test_visualize_is_stun_predator(self):
+        universe = Universe(1, 1)
+        entity = Entity("Predator", x=0, y=0, level=3, is_stun_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ζ', output)
+
 if __name__ == '__main__':
     unittest.main()

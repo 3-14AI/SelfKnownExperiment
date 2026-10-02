@@ -465,3 +465,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Stabilized flaky mutation tests for `is_parasite_dancer`, `is_grass_walker`, and `is_blizzard_strider`.
 - [x] Implemented visualizer rendering for missing predator traits (`is_day_predator`, `is_night_predator`, `is_spring_predator`, `is_summer_predator`, `is_autumn_predator`, and `is_winter_predator`) in `CLIVisualizer`.
 - [x] Implemented `is_quicksand_predator` rendering in `CLIVisualizer`. Entities with this trait are visually represented as 'Ξ' during terminal output.
+- [x] Implemented `is_disease_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking infected entities.
+- [x] Implemented `is_poison_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking poisoned entities.
+- [x] Implemented `is_stun_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking stunned entities.

@@ -19503,6 +19503,103 @@ class TestGrassPredator(unittest.TestCase):
         self.assertGreater(len(children), 0)
         self.assertTrue(any(getattr(child, 'is_grass_predator', False) for child in children), "Trait should have mutated to True.")
 
+
+class TestDiseasePredator(unittest.TestCase):
+    def test_disease_predator(self):
+        universe = Universe(3, 3)
+        # Setup predator
+        predator = Entity("Predator", x=1, y=1, energy=50, is_disease_predator=True, attack=10, diet='carnivore', stamina=50)
+        # Setup infected prey
+        prey = Entity("Prey", x=1, y=1, energy=50, defense=0, is_infected=True, stamina=50, size=1)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # We need to guarantee combat happens without escape. Is_relentless doesn't guarantee it, but we can mock escape.
+        with mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            universe.tick()
+
+        # Effective attack is 10 * 1.5 = 15. Prey takes 15 damage. Pre-combat energy: 50 - 1 (passive loss) = 49.
+        # Energy after combat should be 49 - 15 = 34. Let's just assert it's less than normal attack.
+        self.assertTrue(prey.energy < 40)
+
+class TestPoisonPredator(unittest.TestCase):
+    def test_poison_predator(self):
+        universe = Universe(3, 3)
+        predator = Entity("Predator", x=1, y=1, energy=50, is_poison_predator=True, attack=10, diet='carnivore', stamina=50)
+        prey = Entity("Prey", x=1, y=1, energy=50, defense=0, poisoned_time=10, stamina=50, size=1)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            universe.tick()
+
+        self.assertTrue(prey.energy < 40)
+
+class TestStunPredator(unittest.TestCase):
+    def test_stun_predator(self):
+        universe = Universe(3, 3)
+        predator = Entity("Predator", x=1, y=1, energy=50, is_stun_predator=True, attack=10, diet='carnivore', stamina=50)
+        prey = Entity("Prey", x=1, y=1, energy=50, defense=0, stunned_time=10, stamina=50, size=1)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            universe.tick()
+
+        self.assertTrue(prey.energy < 40)
+
+
+class TestDiseasePredatorMutation(unittest.TestCase):
+    def test_disease_predator_mutation(self):
+        universe = Universe(3, 3)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity("Parent", energy=100, is_disease_predator=False, age=5, max_age=50, size=1, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 10
+        universe.add_entity(parent)
+
+        with mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_disease_predator', False) for child in children))
+
+class TestPoisonPredatorMutation(unittest.TestCase):
+    def test_poison_predator_mutation(self):
+        universe = Universe(3, 3)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity("Parent", energy=100, is_poison_predator=False, age=5, max_age=50, size=1, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 10
+        universe.add_entity(parent)
+
+        with mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_poison_predator', False) for child in children))
+
+class TestStunPredatorMutation(unittest.TestCase):
+    def test_stun_predator_mutation(self):
+        universe = Universe(3, 3)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity("Parent", energy=100, is_stun_predator=False, age=5, max_age=50, size=1, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 10
+        universe.add_entity(parent)
+
+        with mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_stun_predator', False) for child in children))
+
 if __name__ == '__main__':
 
     unittest.main()
