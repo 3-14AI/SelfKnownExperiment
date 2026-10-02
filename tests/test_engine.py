@@ -19600,6 +19600,67 @@ class TestStunPredatorMutation(unittest.TestCase):
         self.assertGreater(len(children), 0)
         self.assertTrue(any(getattr(child, 'is_stun_predator', False) for child in children))
 
+class TestParasitePredator(unittest.TestCase):
+    def test_parasite_predator(self):
+        universe = Universe(3, 3)
+        predator = Entity("Predator", x=1, y=1, energy=50, is_parasite_predator=True, attack=10, diet='carnivore', stamina=50)
+        prey = Entity("Prey", x=1, y=1, energy=50, defense=0, stamina=50, size=1)
+        prey.attached_parasites = [Entity("Parasite", x=1, y=1)]
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            universe.tick()
+
+        self.assertTrue(prey.energy < 40)
+
+class TestSleepPredator(unittest.TestCase):
+    def test_sleep_predator(self):
+        universe = Universe(3, 3)
+        predator = Entity("Predator", x=1, y=1, energy=50, is_sleep_predator=True, attack=10, diet='carnivore', stamina=50)
+        prey = Entity("Prey", x=1, y=1, energy=50, defense=0, is_sleeping=True, stamina=50, size=1)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with mock.patch('src.universe.engine.random.random', side_effect=lambda: 0.99):
+            universe.tick()
+
+        self.assertTrue(prey.energy < 40)
+
+class TestParasitePredatorMutation(unittest.TestCase):
+    def test_parasite_predator_mutation(self):
+        universe = Universe(3, 3)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity("Parent", energy=100, is_parasite_predator=False, age=5, max_age=50, size=1, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 10
+        universe.add_entity(parent)
+
+        with mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_parasite_predator', False) for child in children))
+
+class TestSleepPredatorMutation(unittest.TestCase):
+    def test_sleep_predator_mutation(self):
+        universe = Universe(3, 3)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity("Parent", energy=100, is_sleep_predator=False, age=5, max_age=50, size=1, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
+        parent.reproduction_threshold = 10
+        universe.add_entity(parent)
+
+        with mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_sleep_predator', False) for child in children))
+
 if __name__ == '__main__':
 
     unittest.main()
