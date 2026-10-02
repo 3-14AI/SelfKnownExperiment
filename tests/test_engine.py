@@ -13361,15 +13361,18 @@ class TestMountainDwellerCave(unittest.TestCase):
         self.assertGreaterEqual(entity.energy, initial_energy + 1, "is_mountain_dweller should be protected from storm in cave")
 
 class TestIsWebDweller(unittest.TestCase):
-    def test_is_web_dweller(self):
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_web_dweller(self, mock_random):
+        mock_random.return_value = 0.0
         from src.universe.engine import Universe, Entity, Terrain
         universe = Universe(width=10, height=10, population_limit=0)
         universe.event_chance = 0
+        universe.disease_chance = 0
         universe.entities = []
         universe.terrains = []
         universe.foods = []
 
-        entity = Entity(name="Web Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=0, size=1, is_web_dweller=True, intelligence=1)
+        entity = Entity(name="Web Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=0, size=1, is_web_dweller=True, intelligence=1, is_ageless=True, is_immune=True)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='web'))
         initial_energy = entity.energy
@@ -20309,25 +20312,28 @@ class TestStunStrider(unittest.TestCase):
         self.assertFalse(getattr(prey, 'was_eaten', False))
 
     def test_stun_strider_mutation(self):
-        parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_stun_strider=False)
-        parent.age = 10
-        parent.reproduction_threshold = 10
-
-        self.universe.entities.append(parent)
         self.universe.mutation_chance = 1.0
-        self.universe.event_chance = 0.0
-        self.universe.localized_event_chance = 0.0
-        self.universe.disease_chance = 0.0
+        parent = Entity(name="Parent", x=1, y=1, size=2, energy=20, is_stun_strider=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
 
-        mutated = False
-        for _ in range(50):
-            parent.energy = 1000
-            if len(self.universe.entities) > 10:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            if any(e.is_stun_strider for e in self.universe.entities if e != parent):
-                mutated = True
-                break
+        import random
+        real_randint = random.randint
+        real_random = random.random
+        try:
+            random.randint = lambda a, b: b
+            random.random = lambda: 0.0
+
+            for _ in range(10):
+                self.universe.foods = []
+                self.universe.tick()
+                parent.energy = 5000
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        children = [e for e in self.universe.entities if e.name.startswith("Parent")]
+        self.assertTrue(len(children) > 1, "Parent did not reproduce")
+        mutated = any(getattr(c, 'is_stun_strider') for c in children if c is not parent)
         self.assertTrue(mutated)
 
 class TestSleepStrider(unittest.TestCase):
@@ -21617,6 +21623,209 @@ class TestIsWinterPredator(unittest.TestCase):
 class TestIsStormPredator(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10)
+
+
+    def test_is_earthquake_predator_mutation(self):
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_earthquake_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+
+        import random
+        real_randint = random.randint
+        real_random = random.random
+        try:
+            random.randint = lambda a, b: b
+            random.random = lambda: 0.0
+
+            for _ in range(10):
+                self.universe.foods = []
+                self.universe.tick()
+                parent.energy = 5000
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        children = [e for e in self.universe.entities if e.name.startswith("Parent")]
+        self.assertTrue(len(children) > 1, "Parent did not reproduce")
+        self.assertTrue(any(getattr(c, 'is_earthquake_predator') for c in children if c is not parent), "Trait did not mutate")
+
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_earthquake_predator_combat(self, mock_random):
+        mock_random.return_value = 0.0
+        pred = Entity(name="Pred", x=1, y=1, size=1, diet='carnivore', attack=10, is_earthquake_predator=True, is_relentless=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=2)
+        self.universe.current_event = 'earthquake'
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+        self.universe.tick()
+        expected_damage = int((10 * 1.5) / 2)
+        self.assertTrue(prey.energy < 10)
+
+    def test_is_fire_predator_mutation(self):
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_fire_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+
+        import random
+        real_randint = random.randint
+        real_random = random.random
+        try:
+            random.randint = lambda a, b: b
+            random.random = lambda: 0.0
+
+            for _ in range(10):
+                self.universe.foods = []
+                self.universe.tick()
+                parent.energy = 5000
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        children = [e for e in self.universe.entities if e.name.startswith("Parent")]
+        self.assertTrue(len(children) > 1, "Parent did not reproduce")
+        self.assertTrue(any(getattr(c, 'is_fire_predator') for c in children if c is not parent), "Trait did not mutate")
+
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_fire_predator_combat(self, mock_random):
+        mock_random.return_value = 0.0
+        pred = Entity(name="Pred", x=1, y=1, size=1, diet='carnivore', attack=10, is_fire_predator=True, is_relentless=True, is_volcanic=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=2, is_volcanic=True)
+        from src.universe.engine import LocalizedEvent
+        self.universe.localized_events.append(LocalizedEvent('fire', 1, 1, 10, 10))
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+        self.universe.tick()
+        expected_damage = int((10 * 1.5) / 2)
+        self.assertTrue(prey.energy < 10)
+
+    def test_is_rain_predator_mutation(self):
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_rain_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+
+        import random
+        real_randint = random.randint
+        real_random = random.random
+        try:
+            random.randint = lambda a, b: b
+            random.random = lambda: 0.0
+
+            for _ in range(10):
+                self.universe.foods = []
+                self.universe.tick()
+                parent.energy = 5000
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        children = [e for e in self.universe.entities if e.name.startswith("Parent")]
+        self.assertTrue(len(children) > 1, "Parent did not reproduce")
+        self.assertTrue(any(getattr(c, 'is_rain_predator') for c in children if c is not parent), "Trait did not mutate")
+
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_rain_predator_combat(self, mock_random):
+        mock_random.return_value = 0.0
+        pred = Entity(name="Pred", x=1, y=1, size=1, diet='carnivore', attack=10, is_rain_predator=True, is_relentless=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=2)
+        from src.universe.engine import LocalizedEvent
+        self.universe.localized_events.append(LocalizedEvent('rain', 1, 1, 10, 10))
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+        self.universe.tick()
+        expected_damage = int((10 * 1.5) / 2)
+        self.assertTrue(prey.energy < 10)
+
+    def test_is_volcano_predator_mutation(self):
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_volcano_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+
+        import random
+        real_randint = random.randint
+        real_random = random.random
+        try:
+            random.randint = lambda a, b: b
+            random.random = lambda: 0.0
+
+            for _ in range(10):
+                self.universe.foods = []
+                self.universe.tick()
+                parent.energy = 5000
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        children = [e for e in self.universe.entities if e.name.startswith("Parent")]
+        self.assertTrue(len(children) > 1, "Parent did not reproduce")
+        self.assertTrue(any(getattr(c, 'is_volcano_predator') for c in children if c is not parent), "Trait did not mutate")
+
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_volcano_predator_combat(self, mock_random):
+        mock_random.return_value = 0.0
+        pred = Entity(name="Pred", x=1, y=1, size=1, diet='carnivore', attack=10, is_volcano_predator=True, is_relentless=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=2)
+        self.universe.current_event = 'volcano'
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+        self.universe.tick()
+        expected_damage = int((10 * 1.5) / 2)
+        self.assertTrue(prey.energy < 10)
+
+    def test_is_drought_predator_mutation(self):
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_drought_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+
+        import random
+        real_randint = random.randint
+        real_random = random.random
+        try:
+            random.randint = lambda a, b: b
+            random.random = lambda: 0.0
+
+            for _ in range(10):
+                self.universe.foods = []
+                self.universe.tick()
+                parent.energy = 5000
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        children = [e for e in self.universe.entities if e.name.startswith("Parent")]
+        self.assertTrue(len(children) > 1, "Parent did not reproduce")
+        self.assertTrue(any(getattr(c, 'is_drought_predator') for c in children if c is not parent), "Trait did not mutate")
+
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_drought_predator_combat(self, mock_random):
+        mock_random.return_value = 0.0
+        pred = Entity(name="Pred", x=1, y=1, size=1, diet='carnivore', attack=10, is_drought_predator=True, is_relentless=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=2)
+        self.universe.current_event = 'drought'
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+        self.universe.tick()
+        expected_damage = int((10 * 1.5) / 2)
+        self.assertTrue(prey.energy < 10)
 
     def test_is_storm_predator_mutation(self):
         self.universe.mutation_chance = 1.0

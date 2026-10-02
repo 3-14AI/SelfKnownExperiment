@@ -471,3 +471,9 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Реализован трейт `is_parasite_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на сущностей с паразитами.
 - [x] Реализован трейт `is_sleep_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на спящих сущностей.
 - [x] Implemented `is_storm_predator` and `is_blizzard_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during 'storm' or 'blizzard' events, respectively.
+
+- [x] Implemented `is_earthquake_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'earthquake' event.
+- [x] Implemented `is_fire_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'fire' event.
+- [x] Implemented `is_rain_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'rain' event.
+- [x] Implemented `is_volcano_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'volcano' event.
+- [x] Implemented `is_drought_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'drought' event.

@@ -284,6 +284,16 @@ class CLIVisualizer:
                         char = 'Ḽ'
                     elif getattr(entity, 'is_space_predator', False):
                         char = '∑'
+                    elif getattr(entity, 'is_earthquake_predator', False):
+                        char = 'ℰ'
+                    elif getattr(entity, 'is_fire_predator', False):
+                        char = 'ℱ'
+                    elif getattr(entity, 'is_rain_predator', False):
+                        char = 'ℛ'
+                    elif getattr(entity, 'is_volcano_predator', False):
+                        char = '℣'
+                    elif getattr(entity, 'is_drought_predator', False):
+                        char = 'ℨ'
                     elif getattr(entity, 'is_cave_predator', False):
                         char = 'Ï'
                     elif getattr(entity, 'is_forest_predator', False):

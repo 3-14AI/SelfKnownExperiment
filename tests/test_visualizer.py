@@ -2723,5 +2723,46 @@ class TestCLIVisualizer(unittest.TestCase):
         out = vis.render()
         self.assertIn('Ḽ', out)
 
+
+    def test_visualize_is_earthquake_predator(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_earthquake_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ℰ", output)
+
+    def test_visualize_is_fire_predator(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_fire_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ℱ", output)
+
+    def test_visualize_is_rain_predator(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_rain_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ℛ", output)
+
+    def test_visualize_is_volcano_predator(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_volcano_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("℣", output)
+
+    def test_visualize_is_drought_predator(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity("Test", x=1, y=1, is_drought_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn("ℨ", output)
+
 if __name__ == '__main__':
     unittest.main()
