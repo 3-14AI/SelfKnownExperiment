@@ -541,3 +541,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_forest_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `forest` terrain.
 
 - [x] Implemented `is_spring_predator`, `is_summer_predator`, `is_autumn_predator`, and `is_winter_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during their respective seasons.
+- Engine: Implemented `is_storm_predator` and `is_blizzard_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during 'storm' or 'blizzard' events, respectively.
