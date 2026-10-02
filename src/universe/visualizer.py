@@ -278,6 +278,10 @@ class CLIVisualizer:
                         char = 'ρ'
                     elif getattr(entity, 'is_sleep_predator', False):
                         char = 'η'
+                    elif getattr(entity, 'is_storm_predator', False):
+                        char = 'Ḱ'
+                    elif getattr(entity, 'is_blizzard_predator', False):
+                        char = 'Ḽ'
                     elif getattr(entity, 'is_space_predator', False):
                         char = '∑'
                     elif getattr(entity, 'is_cave_predator', False):

@@ -470,3 +470,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_stun_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking stunned entities.
 - [x] Реализован трейт `is_parasite_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на сущностей с паразитами.
 - [x] Реализован трейт `is_sleep_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на спящих сущностей.
+- [x] Implemented `is_storm_predator` and `is_blizzard_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during 'storm' or 'blizzard' events, respectively.

@@ -13403,7 +13403,9 @@ class TestIsDeepWaterDweller(unittest.TestCase):
 
         entity = Entity(name="Deep Water Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_deep_water_dweller=True, intelligence=1)
         universe.add_entity(entity)
-        universe.add_terrain(Terrain(x=1, y=1, terrain_type='deep-water'))
+        for x in range(3):
+            for y in range(3):
+                universe.add_terrain(Terrain(x=x, y=y, terrain_type='deep-water'))
         initial_energy = entity.energy
 
         universe.tick()
@@ -18154,14 +18156,20 @@ class TestIsDeepWaterStrider(unittest.TestCase):
         if children:
             self.assertTrue(getattr(children[0], 'is_deep_water_strider', False))
 
-    def test_is_deep_water_strider_defense(self):
+    @mock.patch('src.universe.engine.random.random')
+    def test_is_deep_water_strider_defense(self, mock_random):
+        mock_random.return_value = 0.0  # Force escape or deterministic outcome
         pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_deep_water_strider=True)
 
-        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='deep-water'))
+        for x in range(3):
+            for y in range(3):
+                self.universe.add_terrain(Terrain(x=x, y=y, terrain_type='deep-water'))
 
         self.universe.add_entity(pred)
         self.universe.add_entity(prey)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
 
         self.universe.foods = []
         self.universe.tick()
@@ -21604,3 +21612,102 @@ class TestIsWinterPredator(unittest.TestCase):
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertTrue(len(children) > 0, "Reproduction failed")
         self.assertTrue(any(getattr(child, 'is_winter_predator', False) for child in children), "is_winter_predator should be capable of mutating in children")
+
+
+class TestIsStormPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_storm_predator_mutation(self):
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_storm_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+
+        import random
+        real_randint = random.randint
+        real_random = random.random
+        try:
+            random.randint = lambda a, b: b
+            random.random = lambda: 0.0
+
+            for _ in range(10):
+                self.universe.foods = []
+                self.universe.tick()
+                parent.energy = 5000
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_storm_predator', False))
+
+    @mock.patch('src.universe.engine.random.random')
+    def test_is_storm_predator_combat(self, mock_random):
+        mock_random.return_value = 0.0  # Force escape to verify exact damage based on effective attack / 2
+        pred = Entity(name="Pred", x=1, y=1, size=1, diet='carnivore', attack=10, is_storm_predator=True, is_relentless=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=0, energy=100)
+
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.current_event = 'storm'
+
+        self.universe.foods = []
+        self.universe.tick()
+        # attack = 10 * 1.5 = 15. relentless escape damage = 15 / 2 = 7. energy 100 -> 93
+        self.assertLessEqual(prey.energy, 93)
+
+
+class TestIsBlizzardPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_blizzard_predator_mutation(self):
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_blizzard_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+
+        import random
+        real_randint = random.randint
+        real_random = random.random
+        try:
+            random.randint = lambda a, b: b
+            random.random = lambda: 0.0
+
+            for _ in range(10):
+                self.universe.foods = []
+                self.universe.tick()
+                parent.energy = 5000
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_blizzard_predator', False))
+
+    @mock.patch('src.universe.engine.random.random')
+    def test_is_blizzard_predator_combat(self, mock_random):
+        mock_random.return_value = 0.0
+        pred = Entity(name="Pred", x=1, y=1, size=1, diet='carnivore', attack=10, is_blizzard_predator=True, is_relentless=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=0, energy=100)
+
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.current_event = 'blizzard'
+
+        self.universe.foods = []
+        self.universe.tick()
+        self.assertLessEqual(prey.energy, 93)

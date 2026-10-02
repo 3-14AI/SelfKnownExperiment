@@ -2706,5 +2706,22 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('Ζ', output)
 
+
+    def test_visualizer_is_storm_predator(self):
+        universe = Universe(1, 1)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="Test", x=0, y=0, is_storm_predator=True)
+        universe.add_entity(entity)
+        out = vis.render()
+        self.assertIn('Ḱ', out)
+
+    def test_visualizer_is_blizzard_predator(self):
+        universe = Universe(1, 1)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="Test", x=0, y=0, is_blizzard_predator=True)
+        universe.add_entity(entity)
+        out = vis.render()
+        self.assertIn('Ḽ', out)
+
 if __name__ == '__main__':
     unittest.main()
