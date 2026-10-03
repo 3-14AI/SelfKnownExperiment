@@ -486,4 +486,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `fog` localized event, which can occur during autumn and drastically reduces the perception radius of entities within its area of effect.
 - [x] Updated visualizer to render `swamp` terrain as `&` and the new swamp traits with unique characters. Added unit tests for new mechanics.
 - [x] Implemented `is_fog_walker`, `is_fog_glider`, `is_fog_dweller`, `is_fog_dancer`, `is_fog_strider`, and `is_fog_predator` traits. Entities with these traits interact beneficially with `fog` localized events (reduced stamina cost, shelter benefits, energy recovery, and combat bonuses).
-- [x] Implement `is_magnetic_dweller` trait. Entities with this trait treat `magnetic` storms as a shelter, gaining increased defense and energy recovery.
+- [x] Implement `is_magnetic_dweller` trait. Entities with this trait treat `magnetic` storms as a shelter, gaining increased defense and energy recovery, and attract/repel magnetic entities in their radius.

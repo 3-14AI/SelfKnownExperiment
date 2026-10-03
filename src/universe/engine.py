@@ -1530,6 +1530,25 @@ class Universe:
                             entity.energy += transfer
                             break
 
+            if getattr(entity, 'is_magnetic_dweller', False) and entity.is_alive:
+                for other in self.entities:
+                    if other != entity and other.is_alive and getattr(other, 'is_magnetic', False):
+                        dist = abs(other.x - entity.x) + abs(other.y - entity.y)
+                        if dist <= getattr(entity, 'perception_radius', 10) and dist > 0:
+                            # Attract or repel based on distance
+                            dx = 1 if entity.x > other.x else (-1 if entity.x < other.x else 0)
+                            dy = 1 if entity.y > other.y else (-1 if entity.y < other.y else 0)
+                            if dist > 2:
+                                try:
+                                    self.move_entity(other, dx, dy)
+                                except ValueError:
+                                    pass
+                            else:
+                                try:
+                                    self.move_entity(other, -dx, -dy)
+                                except ValueError:
+                                    pass
+
             if getattr(entity, 'is_thief', False) and getattr(entity, 'can_hoard', False) and entity.energy < entity.max_energy * 0.75:
                 for e in self.entities:
                     if e != entity and e.is_alive and getattr(e, 'can_hoard', False) and getattr(e, 'inventory', []):
@@ -1641,6 +1660,8 @@ class Universe:
                             energy_loss = entity.size
                         else:
                             energy_loss = 3 * entity.size if not in_shelter else entity.size
+                        if in_shelter and getattr(entity, 'can_burrow', False) and entity.is_sleeping:
+                            energy_loss = entity.size # Override blizzard penalty if burrowed
                 elif self.current_event == 'earthquake':
                     if getattr(entity, 'is_earthquake_dancer', False):
                         energy_loss = entity.size
