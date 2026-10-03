@@ -2803,5 +2803,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn("ℨ", output)
 
+    def test_is_magnetic_predator(self):
+        universe = Universe(width=5, height=5)
+        visualizer = CLIVisualizer(universe)
+        e = Entity(name="MagneticPred", is_magnetic_predator=True)
+        e.level = 1
+        universe.add_entity(e)
+        output = visualizer.render()
+        self.assertIn('µ', output)
+
 if __name__ == '__main__':
+
     unittest.main()

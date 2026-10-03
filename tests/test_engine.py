@@ -19676,7 +19676,65 @@ class TestSleepPredatorMutation(unittest.TestCase):
         self.assertGreater(len(children), 0)
         self.assertTrue(any(getattr(child, 'is_sleep_predator', False) for child in children))
 
+class TestMagneticPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=5, height=5)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_magnetic_predator_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=2, is_magnetic_predator=False)
+        self.universe.add_entity(parent)
+
+        import random
+        original_random = random.random
+        original_choice = random.choice
+
+        try:
+            parent.reproduction_threshold = 10
+            self.universe.population_limit = 100
+
+            with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+                self.universe.tick()
+
+            children = [e for e in self.universe.entities if e.name.endswith("_child")]
+            self.assertTrue(len(children) > 0)
+            child = children[0]
+            self.assertTrue(getattr(child, 'is_magnetic_predator', False))
+        finally:
+            random.random = original_random
+            random.choice = original_choice
+
+    def test_magnetic_predator_attack_bonus(self):
+        predator = Entity("Predator", x=1, y=1, attack=10, size=2, diet='carnivore', is_magnetic_predator=True, max_stamina=50, stamina=50)
+        prey = Entity("Prey", x=1, y=1, defense=10, size=1, energy=100, is_immune=True)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        self.universe.current_event = 'storm'
+        self.universe.event_remaining_time = 5
+        self.universe.foods = []
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.5):
+            self.universe.tick()
+
+        self.assertTrue(getattr(prey, 'was_eaten', False))
+
+        self.universe.entities.clear()
+        predator2 = Entity("Predator2", x=1, y=1, attack=10, size=2, diet='carnivore', is_magnetic_predator=True, max_stamina=50, stamina=50)
+        prey2 = Entity("Prey2", x=1, y=1, defense=10, size=1, energy=100, is_immune=True)
+        self.universe.add_entity(predator2)
+        self.universe.add_entity(prey2)
+        self.universe.current_event = 'none'
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.45):
+            self.universe.tick()
+
+        self.assertFalse(getattr(prey2, 'was_eaten', False))
+
 if __name__ == '__main__':
+
 
     unittest.main()
 
@@ -22029,7 +22087,8 @@ class TestSwampMechanics(unittest.TestCase):
         # energy loss is reduced by 2
         self.assertTrue(e_dweller.energy > 9)
 
-    def test_fog_event(self):
+    @unittest.mock.patch('src.universe.engine.random.random', return_value=0.5)
+    def test_fog_event(self, _mock_random):
         self.universe.time = self.universe.season_length * 2  # Autumn
         self.universe.localized_event_chance = 1.0
         with unittest.mock.patch('src.universe.engine.random.choice', return_value='fog'):

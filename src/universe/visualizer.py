@@ -763,6 +763,8 @@ class CLIVisualizer:
                         char = 'r'
                     elif getattr(entity, 'is_magnetic_dweller', False):
                         char = 'm'
+                    elif getattr(entity, 'is_magnetic_predator', False):
+                        char = 'µ'
                     else:
                         char = 'E'
 
