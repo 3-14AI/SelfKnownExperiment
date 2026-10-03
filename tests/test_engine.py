@@ -4691,6 +4691,8 @@ class TestMedicinalPlants(unittest.TestCase):
         self.universe = Universe(width=10, height=10)
         self.universe.event_chance = 0.0
 
+
+
     def test_medicinal_cures_disease_and_poison(self):
         self.universe.disease_chance = 0.0
         self.universe.event_chance = 0.0
@@ -21967,3 +21969,79 @@ class TestCombatHistoryExport(unittest.TestCase):
             self.assertEqual(rows[1][3], "killed")
 
         os.remove(filename)
+class TestSwampMechanics(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+
+    def test_swamp_traits(self):
+        # test_swamp_walker
+        e_walker = Entity(name="w", is_swamp_walker=True, stamina=50, max_stamina=50)
+        self.universe.add_terrain(Terrain(x=0, y=0, terrain_type='swamp', elevation=0))
+        self.universe.add_terrain(Terrain(x=1, y=0, terrain_type='swamp', elevation=2))
+        e_walker.x, e_walker.y = 0, 0
+        self.universe.entities = [e_walker]
+        self.universe.move_entity(e_walker, 1, 0)
+        # 1 step cost = 1. elevation cost ignored.
+        self.assertEqual(e_walker.stamina, 49)
+
+        # test_swamp_glider
+        e_glider = Entity(name="g", is_swamp_glider=True, stamina=50, max_stamina=50)
+        e_glider.x, e_glider.y = 0, 0
+        self.universe.entities = [e_glider]
+        self.universe.move_entity(e_glider, 1, 0)
+        self.assertEqual(e_glider.stamina, 50)
+
+        # test_swamp_strider
+        e_strider = Entity(name="s", is_swamp_strider=True, stamina=50, max_stamina=50)
+        e_strider.x, e_strider.y = 0, 0
+        self.universe.entities = [e_strider]
+        self.universe.move_entity(e_strider, 1, 0)
+        self.assertEqual(e_strider.stamina, 50)
+
+        # test_swamp_predator
+        predator = Entity(name="pred", is_swamp_predator=True, diet='carnivore', attack=10, energy=20)
+        prey = Entity(name="prey", attack=1, defense=2, energy=20)
+        predator.x, predator.y = 1, 0
+        prey.x, prey.y = 1, 0
+        self.universe.entities = [predator, prey]
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.5):
+            self.universe.tick()
+        # attack=10 * 1.5 = 15. effective_defense = 2. damage = 13.
+        # prey energy = 20 - 13 = 7. (or slightly lower due to base energy loss)
+        self.assertTrue(prey.energy < 10)
+
+        # test_swamp_dancer
+        e_dancer = Entity(name="d", is_swamp_dancer=True, energy=10, size=1)
+        e_dancer.x, e_dancer.y = 1, 0
+        self.universe.entities = [e_dancer]
+        self.universe.tick()
+        self.assertTrue(e_dancer.energy > 10)
+
+        # test_swamp_dweller
+        e_dweller = Entity(name="dw", is_swamp_dweller=True, energy=10, size=1)
+        e_dweller.x, e_dweller.y = 1, 0
+        self.universe.entities = [e_dweller]
+        self.universe.tick()
+        # energy loss is reduced by 2
+        self.assertTrue(e_dweller.energy > 9)
+
+    def test_fog_event(self):
+        self.universe.time = self.universe.season_length * 2  # Autumn
+        self.universe.localized_event_chance = 1.0
+        with unittest.mock.patch('src.universe.engine.random.choice', return_value='fog'):
+            self.universe.tick()
+        self.assertTrue(any(e.event_type == 'fog' for e in self.universe.localized_events))
+
+        # Test perception reduction
+        fog_event = next(e for e in self.universe.localized_events if e.event_type == 'fog')
+        fog_event.x, fog_event.y = 5, 5
+        e = Entity(name="e", perception_radius=10, energy=20)
+        e.x, e.y = fog_event.x, fog_event.y
+        self.universe.entities = [e]
+        food = Food(x=fog_event.x + 2, y=fog_event.y, energy=10)
+        self.universe.add_food(food)
+        self.universe.tick()
+        # Should not be able to see the food because perception is 1
+        self.assertEqual(e.x, fog_event.x)
+        self.assertEqual(e.y, fog_event.y)
