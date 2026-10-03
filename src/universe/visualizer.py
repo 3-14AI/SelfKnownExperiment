@@ -749,6 +749,20 @@ class CLIVisualizer:
                         char = 'Ȁ'
                     elif getattr(entity, 'is_swamp_predator', False):
                         char = 'ȁ'
+                    elif getattr(entity, 'is_fog_predator', False):
+                        char = 'f'
+                    elif getattr(entity, 'is_fog_glider', False):
+                        char = 'g'
+                    elif getattr(entity, 'is_fog_walker', False):
+                        char = 'w'
+                    elif getattr(entity, 'is_fog_dweller', False):
+                        char = 'd'
+                    elif getattr(entity, 'is_fog_dancer', False):
+                        char = 'a'
+                    elif getattr(entity, 'is_fog_strider', False):
+                        char = 'r'
+                    elif getattr(entity, 'is_magnetic_dweller', False):
+                        char = 'm'
                     else:
                         char = 'E'
 

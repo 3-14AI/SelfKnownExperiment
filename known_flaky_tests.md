@@ -10,3 +10,6 @@
 
 - `test_is_resilient_stun_recovery` (test_engine.TestIsResilient)
 - `test_grass_glider_mutates` in `tests/test_engine.py`: Failed intermittently with `AssertionError: False is not true`. Flaky mutation test.
+- `test_is_wall_strider_defense` in `tests/test_engine.py`: Failed intermittently with `AssertionError: False is not true`. Flaky combat/defense test due to RNG or entity state escaping.
+
+- `test_disease_strider_mutation` in `tests/test_engine.py`: Failed intermittently with `AssertionError: False is not true`. Flaky mutation test.

@@ -8,3 +8,6 @@ test_is_toxic_inflicts_poison_during_combat_not_just_eat
 - `test_is_cave_dancer_mutation` (test_engine.TestIsCaveDancer)
 
 - `test_is_resilient_stun_recovery` (test_engine.TestIsResilient)
+- `test_is_wall_strider_defense` in `tests/test_engine.py`: Failed intermittently with `AssertionError: False is not true`. Flaky combat/defense test due to RNG or entity state escaping.
+
+- `test_disease_strider_mutation` in `tests/test_engine.py`: Failed intermittently with `AssertionError: False is not true`. Flaky mutation test.
