@@ -487,3 +487,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Updated visualizer to render `swamp` terrain as `&` and the new swamp traits with unique characters. Added unit tests for new mechanics.
 - [x] Implemented `is_fog_walker`, `is_fog_glider`, `is_fog_dweller`, `is_fog_dancer`, `is_fog_strider`, and `is_fog_predator` traits. Entities with these traits interact beneficially with `fog` localized events (reduced stamina cost, shelter benefits, energy recovery, and combat bonuses).
 - [x] Implement `is_magnetic_dweller` trait. Entities with this trait treat `magnetic` storms as a shelter, gaining increased defense and energy recovery, and attract/repel magnetic entities in their radius.
+- [x] Implement `is_magnetic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'storm' event.
