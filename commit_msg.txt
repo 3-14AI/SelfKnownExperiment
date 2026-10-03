@@ -1,6 +1,0 @@
-test: stabilize flaky tests for is_parasite_dancer and grass traits
-
-- Stabilized `test_grass_walker_mutates` and `test_is_parasite_dancer_mutation` using isolated mocking of `random.random`.
-- Fixed missing genetic mutations for `is_grass_walker` and `is_parasite_dancer` in `src/universe/engine.py`.
-- Fixed `test_is_blizzard_strider_defense` with zeroed events and predictable combat RNG.
-- Updated `known_flaky_tests.md` and `tests/known_flaky_tests.md` to reflect stabilized tests.

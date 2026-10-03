@@ -21920,3 +21920,50 @@ class TestIsBlizzardPredator(unittest.TestCase):
         self.universe.foods = []
         self.universe.tick()
         self.assertLessEqual(prey.energy, 93)
+
+class TestCombatHistoryExport(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_combat_history_recording_and_export(self):
+        from src.universe.engine import Entity
+        import unittest.mock
+        import os
+        import csv
+
+        predator = Entity("Predator", species="Wolf", x=5, y=5, diet='carnivore', energy=50, attack=100)
+        prey = Entity("Prey", species="Rabbit", x=5, y=5, diet='herbivore', energy=50, defense=0, is_fearless=True)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        # Force prey to be eaten
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.5):
+            self.universe.tick()
+
+        self.assertEqual(len(self.universe.combat_history), 1)
+        self.assertEqual(self.universe.combat_history[0][1], "Wolf")
+        self.assertEqual(self.universe.combat_history[0][2], "Rabbit")
+        self.assertEqual(self.universe.combat_history[0][3], "killed")
+
+        # Test export
+        filename = "test_combat_history.csv"
+        if os.path.exists(filename):
+            os.remove(filename)
+
+        self.universe.export_combat_history(filename)
+        self.assertTrue(os.path.exists(filename))
+        self.assertEqual(len(self.universe.combat_history), 0) # Should be cleared
+
+        with open(filename, 'r') as f:
+            reader = csv.reader(f)
+            rows = list(reader)
+            self.assertEqual(len(rows), 2) # header + 1 record
+            self.assertEqual(rows[0], ['tick', 'attacker_species', 'prey_species', 'result', 'attacker_energy', 'prey_energy'])
+            self.assertEqual(rows[1][1], "Wolf")
+            self.assertEqual(rows[1][3], "killed")
+
+        os.remove(filename)

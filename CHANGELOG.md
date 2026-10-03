@@ -26,6 +26,8 @@
 ## [Unreleased]
 ### New Features
 ### Added
+- [x] Refactored predator `effective_attack` modifier logic into a single method `get_predator_multiplier()` in `engine.py`.
+- [x] Implemented a combat history logger that records predator-prey interactions and exports them to a CSV file (`combat_history.csv`) at the end of the simulation.
 - Implemented `is_ice_predator`, `is_ash_predator`, `is_mud_predator`, and `is_grass_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking on their respective terrains.
 - `is_deep_water_predator` trait: Entities with this trait gain an attack multiplier of 1.5x when attacking on `deep-water` terrain.
 - Added missing genetic mutation unit test and visualizer test for `is_quicksand_strider` trait.

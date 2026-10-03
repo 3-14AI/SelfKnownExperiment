@@ -477,3 +477,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_rain_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'rain' event.
 - [x] Implemented `is_volcano_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'volcano' event.
 - [x] Implemented `is_drought_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'drought' event.
+
+- [x] Refactored predator `effective_attack` modifier logic into a single method `get_predator_multiplier()` in `engine.py`.
+- [x] Implemented a combat history logger that records predator-prey interactions and exports them to a CSV file (`combat_history.csv`) at the end of the simulation.

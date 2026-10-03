@@ -1,4 +1,6 @@
 import random
+import csv
+import os
 
 class Food:
     def __init__(self, x=0, y=0, energy=5, plant_type='generic', toxicity=0, age=0, max_age=100, hatch_entity=None):
@@ -521,6 +523,7 @@ class Universe:
         self.scent_trails = {}
         self.quicksands = []
         self.disease_chance = disease_chance
+        self.combat_history = []
 
     @property
     def is_day(self):
@@ -545,6 +548,17 @@ class Universe:
             raise ValueError(f"Food out of bounds: ({food.x}, {food.y})")
 
         self.foods.append(food)
+
+
+    def export_combat_history(self, filename='combat_history.csv'):
+        file_exists = os.path.isfile(filename)
+        with open(filename, 'a', newline='') as f:
+            writer = csv.writer(f)
+            if not file_exists:
+                writer.writerow(['tick', 'attacker_species', 'prey_species', 'result', 'attacker_energy', 'prey_energy'])
+            for record in self.combat_history:
+                writer.writerow(record)
+        self.combat_history = []  # Clear after export
 
     def add_temperature_zone(self, zone):
         self.temperature_zones.append(zone)
@@ -4721,6 +4735,7 @@ class Universe:
                             prey_to_eat.energy = max(0, prey_to_eat.energy - 1)
                             if getattr(entity, 'is_relentless', False):
                                 prey_to_eat.energy = max(0, prey_to_eat.energy - int(effective_attack / 2))
+                            self.combat_history.append([self.time, entity.species, prey_to_eat.species, 'escaped', entity.energy, prey_to_eat.energy])
 
                             # Prey gains experience from surviving
                             prey_to_eat.defense += 0.5
@@ -4752,6 +4767,7 @@ class Universe:
 
                             prey_to_eat.energy = 0 # Kill prey
                             prey_to_eat.was_eaten = True
+                            self.combat_history.append([self.time, entity.species, prey_to_eat.species, 'killed', entity.energy, prey_to_eat.energy])
 
             if entity.is_alive and entity.diet in ['herbivore', 'scavenger', 'omnivore'] and not getattr(entity, 'is_scentless', False):
                 self.scent_trails[(entity.x, entity.y)] = 40 if getattr(entity, 'is_smelly', False) else 20
