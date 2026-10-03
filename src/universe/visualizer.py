@@ -41,6 +41,8 @@ class CLIVisualizer:
                     grid[terrain.y][terrain.x] = 'c'
                 elif terrain.terrain_type == 'space':
                     grid[terrain.y][terrain.x] = 'p'
+                elif terrain.terrain_type == 'swamp':
+                    grid[terrain.y][terrain.x] = '&'
 
         # Add food
         for food in self.universe.foods:
@@ -735,6 +737,18 @@ class CLIVisualizer:
                         char = 'õ'
                     elif getattr(entity, 'is_quicksand_strider', False):
                         char = 'Ö'
+                    elif getattr(entity, 'is_swamp_walker', False):
+                        char = 'Ǽ'
+                    elif getattr(entity, 'is_swamp_glider', False):
+                        char = 'ǽ'
+                    elif getattr(entity, 'is_swamp_dweller', False):
+                        char = 'Ǿ'
+                    elif getattr(entity, 'is_swamp_dancer', False):
+                        char = 'ǿ'
+                    elif getattr(entity, 'is_swamp_strider', False):
+                        char = 'Ȁ'
+                    elif getattr(entity, 'is_swamp_predator', False):
+                        char = 'ȁ'
                     else:
                         char = 'E'
 

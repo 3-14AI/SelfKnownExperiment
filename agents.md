@@ -480,3 +480,8 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Refactored predator `effective_attack` modifier logic into a single method `get_predator_multiplier()` in `engine.py`.
 - [x] Implemented a combat history logger that records predator-prey interactions and exports them to a CSV file (`combat_history.csv`) at the end of the simulation.
+
+- [x] Implemented `swamp` terrain logic.
+- [x] Implemented `is_swamp_walker`, `is_swamp_glider`, `is_swamp_dweller`, `is_swamp_dancer`, `is_swamp_strider`, and `is_swamp_predator` traits. Entities with these traits interact beneficially with `swamp` terrain (reduced stamina cost, shelter benefits, energy recovery, and combat bonuses).
+- [x] Implemented `fog` localized event, which can occur during autumn and drastically reduces the perception radius of entities within its area of effect.
+- [x] Updated visualizer to render `swamp` terrain as `&` and the new swamp traits with unique characters. Added unit tests for new mechanics.

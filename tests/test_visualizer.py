@@ -528,6 +528,45 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('T', output)
 
 
+
+
+    def test_swamp_visualizer(self):
+        from src.universe.engine import Terrain, Entity, Universe
+        universe = Universe(width=10, height=10)
+        from src.universe.visualizer import CLIVisualizer
+        visualizer = CLIVisualizer(universe)
+        universe.add_terrain(Terrain(x=0, y=0, terrain_type='swamp'))
+
+        e_walker = Entity(name="w", is_swamp_walker=True, level=1)
+        e_walker.x, e_walker.y = 1, 0
+
+        e_glider = Entity(name="g", is_swamp_glider=True, level=1)
+        e_glider.x, e_glider.y = 2, 0
+
+        e_dweller = Entity(name="dw", is_swamp_dweller=True, level=1)
+        e_dweller.x, e_dweller.y = 3, 0
+
+        e_dancer = Entity(name="da", is_swamp_dancer=True, level=1)
+        e_dancer.x, e_dancer.y = 4, 0
+
+        e_strider = Entity(name="s", is_swamp_strider=True, level=1)
+        e_strider.x, e_strider.y = 5, 0
+
+        e_predator = Entity(name="p", is_swamp_predator=True, level=1)
+        e_predator.x, e_predator.y = 6, 0
+
+        universe.entities = [e_walker, e_glider, e_dweller, e_dancer, e_strider, e_predator]
+
+        output = visualizer.render()
+        lines = output.split('\n')
+        self.assertEqual(lines[0][0], '&')
+        self.assertEqual(lines[0][1], 'Ǽ')
+        self.assertEqual(lines[0][2], 'ǽ')
+        self.assertEqual(lines[0][3], 'Ǿ')
+        self.assertEqual(lines[0][4], 'ǿ')
+        self.assertEqual(lines[0][5], 'Ȁ')
+        self.assertEqual(lines[0][6], 'ȁ')
+
     def test_visualizer_has_strong_stomach(self):
         universe = Universe(width=5, height=5)
         e = Entity("Strong", x=1, y=1, has_strong_stomach=True, diet="herbivore")
