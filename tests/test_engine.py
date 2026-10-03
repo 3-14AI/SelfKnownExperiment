@@ -8735,6 +8735,7 @@ class TestIsSnowDweller(unittest.TestCase):
         universe.foods = []
         universe.localized_events = []
         entity = Entity(name="Snow Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_snow_dweller=True, intelligence=1)
+        entity.is_sleeping = True # Need to be sleeping to recover energy
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='snow'))
 
@@ -22134,6 +22135,37 @@ class TestIsMagneticDweller(unittest.TestCase):
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
         self.universe.current_event = 'storm'
+
+    def test_is_magnetic_dweller_attraction_repulsion(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.terrains = [Terrain(x, y, terrain_type='grass', elevation=0) for x in range(10) for y in range(10)]
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+        dweller = Entity("Dweller", x=5, y=5, is_magnetic_dweller=True, perception_radius=5)
+        dweller.stamina = 50
+
+        # Should be attracted
+        mag_far = Entity("MagFar", x=2, y=5, is_magnetic=True, max_stamina=50, stamina=50)
+        # Should be repelled
+        mag_near = Entity("MagNear", x=4, y=5, is_magnetic=True, max_stamina=50, stamina=50)
+
+        self.universe.add_entity(dweller)
+        self.universe.add_entity(mag_far)
+        self.universe.add_entity(mag_near)
+
+        # Set can_move True by ensuring they aren't sleeping etc
+        dweller.is_sleeping = False
+        mag_far.is_sleeping = False
+        mag_near.is_sleeping = False
+
+        self.universe.tick()
+
+        # MagFar was at (2, 5), dweller at (5, 5). dx=1, dy=0 -> attracted -> moves to (3, 5)
+        # MagNear was at (4, 5), dweller at (5, 5). dx=1, dy=0 -> repelled -> moves to (3, 5)
+        self.assertTrue(mag_far.x > 2)
+        self.assertTrue(mag_near.x < 4)
 
     def test_is_magnetic_dweller_energy(self):
         entity = Entity("Magnetic Dweller", x=2, y=2, is_magnetic_dweller=True, is_magnetic=True, stamina=50, energy=10)
