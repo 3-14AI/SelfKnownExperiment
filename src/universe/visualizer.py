@@ -765,6 +765,8 @@ class CLIVisualizer:
                         char = 'm'
                     elif getattr(entity, 'is_magnetic_predator', False):
                         char = 'µ'
+                    elif getattr(entity, 'is_sandstorm_dweller', False):
+                        char = 'ţ'
                     else:
                         char = 'E'
 
