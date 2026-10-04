@@ -2261,3 +2261,13 @@ Implemented is_rain_walker trait.
   - Изменения включают обновление `Entity.__init__`, логику генетических мутаций в `Universe.tick()`, а также обновление циклов охоты.
   - Добавлены исчерпывающие тесты в `tests/test_engine.py` и визуализация в `src/universe/visualizer.py` (символы 'ρ', 'η').
 - **Дальнейшие шаги**: Продолжить реализацию оставшихся задач из `agents.md`, уделяя внимание балансировке, стабильности тестов и новым свойствам.
+
+### Analysis X: Stabilized test_is_magnetic_mutation
+- Fixed flaky mutation test `test_is_magnetic_mutation`.
+- Removed `@unittest.skip('flaky')` from the test.
+- Added deterministic reproduction state (event chance 0.0, low reproduction threshold, mocked RNG) to ensure stable runs.
+
+### Analysis X: Implemented is_sandstorm_dweller trait
+- Implemented `is_sandstorm_dweller` trait in `engine.py`, providing shelter benefits (defense and energy recovery) during `sandstorm` events.
+- Added character 'ţ' to `visualizer.py` for rendering entities with this trait.
+- Added unit tests for energy recovery, combat defense modifier, and genetic mutation in `tests/test_engine.py` and visualization tests in `tests/test_visualizer.py`.

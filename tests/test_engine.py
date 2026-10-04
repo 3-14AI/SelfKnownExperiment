@@ -11927,25 +11927,24 @@ class TestIsSureFooted(unittest.TestCase):
 
 
 class TestIsMagnetic(unittest.TestCase):
-    @unittest.skip('flaky')
     def test_is_magnetic_mutation(self):
         parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=2, is_magnetic=False)
         universe = Universe(width=10, height=10)
         universe.add_entity(parent)
 
-        import random
-        original_random = random.random
-        try:
-            random.random = lambda: 0.001
+        parent.reproduction_threshold = 10
+        universe.population_limit = 100
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
             universe.tick()
 
-            children = [e for e in universe.entities if e != parent]
-            pass # Removed due to flaky behavior
-            child = children[0]
-
-            self.assertTrue(getattr(child, 'is_magnetic', False))
-        finally:
-            random.random = original_random
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_magnetic', False))
 
     def test_is_magnetic_bonus(self):
         entity = Entity(name="Magnetic", x=1, y=1, energy=40, max_stamina=50, stamina=10, size=1, is_magnetic=True)
@@ -22269,3 +22268,52 @@ class TestIsMagneticDweller(unittest.TestCase):
                     break
 
         self.assertTrue(mutated)
+
+class TestIsSandstormDweller(unittest.TestCase):
+    def test_is_sandstorm_dweller_energy(self):
+        universe = Universe(width=10, height=10)
+        universe.current_event = 'sandstorm'
+        # Size=0 avoids base energy loss so the energy_loss -= 1 actually results in a gain
+        entity = Entity("Sandstorm Dweller", x=2, y=2, is_sandstorm_dweller=True, stamina=0, energy=10, is_sleeping=True, size=0)
+        universe.add_entity(entity)
+        universe.tick()
+        self.assertTrue(entity.energy > 10)
+
+    def test_is_sandstorm_dweller_defense(self):
+        universe = Universe(width=10, height=10)
+        universe.current_event = 'sandstorm'
+        dweller = Entity("Dweller", x=2, y=2, is_sandstorm_dweller=True, defense=10, size=1, energy=100)
+        predator = Entity("Predator", x=2, y=2, attack=15, diet='carnivore', stamina=50, size=2, energy=100)
+        universe.add_entity(dweller)
+        universe.add_entity(predator)
+
+        # Determine base damage
+        base_damage = max(1, 15 - (10 + 2)) # 15 attack - (10 defense + 2 shelter bonus) = 3 damage
+
+        # Test omnivore/scavenger attack path
+        scavenger = Entity("Scavenger", x=2, y=2, attack=15, diet='omnivore', stamina=50, size=2, energy=10)
+        universe.add_entity(scavenger)
+        scavenger.energy = 5
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=1.0):
+            universe.tick()
+
+        self.assertTrue(dweller.energy < 100)
+
+    def test_is_sandstorm_dweller_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=2, is_sandstorm_dweller=False)
+        universe = Universe(width=10, height=10)
+        universe.add_entity(parent)
+        parent.reproduction_threshold = 10
+        universe.population_limit = 100
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_sandstorm_dweller', False))

@@ -514,6 +514,8 @@ All notable changes to Project Genesis will be documented in this file.
 - [x] Implemented `is_parasite_strider` trait. Entities with this trait consume no stamina when moving while they have attached parasites and gain a defense bonus while they have attached parasites.
 
 ## Next Steps
+- [x] Implemented `is_sandstorm_dweller` trait. Entities with this trait treat `sandstorm` events as a shelter, gaining increased defense and energy recovery. Rendered as 'ţ' in CLI visualizer.
+- [x] Fixed and unskipped flaky mutation test `test_is_magnetic_mutation` by removing un-mocked RNG state leakage and adding proper reproduction configuration.
 - [x] Fixed and unskipped flaky mutation tests for seasonal dancer traits (`is_spring_dancer`, `is_summer_dancer`, `is_autumn_dancer`, `is_winter_dancer`) by ensuring entities survive long enough to reproduce and removing test state leakage.
 
 

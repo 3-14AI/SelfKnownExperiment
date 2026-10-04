@@ -2812,6 +2812,16 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('µ', output)
 
+
+    def test_visualize_is_sandstorm_dweller(self):
+        universe = Universe(width=5, height=5)
+        visualizer = CLIVisualizer(universe)
+        e = Entity(name="Sandstorm Dweller", is_sandstorm_dweller=True)
+        e.level = 1
+        universe.add_entity(e)
+        output = visualizer.render()
+        self.assertIn('ţ', output)
+
 if __name__ == '__main__':
 
     unittest.main()
