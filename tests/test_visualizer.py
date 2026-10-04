@@ -2822,6 +2822,16 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('ţ', output)
 
+
+    def test_visualize_is_sandstorm_predator(self):
+        universe = Universe(width=5, height=5)
+        visualizer = CLIVisualizer(universe)
+        e = Entity(name="SandstormPredator", is_sandstorm_predator=True)
+        e.level = 1
+        universe.add_entity(e)
+        output = visualizer.render()
+        self.assertIn('ø', output)
+
 if __name__ == '__main__':
 
     unittest.main()
