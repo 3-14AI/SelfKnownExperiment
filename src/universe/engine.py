@@ -1036,7 +1036,7 @@ class Universe:
         nearest = None
         min_dist = float('inf')
         for e in self.entities:
-            if e.diet == 'carnivore' and e.is_alive:
+            if e.diet in ['carnivore', 'omnivore'] and e.is_alive and e != entity:
                 dist = abs(e.x - x) + abs(e.y - y)
                 if max_distance is not None:
                     camou = getattr(e, 'camouflage', 0.0)
@@ -4105,6 +4105,16 @@ class Universe:
                                                 target_x, target_y = best_flank
 
                                     path = self.find_path(entity.x, entity.y, target_x, target_y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False), )
+                                    if path and len(path) > 0:
+                                        dx, dy = path[0]
+                                        try:
+                                            self.move_entity(entity, dx, dy)
+                                        except ValueError:
+                                            pass
+                                elif nearest_food:
+                                    # We can fall back to the nearest food since there is no prey
+                                    target_to_chase = nearest_food
+                                    path = self.find_path(entity.x, entity.y, target_to_chase.x, target_to_chase.y, max_distance=effective_perception, memory=entity.memory, is_aquatic=getattr(entity, 'is_aquatic', False), is_flying=getattr(entity, 'is_flying', False), is_amphibious=getattr(entity, 'is_amphibious', False), is_climbing=getattr(entity, 'can_climb', False), is_water_strider=getattr(entity, 'is_water_strider', False), is_wall_strider=getattr(entity, 'is_wall_strider', False), is_deep_water_strider=getattr(entity, 'is_deep_water_strider', False), is_web_strider=getattr(entity, 'is_web_strider', False), )
                                     if path and len(path) > 0:
                                         dx, dy = path[0]
                                         try:
