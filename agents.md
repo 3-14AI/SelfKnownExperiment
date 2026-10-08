@@ -491,3 +491,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implement `is_magnetic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'storm' event.
 
 - [x] Implemented `is_sandstorm_dweller` trait. Entities with this trait treat `sandstorm` events as a shelter, gaining increased defense and energy recovery.
+- [x] Implemented `is_sandstorm_strider` trait. Entities with this trait consume 0 stamina when moving during a 'sandstorm' event and gain a defense bonus while inside a sandstorm.
