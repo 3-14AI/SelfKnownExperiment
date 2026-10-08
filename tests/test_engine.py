@@ -22363,3 +22363,83 @@ class TestIsSandstormDweller(unittest.TestCase):
         self.assertTrue(len(children) > 0)
         child = children[0]
         self.assertTrue(getattr(child, 'is_sandstorm_dweller', False))
+
+class TestIsSandstormStrider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe()
+
+    def test_is_sandstorm_strider_stamina_cost(self):
+        self.universe.entities = []
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        # Normal entity
+        normal = Entity(name="n", x=0, y=0, max_stamina=20, stamina=20, is_sandstorm_strider=False, size=1)
+        # Sandstorm strider entity
+        strider = Entity(name="s", x=0, y=1, max_stamina=20, stamina=20, is_sandstorm_strider=True, size=1)
+        self.universe.add_entity(normal)
+        self.universe.add_entity(strider)
+
+        self.universe.current_event = 'sandstorm'
+        self.universe.event_remaining_time = 5
+        self.universe.time = 0
+
+        # force movement
+        normal.energy = 50
+        strider.energy = 50
+        self.universe.tick()
+
+        self.assertTrue(strider.stamina >= normal.stamina)
+        self.assertEqual(strider.stamina, 20)
+
+    @unittest.mock.patch('random.random')
+    def test_is_sandstorm_strider_mutation(self, mock_random):
+        self.universe.entities = []
+        self.universe.population_limit = 100
+        self.universe.energy_global = 100
+
+        # We need a high energy parent, egg layer
+        parent = Entity(name="parent", x=0, y=0, size=5, age=1, max_age=10)
+        parent.energy = 500
+        parent.reproduction_threshold = 10
+        parent.is_sandstorm_strider = False
+        parent.lays_eggs = True
+        parent.is_sleeping = False
+        self.universe.add_entity(parent)
+
+        mock_random.return_value = 0.0001
+        self.universe.tick()
+
+        child_egg = None
+        for f in self.universe.foods:
+            if f.plant_type == 'egg':
+                child_egg = f
+                break
+
+        self.assertIsNotNone(child_egg)
+        self.assertTrue(child_egg.hatch_entity.is_sandstorm_strider)
+
+    def test_is_sandstorm_strider_defense_bonus(self):
+        self.universe.entities = []
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.current_event = 'sandstorm'
+
+        # Test omnivore path for deterministic damage
+        predator = Entity(name="pred", x=0, y=0, size=2, diet='omnivore', attack=10)
+        predator.energy = 5
+        predator.stamina = 50
+
+        prey = Entity(name="prey", x=0, y=0, size=1, diet='herbivore', is_sandstorm_strider=True)
+        prey.energy = 100
+        prey.stamina = 50
+        prey.defense = 0
+
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=1.0):
+            self.universe.tick()
+
+        self.assertTrue(prey.energy < 100)
