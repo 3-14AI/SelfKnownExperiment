@@ -19735,6 +19735,42 @@ class TestMagneticPredator(unittest.TestCase):
 
 
 
+class TestIsSandstormDancer(unittest.TestCase):
+    def test_sandstorm_dancer_gains_energy_in_sandstorm(self):
+        from src.universe.engine import Entity, Universe
+        u = Universe(width=10, height=10)
+        e = Entity(name="Sandstorm Dancer", x=1, y=1, energy=10, size=1, is_sandstorm_dancer=True, is_sleeping=True)
+        u.add_entity(e)
+        u.disease_chance = 0.0
+        u.event_chance = 0.0
+        u.localized_event_chance = 0.0
+        u.current_event = 'sandstorm'
+        u.event_duration = 5
+        u.tick()
+        self.assertTrue(e.energy > 10)
+
+    def test_is_sandstorm_dancer_mutation(self):
+        from src.universe.engine import Entity, Universe
+        import unittest.mock
+        u = Universe(width=10, height=10)
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=2, is_sandstorm_dancer=False, lays_eggs=False)
+        u.add_entity(parent)
+        u.population_limit = 10
+        parent.reproduction_threshold = 100
+        u.reproduction_threshold = 10
+        u.mutation_chance = 1.0
+        u.disease_chance = 0.0
+        u.event_chance = 0.0
+        u.localized_event_chance = 0.0
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            u.tick()
+
+        children = [e for e in u.entities if e.name == "Parent_child" or (e.name == "Parent" and e is not parent)]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_sandstorm_dancer', False))
+
+
 if __name__ == '__main__':
 
 
