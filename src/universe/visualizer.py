@@ -767,6 +767,8 @@ class CLIVisualizer:
                         char = 'µ'
                     elif getattr(entity, 'is_sandstorm_predator', False):
                         char = 'ø'
+                    elif getattr(entity, 'is_sandstorm_dancer', False):
+                        char = 'þ'
                     elif getattr(entity, 'is_sandstorm_dweller', False):
                         char = 'ţ'
                     elif getattr(entity, 'is_sandstorm_strider', False):

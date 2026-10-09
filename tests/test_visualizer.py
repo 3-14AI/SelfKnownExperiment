@@ -2823,6 +2823,14 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('µ', output)
 
 
+    def test_visualize_is_sandstorm_dancer(self):
+        universe = Universe(1, 1)
+        visualizer = CLIVisualizer(universe)
+        e = Entity(name="Sandstorm Dancer", is_sandstorm_dancer=True)
+        universe.add_entity(e)
+        output = visualizer.render()
+        self.assertIn('þ', output)
+
     def test_visualize_is_sandstorm_dweller(self):
         universe = Universe(width=5, height=5)
         visualizer = CLIVisualizer(universe)
