@@ -493,3 +493,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_sandstorm_dweller` trait. Entities with this trait treat `sandstorm` events as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sandstorm_strider` trait. Entities with this trait consume 0 stamina when moving during a 'sandstorm' event and gain a defense bonus while inside a sandstorm.
 - [x] Implement `is_sandstorm_dancer` trait. Entities with this trait gain energy when a `sandstorm` event occurs.
+- [x] Implement `is_magnetic_strider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event and gain a defense bonus while inside a storm.
+- [x] Implement `is_magnetic_dancer` trait. Entities with this trait gain energy when a 'storm' event occurs.
