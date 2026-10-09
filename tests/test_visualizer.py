@@ -2874,6 +2874,14 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         output = visualizer.render()
         self.assertIn('ț', output)
+    def test_visualize_is_marsh_predator(self):
+        universe = Universe(width=10, height=10)
+        e = Entity(name="Marsh Predator", is_marsh_predator=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('Ȃ', output)
+
 
 if __name__ == '__main__':
 
