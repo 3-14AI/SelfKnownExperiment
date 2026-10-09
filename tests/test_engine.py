@@ -19858,6 +19858,47 @@ class TestIsMagneticDancer(unittest.TestCase):
         if children:
             self.assertTrue(children[0].is_magnetic_dancer)
 
+
+class TestMarshPredator(unittest.TestCase):
+    def test_is_marsh_predator_combat(self):
+        universe = Universe(3, 3)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        for x in range(3):
+            for y in range(3):
+                universe.terrains.append(Terrain(x, y, terrain_type='mud'))
+
+        predator = Entity("MarshPredator", x=1, y=1, is_marsh_predator=True, energy=30, attack=10, max_stamina=100, stamina=100, size=1, diet='carnivore', is_immune=True, is_relentless=True)
+        prey = Entity("Prey", x=1, y=1, energy=20, defense=0, max_stamina=0, stamina=0, size=1, is_immune=True, temperature_tolerance=100)
+
+        universe.entities = [predator, prey]
+
+        def mock_random(*args, **kwargs):
+            return 0.0
+
+        with mock.patch('src.universe.engine.random.random', side_effect=mock_random):
+            universe.tick()
+
+        self.assertLess(prey.energy, 12, "Predator did not deal the correct 1.5x damage multiplier")
+
+    def test_is_marsh_predator_mutation(self):
+        universe = Universe(3, 3)
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent = Entity("Parent", x=1, y=1, is_marsh_predator=False, energy=100, is_immune=True, lays_eggs=False, size=2, diet='herbivore')
+        parent.reproduction_threshold = 10
+        universe.entities.append(parent)
+
+        with mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_marsh_predator', False) for child in children), "Trait should have mutated to True.")
+
 if __name__ == '__main__':
 
 
