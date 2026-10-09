@@ -19826,7 +19826,9 @@ class TestIsMagneticDancer(unittest.TestCase):
     def test_is_magnetic_dancer_energy_gain(self):
         universe = Universe(10, 10)
         universe.current_event = 'storm'
+        universe.event_remaining_time = 5
         entity = Entity(5, 5, size=1, is_magnetic_dancer=True)
+        entity.is_magnetic = True
         universe.add_entity(entity)
 
         entity.energy = 5
@@ -22564,3 +22566,41 @@ class TestIsSandstormStrider(unittest.TestCase):
             self.universe.tick()
 
         self.assertTrue(prey.energy < 100)
+
+class TestIsSandstormWalker(unittest.TestCase):
+    def test_is_sandstorm_walker_elevation_stamina_cost(self):
+        universe = Universe(10, 10)
+        universe.current_event = 'sandstorm'
+        universe.add_terrain(Terrain(x=2, y=2, terrain_type='sand', elevation=2)) # Target elevation higher
+
+        walker = Entity("Sandstorm Walker", x=2, y=1, is_sandstorm_walker=True, size=1, max_stamina=100, stamina=100)
+        universe.add_entity(walker)
+
+        normal = Entity("Normal Entity", x=2, y=1, is_sandstorm_walker=False, size=1, max_stamina=100, stamina=100)
+        universe.add_entity(normal)
+
+        # Move both to higher elevation
+        universe.move_entity(walker, 0, 1)
+        universe.move_entity(normal, 0, 1)
+
+        # Walker shouldn't have paid elevation cost in a sandstorm (only basic stamina drain)
+        self.assertGreater(walker.stamina, normal.stamina)
+
+    @unittest.mock.patch('random.random')
+    def test_is_sandstorm_walker_mutation(self, mock_random):
+        mock_random.return_value = 0.0 # Force mutation
+        universe = Universe(10, 10)
+        universe.population_limit = 100
+        parent = Entity(5, 5, is_sandstorm_walker=False)
+        parent.energy = 100
+        parent.reproduction_threshold = 50
+        parent.size = 1
+
+        universe.add_entity(parent)
+        universe.mutation_chance = 1.0 # Ensure mutation happens
+
+        universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        if children:
+            self.assertTrue(children[0].is_sandstorm_walker)

@@ -495,3 +495,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implement `is_sandstorm_dancer` trait. Entities with this trait gain energy when a `sandstorm` event occurs.
 - [x] Implement `is_magnetic_strider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event and gain a defense bonus while inside a storm.
 - [x] Implement `is_magnetic_dancer` trait. Entities with this trait gain energy when a 'storm' event occurs.
+- [x] Implemented `is_sandstorm_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a sandstorm event. Fixed test `test_is_magnetic_dancer_energy_gain`.
+- [ ] Implement `is_marsh_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `mud` or `water` terrain.
