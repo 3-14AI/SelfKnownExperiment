@@ -2850,6 +2850,31 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('ø', output)
 
+
+    def test_visualize_is_sandstorm_strider(self):
+        universe = Universe(width=10, height=10)
+        e = Entity(name="Sandstorm Strider", is_sandstorm_strider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('ş', output)
+
+    def test_visualize_is_magnetic_strider(self):
+        universe = Universe(width=10, height=10)
+        e = Entity(name="Magnetic Strider", is_magnetic_strider=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('š', output)
+
+    def test_visualize_is_magnetic_dancer(self):
+        universe = Universe(width=10, height=10)
+        e = Entity(name="Magnetic Dancer", is_magnetic_dancer=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('ț', output)
+
 if __name__ == '__main__':
 
     unittest.main()
