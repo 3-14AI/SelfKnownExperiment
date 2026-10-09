@@ -722,7 +722,7 @@ class CLIVisualizer:
                     elif getattr(entity, 'is_space_dancer', False):
                         char = 'Ş'
                     elif getattr(entity, 'is_symbiotic', False):
-                        char = 'ş'
+                        char = 'ẃ'
                     elif getattr(entity, 'is_hive_mind', False):
                         char = 'ĥ'
                     elif getattr(entity, 'is_rain_strider', False):
@@ -765,6 +765,10 @@ class CLIVisualizer:
                         char = 'm'
                     elif getattr(entity, 'is_magnetic_predator', False):
                         char = 'µ'
+                    elif getattr(entity, 'is_magnetic_strider', False):
+                        char = 'š'
+                    elif getattr(entity, 'is_magnetic_dancer', False):
+                        char = 'ț'
                     elif getattr(entity, 'is_sandstorm_predator', False):
                         char = 'ø'
                     elif getattr(entity, 'is_sandstorm_dancer', False):
