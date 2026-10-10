@@ -2883,7 +2883,6 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('g', output)
 
-
     def test_visualize_is_magnetic_glider(self):
         e = Entity(name="MagneticGlider", is_magnetic_glider=True)
         u = Universe(1, 1)

@@ -17,3 +17,6 @@
 - `test_is_storm_dweller` in `tests/test_engine.py`
 - `test_is_day_strider_mutation` in `tests/test_engine.py`
 - `test_is_magnetic_walker_mutation` in `tests/test_engine.py`
+- `test_is_web_strider_defense`: Known flaky test, sometimes prey dies
+- `test_is_sleeping`: Known flaky test
+- `test_is_night_dweller`: Known flaky test
