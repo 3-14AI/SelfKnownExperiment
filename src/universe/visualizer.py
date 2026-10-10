@@ -779,6 +779,12 @@ class CLIVisualizer:
                         char = 'ţ'
                     elif getattr(entity, 'is_sandstorm_strider', False):
                         char = 'ş'
+                    elif getattr(entity, 'is_sandstorm_walker', False):
+                        char = 'w'
+                    elif getattr(entity, 'is_magnetic_walker', False):
+                        char = 'm'
+                    elif getattr(entity, 'is_sandstorm_glider', False):
+                        char = 'g'
                     elif getattr(entity, 'is_marsh_predator', False):
                         char = 'Ȃ'
                     else:

@@ -13374,7 +13374,7 @@ class TestIsWebDweller(unittest.TestCase):
         universe.terrains = []
         universe.foods = []
 
-        entity = Entity(name="Web Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=0, size=1, is_web_dweller=True, intelligence=1, is_ageless=True, is_immune=True)
+        entity = Entity(name="Web Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=0, size=0, is_web_dweller=True, intelligence=1, is_ageless=True, is_immune=True)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='web'))
         entity.is_sleeping = True
@@ -19934,10 +19934,14 @@ class TestIsMagneticWalker(unittest.TestCase):
         mock_random.return_value = 0.0
         universe = Universe(10, 10)
         universe.population_limit = 100
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
         parent = Entity(5, 5, is_magnetic_walker=False)
-        parent.energy = 100
+        parent.energy = 5000
         parent.reproduction_threshold = 50
-        parent.size = 1
+        parent.size = 2
+        parent.lays_eggs = False
         universe.add_entity(parent)
         universe.mutation_chance = 1.0
 
@@ -22753,7 +22757,11 @@ class TestIsMagneticGlider(unittest.TestCase):
         mock_random.return_value = 0.0
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
-        parent = Entity(name="Parent", x=5, y=5, is_magnetic_glider=False, size=5, energy=5000, age=5)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity(name="Parent", x=5, y=5, is_magnetic_glider=False, size=2, energy=5000, age=5)
+        parent.reproduction_threshold = 50
         parent.lays_eggs = False
         parent.is_sleeping = False
         universe.add_entity(parent)
