@@ -19899,6 +19899,53 @@ class TestMarshPredator(unittest.TestCase):
         self.assertGreater(len(children), 0)
         self.assertTrue(any(getattr(child, 'is_marsh_predator', False) for child in children), "Trait should have mutated to True.")
 
+class TestIsMagneticWalker(unittest.TestCase):
+    def test_is_magnetic_walker_elevation_stamina_cost(self):
+        universe = Universe(5, 5)
+        universe.current_event = 'storm'
+        universe.event_remaining_time = 5
+        universe.terrains.append(Terrain(2, 1, elevation=1, terrain_type='sand'))
+
+        walker = Entity("Magnetic Walker", x=2, y=1, is_magnetic_walker=True, size=1, max_stamina=100, stamina=100)
+        walker.energy = 50
+        universe.add_entity(walker)
+
+        normal = Entity("Normal Entity", x=2, y=1, is_magnetic_walker=False, size=1, max_stamina=100, stamina=100)
+        normal.energy = 50
+        universe.add_entity(normal)
+
+        universe.move_entity(walker, 0, -1) # move to 2, 0 (elevation 0 -> cost is basic 1 because it's going down or 1)
+        # Actually let's move them UP to elevation 1
+        walker.x, walker.y = 2, 0
+        normal.x, normal.y = 2, 0
+        walker.stamina = 100
+        normal.stamina = 100
+
+        universe.move_entity(walker, 0, 1) # move to 2, 1 (elevation 1). cost should be 1
+        universe.move_entity(normal, 0, 1) # move to 2, 1 (elevation 1). cost should be 2
+
+        self.assertEqual(walker.stamina, 99)
+        self.assertEqual(normal.stamina, 98)
+
+    @unittest.mock.patch('random.random')
+    def test_is_magnetic_walker_mutation(self, mock_random):
+        mock_random.return_value = 0.0
+        universe = Universe(10, 10)
+        universe.population_limit = 100
+        parent = Entity(5, 5, is_magnetic_walker=False)
+        parent.energy = 100
+        parent.reproduction_threshold = 50
+        parent.size = 1
+        universe.add_entity(parent)
+        universe.mutation_chance = 1.0
+
+        universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertTrue(len(children) > 0)
+        if children:
+            self.assertTrue(children[0].is_magnetic_walker)
+
 if __name__ == '__main__':
 
 
