@@ -1667,7 +1667,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         # High defense, 0 attack -> 100% escape chance
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=0)
-        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=100, perception_radius=0)
+        herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=50, defense=100, perception_radius=0)
         universe.add_entity(carnivore)
         universe.add_entity(herbivore)
 
@@ -1685,7 +1685,7 @@ class TestUniverse(unittest.TestCase):
         self.assertIn(herbivore, universe.entities)
         # Both lost energy from struggles and ticks
         self.assertLess(carnivore.energy, 10)
-        self.assertLess(herbivore.energy, 10)
+        self.assertLess(herbivore.energy, 50)
 
 
     def test_combat_defense_eaten(self):
