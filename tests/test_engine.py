@@ -19929,24 +19929,21 @@ class TestIsMagneticWalker(unittest.TestCase):
         self.assertEqual(walker.stamina, 99)
         self.assertEqual(normal.stamina, 98)
 
-    @unittest.mock.patch('random.random')
+    @unittest.mock.patch('src.universe.engine.random.random')
     def test_is_magnetic_walker_mutation(self, mock_random):
         mock_random.return_value = 0.0
         universe = Universe(10, 10)
         universe.population_limit = 100
-        parent = Entity(5, 5, is_magnetic_walker=False)
-        parent.energy = 100
-        parent.reproduction_threshold = 50
-        parent.size = 1
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=5, y=5, is_magnetic_walker=False, size=10, energy=5000, age=5)
+        parent.lays_eggs = False
+        parent.is_sleeping = False
         universe.add_entity(parent)
         universe.mutation_chance = 1.0
-
         universe.tick()
-
-        children = [e for e in universe.entities if e is not parent]
+        children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
-        if children:
-            self.assertTrue(children[0].is_magnetic_walker)
+        self.assertTrue(children[0].is_magnetic_walker)
 
 class TestIsSandstormGlider(unittest.TestCase):
     def setUp(self):
@@ -22753,7 +22750,8 @@ class TestIsMagneticGlider(unittest.TestCase):
         mock_random.return_value = 0.0
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
-        parent = Entity(name="Parent", x=5, y=5, is_magnetic_glider=False, size=5, energy=5000, age=5)
+        universe.reproduction_threshold = 100
+        parent = Entity(name="Parent", x=5, y=5, is_magnetic_glider=False, size=10, energy=5000, age=5)
         parent.lays_eggs = False
         parent.is_sleeping = False
         universe.add_entity(parent)

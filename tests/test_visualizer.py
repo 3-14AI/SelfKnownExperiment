@@ -2860,6 +2860,31 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('ş', output)
 
 
+
+
+    def test_visualize_is_magnetic_walker(self):
+        e = Entity(name="MagneticWalker", is_magnetic_walker=True)
+        universe = Universe(width=10, height=10)
+        universe.entities.append(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('w', output.lower())
+
+    def test_visualize_is_sandstorm_glider(self):
+        e = Entity(name="SandstormGlider", is_sandstorm_glider=True)
+        universe = Universe(width=10, height=10)
+        universe.entities.append(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('g', output.lower())
+
+    def test_visualize_is_sandstorm_walker(self):
+        e = Entity(name="SandstormWalker", is_sandstorm_walker=True)
+        universe = Universe(width=10, height=10)
+        universe.entities.append(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('v', output.lower())
     def test_visualize_is_magnetic_glider(self):
         e = Entity(name="MagneticGlider", is_magnetic_glider=True)
         u = Universe(1, 1)
