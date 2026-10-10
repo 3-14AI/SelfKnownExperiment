@@ -19946,6 +19946,49 @@ class TestIsMagneticWalker(unittest.TestCase):
         if children:
             self.assertTrue(children[0].is_magnetic_walker)
 
+class TestIsSandstormGlider(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.entities = []
+        self.universe.terrains = []
+        self.universe.foods = []
+        self.universe.localized_events = []
+        self.universe.scent_trails = {}
+
+    def test_is_sandstorm_glider_stamina(self):
+        entity_normal = Entity("Normal", x=0, y=0, energy=100, max_stamina=50, stamina=50, is_sandstorm_glider=False)
+        entity_glider = Entity("Glider", x=1, y=0, energy=100, max_stamina=50, stamina=50, is_sandstorm_glider=True)
+        self.universe.entities.extend([entity_normal, entity_glider])
+
+        self.universe.current_event = "sandstorm"
+        self.universe.event_remaining_time = 5
+
+        # Test normal entity stamina consumption (stamina cost 1 per move)
+        self.universe.move_entity(entity_normal, 1, 0)
+        self.assertEqual(entity_normal.stamina, 49)
+
+        # Test glider entity stamina consumption (stamina cost 0 per move during storm)
+        self.universe.move_entity(entity_glider, 1, 0)
+        self.assertEqual(entity_glider.stamina, 50)
+
+    @unittest.mock.patch('random.random')
+    def test_is_sandstorm_glider_mutation(self, mock_random):
+        mock_random.return_value = 0.0 # Force mutation
+        self.universe.population_limit = 100
+        parent = Entity(5, 5, is_sandstorm_glider=False)
+        parent.energy = 100
+        parent.reproduction_threshold = 50
+        parent.size = 1
+
+        self.universe.add_entity(parent)
+        self.universe.mutation_chance = 1.0 # Ensure mutation happens
+
+        self.universe.tick()
+
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(children[0].is_sandstorm_glider)
+
 if __name__ == '__main__':
 
 

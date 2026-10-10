@@ -13,3 +13,5 @@ test_is_toxic_inflicts_poison_during_combat_not_just_eat
 - `test_disease_strider_mutation` in `tests/test_engine.py`: Failed intermittently with `AssertionError: False is not true`. Flaky mutation test.
 - `test_is_web_dweller` in `tests/test_engine.py`
 - `test_is_storm_dweller` in `tests/test_engine.py`
+- `test_is_day_strider_mutation` in `tests/test_engine.py`
+- `test_is_magnetic_walker_mutation` in `tests/test_engine.py`
