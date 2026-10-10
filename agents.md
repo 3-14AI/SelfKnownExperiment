@@ -499,3 +499,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implement `is_marsh_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `mud` or `water` terrain.
 - [x] Implemented `is_magnetic_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'storm' event.
 - [x] Implemented `is_sandstorm_glider` trait. Entities with this trait consume 0 stamina when moving during a 'sandstorm' event.
+- [x] Implemented `is_magnetic_glider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event. Added visualizer rendering and respective tests.

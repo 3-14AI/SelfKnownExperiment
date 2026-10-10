@@ -2859,6 +2859,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('ş', output)
 
+
+    def test_visualize_is_magnetic_glider(self):
+        e = Entity(name="MagneticGlider", is_magnetic_glider=True)
+        u = Universe(1, 1)
+        u.add_entity(e)
+        v = CLIVisualizer(u)
+        output = v.render()
+        self.assertIn('Ń', "".join(output).upper())
+
     def test_visualize_is_magnetic_strider(self):
         universe = Universe(width=10, height=10)
         e = Entity(name="Magnetic Strider", is_magnetic_strider=True)

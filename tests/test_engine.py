@@ -13377,6 +13377,8 @@ class TestIsWebDweller(unittest.TestCase):
         entity = Entity(name="Web Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=0, size=1, is_web_dweller=True, intelligence=1, is_ageless=True, is_immune=True)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='web'))
+        entity.is_sleeping = True
+        entity.energy = 20
         initial_energy = entity.energy
 
         universe.tick()
@@ -22735,3 +22737,29 @@ class TestIsSandstormWalker(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         if children:
             self.assertTrue(children[0].is_sandstorm_walker)
+class TestIsMagneticGlider(unittest.TestCase):
+    def test_is_magnetic_glider_stamina_cost(self):
+        universe = Universe(10, 10)
+        entity = Entity("Glider", x=5, y=5, is_magnetic_glider=True, stamina=10)
+        universe.add_entity(entity)
+        universe.current_event = 'storm'
+
+        initial_stamina = entity.stamina
+        universe.move_entity(entity, 1, 0)
+        self.assertEqual(entity.stamina, initial_stamina, "is_magnetic_glider should consume 0 stamina during a storm")
+
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_magnetic_glider_mutation(self, mock_random):
+        mock_random.return_value = 0.0
+        universe = Universe(width=10, height=10)
+        universe.population_limit = 100
+        parent = Entity(name="Parent", x=5, y=5, is_magnetic_glider=False, size=5, energy=5000, age=5)
+        parent.lays_eggs = False
+        parent.is_sleeping = False
+        universe.add_entity(parent)
+        universe.mutation_chance = 1.0
+        universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Entity should have reproduced")
+        self.assertTrue(getattr(children[0], 'is_magnetic_glider', False), "is_magnetic_glider trait should mutate")
