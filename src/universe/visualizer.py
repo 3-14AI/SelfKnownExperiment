@@ -761,6 +761,8 @@ class CLIVisualizer:
                         char = 'a'
                     elif getattr(entity, 'is_fog_strider', False):
                         char = 'r'
+                    elif getattr(entity, 'is_oasis_dweller', False):
+                        char = 'o'
                     elif getattr(entity, 'is_magnetic_dweller', False):
                         char = 'm'
                     elif getattr(entity, 'is_magnetic_predator', False):

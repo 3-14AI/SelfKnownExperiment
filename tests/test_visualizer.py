@@ -2883,6 +2883,15 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('Ȃ', output)
 
 
+
+    def test_is_oasis_dweller(self):
+        universe = Universe(10, 10)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("Test", x=0, y=0, is_oasis_dweller=True)
+        universe.add_entity(entity)
+        out = visualizer.render()
+        self.assertIn('o', out)
+
 if __name__ == '__main__':
 
     unittest.main()

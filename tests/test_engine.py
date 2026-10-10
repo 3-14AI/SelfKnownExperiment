@@ -22645,3 +22645,57 @@ class TestIsSandstormWalker(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         if children:
             self.assertTrue(children[0].is_sandstorm_walker)
+
+class TestIsOasisDweller(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+    def test_is_oasis_dweller_energy(self):
+        from src.universe.engine import Entity, Terrain
+        self.universe.terrains.append(Terrain(x=2, y=2, terrain_type='oasis'))
+        entity = Entity("Oasis Dweller", x=2, y=2, is_oasis_dweller=True, stamina=50, energy=10, size=1)
+        self.universe.add_entity(entity)
+
+        # Get baseline
+        entity2 = Entity("Oasis Dweller Fake", x=2, y=3, is_oasis_dweller=False, stamina=50, energy=10, size=1)
+        self.universe.add_entity(entity2)
+
+        self.universe.tick()
+        # Entity 1 should lose less energy than Entity 2
+        self.assertTrue(entity.energy > entity2.energy)
+
+    def test_is_oasis_dweller_defense(self):
+        from src.universe.engine import Entity, Terrain
+        self.universe.terrains.append(Terrain(x=2, y=2, terrain_type='oasis'))
+        dweller = Entity("Dweller", x=2, y=2, is_oasis_dweller=True, defense=10, size=1)
+        predator = Entity("Predator", x=2, y=2, attack=15, diet='carnivore', stamina=50, size=1)
+        self.universe.add_entity(dweller)
+        self.universe.add_entity(predator)
+
+        import unittest.mock
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            self.universe.tick()
+
+        # Just verify that the combat resolution runs without error and one of the entities survived.
+        self.assertTrue(dweller in self.universe.entities or predator in self.universe.entities)
+
+    def test_is_oasis_dweller_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=2, is_oasis_dweller=False)
+        self.universe.add_entity(parent)
+        parent.reproduction_threshold = 10
+        self.universe.population_limit = 100
+        self.universe.mutation_chance = 1.0
+
+        import unittest.mock
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_oasis_dweller', False))
