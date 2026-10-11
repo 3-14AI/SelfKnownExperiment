@@ -505,3 +505,4 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_moon_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during the night.
 - [x] Implemented `is_giant_slayer` trait. Entities with this trait gain an attack multiplier of 2.0x when attacking entities larger than themselves.
+- [x] Implemented `is_sun_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during the day.

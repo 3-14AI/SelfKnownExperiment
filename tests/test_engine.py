@@ -22801,6 +22801,48 @@ class TestIsMagneticGlider(unittest.TestCase):
         self.assertTrue(len(children) > 0, "Entity should have reproduced")
         self.assertTrue(getattr(children[0], 'is_magnetic_glider', False), "is_magnetic_glider trait should mutate")
 
+class TestIsSunPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10, day_length=10)
+
+    @unittest.mock.patch('src.universe.engine.random.random', return_value=0.0)
+    def test_is_sun_predator_mutation(self, mock_random):
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=5, is_sun_predator=False)
+        self.universe.add_entity(parent)
+        self.universe.population_limit = 100
+        self.universe.reproduction_threshold = 100
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+        self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name.startswith("Parent") and e is not parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_sun_predator', False))
+
+    @unittest.mock.patch('src.universe.engine.random.random', return_value=0.0)
+    def test_is_sun_predator_combat(self, mock_random):
+        predator = Entity("SunPredator", x=2, y=2, attack=20, diet='carnivore', stamina=50, max_stamina=50, size=2, age=5, energy=100, is_sun_predator=True, max_age=100, is_relentless=True)
+        prey = Entity("Prey", x=2, y=2, defense=1, stamina=50, size=1, age=5, energy=100, max_age=100)
+
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+
+        self.universe.time = self.universe.day_length // 2
+
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+        initial_prey_energy = prey.energy
+
+        self.universe.tick()
+
+        self.assertTrue(prey.energy < initial_prey_energy)
+
+
 class TestIsMoonPredator(unittest.TestCase):
     def setUp(self):
         self.universe = Universe(width=10, height=10, day_length=10)

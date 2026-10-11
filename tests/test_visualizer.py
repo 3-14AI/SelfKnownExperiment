@@ -2479,6 +2479,22 @@ class TestCLIVisualizer(unittest.TestCase):
         output = vis.render()
         self.assertIn('Ě', output)
 
+    def test_visualize_is_sun_predator(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="E", x=0, y=0, size=5, is_sun_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ң', output)
+
+    def test_visualize_is_moon_predator(self):
+        universe = Universe(10, 10)
+        entity = Entity(name="E", x=0, y=0, size=5, is_moon_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Җ', output)
+
     def test_visualize_is_cave_predator(self):
         universe = Universe(1, 1)
         entity = Entity(name="E", x=0, y=0, size=5, is_cave_predator=True)
