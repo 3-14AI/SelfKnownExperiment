@@ -17580,30 +17580,20 @@ class TestIsSpaceGlider(unittest.TestCase):
         self.universe.tick()
         self.assertGreaterEqual(glider.stamina, 49)
 
-    def test_space_glider_mutates(self):
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_space_glider_mutates(self, mock_random):
+        mock_random.return_value = 0.0
         universe = Universe(width=10, height=10)
         universe.mutation_chance = 1.0
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100
-        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_space_glider=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.reproduction_threshold = 500
+        universe.population_limit = 1000
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, size=20, age=5, is_space_glider=False, lays_eggs=False)
         universe.add_entity(parent)
-
-        import random
-        random.seed(42)
-
-        has_mutated = False
-        for _ in range(50):
-            universe.foods = []
-            parent.energy = 1000
-            universe.tick()
-            for entity in universe.entities:
-                if getattr(entity, 'is_space_glider', False):
-                    has_mutated = True
-                    break
-            if has_mutated:
-                break
+        universe.tick()
+        has_mutated = any(getattr(e, 'is_space_glider', False) for e in universe.entities if e is not parent)
         self.assertTrue(has_mutated)
 
 class TestIsSpaceDancer(unittest.TestCase):
@@ -18372,9 +18362,11 @@ class TestIsMountainStrider(unittest.TestCase):
         if children:
             self.assertTrue(getattr(children[0], 'is_mountain_strider', False))
 
-    def test_is_mountain_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_mountain_strider=True)
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_mountain_strider_defense(self, mock_random):
+        mock_random.return_value = 0.0
+        pred = Entity(name="Pred", x=1, y=1, size=1, diet='carnivore', attack=5, is_relentless=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=6, energy=100, is_mountain_strider=True)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='mountain'))
 
@@ -19036,27 +19028,20 @@ class TestQuicksandDancer(unittest.TestCase):
 
         self.assertTrue(e.energy > 10)
 
-    def test_is_quicksand_dancer_mutation(self):
-        parent = Entity('parent', x=5, y=5, energy=1000, size=15, is_quicksand_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
-        self.universe.add_entity(parent)
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_quicksand_dancer_mutation(self, mock_random):
+        mock_random.return_value = 0.0
+        self.universe.mutation_chance = 1.0
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
         self.universe.reproduction_threshold = 500
-        self.universe.mutation_chance = 1.0
-        mutation_occurred = False
-        for _ in range(250):
-            if len(self.universe.entities) > 20:
-                self.universe.entities = [parent]
-            parent.energy = 1000
-            self.universe.tick()
-            for e in self.universe.entities:
-                if e is not parent and getattr(e, 'is_quicksand_dancer', False):
-                    mutation_occurred = True
-                    break
-            if mutation_occurred:
-                break
-        self.assertTrue(mutation_occurred)
+        self.universe.population_limit = 1000
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, size=20, age=5, is_quicksand_dancer=False, lays_eggs=False)
+        self.universe.add_entity(parent)
+        self.universe.tick()
+        has_mutated = any(getattr(e, 'is_quicksand_dancer', False) for e in self.universe.entities if e is not parent)
+        self.assertTrue(has_mutated)
 
 class TestMudStrider(unittest.TestCase):
     def test_is_mud_strider_stamina(self):
@@ -22751,9 +22736,10 @@ class TestIsMagneticGlider(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.population_limit = 100
         universe.reproduction_threshold = 100
-        parent = Entity(name="Parent", x=5, y=5, is_magnetic_glider=False, size=10, energy=5000, age=5)
-        parent.lays_eggs = False
-        parent.is_sleeping = False
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity(name="Parent", x=5, y=5, is_magnetic_glider=False, size=10, energy=5000, age=5, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
         universe.mutation_chance = 1.0
         universe.tick()
@@ -22761,3 +22747,36 @@ class TestIsMagneticGlider(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0, "Entity should have reproduced")
         self.assertTrue(getattr(children[0], 'is_magnetic_glider', False), "is_magnetic_glider trait should mutate")
+
+class TestIsMoonPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10, day_length=10)
+
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_moon_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.0
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_moon_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        self.universe.add_entity(parent)
+        self.universe.tick()
+
+        children = [e for e in self.universe.entities if e.name.startswith("Parent") and e is not parent]
+        self.assertTrue(len(children) > 0, "Parent did not reproduce")
+        self.assertTrue(any(getattr(c, 'is_moon_predator', False) for c in children), "Trait did not mutate")
+
+    @unittest.mock.patch('src.universe.engine.random.random')
+    def test_is_moon_predator_combat(self, mock_random):
+        mock_random.return_value = 0.0
+        # Force night time (day_length=10, time%10=6 >= 5 -> night)
+        self.universe.time = 6
+        pred = Entity(name="Pred", x=1, y=1, size=1, diet='carnivore', attack=10, is_moon_predator=True, is_relentless=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=2)
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+        self.universe.tick()
+        expected_damage = int((10 * 1.5) / 2)
+        self.assertTrue(prey.energy < 10)

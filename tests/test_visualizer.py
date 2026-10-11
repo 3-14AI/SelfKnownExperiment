@@ -2917,6 +2917,15 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('Ȃ', output)
 
 
+
+    def test_visualize_is_moon_predator(self):
+        universe = Universe(width=10, height=10)
+        e = Entity(name="Moon Predator", is_moon_predator=True)
+        universe.add_entity(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('Җ', output)
+
 if __name__ == '__main__':
 
     unittest.main()

@@ -502,3 +502,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_magnetic_glider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event. Added visualizer rendering and respective tests.
 
 - [x] Implemented missing visualizer rendering for `is_magnetic_walker`, `is_sandstorm_glider`, and `is_sandstorm_walker` traits in `CLIVisualizer`.
+
+- [x] Implemented `is_moon_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during the night.
