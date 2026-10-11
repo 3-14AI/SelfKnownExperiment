@@ -117,6 +117,17 @@ class TestCLIVisualizer(unittest.TestCase):
         expected_output = "...\n.X.\n..."
         self.assertEqual(visualizer.render(), expected_output)
 
+
+    def test_render_is_vampiric_predator(self):
+        from src.universe.engine import Entity, Universe
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=3, height=3)
+        entity = Entity("VampPred", x=1, y=1, energy=10, is_vampiric_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        expected_output = "...\n.V.\n..."
+        self.assertEqual(visualizer.render(), expected_output)
+
     def test_render_terrain(self):
         universe = Universe(width=3, height=3)
         universe.add_terrain(Terrain(x=0, y=0, terrain_type='wall'))
