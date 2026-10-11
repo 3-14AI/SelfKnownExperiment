@@ -19973,6 +19973,59 @@ class TestIsSandstormGlider(unittest.TestCase):
         if children:
             self.assertTrue(children[0].is_sandstorm_glider)
 
+class TestIsGiantSlayer(unittest.TestCase):
+    def test_is_giant_slayer_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=2, is_giant_slayer=False)
+        universe.add_entity(parent)
+        universe.population_limit = 100
+        parent.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_giant_slayer', False))
+
+    def test_is_giant_slayer_combat(self):
+        universe = Universe(width=10, height=10)
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.event_chance = 0.0
+
+        # Giant slayer size 1 attacks size 2 (gains 2.0x multiplier, total 20 effective attack vs 15 defense)
+        predator = Entity("Slayer", x=2, y=2, attack=10, diet='carnivore', stamina=50, max_stamina=50, size=1, energy=100, is_giant_slayer=True)
+        # Giant prey size 2, defense 15
+        prey = Entity("Giant", x=2, y=2, defense=15, size=2, age=5, energy=100, is_immune=True)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Test it wins against larger prey due to multiplier
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertTrue(getattr(prey, 'was_eaten', False))
+
+        universe.entities.clear()
+
+        # Slay attempt on equal size prey (should fail as it needs > size)
+        # attack 10 vs defense 15 -> should fail without multiplier
+        predator2 = Entity("Slayer2", x=2, y=2, attack=10, diet='carnivore', stamina=50, max_stamina=50, size=2, age=5, energy=100, is_giant_slayer=True)
+        prey2 = Entity("Giant2", x=2, y=2, defense=15, size=2, age=5, energy=100, is_immune=True)
+        universe.add_entity(predator2)
+        universe.add_entity(prey2)
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertFalse(getattr(prey2, 'was_eaten', False))
+
+
 if __name__ == '__main__':
 
 
