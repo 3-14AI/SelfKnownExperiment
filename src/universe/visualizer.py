@@ -795,6 +795,8 @@ class CLIVisualizer:
                         char = 'Y'
                     elif getattr(entity, 'is_aerial_predator', False):
                         char = 'A'
+                    elif getattr(entity, 'is_apex_predator', False):
+                        char = 'X'
                     else:
                         char = 'E'
 

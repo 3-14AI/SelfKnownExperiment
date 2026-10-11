@@ -20103,7 +20103,78 @@ class TestIsAerialPredator(unittest.TestCase):
         self.assertFalse(getattr(prey_flying, 'was_eaten', False))
 
 
+
+
+
+
+class TestApexPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_apex_predator_combat_bonus(self):
+        # We will test the effective_attack directly by ensuring deterministic kills using is_relentless
+        # is_relentless guarantees prey takes damage equal to effective_attack // 2 even if they escape.
+
+        # Predator (Apex)
+        predator = Entity("Predator", x=1, y=1, energy=50, max_age=50, age=5, size=5, attack=20, defense=10, diet='carnivore', is_apex_predator=True, is_relentless=True)
+        # Carnivore prey. Note that get_preys_at only returns carnivore if we don't skip them, wait...
+        # 'carnivore' is NOT in ['herbivore', 'scavenger', 'omnivore'].
+        # SO carnivores DO NOT target other carnivores UNLESS they are cannibalistic and starving.
+        # Let's make the prey an omnivore, which is a valid prey for get_preys_at.
+
+        omnivore_prey = Entity("OmniPrey", x=1, y=1, energy=12, max_age=50, age=5, size=1, defense=10, diet='omnivore')
+
+        self.universe.add_entity(predator)
+        self.universe.add_entity(omnivore_prey)
+
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.mutation_chance = 0.0
+
+        # with random.random() = 0.0, prey escapes (0.0 < escape_chance is TRUE)
+        # It takes max(0, energy - effective_attack/2)
+        # For omnivore prey: attack = 20 * 1.5 = 30. damage = 15. Energy is 12 - 1 = 11. 11 - 15 = 0. So it dies (energy=0).
+        with unittest.mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        self.assertFalse(omnivore_prey.is_alive)
+
+        # Reset and test herbivore
+        self.universe.entities = []
+        predator2 = Entity("Predator2", x=2, y=2, energy=50, max_age=50, age=5, size=5, attack=20, defense=10, diet='carnivore', is_apex_predator=True, is_relentless=True)
+        # Make it survive 10 damage! 10 damage + 1 escape penalty + 1 base decay = 12 total. So we need energy > 12. Let's use 15.
+        herbivore_prey = Entity("HerbPrey", x=2, y=2, energy=15, max_age=50, age=5, size=1, defense=10, diet='herbivore')
+
+        self.universe.add_entity(predator2)
+        self.universe.add_entity(herbivore_prey)
+
+        # For herbivore prey: attack = 20. damage = 10. Energy is 15. After -1 from escape = 14. 14 - 10 = 4. So it lives.
+        with unittest.mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        self.assertTrue(herbivore_prey.is_alive)
+
+    def test_apex_predator_mutation(self):
+        parent = Entity("Parent", x=1, y=1, energy=250, max_age=50, age=5, size=5, is_apex_predator=False)
+        self.universe.add_entity(parent)
+
+        self.universe.reproduction_threshold = 10
+        self.universe.population_limit = 100
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        children = [e for e in self.universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_apex_predator)
+
 if __name__ == '__main__':
+
 
 
     unittest.main()
