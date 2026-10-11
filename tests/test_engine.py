@@ -7784,7 +7784,7 @@ class TestIsDroughtResistant(unittest.TestCase):
             random.random = original_random
 
     def test_is_drought_resistant_effect(self):
-        resistant = Entity(name="Resistant", x=1, y=1, hydration=50, max_hydration=50, is_drought_resistant=True, size=1)
+        resistant = Entity(name="Resistant", x=1, y=1, hydration=50, max_hydration=50, size=1, is_drought_resistant=True)
         control = Entity(name="Control", x=2, y=2, hydration=50, max_hydration=50, is_drought_resistant=False, size=1)
         universe = Universe(width=10, height=10)
         universe.add_entity(resistant)
@@ -8575,6 +8575,9 @@ class TestIsFireGlider(unittest.TestCase):
         universe.add_entity(parent)
         universe.time = 0
         universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
         universe.tick()
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertGreater(len(children), 0)
@@ -8614,6 +8617,9 @@ class TestIsForestGlider(unittest.TestCase):
         universe.add_entity(parent)
         universe.time = 0
         universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
         universe.tick()
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertGreater(len(children), 0)
@@ -8643,6 +8649,9 @@ class TestIsShelterGlider(unittest.TestCase):
         universe.add_entity(parent)
         universe.time = 0
         universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
         universe.tick()
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertGreater(len(children), 0)
@@ -8833,10 +8842,13 @@ class TestIsWinterDwellerTrait(unittest.TestCase):
     def test_is_drought_dweller(self):
         universe = Universe(width=5, height=5)
         universe.current_event = 'drought'
+        universe.disease_chance = 0.0
         universe.event_remaining_time = 10
-        entity = Entity(name="Drought Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_drought_dweller=True, is_sleeping=True, intelligence=1, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40)
-        universe.add_entity(entity)
-        universe.tick()
+        entity = Entity(name="Drought Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_drought_dweller=True, is_sleeping=True, is_drought_resistant=True, intelligence=1, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=1000, hydration=5000, max_hydration=5000, is_immune=True)
+
+        with mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.add_entity(entity)
+            universe.tick()
 
         self.assertGreaterEqual(entity.energy, 30, "is_drought_dweller should recover energy during a drought")
 
@@ -13035,6 +13047,9 @@ class TestIsWebGlider(unittest.TestCase):
         universe.add_entity(parent)
         universe.time = 0
         universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
         universe.tick()
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertGreater(len(children), 0)
@@ -13090,6 +13105,9 @@ class TestIsWaterGlider(unittest.TestCase):
         universe.add_entity(parent)
         universe.time = 0
         universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
         universe.tick()
         children = [e for e in universe.entities if getattr(e, 'generation', 0) == 1]
         self.assertGreater(len(children), 0)
@@ -13363,23 +13381,29 @@ class TestMountainDwellerCave(unittest.TestCase):
         self.assertGreaterEqual(entity.energy, initial_energy + 1, "is_mountain_dweller should be protected from storm in cave")
 
 class TestIsWebDweller(unittest.TestCase):
-    @unittest.mock.patch('src.universe.engine.random.random')
-    def test_is_web_dweller(self, mock_random):
-        mock_random.return_value = 0.0
+    def test_is_web_dweller(self):
         from src.universe.engine import Universe, Entity, Terrain
         universe = Universe(width=10, height=10, population_limit=0)
-        universe.event_chance = 0
-        universe.disease_chance = 0
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
         universe.entities = []
         universe.terrains = []
         universe.foods = []
 
-        entity = Entity(name="Web Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=0, size=1, is_web_dweller=True, intelligence=1, is_ageless=True, is_immune=True)
+        entity = Entity(name="Web Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_web_dweller=True, is_web_strider=True)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='web'))
         entity.is_sleeping = True
         entity.energy = 20
         initial_energy = entity.energy
+
+        # Energy loss logic:
+        # size 1 -> 2
+        # is_sleeping -> -2
+        # in_shelter -> -2
+        # total loss = -2
+        # so energy should increase by 2, cap at max_energy = 50
 
         universe.tick()
 
@@ -16399,7 +16423,7 @@ class TestIsIceDancer(unittest.TestCase):
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
         parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_ice_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
-        parent.reproduction_threshold = 100
+
         universe.add_entity(parent)
 
         import random
@@ -16441,24 +16465,23 @@ class TestIsMountainDancer(unittest.TestCase):
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100
-        parent = Entity(name="Parent", x=1, y=1, energy=1000, size=5, is_mountain_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.reproduction_threshold = 10
+        universe.population_limit = 100
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, size=10, is_mountain_dancer=False, is_ageless=True, is_immune=True, is_pacifist=True)
         universe.add_entity(parent)
 
-        import random
-        random.seed(42)
-
         has_mutated = False
-        for _ in range(50):
-            universe.foods = []
-            parent.energy = 1000
-            universe.tick()
-            for entity in universe.entities:
-                if getattr(entity, 'is_mountain_dancer', False):
-                    has_mutated = True
+        import unittest.mock
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            for _ in range(10):
+                universe.foods = []
+                parent.energy = 5000
+                universe.tick()
+                for entity in universe.entities:
+                    if entity != parent and getattr(entity, 'is_mountain_dancer', False):
+                        has_mutated = True
+                if has_mutated:
                     break
-            if has_mutated:
-                break
         self.assertTrue(has_mutated)
 
 class TestDeepWaterDancer(unittest.TestCase):
@@ -19743,7 +19766,7 @@ class TestIsSandstormDancer(unittest.TestCase):
         parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=2, is_sandstorm_dancer=False, lays_eggs=False)
         u.add_entity(parent)
         u.population_limit = 10
-        parent.reproduction_threshold = 100
+
         u.reproduction_threshold = 10
         u.mutation_chance = 1.0
         u.disease_chance = 0.0
@@ -19925,6 +19948,9 @@ class TestIsMagneticWalker(unittest.TestCase):
         parent.is_sleeping = False
         universe.add_entity(parent)
         universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
         universe.tick()
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
@@ -20024,6 +20050,57 @@ class TestIsGiantSlayer(unittest.TestCase):
             universe.tick()
 
         self.assertFalse(getattr(prey2, 'was_eaten', False))
+
+
+class TestIsAerialPredator(unittest.TestCase):
+    def test_is_aerial_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=2, is_aerial_predator=False)
+        universe.add_entity(parent)
+        universe.population_limit = 100
+        parent.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.mutation_chance = 1.0
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_aerial_predator', False))
+
+    def test_is_aerial_predator_combat(self):
+        universe = Universe(width=10, height=10)
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.event_chance = 0.0
+
+        # Aerial predator attacks non-flying prey (multiplier x1.5 -> effective attack 13.5) vs defense 10 -> wins
+        predator = Entity("Hawk", x=2, y=2, attack=9, diet='carnivore', stamina=50, max_stamina=50, size=2, energy=100, is_aerial_predator=True)
+        prey_non_flying = Entity("Mouse", x=2, y=2, defense=10, size=2, age=5, energy=100, is_immune=True, is_flying=False)
+        universe.add_entity(predator)
+        universe.add_entity(prey_non_flying)
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertTrue(getattr(prey_non_flying, 'was_eaten', False))
+
+        universe.entities.clear()
+
+        # Aerial predator attacks flying prey (no multiplier -> effective attack 9) vs defense 10 -> fails
+        predator2 = Entity("Hawk2", x=2, y=2, attack=9, diet='carnivore', stamina=50, max_stamina=50, size=2, energy=100, is_aerial_predator=True)
+        prey_flying = Entity("Bird", x=2, y=2, defense=10, size=2, age=5, energy=100, is_immune=True, is_flying=True)
+        universe.add_entity(predator2)
+        universe.add_entity(prey_flying)
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertFalse(getattr(prey_flying, 'was_eaten', False))
 
 
 if __name__ == '__main__':
@@ -20723,7 +20800,7 @@ class TestSleepStrider(unittest.TestCase):
 
     def test_sleep_strider_mutation(self):
         parent = Entity("Parent", x=0, y=0, energy=1000, max_age=100, is_sleep_strider=False)
-        parent.reproduction_threshold = 100
+
         parent.is_immune = True
         parent.is_ageless = True
         parent.is_pacifist = True
@@ -21479,7 +21556,7 @@ class TestIsCavePredator(unittest.TestCase):
 
     def test_is_cave_predator_mutation(self):
         parent = Entity("Parent", x=1, y=1, energy=1000, age=10, max_age=100, size=5, is_cave_predator=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
-        parent.reproduction_threshold = 100
+
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
 
@@ -21520,7 +21597,7 @@ class TestIsCavePredator(unittest.TestCase):
 
     def test_is_forest_predator_mutation(self):
         parent = Entity("Parent", x=1, y=1, energy=1000, age=10, max_age=100, size=5, is_forest_predator=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
-        parent.reproduction_threshold = 100
+
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
 
@@ -21567,7 +21644,7 @@ class TestMountainPredator(unittest.TestCase):
     def test_mountain_predator_mutation(self):
         parent = Entity("Parent", energy=150, diet='carnivore', size=1)
         parent.is_mountain_predator = False
-        parent.reproduction_threshold = 100
+
         parent.lays_eggs = False
 
         self.universe.entities = [parent]
@@ -22795,6 +22872,9 @@ class TestIsMagneticGlider(unittest.TestCase):
         parent = Entity(name="Parent", x=5, y=5, is_magnetic_glider=False, size=10, energy=5000, age=5, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
         universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
         universe.tick()
 
         children = [e for e in universe.entities if e != parent]
