@@ -82,7 +82,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e2)
 
         # Override energy loss by avoiding random behavior, ensure they don't reproduce
-        universe.population_limit = 0
+        universe.population_limit = 100
         universe.reproduction_threshold = 100
         e.intelligence = 1
         e2.intelligence = 1
@@ -4095,7 +4095,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_has_blubber_mechanics(self):
         universe = Universe(10, 10)
-        universe.population_limit = 0
+        universe.population_limit = 100
         universe.reproduction_threshold = 100
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
@@ -4143,7 +4143,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(entity)
 
         # Disable mechanics that drain stamina/hydration to isolate test
-        universe.population_limit = 0
+        universe.population_limit = 100
         universe.reproduction_threshold = 100
         entity.intelligence = 1
         entity.preferred_temperature = 20
@@ -4532,7 +4532,7 @@ class TestUniverse(unittest.TestCase):
         universe.mutation_chance = 0.0
         # Initialize size to 10 so max_energy is 500, avoiding energy cap
         entity = Entity(name="Sleeper", x=5, y=5, size=10, energy=20, max_stamina=50, stamina=10, is_sleeping=True, is_immune=True, is_pacifist=True, is_ageless=True, temperature_tolerance=1000)
-        universe.population_limit = 0
+        universe.population_limit = 100
         universe.reproduction_threshold = 100
         universe.add_entity(entity)
         from src.universe.engine import Food
@@ -4593,7 +4593,7 @@ class TestUniverse(unittest.TestCase):
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         universe.localized_event_chance = 0.0
-        universe.population_limit = 0
+        universe.population_limit = 100
         universe.reproduction_threshold = 100 # no reproduction
 
         e1 = Entity("Helper", x=5, y=5, is_cooperative=True, energy=80, max_age=100, species="TestSpecies", is_telepathic=False)
@@ -5281,7 +5281,7 @@ class TestSprint(unittest.TestCase):
         universe.disease_chance = 0.0
 
         vampire = Entity("Vampire", x=5, y=5, size=1, energy=20, hydration=20, max_hydration=100, diet='carnivore', attack=10, is_vampiric=True, stamina=100, max_stamina=100, intelligence=1, perception_radius=0, can_spin_webs=False, is_migratory=False, lays_eggs=False, is_mud_bather=False, is_territorial=False, has_strong_stomach=False, is_agile=False, is_prolific=False)
-        universe.population_limit = 0
+        universe.population_limit = 100
         universe.reproduction_threshold = 100
         prey = Entity("Prey", x=5, y=5, size=1, energy=50, hydration=50, max_hydration=100, defense=10000, stamina=100, max_stamina=100, intelligence=1, perception_radius=0, is_migratory=False, is_agile=False, has_strong_stomach=False, is_prolific=False, lays_eggs=False, can_spin_webs=False)
 
@@ -8962,7 +8962,7 @@ class TestPhotosynthesis(unittest.TestCase):
         entity.hydration = entity.max_hydration
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.population_limit = 0
+        universe.population_limit = 100
         universe.reproduction_threshold = 100 # Prevent reproduction draining energy
         entity.is_sunbather = False
         universe.add_entity(entity)
@@ -8987,7 +8987,7 @@ class TestPhotosynthesis(unittest.TestCase):
         entity.hydration = entity.max_hydration
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.population_limit = 0
+        universe.population_limit = 100
         universe.reproduction_threshold = 100 # Prevent reproduction draining energy
         universe.add_entity(entity)
 
@@ -9787,7 +9787,7 @@ class TestAmbushPredator(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.population_limit = 0
+        universe.population_limit = 100
         universe.reproduction_threshold = 100
 
         # Attack 5 vs Defense 10 -> Escape chance 10/15 = 0.666
@@ -23026,3 +23026,54 @@ class TestIsMoonPredator(unittest.TestCase):
         self.universe.tick()
         expected_damage = int((10 * 1.5) / 2)
         self.assertTrue(prey.energy < 10)
+
+class TestIsVampiricPredator(unittest.TestCase):
+    def test_is_vampiric_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_vampiric_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+        universe.population_limit = 100
+        universe.reproduction_threshold = 100
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.mutation_chance = 1.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, f'No children born. Parent energy: {parent.energy}, max_energy: {getattr(parent, "max_energy", "?")}')
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_vampiric_predator', False))
+
+    def test_is_vampiric_predator_combat(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_vampiric_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
+        prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='herbivore', is_vampiric=True, is_relentless=False, is_ageless=True, is_immune=True)
+
+        predator2 = Entity("Predator2", x=2, y=2, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_vampiric_predator=False, is_relentless=True, is_ageless=True, is_immune=True)
+        prey2 = Entity("Prey2", x=2, y=2, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='herbivore', is_vampiric=True, is_relentless=False, is_ageless=True, is_immune=True)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+        universe.add_entity(predator2)
+        universe.add_entity(prey2)
+
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+            universe.tick()
+            universe.tick()
+
+        # predator 1 with is_vampiric_predator should deal more damage (attack 60 vs defense 50), causing prey to lose more energy
+        # predator 2 without is_vampiric_predator (attack 40 vs defense 50) will deal 0 base, but relentless means 20 damage when prey escapes
+
+        self.assertLess(prey.energy, prey2.energy, "is_vampiric_predator should deal more damage to vampiric prey")
