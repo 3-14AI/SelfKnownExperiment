@@ -2917,6 +2917,15 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('Ȃ', output)
 
 
+
+    def test_visualize_is_water_swimmer(self):
+        e = Entity(name="WaterSwimmer", is_water_swimmer=True)
+        universe = Universe(width=10, height=10)
+        universe.entities.append(e)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('~', output.lower())
+
 if __name__ == '__main__':
 
     unittest.main()

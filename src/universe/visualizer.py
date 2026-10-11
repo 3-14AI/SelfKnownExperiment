@@ -787,6 +787,8 @@ class CLIVisualizer:
                         char = 'g'
                     elif getattr(entity, 'is_sandstorm_walker', False):
                         char = 'v'
+                    elif getattr(entity, 'is_water_swimmer', False):
+                        char = '~'
                     else:
                         char = 'E'
 
