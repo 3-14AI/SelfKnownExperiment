@@ -2942,6 +2942,15 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('Җ', output)
 
+    def test_is_aerial_predator_rendering(self):
+        universe = Universe(width=5, height=5)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("Hawk", x=1, y=1, is_aerial_predator=True)
+        universe.add_entity(entity)
+        rendered = visualizer.render()
+        self.assertIn('A', rendered)
+
+
 if __name__ == '__main__':
 
     unittest.main()

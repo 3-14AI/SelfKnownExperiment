@@ -791,6 +791,10 @@ class CLIVisualizer:
                         char = 'g'
                     elif getattr(entity, 'is_sandstorm_walker', False):
                         char = 'v'
+                    elif getattr(entity, 'is_giant_slayer', False):
+                        char = 'Y'
+                    elif getattr(entity, 'is_aerial_predator', False):
+                        char = 'A'
                     else:
                         char = 'E'
 
