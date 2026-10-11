@@ -324,6 +324,8 @@ class CLIVisualizer:
                         char = 'Ұ'
                     elif getattr(entity, 'is_night_predator', False):
                         char = 'ұ'
+                    elif getattr(entity, 'is_moon_predator', False):
+                        char = 'Җ'
                     elif getattr(entity, 'is_spring_predator', False):
                         char = 'Ҳ'
                     elif getattr(entity, 'is_summer_predator', False):
