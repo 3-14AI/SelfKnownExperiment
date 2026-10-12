@@ -162,6 +162,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
 - [x] Implemented `is_carnivore_predator` and `is_herbivore_predator` traits. Entities with these traits gain a 1.5x attack multiplier against carnivores/omnivores and herbivores, respectively.
+- [x] Implemented `is_omnivore_predator` trait. Entities with this trait gain a 1.5x attack multiplier when attacking omnivores.
 - [x] Fixed `is_drought_dweller` energy loss calculation logic and `is_winter_strider_mutation` missing mutation trigger.
 - [x] Fixed `test_is_drought_dweller` energy loss calculation logic and `test_is_winter_strider_mutation` missing mutation trigger.
 - [x] Implemented `is_sleep_strider` trait. Entities with this trait consume no stamina when moving while sleeping and gain a defense bonus while sleeping.
