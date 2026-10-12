@@ -799,6 +799,14 @@ class CLIVisualizer:
                         char = 'X'
                     elif getattr(entity, 'is_vampiric_predator', False):
                         char = 'V'
+                    elif getattr(entity, 'is_carnivore_predator', False):
+                        char = 'ℰ'
+                    elif getattr(entity, 'is_herbivore_predator', False):
+                        char = 'ℱ'
+                    elif getattr(entity, 'is_scavenger_predator', False):
+                        char = '↬'
+                    elif getattr(entity, 'is_omnivore_predator', False):
+                        char = '∆'
                     else:
                         char = 'E'
 
