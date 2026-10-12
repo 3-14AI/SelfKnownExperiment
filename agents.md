@@ -516,3 +516,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_scavenger_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking scavengers.
 
 - [x] Implemented visualizer rendering for `is_omnivore_predator`, `is_herbivore_predator`, `is_carnivore_predator`, and `is_scavenger_predator` traits.
+- [x] Fixed `is_deep_water_dweller` trait to properly recover energy on `deep-water` terrain.
+- [x] Fixed `test_energy_gain_in_summer` and stabilized other related flaky engine tests.
+- [x] Added `is_scavenger_predator` and `is_omnivore_predator` traits which grant attack multipliers to predators against scavengers and omnivores.

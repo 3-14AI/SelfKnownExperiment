@@ -1,5 +1,5 @@
 import unittest
-from src.universe.engine import Universe, Entity, Food, Terrain, Quicksand
+from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent, Quicksand
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):

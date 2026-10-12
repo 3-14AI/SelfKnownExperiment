@@ -4,7 +4,7 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from universe.engine import Universe, Entity, Terrain, LocalizedEvent
+from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent, Quicksand
 
 class TestQuicksandStrider(unittest.TestCase):
     def setUp(self):

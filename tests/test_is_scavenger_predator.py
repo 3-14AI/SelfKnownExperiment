@@ -1,5 +1,5 @@
 import unittest
-from src.universe.engine import Universe, Entity
+from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent, Quicksand
 import unittest.mock
 
 class TestIsScavengerPredator(unittest.TestCase):
