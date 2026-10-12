@@ -2271,3 +2271,15 @@ Implemented is_rain_walker trait.
 - Implemented `is_sandstorm_dweller` trait in `engine.py`, providing shelter benefits (defense and energy recovery) during `sandstorm` events.
 - Added character 'ţ' to `visualizer.py` for rendering entities with this trait.
 - Added unit tests for energy recovery, combat defense modifier, and genetic mutation in `tests/test_engine.py` and visualization tests in `tests/test_visualizer.py`.
+
+### Analysis 331: Реализация трейтов специализированных хищников и стабилизация тестов
+- **Цель агента**: Проанализировать недавние изменения, включая добавление новых свойств специализации хищников (`is_moon_predator`, `is_sun_predator`, `is_giant_slayer`, `is_aerial_predator`, `is_apex_predator`, `is_vampiric_predator`, `is_scavenger_predator`, `is_carnivore_predator`, `is_herbivore_predator`, `is_omnivore_predator`) и исправление падающего теста `test_is_mud_dweller`.
+- **Детали реализации**:
+  - Была реализована серия уникальных свойств хищников. Каждое свойство предоставляет множитель атаки (обычно x1.5 или x2.0) при определенных условиях:
+    - `is_moon_predator` / `is_sun_predator`: атаки ночью / днем.
+    - `is_giant_slayer`: атаки на сущностей большего размера (x2.0 множитель).
+    - `is_aerial_predator`: атаки на нелетающих сущностей.
+    - Диетические хищники: `is_apex_predator` (атакует хищников/всеядных), `is_carnivore_predator` (хищники), `is_herbivore_predator` (травоядные), `is_omnivore_predator` (всеядные), `is_scavenger_predator` (падальщики) и `is_vampiric_predator` (вампиры).
+  - Свойства были корректно интегрированы в метод инициализации `Entity.__init__`, логику генетических мутаций `Universe.tick()`, а также в циклы охоты `Universe.tick()`. Все соответствующие тесты были добавлены в `tests/test_engine.py` и визуализация в `CLIVisualizer`. Свойства отмечены выполненными в `agents.md`.
+  - Исправлен нестабильный тест `test_is_mud_dweller` в `tests/test_engine.py`. Тест падал из-за того, что `size=1` задавал слишком низкий потолок `max_energy`, поэтому прибавка от укрытия не могла превысить начальную энергию. Установка значений `size=5`, `age=5` и `energy=200` обеспечила правильный расчет механики восстановления энергии.
+- **Дальнейшие шаги**: Продолжить работу по реализации оставшихся свойств из `agents.md` или начать разработку новых систем по завершении текущего списка задач, уделяя внимание покрытию тестами и балансировке.
