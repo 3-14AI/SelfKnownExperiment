@@ -13318,7 +13318,7 @@ class TestIsMudDweller(unittest.TestCase):
 
         # Test that mud acts as shelter for mud dwellers
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='mud'))
-        entity = Entity(name="Mud Dweller", x=1, y=1, energy=20, max_stamina=50, stamina=50, size=1, is_mud_dweller=True, intelligence=1)
+        entity = Entity(name="Mud Dweller", x=1, y=1, energy=200, max_stamina=50, stamina=50, size=5, age=5, is_mud_dweller=True, intelligence=1)
         universe.add_entity(entity)
 
         initial_energy = entity.energy
