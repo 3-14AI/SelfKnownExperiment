@@ -799,6 +799,8 @@ class CLIVisualizer:
                         char = 'X'
                     elif getattr(entity, 'is_vampiric_predator', False):
                         char = 'V'
+                    elif getattr(entity, 'is_bully', False):
+                        char = 'b'
                     else:
                         char = 'E'
 
