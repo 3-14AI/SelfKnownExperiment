@@ -8846,7 +8846,7 @@ class TestIsWinterDwellerTrait(unittest.TestCase):
         universe.event_remaining_time = 10
         entity = Entity(name="Drought Dweller", x=1, y=1, energy=40, max_stamina=50, stamina=50, size=1, is_drought_dweller=True, is_sleeping=True, is_drought_resistant=True, intelligence=1, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=1000, hydration=5000, max_hydration=5000, is_immune=True)
 
-        with mock.patch('src.universe.engine.random.random', return_value=0.0):
+        with mock.patch('src.universe.engine.random.random', return_value=0.1):
             universe.add_entity(entity)
             universe.tick()
 
@@ -20567,7 +20567,7 @@ class TestIsWinterStrider(unittest.TestCase):
 
     def test_is_winter_strider_mutation(self):
         from src.universe.engine import Entity
-        parent = Entity(name="Parent", x=5, y=5, energy=5000, max_age=100, age=10, size=5, is_winter_strider=False, is_ageless=True, is_immune=True, is_pacifist=True)
+        parent = Entity(name="Parent", x=5, y=5, energy=5000, max_age=100, age=10, size=5, is_winter_strider=False, is_ageless=True, is_immune=True, is_pacifist=True, lays_eggs=False, is_gluttonous=True, has_blubber=True)
         self.universe.entities = [parent]
         self.universe.mutation_chance = 1.0
         self.universe.reproduction_threshold = 100
@@ -23077,3 +23077,85 @@ class TestIsVampiricPredator(unittest.TestCase):
         # predator 2 without is_vampiric_predator (attack 40 vs defense 50) will deal 0 base, but relentless means 20 damage when prey escapes
 
         self.assertLess(prey.energy, prey2.energy, "is_vampiric_predator should deal more damage to vampiric prey")
+
+
+class TestCarnivoreAndHerbivorePredator(unittest.TestCase):
+    def test_is_carnivore_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_carnivore_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+
+        universe.mutation_chance = 1.0
+        universe.reproduction_threshold = 100
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.energy = 1000
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+        child = None
+        for e in universe.entities:
+            if e != parent:
+                child = e
+                break
+        self.assertIsNotNone(child)
+        self.assertTrue(getattr(child, 'is_carnivore_predator', False))
+
+    def test_is_herbivore_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_herbivore_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+
+        universe.mutation_chance = 1.0
+        universe.reproduction_threshold = 100
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.energy = 1000
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+        child = None
+        for e in universe.entities:
+            if e != parent:
+                child = e
+                break
+        self.assertIsNotNone(child)
+        self.assertTrue(getattr(child, 'is_herbivore_predator', False))
+
+    def test_is_carnivore_predator_combat(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_carnivore_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
+        prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='carnivore', is_relentless=False, is_ageless=True, is_immune=True)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Base effective attack is 40. Multiplier is 1.5. So 60.
+        # Defense is 50.
+        # Relentless means prey loses effective_attack / 2 even if escapes. But we mock escape=1.0 so it fails.
+        # Wait, if escape fails (random=1.0), it gets eaten.
+        # If random=0.0, escape succeeds, damage is effective_attack / 2.
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        self.assertLess(prey.energy, 4980)
+
+    def test_is_herbivore_predator_combat(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_herbivore_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
+        prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='herbivore', is_relentless=False, is_ageless=True, is_immune=True)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        self.assertLess(prey.energy, 4980)
