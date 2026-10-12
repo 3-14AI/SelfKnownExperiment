@@ -161,6 +161,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Implemented `is_aquatic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking aquatic entities.
 - [x] Implemented `is_carnivore_predator` and `is_herbivore_predator` traits. Entities with these traits gain a 1.5x attack multiplier against carnivores/omnivores and herbivores, respectively.
 - [x] Implemented `is_omnivore_predator` trait. Entities with this trait gain a 1.5x attack multiplier when attacking omnivores.
 - [x] Fixed `is_drought_dweller` energy loss calculation logic and `is_winter_strider_mutation` missing mutation trigger.
@@ -515,7 +516,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_vampiric_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking vampiric entities.
 - [x] Implemented `is_scavenger_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking scavengers.
 
-- [x] Implemented visualizer rendering for `is_omnivore_predator`, `is_herbivore_predator`, `is_carnivore_predator`, and `is_scavenger_predator` traits.
+- [x] Implemented visualizer rendering for `is_omnivore_predator`, `is_herbivore_predator`, `is_carnivore_predator`, `is_scavenger_predator` and `is_aquatic_predator` traits.
 - [x] Fixed `is_deep_water_dweller` trait to properly recover energy on `deep-water` terrain.
 - [x] Fixed `test_energy_gain_in_summer` and stabilized other related flaky engine tests.
 - [x] Added `is_scavenger_predator` and `is_omnivore_predator` traits which grant attack multipliers to predators against scavengers and omnivores.
