@@ -510,3 +510,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_apex_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking prey with a carnivore or omnivore diet.
 - [x] Implemented `is_vampiric_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking vampiric entities.
 - [x] Implemented `is_bully` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities smaller than themselves.
+- [x] Implemented `is_bully` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities smaller than themselves.
