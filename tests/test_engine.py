@@ -23166,3 +23166,116 @@ class TestCarnivoreAndHerbivorePredator(unittest.TestCase):
             universe.tick()
 
         self.assertLess(prey.energy, 4980)
+
+class TestScavengerPredator(unittest.TestCase):
+    def test_is_scavenger_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_scavenger_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+
+        universe.mutation_chance = 1.0
+        universe.reproduction_threshold = 100
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.energy = 1000
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_scavenger_predator', False))
+
+    def test_is_scavenger_predator_combat(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_scavenger_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
+        prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='scavenger', is_relentless=False, is_ageless=True, is_immune=True)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Base effective attack is 40. Multiplier is 1.5. So 60.
+        # Defense is 50. Damage = 10.
+        pre_combat_energy = prey.energy
+        universe.tick()
+        universe.tick()
+        universe.tick()
+
+        self.assertTrue(prey.energy < pre_combat_energy)
+
+class TestOmnivorePredator(unittest.TestCase):
+    def test_is_omnivore_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_omnivore_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+
+        universe.mutation_chance = 1.0
+        universe.reproduction_threshold = 100
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.energy = 1000
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_omnivore_predator', False))
+
+    def test_is_omnivore_predator_combat(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_omnivore_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
+        prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='omnivore', is_relentless=False, is_ageless=True, is_immune=True)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        pre_combat_energy = prey.energy
+        universe.tick()
+        universe.tick()
+        universe.tick()
+
+        self.assertTrue(prey.energy < pre_combat_energy)
+
+class TestAquaticPredator(unittest.TestCase):
+    def test_is_aquatic_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_aquatic_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+
+        universe.mutation_chance = 1.0
+        universe.reproduction_threshold = 100
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.energy = 1000
+        with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_aquatic_predator', False))
+
+    def test_is_aquatic_predator_combat(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_aquatic_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
+        prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='herbivore', is_aquatic=True, is_relentless=False, is_ageless=True, is_immune=True)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        pre_combat_energy = prey.energy
+        universe.tick()
+        universe.tick()
+        universe.tick()
+
+        self.assertTrue(prey.energy < pre_combat_energy)
