@@ -13395,6 +13395,8 @@ class TestIsWebDweller(unittest.TestCase):
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='web'))
         entity.is_sleeping = True
+        entity.preferred_temperature = universe.get_temperature_at(1,1)
+        entity.temperature_tolerance = 100
         entity.energy = 20
         initial_energy = entity.energy
 
@@ -18389,7 +18391,12 @@ class TestIsMountainStrider(unittest.TestCase):
     def test_is_mountain_strider_defense(self, mock_random):
         mock_random.return_value = 0.0
         pred = Entity(name="Pred", x=1, y=1, size=1, diet='carnivore', attack=5, is_relentless=True)
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=6, energy=100, is_mountain_strider=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=200, energy=5000, is_mountain_strider=True, is_ageless=True, is_immune=True, stamina=50)
+        pred.stamina = 50
+
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='mountain'))
 
