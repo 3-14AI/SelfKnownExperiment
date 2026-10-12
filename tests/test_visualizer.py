@@ -109,6 +109,37 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('M', output)
 
 
+    def test_render_is_carnivore_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("CarnivorePred", x=1, y=1, energy=10, is_carnivore_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('ℰ', output)
+
+    def test_render_is_herbivore_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("HerbivorePred", x=1, y=1, energy=10, is_herbivore_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('ℱ', output)
+
+    def test_render_is_scavenger_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("ScavengerPred", x=1, y=1, energy=10, is_scavenger_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('↬', output)
+
+    def test_render_is_omnivore_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("OmnivorePred", x=1, y=1, energy=10, is_omnivore_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('∆', output)
     def test_render_is_apex_predator(self):
         universe = Universe(width=3, height=3)
         entity = Entity("Apex", x=1, y=1, energy=10, is_apex_predator=True)
