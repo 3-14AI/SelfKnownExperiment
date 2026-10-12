@@ -3002,6 +3002,15 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('A', rendered)
 
 
+
+    def test_visualize_is_aquatic_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("AquaticPredator", x=1, y=1, is_aquatic_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        out = visualizer.render()
+        self.assertIn('≈', out)
+
 if __name__ == '__main__':
 
     unittest.main()
