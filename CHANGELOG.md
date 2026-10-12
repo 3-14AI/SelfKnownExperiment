@@ -547,3 +547,7 @@ All notable changes to Project Genesis will be documented in this file.
 - [x] Implemented `is_spring_predator`, `is_summer_predator`, `is_autumn_predator`, and `is_winter_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during their respective seasons.
 - Engine: Implemented `is_storm_predator` and `is_blizzard_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during 'storm' or 'blizzard' events, respectively.
 - Implemented `is_magnetic_dweller` behavior to attract or repel magnetic entities within its perception radius.
+
+- Fixed `is_deep_water_dweller` trait to properly recover energy on `deep-water` terrain.
+- Fixed `test_energy_gain_in_summer` and stabilized other related flaky engine tests.
+- Added `is_scavenger_predator` and `is_omnivore_predator` traits which grant attack multipliers to predators against scavengers and omnivores.

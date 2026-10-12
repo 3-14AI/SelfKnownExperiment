@@ -1,5 +1,5 @@
 import unittest
-from src.universe.engine import Universe, Entity
+from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent, Quicksand
 
 class TestIsOmnivorePredator(unittest.TestCase):
     def test_is_omnivore_predator_mutation(self):
