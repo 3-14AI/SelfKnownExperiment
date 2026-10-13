@@ -342,7 +342,7 @@ class TestUniverse(unittest.TestCase):
         universe.add_entity(e)
 
         import unittest.mock
-        with unittest.mock.patch('random.random', return_value=0.1):
+        with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
         self.assertTrue(e.is_sleeping, "Nocturnal entity should sleep during the day")
@@ -23322,6 +23322,112 @@ class TestAmphibiousPredator(unittest.TestCase):
 
 
 class TestDeserticPredator(unittest.TestCase):
+
+    def test_is_forestal_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_forestal_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+        universe.reproduction_threshold = 100
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_forestal_predator', False))
+
+    def test_is_forestal_predator_combat(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_forestal_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
+        prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='herbivore', is_forestal=True, is_relentless=False, is_ageless=True, is_immune=True)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        pre_combat_energy = prey.energy
+        universe.tick()
+        universe.tick()
+        universe.tick()
+
+        self.assertTrue(prey.energy < pre_combat_energy)
+
+    def test_is_volcanic_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_volcanic_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+        universe.reproduction_threshold = 100
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_volcanic_predator', False))
+
+    def test_is_volcanic_predator_combat(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_volcanic_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
+        prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='herbivore', is_volcanic=True, is_relentless=False, is_ageless=True, is_immune=True)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        pre_combat_energy = prey.energy
+        universe.tick()
+        universe.tick()
+        universe.tick()
+
+        self.assertTrue(prey.energy < pre_combat_energy)
+
+    def test_is_arctic_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        universe.mutation_chance = 1.0
+        parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_arctic_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+        universe.reproduction_threshold = 100
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_arctic_predator', False))
+
+    def test_is_arctic_predator_combat(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_arctic_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
+        prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='herbivore', is_arctic=True, is_relentless=False, is_ageless=True, is_immune=True)
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        pre_combat_energy = prey.energy
+        universe.tick()
+        universe.tick()
+        universe.tick()
+
+        self.assertTrue(prey.energy < pre_combat_energy)
+
     def test_is_desertic_predator_mutation(self):
         from src.universe.engine import Universe, Entity
         import unittest.mock

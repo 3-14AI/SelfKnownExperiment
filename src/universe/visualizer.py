@@ -813,6 +813,12 @@ class CLIVisualizer:
                         char = '≈'
                     elif getattr(entity, 'is_desertic_predator', False):
                         char = 'δ'
+                    elif getattr(entity, 'is_forestal_predator', False):
+                        char = 'φ'
+                    elif getattr(entity, 'is_volcanic_predator', False):
+                        char = 'υ'
+                    elif getattr(entity, 'is_arctic_predator', False):
+                        char = 'α'
                     else:
                         char = 'E'
 
