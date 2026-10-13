@@ -809,6 +809,8 @@ class CLIVisualizer:
                         char = '∆'
                     elif getattr(entity, 'is_aquatic_predator', False):
                         char = '≈'
+                    elif getattr(entity, 'is_amphibious_predator', False):
+                        char = '≈'
                     else:
                         char = 'E'
 
