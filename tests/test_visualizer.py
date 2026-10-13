@@ -3019,6 +3019,16 @@ class TestCLIVisualizer(unittest.TestCase):
         out = visualizer.render()
         self.assertIn('≈', out)
 
+
+
+    def test_visualize_is_desertic_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("DeserticPredator", x=1, y=1, is_desertic_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        out = visualizer.render()
+        self.assertIn('δ', out)
+
 if __name__ == '__main__':
 
     unittest.main()
