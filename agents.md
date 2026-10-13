@@ -523,3 +523,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Added `is_scavenger_predator` and `is_omnivore_predator` traits which grant attack multipliers to predators against scavengers and omnivores.
 - [x] Implemented `is_aquatic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking aquatic entities.
 - [x] Implemented `is_amphibious_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking amphibious entities.
+- [x] Implemented visualizer rendering and test for `is_amphibious_predator` trait.
