@@ -526,3 +526,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented visualizer rendering and test for `is_amphibious_predator` trait.
 - [x] Implemented `is_desertic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking desertic entities.
 - [x] Implemented `is_forestal_predator`, `is_volcanic_predator`, and `is_arctic_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking forestal, volcanic, and arctic entities, respectively. Implemented visualizer rendering and test.
+- [x] Implemented `is_toxic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking toxic entities. Added visualizer rendering and test.
