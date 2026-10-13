@@ -524,3 +524,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_aquatic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking aquatic entities.
 - [x] Implemented `is_amphibious_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking amphibious entities.
 - [x] Implemented visualizer rendering and test for `is_amphibious_predator` trait.
+- [x] Implemented `is_desertic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking desertic entities.
