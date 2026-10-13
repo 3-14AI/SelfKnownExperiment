@@ -3021,6 +3021,31 @@ class TestCLIVisualizer(unittest.TestCase):
 
 
 
+
+    def test_visualize_is_forestal_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("ForestalPredator", x=1, y=1, is_forestal_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        out = visualizer.render()
+        self.assertIn('φ', out)
+
+    def test_visualize_is_volcanic_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("VolcanicPredator", x=1, y=1, is_volcanic_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        out = visualizer.render()
+        self.assertIn('υ', out)
+
+    def test_visualize_is_arctic_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("ArcticPredator", x=1, y=1, is_arctic_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        out = visualizer.render()
+        self.assertIn('α', out)
+
     def test_visualize_is_desertic_predator(self):
         universe = Universe(width=3, height=3)
         entity = Entity("DeserticPredator", x=1, y=1, is_desertic_predator=True)
