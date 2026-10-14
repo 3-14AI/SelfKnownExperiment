@@ -533,3 +533,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_sturdy_predator` and `is_slippery_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking sturdy and slippery entities, respectively. Added visualizer rendering and test.
 - [x] Implemented `is_heavy_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking heavy entities. Added visualizer rendering and test.
 - [x] Implemented `is_lightweight_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking lightweight entities. Add visualizer rendering and test.
+
+- [x] Implemented `is_agile_predator` and `is_evasive_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking agile and evasive entities, respectively. Added visualizer rendering and tests.
