@@ -13318,7 +13318,8 @@ class TestIsMudDweller(unittest.TestCase):
 
         # Test that mud acts as shelter for mud dwellers
         universe.add_terrain(Terrain(x=1, y=1, terrain_type='mud'))
-        entity = Entity(name="Mud Dweller", x=1, y=1, energy=200, max_stamina=50, stamina=50, size=5, age=5, is_mud_dweller=True, intelligence=1)
+        entity = Entity(name="Mud Dweller", x=1, y=1, energy=200, max_stamina=50, stamina=50, size=5, age=5, is_mud_dweller=True, intelligence=1, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.reproduction_threshold = 1000
         universe.add_entity(entity)
 
         initial_energy = entity.energy
@@ -20179,6 +20180,50 @@ class TestApexPredator(unittest.TestCase):
         children = [e for e in self.universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(children[0].is_apex_predator)
+
+class TestArmoredPredator(unittest.TestCase):
+    def test_is_armored_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, max_age=100, age=5, size=20, is_armored_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+
+        universe.mutation_chance = 1.0
+        universe.reproduction_threshold = 100
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Reproduction failed.")
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_armored_predator', False), "is_armored_predator should have mutated to True.")
+
+    def test_is_armored_predator_combat_modifier(self):
+        from src.universe.engine import Universe, Entity
+        import unittest.mock
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+
+        predator = Entity(name="Pred", x=1, y=1, energy=500, max_age=100, age=5, size=100, attack=1000, diet="carnivore", is_armored_predator=True, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=False)
+        prey = Entity(name="Prey", x=1, y=1, energy=100, max_age=100, age=5, size=10, defense=10, has_shell=True, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, diet="herbivore")
+
+        predator.attack = 1000
+        prey.defense = 10
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with unittest.mock.patch('random.random', return_value=0.1):
+            for _ in range(3):
+                universe.tick()
+
+        self.assertTrue(prey not in universe.entities or not prey.is_alive, "Prey should be killed by armored predator.")
 
 if __name__ == '__main__':
 
