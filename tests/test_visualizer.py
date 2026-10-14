@@ -3054,6 +3054,14 @@ class TestCLIVisualizer(unittest.TestCase):
         out = visualizer.render()
         self.assertIn('δ', out)
 
+    def test_visualize_is_venomous_predator(self):
+        universe = Universe(width=10, height=10)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("VenomousPredator", x=1, y=1, is_venomous_predator=True)
+        universe.add_entity(entity)
+        output = visualizer.render()
+        self.assertIn('ν', output.lower())
+
 if __name__ == '__main__':
 
     unittest.main()
