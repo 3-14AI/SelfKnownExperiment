@@ -823,6 +823,8 @@ class CLIVisualizer:
                         char = 'τ'
                     elif getattr(entity, 'is_venomous_predator', False):
                         char = 'ν'
+                    elif getattr(entity, 'is_electric_predator', False):
+                        char = 'ε'
                     else:
                         char = 'E'
 
