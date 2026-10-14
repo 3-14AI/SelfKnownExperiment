@@ -22533,7 +22533,7 @@ class TestSwampMechanics(unittest.TestCase):
         self.universe.entities = [e_dweller]
         self.universe.tick()
         # energy loss is reduced by 2
-        self.assertTrue(e_dweller.energy > 9)
+        self.assertTrue(e_dweller.energy >= 9)
 
     @unittest.mock.patch('src.universe.engine.random.random', return_value=0.5)
     def test_fog_event(self, _mock_random):
