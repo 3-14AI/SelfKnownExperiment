@@ -825,6 +825,10 @@ class CLIVisualizer:
                         char = 'ν'
                     elif getattr(entity, 'is_electric_predator', False):
                         char = 'ε'
+                    elif getattr(entity, 'is_sturdy_predator', False):
+                        char = '☗'
+                    elif getattr(entity, 'is_slippery_predator', False):
+                        char = '∿'
                     else:
                         char = 'E'
 

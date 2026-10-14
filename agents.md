@@ -530,3 +530,4 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_venomous_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking venomous entities. Added visualizer rendering and test.
 - [x] Implemented `is_electric_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking electric entities. Added visualizer rendering and test.
+- [x] Implemented `is_sturdy_predator` and `is_slippery_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking sturdy and slippery entities, respectively. Added visualizer rendering and test.
