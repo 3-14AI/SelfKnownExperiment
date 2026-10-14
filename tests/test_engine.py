@@ -6103,7 +6103,7 @@ class TestIsToxic(unittest.TestCase):
         predator.defense = 5
         predator.size = 2
 
-        prey = Entity("Prey", x=5, y=5, energy=50, species="PreySpecies", is_toxic=True)
+        prey = Entity("Prey", x=5, y=5, energy=5000, max_age=100, is_ageless=True, size=10, species="PreySpecies", is_toxic=True)
         # Ensure prey survives combat
         prey.attack = 0
         prey.defense = 1000
@@ -6133,7 +6133,7 @@ class TestIsToxic(unittest.TestCase):
         predator.defense = 5
         predator.size = 2
 
-        prey = Entity("Prey", x=5, y=5, energy=50, species="PreySpecies", is_toxic=True)
+        prey = Entity("Prey", x=5, y=5, energy=5000, max_age=100, is_ageless=True, size=10, species="PreySpecies", is_toxic=True)
         prey.attack = 0
         prey.defense = 0
         prey.size = 1
@@ -23536,3 +23536,71 @@ class TestElectricPredator(unittest.TestCase):
             universe.tick()
 
         self.assertTrue(prey.energy < pre_combat_energy)
+
+class TestHeavyPredator(unittest.TestCase):
+    def test_is_heavy_predator_combat_bonus(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator_normal = Entity("PredNormal", x=5, y=5, energy=5000, attack=40, size=10, max_age=100, is_ageless=True, diet='carnivore', is_relentless=True, is_nest_builder=False)
+        prey1 = Entity("Prey1", x=5, y=5, energy=5000, defense=1000, size=10, max_age=100, is_ageless=True, is_heavy=True, is_nest_builder=False)
+        universe.add_entity(predator_normal)
+        universe.add_entity(prey1)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        damage_normal = 5000 - prey1.energy
+
+        universe2 = Universe(width=10, height=10)
+        universe2.event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+        universe2.disease_chance = 0.0
+
+        predator_heavy = Entity("PredHeavy", x=5, y=5, energy=5000, attack=40, size=10, max_age=100, is_ageless=True, diet='carnivore', is_relentless=True, is_heavy_predator=True, is_nest_builder=False)
+        prey2 = Entity("Prey2", x=5, y=5, energy=5000, defense=1000, size=10, max_age=100, is_ageless=True, is_heavy=True, is_nest_builder=False)
+        universe2.add_entity(predator_heavy)
+        universe2.add_entity(prey2)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe2.tick()
+
+        damage_heavy = 5000 - prey2.energy
+
+        self.assertGreater(damage_heavy, damage_normal)
+
+class TestLightweightPredator(unittest.TestCase):
+    def test_is_lightweight_predator_combat_bonus(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator_normal = Entity("PredNormal", x=5, y=5, energy=5000, attack=40, size=10, max_age=100, is_ageless=True, diet='carnivore', is_relentless=True, is_nest_builder=False)
+        prey1 = Entity("Prey1", x=5, y=5, energy=5000, defense=1000, size=10, max_age=100, is_ageless=True, is_lightweight=True, is_nest_builder=False)
+        universe.add_entity(predator_normal)
+        universe.add_entity(prey1)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        damage_normal = 5000 - prey1.energy
+
+        universe2 = Universe(width=10, height=10)
+        universe2.event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+        universe2.disease_chance = 0.0
+
+        predator_lightweight = Entity("PredLightweight", x=5, y=5, energy=5000, attack=40, size=10, max_age=100, is_ageless=True, diet='carnivore', is_relentless=True, is_lightweight_predator=True, is_nest_builder=False)
+        prey2 = Entity("Prey2", x=5, y=5, energy=5000, defense=1000, size=10, max_age=100, is_ageless=True, is_lightweight=True, is_nest_builder=False)
+        universe2.add_entity(predator_lightweight)
+        universe2.add_entity(prey2)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            universe2.tick()
+
+        damage_lightweight = 5000 - prey2.energy
+
+        self.assertGreater(damage_lightweight, damage_normal)
