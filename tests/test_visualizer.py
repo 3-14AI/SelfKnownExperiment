@@ -3,6 +3,15 @@ from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent,
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+    def test_is_lightweight_predator_rendering(self):
+        universe = Universe(width=10, height=10)
+        visualizer = CLIVisualizer(universe)
+        e = Entity("LightweightPred", x=0, y=0, size=1, age=0, is_lightweight_predator=True)
+        universe.add_entity(e)
+        grid = visualizer.render()
+        self.assertEqual(grid[0][0], 'l')
+
+
 
     def test_visualize_is_quicksand_dancer(self):
         universe = Universe(width=10, height=10)
