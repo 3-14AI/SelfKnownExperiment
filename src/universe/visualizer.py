@@ -833,6 +833,10 @@ class CLIVisualizer:
                         char = 'H'
                     elif getattr(entity, 'is_lightweight_predator', False):
                         char = 'l'
+                    elif getattr(entity, 'is_agile_predator', False):
+                        char = 'A'
+                    elif getattr(entity, 'is_evasive_predator', False):
+                        char = 'e'
                     else:
                         char = 'E'
 

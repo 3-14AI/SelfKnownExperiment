@@ -3071,6 +3071,22 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('ν', output.lower())
 
+    def test_render_agile_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("AgilePredator", x=1, y=1, is_agile_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        out = visualizer.render()
+        self.assertIn('A', out)
+
+    def test_render_evasive_predator(self):
+        universe = Universe(width=3, height=3)
+        entity = Entity("EvasivePredator", x=1, y=1, is_evasive_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        out = visualizer.render()
+        self.assertIn('e', out)
+
 if __name__ == '__main__':
 
     unittest.main()

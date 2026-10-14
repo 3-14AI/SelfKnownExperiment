@@ -23604,3 +23604,74 @@ class TestLightweightPredator(unittest.TestCase):
         damage_lightweight = 5000 - prey2.energy
 
         self.assertGreater(damage_lightweight, damage_normal)
+
+
+class TestAgilePredator(unittest.TestCase):
+    def test_is_agile_predator_combat_bonus(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator_normal = Entity("PredNormal", x=5, y=5, energy=5000, attack=40, size=10, max_age=100, is_ageless=True, diet='carnivore', is_relentless=True, is_nest_builder=False)
+        prey1 = Entity("Prey1", x=5, y=5, energy=5000, defense=1000, size=10, max_age=100, is_ageless=True, is_agile=True, is_nest_builder=False)
+        universe.add_entity(predator_normal)
+        universe.add_entity(prey1)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            for _ in range(3):
+                universe.tick()
+
+        damage_normal = 5000 - prey1.energy
+
+        universe2 = Universe(width=10, height=10)
+        universe2.event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+        universe2.disease_chance = 0.0
+
+        predator_agile = Entity("PredAgile", x=5, y=5, energy=5000, attack=40, size=10, max_age=100, is_ageless=True, diet='carnivore', is_relentless=True, is_agile_predator=True, is_nest_builder=False)
+        prey2 = Entity("Prey2", x=5, y=5, energy=5000, defense=1000, size=10, max_age=100, is_ageless=True, is_agile=True, is_nest_builder=False)
+        universe2.add_entity(predator_agile)
+        universe2.add_entity(prey2)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            for _ in range(3):
+                universe2.tick()
+
+        damage_agile = 5000 - prey2.energy
+        self.assertGreater(damage_agile, damage_normal)
+
+class TestEvasivePredator(unittest.TestCase):
+    def test_is_evasive_predator_combat_bonus(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator_normal = Entity("PredNormal", x=5, y=5, energy=5000, attack=40, size=10, max_age=100, is_ageless=True, diet='carnivore', is_relentless=True, is_nest_builder=False)
+        prey1 = Entity("Prey1", x=5, y=5, energy=5000, defense=1000, size=10, max_age=100, is_ageless=True, is_evasive=True, is_nest_builder=False)
+        universe.add_entity(predator_normal)
+        universe.add_entity(prey1)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            for _ in range(3):
+                universe.tick()
+
+        damage_normal = 5000 - prey1.energy
+
+        universe2 = Universe(width=10, height=10)
+        universe2.event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+        universe2.disease_chance = 0.0
+
+        predator_evasive = Entity("PredEvasive", x=5, y=5, energy=5000, attack=40, size=10, max_age=100, is_ageless=True, diet='carnivore', is_relentless=True, is_evasive_predator=True, is_nest_builder=False)
+        prey2 = Entity("Prey2", x=5, y=5, energy=5000, defense=1000, size=10, max_age=100, is_ageless=True, is_evasive=True, is_nest_builder=False)
+        universe2.add_entity(predator_evasive)
+        universe2.add_entity(prey2)
+
+        with unittest.mock.patch('random.random', return_value=0.0):
+            for _ in range(3):
+                universe2.tick()
+
+        damage_evasive = 5000 - prey2.energy
+        self.assertGreater(damage_evasive, damage_normal)
