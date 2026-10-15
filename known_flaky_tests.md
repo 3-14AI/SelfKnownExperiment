@@ -20,3 +20,4 @@
 - `test_is_web_strider_defense`: Known flaky test, sometimes prey dies
 - `test_is_sleeping`: Known flaky test
 - `test_is_night_dweller`: Known flaky test
+- `test_is_web_dweller`
