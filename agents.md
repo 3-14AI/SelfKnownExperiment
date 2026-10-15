@@ -542,3 +542,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_territorial_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking territorial entities.
 
 - [x] Implemented `is_playful_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking playful entities.
+- [x] Implemented `is_fearless_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking fearless entities.

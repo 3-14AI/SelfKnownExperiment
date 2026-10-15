@@ -3,6 +3,14 @@ from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent,
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+    def test_is_fearless_predator_rendering(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="predator", x=5, y=5, is_fearless_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ф', output)
+
     def test_is_solitary_predator_rendering(self):
         universe = Universe(width=5, height=5)
         entity = Entity(name='SolitaryPred', x=2, y=2, size=1, age=5, is_solitary_predator=True)
