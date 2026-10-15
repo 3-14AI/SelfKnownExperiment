@@ -23710,3 +23710,33 @@ class TestStealthyPredator(unittest.TestCase):
 
         damage_stealthy = 5000 - prey2.energy
         self.assertGreater(damage_stealthy, damage_normal)
+
+class TestSocialPredator(unittest.TestCase):
+    def test_social_predator_multiplier(self):
+        universe = Universe(width=10, height=10)
+        predator = Entity(name="SocialPredator", x=5, y=5, size=5, age=5, attack=25, is_social_predator=True, diet="carnivore")
+        prey = Entity(name="SocialPrey", x=5, y=5, size=5, age=5, defense=10, energy=5000, is_social=True, diet="herbivore")
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        # 25 * 1.5 = 37.5. Attack > Defense, should kill the prey
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+
+    def test_social_predator_no_multiplier(self):
+        universe = Universe(width=10, height=10)
+        predator = Entity(name="SocialPredator", x=5, y=5, size=5, age=5, attack=8, is_social_predator=True, diet="carnivore")
+        prey = Entity(name="NonSocialPrey", x=5, y=5, size=5, age=5, defense=10, energy=5000, is_social=False, diet="herbivore")
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        # 8 < 10. Predator should fail to eat prey.
+        self.assertTrue(prey.energy > 0)
