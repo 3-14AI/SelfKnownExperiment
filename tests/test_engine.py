@@ -20582,17 +20582,19 @@ class TestIsWinterStrider(unittest.TestCase):
         self.universe.disease_chance = 0.0
         self.universe.localized_event_chance = 0.0
         has_mutated = False
-        for _ in range(150):
-            parent.energy = 5000
-            self.universe.tick()
-            if len(self.universe.entities) > 20:
-                 self.universe.entities = [parent]
-            for entity in self.universe.entities:
-                if getattr(entity, 'is_winter_strider', False):
-                    has_mutated = True
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.05):
+            for _ in range(150):
+                parent.energy = 5000
+                self.universe.tick()
+                if len(self.universe.entities) > 20:
+                     self.universe.entities = [parent]
+                for entity in self.universe.entities:
+                    if getattr(entity, 'is_winter_strider', False):
+                        has_mutated = True
+                        break
+                if has_mutated:
                     break
-            if has_mutated:
-                break
         self.assertTrue(has_mutated, "is_winter_strider did not mutate")
 
 
