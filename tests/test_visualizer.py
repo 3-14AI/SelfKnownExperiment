@@ -3114,6 +3114,16 @@ class TestCLIVisualizer(unittest.TestCase):
         out = visualizer.render()
         self.assertIn('e', out)
 
+
+    def test_is_playful_predator_rendering(self):
+        universe = Universe(width=1, height=1)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity(name='predator', x=0, y=0, energy=100, max_age=10, is_playful_predator=True)
+        universe.entities.append(entity)
+        rendered = visualizer.render()
+        self.assertIn('ℙ', rendered)
+
+
 if __name__ == '__main__':
 
     unittest.main()
