@@ -537,3 +537,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_agile_predator` and `is_evasive_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking agile and evasive entities, respectively. Added visualizer rendering and tests.
 - [x] Implemented `is_stealthy_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking stealthy entities. Added visualizer rendering and tests.
 - [x] Implemented `is_social_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking social entities. Added visualizer rendering and tests.
+
+- [x] Implemented `is_solitary_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking solitary entities.
