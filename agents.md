@@ -539,3 +539,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_social_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking social entities. Added visualizer rendering and tests.
 
 - [x] Implemented `is_solitary_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking solitary entities.
+- [x] Implemented `is_territorial_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking territorial entities.
