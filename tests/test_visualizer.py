@@ -3,6 +3,14 @@ from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent,
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+    def test_is_social_predator_rendering(self):
+        universe = Universe(width=5, height=5)
+        entity = Entity(name='SocialPred', x=2, y=2, size=1, age=5, is_social_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        grid = visualizer.render()
+        self.assertIn('₷', grid)
+
     def test_is_stealthy_predator_rendering(self):
         universe = Universe(width=10, height=10)
         visualizer = CLIVisualizer(universe)
