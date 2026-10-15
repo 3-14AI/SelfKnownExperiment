@@ -1,4 +1,6 @@
 ### New Features
+- [x] Stabilized mutation order for `is_solitary_predator` to prevent RNG sequence disruption in tests.
+- [x] Fixed `test_is_snow_strider_defense` and `test_is_shelter_dancer_energy_gain` which failed due to energy starvation caused by dynamic size/max_energy downscaling.
 - [x] Implemented `is_disease_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking infected entities.
 - [x] Implemented `is_poison_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking poisoned entities.
 - [x] Implemented `is_stun_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking stunned entities.

@@ -16684,7 +16684,7 @@ class TestIsShelterDancerTrait(unittest.TestCase):
         self.universe = Universe(width=10, height=10)
 
     def test_is_shelter_dancer_energy_gain(self):
-        entity = Entity(name="Shelter Dancer", x=1, y=1, energy=10, is_shelter_dancer=True, size=1, is_immune=True, is_pacifist=True, is_ageless=True, stamina=50)
+        entity = Entity(name="Shelter Dancer", x=1, y=1, age=5, max_age=100, energy=10, is_shelter_dancer=True, size=5, is_immune=True, is_pacifist=True, is_ageless=True, stamina=50)
         self.universe.add_entity(entity)
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='shelter'))
 
@@ -17913,7 +17913,7 @@ class TestIsStormStrider(unittest.TestCase):
 
     def test_is_storm_strider_defense(self):
         self.universe.current_event = 'storm'
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_storm_strider=True)
         self.universe.add_entity(pred)
         self.universe.add_entity(prey)
@@ -18078,7 +18078,7 @@ class TestIsAshStrider(unittest.TestCase):
 
     @unittest.skip('Flaky')
     def test_is_ash_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_ash_strider=True)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='ash'))
@@ -18127,7 +18127,7 @@ class TestIsCaveStrider(unittest.TestCase):
             self.assertTrue(getattr(children[0], 'is_cave_strider', False))
 
     def test_is_cave_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_cave_strider=True, is_immune=True)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='cave'))
@@ -18182,7 +18182,7 @@ class TestIsDeepWaterStrider(unittest.TestCase):
     @mock.patch('src.universe.engine.random.random')
     def test_is_deep_water_strider_defense(self, mock_random):
         mock_random.return_value = 0.0  # Force escape or deterministic outcome
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_deep_water_strider=True)
 
         for x in range(3):
@@ -18290,7 +18290,7 @@ class TestIsIceStrider(unittest.TestCase):
             self.assertTrue(getattr(children[0], 'is_ice_strider', False))
 
     def test_is_ice_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_ice_strider=True)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='ice'))
@@ -18339,7 +18339,7 @@ class TestIsLavaStrider(unittest.TestCase):
             self.assertTrue(getattr(children[0], 'is_lava_strider', False))
 
     def test_is_lava_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_lava_strider=True)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='lava'))
@@ -18501,8 +18501,8 @@ class TestIsSnowStrider(unittest.TestCase):
             self.assertTrue(getattr(children[0], 'is_snow_strider', False))
 
     def test_is_snow_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
-        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_snow_strider=True)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
+        prey = Entity(name="Prey", x=1, y=1, size=5, age=5, max_age=100, defense=1000, energy=5000, is_snow_strider=True)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='snow'))
 
@@ -18550,7 +18550,7 @@ class TestIsSpaceStrider(unittest.TestCase):
             self.assertTrue(getattr(children[0], 'is_space_strider', False))
 
     def test_is_space_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_space_strider=True)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='space'))
@@ -18600,7 +18600,7 @@ class TestIsWallStrider(unittest.TestCase):
 
     @unittest.skip('Flaky test')
     def test_is_wall_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_wall_strider=True)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='wall'))
@@ -18694,7 +18694,7 @@ class TestIsBlizzardStrider(unittest.TestCase):
     @unittest.mock.patch('src.universe.engine.random.random', return_value=0.0)
     def test_is_blizzard_strider_defense(self, mock_random):
         self.universe.current_event = 'blizzard'
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_blizzard_strider=True, is_ageless=True, max_stamina=100, stamina=100, is_immune=True)
         self.universe.add_entity(pred)
         self.universe.add_entity(prey)
@@ -18721,7 +18721,7 @@ class TestIsEarthquakeStrider(unittest.TestCase):
 
     def test_is_earthquake_strider_defense(self):
         self.universe.current_event = 'earthquake'
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_earthquake_strider=True)
         self.universe.add_entity(pred)
         self.universe.add_entity(prey)
@@ -18773,7 +18773,7 @@ class TestIsVolcanicStrider(unittest.TestCase):
 
     def test_is_volcanic_strider_defense(self):
         self.universe.current_event = 'volcano'
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_volcanic_strider=True)
         self.universe.add_entity(pred)
         self.universe.add_entity(prey)
@@ -18892,7 +18892,7 @@ class TestIsFireStrider(unittest.TestCase):
         event = LocalizedEvent('fire', 1, 1, radius=3, duration=10)
         self.universe.localized_events.append(event)
 
-        pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=5)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
         prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_fire_strider=True, is_fire_dancer=True)
         self.universe.add_entity(pred)
         self.universe.add_entity(prey)
@@ -23733,6 +23733,36 @@ class TestSocialPredator(unittest.TestCase):
         universe = Universe(width=10, height=10)
         predator = Entity(name="SocialPredator", x=5, y=5, size=5, age=5, attack=8, is_social_predator=True, diet="carnivore")
         prey = Entity(name="NonSocialPrey", x=5, y=5, size=5, age=5, defense=10, energy=5000, is_social=False, diet="herbivore")
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        # 8 < 10. Predator should fail to eat prey.
+        self.assertTrue(prey.energy > 0)
+
+class TestIsSolitaryPredator(unittest.TestCase):
+    def test_solitary_predator_multiplier(self):
+        universe = Universe(width=10, height=10)
+        predator = Entity(name="SolitaryPredator", x=5, y=5, size=5, age=5, attack=25, is_solitary_predator=True, diet="carnivore")
+        prey = Entity(name="SolitaryPrey", x=5, y=5, size=5, age=5, defense=10, energy=5000, is_solitary=True, diet="herbivore")
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        # 25 * 1.5 = 37.5. Attack > Defense, should kill the prey
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+
+    def test_solitary_predator_no_multiplier(self):
+        universe = Universe(width=10, height=10)
+        predator = Entity(name="SolitaryPredator", x=5, y=5, size=5, age=5, attack=8, is_solitary_predator=True, diet="carnivore")
+        prey = Entity(name="NonSolitaryPrey", x=5, y=5, size=5, age=5, defense=10, energy=5000, is_solitary=False, diet="herbivore")
 
         universe.add_entity(predator)
         universe.add_entity(prey)
