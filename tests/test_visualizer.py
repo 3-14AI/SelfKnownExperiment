@@ -3,6 +3,17 @@ from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent,
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+    def test_is_stealthy_predator_rendering(self):
+        universe = Universe(width=10, height=10)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity(name="TestStealthy", x=2, y=2, is_stealthy_predator=True)
+        universe.add_entity(entity)
+
+        # In `CLIVisualizer.render()`, it actually returns a string. The other test might be failing or parsing it wrong.
+        # So we check if 'S' is in the output string.
+        output = visualizer.render()
+        self.assertIn('S', output)
+
     def test_is_lightweight_predator_rendering(self):
         universe = Universe(width=10, height=10)
         visualizer = CLIVisualizer(universe)
