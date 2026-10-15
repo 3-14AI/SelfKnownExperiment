@@ -23839,3 +23839,79 @@ class TestPlayfulPredator(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_playful_predator', False))
+
+
+class TestFearlessPredator(unittest.TestCase):
+    def test_fearless_predator_combat(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+
+        predator = Entity(
+            name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5,
+            diet="carnivore", attack=20, stamina=100,
+            is_fearless_predator=True
+        )
+        prey = Entity(
+            name="prey", x=5, y=5, energy=5, max_age=100, size=1, age=1,
+            defense=1, is_fearless=True
+        )
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        # Base attack is 20, defense is 1. Effective attack becomes 20 * 1.5 = 30.
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.5):
+            for _ in range(3):
+                universe.tick()
+
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+
+
+    def test_fearless_predator_combat_control(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator = Entity(
+            name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5,
+            diet="carnivore", attack=8, stamina=100,
+            is_fearless_predator=False
+        )
+        prey = Entity(
+            name="prey", x=5, y=5, energy=5000, max_age=100, size=100, age=5,
+            defense=20, is_fearless=True, is_ageless=True, is_immune=True
+        )
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        import unittest.mock
+        with unittest.mock.patch('random.random', return_value=0.5):
+            for _ in range(3):
+                universe.tick()
+
+        # 8 < 20. Predator should fail to eat prey.
+        self.assertTrue(prey.energy > 4000)
+        self.assertFalse(prey.was_eaten)
+
+    def test_fearless_predator_mutation(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0, reproduction_threshold=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(
+            name="parent", x=5, y=5, energy=5000, size=5, max_age=100, age=10,
+            lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True,
+            is_fearless_predator=False
+        )
+        universe.add_entity(parent)
+
+        with unittest.mock.patch('random.random', return_value=0.05):
+            universe.tick()
+
+        children = [e for e in universe.entities if e.name != "parent"]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_fearless_predator)
