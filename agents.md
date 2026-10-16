@@ -550,3 +550,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_patient_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking patient entities. Added visualizer rendering and test.
 
 - [x] Implemented `is_tireless_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking tireless entities. Added visualizer rendering and test.
+- [x] Implemented `is_vigilant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking vigilant entities. Added visualizer rendering and test.

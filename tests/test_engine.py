@@ -23980,6 +23980,32 @@ class TestCautiousPredator(unittest.TestCase):
         self.assertTrue(prey.energy > 0)
         self.assertFalse(prey.was_eaten)
 
+class TestVigilantPredator(unittest.TestCase):
+    def test_is_vigilant_predator_combat(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        predator = Entity(name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5, diet="carnivore", attack=20, stamina=100, is_vigilant_predator=True)
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100, size=5, age=5, diet="herbivore", defense=25, is_vigilant=True)
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+
+    def test_is_vigilant_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="parent", x=1, y=1, age=5, size=5, diet='carnivore', is_vigilant_predator=False, is_ageless=True, is_immune=True)
+        parent.energy = 5000
+        universe.entities = [parent]
+        universe.reproduction_threshold = 100
+
+        with unittest.mock.patch('random.random', return_value=0.01):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        if children:
+            child = children[0]
+            self.assertTrue(getattr(child, 'is_vigilant_predator', False))
+
 class TestPatientPredator(unittest.TestCase):
     def test_patient_predator_combat(self):
         universe = Universe(width=10, height=10, food_spawn_rate=0)
