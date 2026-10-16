@@ -3194,6 +3194,14 @@ class TestCLIVisualizer(unittest.TestCase):
         visualizer = CLIVisualizer(universe)
         grid = visualizer.render()
         self.assertIn('⍟', grid)
+    def test_is_resourceful_predator_visualizer(self):
+        universe = Universe(width=5, height=5)
+        entity = Entity(name="resourceful_predator", x=2, y=2, energy=100, size=5, age=5, max_age=100, is_resourceful_predator=True)
+        universe.entities.append(entity)
+        visualizer = CLIVisualizer(universe)
+        grid = visualizer.render()
+        self.assertIn('R', grid)
+
 
 if __name__ == '__main__':
 
