@@ -548,3 +548,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_reckless_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking reckless entities. Added visualizer rendering and test.
 - [x] Implemented `is_cautious_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cautious entities. Added visualizer rendering and test.
 - [x] Implemented `is_patient_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking patient entities. Added visualizer rendering and test.
+
+- [x] Implemented `is_tireless_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking tireless entities. Added visualizer rendering and test.

@@ -18,3 +18,4 @@ test_is_toxic_inflicts_poison_during_combat_not_just_eat
 - `test_is_web_strider_defense`: Known flaky test, sometimes prey dies
 - `test_is_sleeping`: Known flaky test
 - `test_is_night_dweller`: Known flaky test
+- `test_can_sprint_movement` in `tests/test_engine.py` (intermittent failure, passes when run alone)
