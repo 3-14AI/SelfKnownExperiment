@@ -20180,6 +20180,35 @@ class TestApexPredator(unittest.TestCase):
         self.assertTrue(len(children) > 0)
         self.assertTrue(children[0].is_apex_predator)
 
+class TestIntimidatingPredator(unittest.TestCase):
+    def test_is_intimidating_predator_combat(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        predator = Entity(name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5, diet="carnivore", attack=20, stamina=100, is_intimidating_predator=True)
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100, size=5, age=5, diet="herbivore", defense=25, is_intimidating=True)
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertTrue(prey.was_eaten)
+
+    def test_is_intimidating_predator_mutation(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0, reproduction_threshold=100)
+        parent = Entity(name="parent", x=5, y=5, energy=2000, size=5, max_age=100, age=5, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, is_intimidating_predator=False)
+        universe.entities = [parent]
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        with unittest.mock.patch('random.random', return_value=0.05):
+            universe.tick()
+            universe.tick()
+            universe.tick()
+            universe.tick()
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(any(getattr(child, 'is_intimidating_predator', False) for child in children))
+
 if __name__ == '__main__':
 
 

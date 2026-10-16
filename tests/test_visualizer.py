@@ -3170,6 +3170,14 @@ class TestCLIVisualizer(unittest.TestCase):
         universe.add_entity(entity)
         self.assertIn('Ⓥ', viz.render())
 
+    def test_render_is_intimidating_predator(self):
+        universe = Universe(width=1, height=1)
+        entity = Entity(name="test", x=0, y=0, energy=10, is_intimidating_predator=True)
+        universe.entities = [entity]
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('⍋', output)
+
 if __name__ == '__main__':
 
     unittest.main()
