@@ -24055,3 +24055,31 @@ class TestPatientPredator(unittest.TestCase):
             universe.tick()
         self.assertTrue(prey.energy > 0)
         self.assertFalse(prey.was_eaten)
+
+class TestDefensivePredatorTrait(unittest.TestCase):
+    def test_defensive_predator_combat_multiplier(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100000
+
+        predator = Entity(
+            name="pred", x=5, y=5, energy=5000, age=5, size=5,
+            is_defensive_predator=True, attack=9, stamina=50,
+            is_ageless=True, max_age=100
+        )
+        predator.diet = 'carnivore'
+
+        prey = Entity(
+            name="prey", x=5, y=5, energy=5000, age=5, size=5,
+            is_defensive=True, defense=10, stamina=50,
+            is_ageless=True, max_age=100
+        )
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with mock.patch('random.random', return_value=0.9):
+            universe.tick()
+
+        self.assertNotIn(prey, universe.entities)

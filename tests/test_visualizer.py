@@ -3178,6 +3178,14 @@ class TestCLIVisualizer(unittest.TestCase):
         output = visualizer.render()
         self.assertIn('⍋', output)
 
+    def test_defensive_predator_rendering(self):
+        universe = Universe(width=10, height=10)
+        pred = Entity(name="pred", x=5, y=5, energy=5000, age=5, size=5, is_defensive_predator=True)
+        universe.add_entity(pred)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('⍎', output)
+
 if __name__ == '__main__':
 
     unittest.main()
