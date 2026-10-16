@@ -3161,6 +3161,15 @@ class TestCLIVisualizer(unittest.TestCase):
         grid_str = visualizer.render()
         self.assertIn('⏳', grid_str)
 
+
+
+    def test_is_vigilant_predator(self):
+        universe = Universe(width=10, height=10)
+        viz = CLIVisualizer(universe)
+        entity = Entity("vigilant_predator", 0, 0, is_vigilant_predator=True)
+        universe.add_entity(entity)
+        self.assertIn('Ⓥ', viz.render())
+
 if __name__ == '__main__':
 
     unittest.main()
