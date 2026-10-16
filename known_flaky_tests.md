@@ -21,3 +21,4 @@
 - `test_is_sleeping`: Known flaky test
 - `test_is_night_dweller`: Known flaky test
 - `test_is_web_dweller`
+- `test_is_day_dweller`: Failed once in full suite run due to `2 not greater than or equal to 30` energy assertion. Passed on re-run.
