@@ -24083,3 +24083,30 @@ class TestDefensivePredatorTrait(unittest.TestCase):
             universe.tick()
 
         self.assertNotIn(prey, universe.entities)
+
+class TestResourcefulPredator(unittest.TestCase):
+    def test_is_resourceful_predator_combat_modifier(self):
+        from src.universe.engine import Entity, Universe
+        from unittest.mock import patch
+
+        # test that resourceful_predator gains 1.5x attack vs resourceful entities
+        predator = Entity(name="predator", x=0, y=0, size=5, attack=10, max_age=100, is_ageless=True, is_resourceful_predator=True, is_pacifist=False, diet="carnivore")
+        prey = Entity(name="prey", x=0, y=0, size=5, defense=12, energy=1000, max_age=100, is_ageless=True, is_resourceful=True)
+        control_prey = Entity(name="control_prey", x=0, y=0, size=5, defense=12, energy=1000, max_age=100, is_ageless=True, is_resourceful=False)
+
+        # resourceful prey
+        u1 = Universe(width=10, height=10)
+        u1.add_entity(predator)
+        u1.add_entity(prey)
+        with patch('random.random', return_value=0.5):
+            u1.tick()
+        self.assertEqual(prey.energy, 0, "Prey should be killed by 1.5x multiplier")
+
+        # control prey
+        u2 = Universe(width=10, height=10)
+        predator2 = Entity(name="predator2", x=0, y=0, size=5, attack=10, max_age=100, is_ageless=True, is_resourceful_predator=True, is_pacifist=False, diet="carnivore")
+        u2.add_entity(predator2)
+        u2.add_entity(control_prey)
+        with patch('random.random', return_value=0.5):
+            u2.tick()
+        self.assertGreater(control_prey.energy, 0, "Control prey should survive normal attack")
