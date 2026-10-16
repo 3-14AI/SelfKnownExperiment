@@ -1,4 +1,6 @@
 ### New Features
+- Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
+- Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
 - [x] Implemented `is_fearless_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking fearless entities.
 - [x] Stabilized mutation order for `is_solitary_predator` to prevent RNG sequence disruption in tests.
 - [x] Fixed `test_is_snow_strider_defense` and `test_is_shelter_dancer_energy_gain` which failed due to energy starvation caused by dynamic size/max_energy downscaling.
@@ -10,6 +12,7 @@
 - [x] Fixed multiple flaky tests across `test_engine.py` and `test_quicksand_strider.py` that were occasionally failing due to un-mocked RNG state, trait energy leakages, or size-dependent mutation bugs.
 
 ### New Features
+- Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
 - [x] Fixed missing dweller traits in `Universe.tick()`. `is_parasite_dweller` and `is_shelter_dweller` are now properly considered as being in shelter for entity logic, and `is_grass_dweller` correctly protects prey when on `grass` terrain.
 - [x] Implemented `is_absorbent` trait. Entities with this trait gain hydration rapidly while in water or rain.
 - [x] Implemented `is_parasite_dancer` trait. Entities with this trait gain energy while they have attached parasites.
@@ -28,6 +31,7 @@
 
 ## [Unreleased]
 ### New Features
+- Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
 ### Added
 - [x] Refactored predator `effective_attack` modifier logic into a single method `get_predator_multiplier()` in `engine.py`.
 - [x] Implemented a combat history logger that records predator-prey interactions and exports them to a CSV file (`combat_history.csv`) at the end of the simulation.

@@ -24,3 +24,5 @@
 - `test_is_day_dweller`: Failed once in full suite run due to `2 not greater than or equal to 30` energy assertion. Passed on re-run.
 test_has_strong_stomach_meat_energy (test_engine.TestStrongStomach.test_has_strong_stomach_meat_energy) and test_is_space_strider_defense (test_engine.TestIsSpaceStrider.test_is_space_strider_defense) and test_is_sleeping (test_engine.TestUniverse.test_is_sleeping) are flaky tests
 test_is_not_resilient_stun_recovery (test_engine.TestIsResilient.test_is_not_resilient_stun_recovery) is a flaky test
+- test_is_mud_dweller
+- test_combat_defense_escape
