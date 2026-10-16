@@ -849,6 +849,14 @@ class CLIVisualizer:
                         char = 'Ṫ'
                     elif getattr(entity, 'is_fearless_predator', False):
                         char = 'Ф'
+                    elif getattr(entity, 'is_pacifist_predator', False):
+                        char = '☤'
+                    elif getattr(entity, 'is_reckless_predator', False):
+                        char = '⚡'
+                    elif getattr(entity, 'is_cautious_predator', False):
+                        char = '⚑'
+                    elif getattr(entity, 'is_patient_predator', False):
+                        char = '⏳'
                     else:
                         char = 'E'
 

@@ -23915,3 +23915,88 @@ class TestFearlessPredator(unittest.TestCase):
         children = [e for e in universe.entities if e.name != "parent"]
         self.assertTrue(len(children) > 0)
         self.assertTrue(children[0].is_fearless_predator)
+
+
+class TestPacifistPredator(unittest.TestCase):
+    def test_pacifist_predator_combat(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        predator = Entity(name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5, diet="carnivore", attack=20, stamina=100, is_pacifist_predator=True)
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100, size=5, age=5, diet="herbivore", defense=25, is_pacifist=True)
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+
+    def test_pacifist_predator_combat_control(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        predator = Entity(name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5, diet="carnivore", attack=20, stamina=100, is_pacifist_predator=False)
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100, size=5, age=5, diet="herbivore", defense=25, is_pacifist=True)
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertTrue(prey.energy > 0)
+        self.assertFalse(prey.was_eaten)
+
+class TestRecklessPredator(unittest.TestCase):
+    def test_reckless_predator_combat(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        predator = Entity(name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5, diet="carnivore", attack=20, stamina=100, is_reckless_predator=True)
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100, size=5, age=5, diet="herbivore", defense=25, is_reckless=True)
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+
+    def test_reckless_predator_combat_control(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        predator = Entity(name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5, diet="carnivore", attack=20, stamina=100, is_reckless_predator=False)
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100, size=5, age=5, diet="herbivore", defense=25, is_reckless=True)
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertTrue(prey.energy > 0)
+        self.assertFalse(prey.was_eaten)
+
+class TestCautiousPredator(unittest.TestCase):
+    def test_cautious_predator_combat(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        predator = Entity(name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5, diet="carnivore", attack=20, stamina=100, is_cautious_predator=True)
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100, size=5, age=5, diet="herbivore", defense=25, is_cautious=True)
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+
+    def test_cautious_predator_combat_control(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        predator = Entity(name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5, diet="carnivore", attack=20, stamina=100, is_cautious_predator=False)
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100, size=5, age=5, diet="herbivore", defense=25, is_cautious=True)
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertTrue(prey.energy > 0)
+        self.assertFalse(prey.was_eaten)
+
+class TestPatientPredator(unittest.TestCase):
+    def test_patient_predator_combat(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        predator = Entity(name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5, diet="carnivore", attack=20, stamina=100, is_patient_predator=True)
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100, size=5, age=5, diet="herbivore", defense=25, is_patient=True)
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+
+    def test_patient_predator_combat_control(self):
+        universe = Universe(width=10, height=10, food_spawn_rate=0)
+        predator = Entity(name="predator", x=5, y=5, energy=500, max_age=100, size=5, age=5, diet="carnivore", attack=20, stamina=100, is_patient_predator=False)
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100, size=5, age=5, diet="herbivore", defense=25, is_patient=True)
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertTrue(prey.energy > 0)
+        self.assertFalse(prey.was_eaten)

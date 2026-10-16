@@ -3132,6 +3132,35 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('ℙ', rendered)
 
 
+
+    def test_pacifist_predator_char(self):
+        visualizer = CLIVisualizer(Universe(width=1, height=1))
+        entity = Entity("PacifistPredator", 0, 0, energy=50, is_pacifist_predator=True, age=5, max_age=10)
+        visualizer.universe.entities = [entity]
+        grid_str = visualizer.render()
+        self.assertIn('☤', grid_str)
+
+    def test_reckless_predator_char(self):
+        visualizer = CLIVisualizer(Universe(width=1, height=1))
+        entity = Entity("RecklessPredator", 0, 0, energy=50, is_reckless_predator=True, age=5, max_age=10)
+        visualizer.universe.entities = [entity]
+        grid_str = visualizer.render()
+        self.assertIn('⚡', grid_str)
+
+    def test_cautious_predator_char(self):
+        visualizer = CLIVisualizer(Universe(width=1, height=1))
+        entity = Entity("CautiousPredator", 0, 0, energy=50, is_cautious_predator=True, age=5, max_age=10)
+        visualizer.universe.entities = [entity]
+        grid_str = visualizer.render()
+        self.assertIn('⚑', grid_str)
+
+    def test_patient_predator_char(self):
+        visualizer = CLIVisualizer(Universe(width=1, height=1))
+        entity = Entity("PatientPredator", 0, 0, energy=50, is_patient_predator=True, age=5, max_age=10)
+        visualizer.universe.entities = [entity]
+        grid_str = visualizer.render()
+        self.assertIn('⏳', grid_str)
+
 if __name__ == '__main__':
 
     unittest.main()
