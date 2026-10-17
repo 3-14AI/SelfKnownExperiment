@@ -883,6 +883,8 @@ class CLIVisualizer:
                         char = '☆'
                     elif getattr(entity, 'is_sure_footed_predator', False):
                         char = '🐾'
+                    elif getattr(entity, 'is_chameleon_predator', False):
+                        char = '🦎'
                     else:
                         char = 'E'
 
