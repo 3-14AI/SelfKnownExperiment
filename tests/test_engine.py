@@ -3,6 +3,28 @@ import unittest
 from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent, Quicksand
 
 class TestUniverse(unittest.TestCase):
+    def test_is_vocal_predator_combat_bonus(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100000
+        predator = Entity(name="Vocal Predator", x=5, y=5, size=5, attack=40, defense=10, energy=1000, age=5, max_age=100, is_vocal_predator=True, diet="carnivore", is_pacifist=False)
+        prey = Entity(name="Vocal Prey", x=5, y=5, size=5, attack=5, defense=50, energy=100, age=5, max_age=100, is_vocal=True, diet="herbivore", is_pacifist=True)
+        control_prey = Entity(name="Normal Prey", x=5, y=5, size=5, attack=5, defense=50, energy=100, age=5, max_age=100, is_vocal=False, diet="herbivore", is_pacifist=True)
+
+        # Test against vocal prey
+        universe.entities = [predator, prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+        self.assertEqual(prey.energy, 0, "Predator should kill vocal prey due to 1.5x attack bonus (40 * 1.5 = 60 > 50).")
+
+        # Reset and test against control prey
+        universe2 = Universe(width=10, height=10)
+        universe2.reproduction_threshold = 100000
+        predator2 = Entity(name="Vocal Predator", x=5, y=5, size=5, attack=40, defense=10, energy=1000, age=5, max_age=100, is_vocal_predator=True, diet="carnivore", is_pacifist=False)
+        universe2.entities = [predator2, control_prey]
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe2.tick()
+        self.assertGreater(control_prey.energy, 0, "Predator should fail to kill normal prey without 1.5x attack bonus (40 < 50).")
+
     def test_is_adaptable_predator(self):
         # Predator attacking adaptable prey (gets 1.5x bonus)
         universe_bonus = Universe(width=10, height=10)

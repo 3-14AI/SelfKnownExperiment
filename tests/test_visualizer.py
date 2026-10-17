@@ -3,6 +3,14 @@ from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent,
 from src.universe.visualizer import CLIVisualizer
 
 class TestCLIVisualizer(unittest.TestCase):
+    def test_is_vocal_predator_visual(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="Test", x=1, y=1, is_vocal_predator=True)
+        universe.entities = [entity]
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        self.assertIn('V', output)
+
     def test_is_adaptable_predator_rendering(self):
         universe = Universe(width=10, height=10)
         entity = Entity(name="predator", x=5, y=5, is_adaptable_predator=True)
