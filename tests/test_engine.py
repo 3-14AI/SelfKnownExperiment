@@ -3,6 +3,48 @@ import unittest
 from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent, Quicksand
 
 class TestUniverse(unittest.TestCase):
+    def test_is_adaptable_predator(self):
+        # Predator attacking adaptable prey (gets 1.5x bonus)
+        universe_bonus = Universe(width=10, height=10)
+        predator_bonus = Entity(name="pred_bonus", x=5, y=5, energy=100, attack=10, diet='carnivore', age=5, is_pacifist=False, is_adaptable_predator=True)
+        prey_adaptable = Entity(name="prey_adaptable", x=5, y=5, energy=5000, defense=11, age=5, is_pacifist=True, is_adaptable=True)
+        universe_bonus.entities = [predator_bonus, prey_adaptable]
+        universe_bonus.reproduction_threshold = 100000
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe_bonus.tick()
+        self.assertEqual(prey_adaptable.energy, 0)
+
+        # Predator attacking non-adaptable prey (no bonus)
+        universe_normal = Universe(width=10, height=10)
+        predator_normal = Entity(name="pred_normal", x=5, y=5, energy=100, attack=10, diet='carnivore', age=5, is_pacifist=False, is_adaptable_predator=True)
+        prey_normal = Entity(name="prey_normal", x=5, y=5, energy=5000, defense=11, age=5, is_pacifist=True, is_adaptable=False)
+        universe_normal.entities = [predator_normal, prey_normal]
+        universe_normal.reproduction_threshold = 100000
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe_normal.tick()
+        self.assertGreater(prey_normal.energy, 0)
+
+    def test_is_adaptable_predator(self):
+        # Predator attacking adaptable prey (gets 1.5x bonus)
+        universe_bonus = Universe(width=10, height=10)
+        predator_bonus = Entity(name="pred_bonus", x=5, y=5, energy=100, attack=10, diet='carnivore', age=5, is_pacifist=False, is_adaptable_predator=True)
+        prey_adaptable = Entity(name="prey_adaptable", x=5, y=5, energy=5000, defense=11, age=5, is_pacifist=True, is_adaptable=True)
+        universe_bonus.entities = [predator_bonus, prey_adaptable]
+        universe_bonus.reproduction_threshold = 100000
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe_bonus.tick()
+        self.assertEqual(prey_adaptable.energy, 0)
+
+        # Predator attacking non-adaptable prey (no bonus)
+        universe_normal = Universe(width=10, height=10)
+        predator_normal = Entity(name="pred_normal", x=5, y=5, energy=100, attack=10, diet='carnivore', age=5, is_pacifist=False, is_adaptable_predator=True)
+        prey_normal = Entity(name="prey_normal", x=5, y=5, energy=5000, defense=11, age=5, is_pacifist=True, is_adaptable=False)
+        universe_normal.entities = [predator_normal, prey_normal]
+        universe_normal.reproduction_threshold = 100000
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe_normal.tick()
+        self.assertGreater(prey_normal.energy, 0)
+
 
 
 
