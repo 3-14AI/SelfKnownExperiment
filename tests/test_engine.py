@@ -24198,3 +24198,106 @@ class TestFrenziedPredator(unittest.TestCase):
             universe2.tick()
 
         self.assertGreater(prey2.energy, 0, "Prey without is_frenzied should survive (40 attack < 50 defense)")
+
+class TestIsBloodthirstyPredator(unittest.TestCase):
+    def setUp(self):
+        from src.universe.engine import Universe
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_bloodthirsty_predator_combat_multiplier(self):
+        from src.universe.engine import Entity
+        pred = Entity(name="pred", x=5, y=5, energy=5000, age=5, size=5, is_bloodthirsty_predator=True, attack=9, stamina=50, max_stamina=50, diet='carnivore', is_pacifist=False)
+        prey = Entity(name="prey", x=5, y=5, energy=100, age=5, size=1, defense=10, is_bloodthirsty=True, stamina=50, max_stamina=50)
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+
+        import random
+        # Save real random
+        real_randint = random.randint
+        real_random = random.random
+
+        def fake_random():
+            return 0.5 # Force no escape
+
+        def fake_randint(a, b):
+            return 0 # No damage variance
+
+        random.randint = fake_randint
+        random.random = fake_random
+
+        try:
+            self.universe.foods = []
+            self.universe.tick()
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        # Attack is 9. With 1.5x multiplier, it becomes 13.5 -> 13
+        # Defense is 10.
+        # Attack (13) > Defense (10), prey should be dead
+        self.assertFalse(prey.is_alive or prey in self.universe.entities)
+
+    def test_is_bloodthirsty_predator_no_multiplier(self):
+        from src.universe.engine import Entity
+        pred = Entity(name="pred", x=5, y=5, energy=5000, age=5, size=5, is_bloodthirsty_predator=True, attack=9, stamina=50, max_stamina=50, diet='carnivore', is_pacifist=False)
+        prey = Entity(name="prey", x=5, y=5, energy=5000, age=5, size=1, defense=10, is_bloodthirsty=False, stamina=50, max_stamina=50)
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+
+        import random
+        # Save real random
+        real_randint = random.randint
+        real_random = random.random
+
+        def fake_random():
+            return 0.5 # Force no escape
+
+        def fake_randint(a, b):
+            return 0 # No damage variance
+
+        random.randint = fake_randint
+        random.random = fake_random
+
+        try:
+            self.universe.foods = []
+            self.universe.tick()
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        # Attack is 9. No multiplier.
+        # Defense is 10.
+        # Attack (9) < Defense (10), prey should survive
+        self.assertTrue(prey.is_alive and prey in self.universe.entities)
+
+    def test_is_bloodthirsty_predator_mutation(self):
+        from src.universe.engine import Entity
+        parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_bloodthirsty_predator=False, lays_eggs=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+
+        import random
+        real_random = random.random
+        real_randint = random.randint
+
+        def fake_random():
+            return 0.0
+
+        random.random = fake_random
+
+        try:
+            for _ in range(10):
+                self.universe.foods = []
+                self.universe.tick()
+                parent.energy = 5000
+        finally:
+            random.random = real_random
+            random.randint = real_randint
+
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_bloodthirsty_predator', False))

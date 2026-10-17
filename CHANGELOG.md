@@ -1,4 +1,5 @@
 ### New Features
+- Implemented `is_bloodthirsty_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking bloodthirsty entities.
 - Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
 - Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
 - [x] Implemented `is_fearless_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking fearless entities.
