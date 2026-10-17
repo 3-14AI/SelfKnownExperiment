@@ -24174,3 +24174,27 @@ class TestResourcefulPredator(unittest.TestCase):
         with patch('random.random', return_value=0.5):
             u2.tick()
         self.assertGreater(control_prey.energy, 0, "Control prey should survive normal attack")
+
+class TestFrenziedPredator(unittest.TestCase):
+
+    def test_is_frenzied_predator_combat_bonus(self):
+        from unittest.mock import patch
+        universe = Universe(width=10, height=10)
+        predator = Entity(name="Frenzied Predator", x=5, y=5, size=5, attack=40, defense=10, energy=1000, age=5, max_age=100, is_frenzied_predator=True, diet="carnivore", is_pacifist=False)
+        prey = Entity(name="Prey", x=5, y=5, size=5, attack=5, defense=50, energy=1000, age=5, max_age=100, is_frenzied=True, is_pacifist=True, )
+        universe.entities.extend([predator, prey])
+
+        with patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertEqual(prey.energy, 0, "Prey should be eaten due to frenzied predator bonus (40 * 1.5 = 60 > 50 defense)")
+
+        universe2 = Universe(width=10, height=10)
+        predator2 = Entity(name="Frenzied Predator", x=5, y=5, size=5, attack=40, defense=10, energy=1000, age=5, max_age=100, is_frenzied_predator=True, diet="carnivore", is_pacifist=False)
+        prey2 = Entity(name="Prey Control", x=5, y=5, size=5, attack=5, defense=50, energy=1000, age=5, max_age=100, is_frenzied=False, is_pacifist=True, )
+        universe2.entities.extend([predator2, prey2])
+
+        with patch('random.random', return_value=0.5):
+            universe2.tick()
+
+        self.assertGreater(prey2.energy, 0, "Prey without is_frenzied should survive (40 attack < 50 defense)")

@@ -26,3 +26,4 @@ test_has_strong_stomach_meat_energy (test_engine.TestStrongStomach.test_has_stro
 test_is_not_resilient_stun_recovery (test_engine.TestIsResilient.test_is_not_resilient_stun_recovery) is a flaky test
 - test_is_mud_dweller
 - test_combat_defense_escape
+Test failures were flaky/intermittent tests.
