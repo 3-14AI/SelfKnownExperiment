@@ -3243,6 +3243,14 @@ class TestCLIVisualizer(unittest.TestCase):
         self.assertIn('R', grid)
 
 
+    def test_arboreal_predator_rendering(self):
+        visualizer = CLIVisualizer(universe=Universe(width=1, height=1))
+        entity = Entity(name="P", x=0, y=0, energy=10, age=0)
+        entity.is_arboreal_predator = True
+        visualizer.universe.entities = [entity]
+        grid = visualizer.render()
+        self.assertIn('🌲', grid)
+
 if __name__ == '__main__':
 
     unittest.main()

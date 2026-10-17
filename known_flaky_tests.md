@@ -27,3 +27,4 @@ test_is_not_resilient_stun_recovery (test_engine.TestIsResilient.test_is_not_res
 - test_is_mud_dweller
 - test_combat_defense_escape
 Test failures were flaky/intermittent tests.
+- `test_mountain_dancer_gains_energy` in `tests/test_engine.py`: Failed intermittently with `AssertionError: 0 not greater than 10`.

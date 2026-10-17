@@ -561,3 +561,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_vocal_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking vocal entities. Added visualizer rendering and test.
 - [x] Implemented `is_frenzied_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking frenzied entities. Added visualizer rendering and test.
 - [x] Implemented `is_bloodthirsty_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking bloodthirsty entities.
+- [x] Implemented `is_arboreal_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking arboreal entities.
