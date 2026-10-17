@@ -558,3 +558,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_resourceful_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking resourceful entities. Added visualizer rendering and test.
 - [x] Implemented `is_adaptable_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking adaptable entities. Added visualizer rendering and test.
 - [x] Implemented `is_adaptable_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking adaptable entities. Added visualizer rendering and test.
+- [x] Implemented `is_vocal_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking vocal entities. Added visualizer rendering and test.
