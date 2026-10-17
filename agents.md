@@ -563,3 +563,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_bloodthirsty_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking bloodthirsty entities.
 - [x] Implemented `is_arboreal_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking arboreal entities.
 - [x] Implemented `is_stargazer_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking stargazer entities.
+- [x] Implemented `is_sure_footed_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking sure-footed entities.
