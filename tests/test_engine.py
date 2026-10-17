@@ -24461,3 +24461,59 @@ class TestIsStargazerPredator(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_stargazer_predator', False))
+
+class TestIsSureFootedPredator(unittest.TestCase):
+
+    def test_is_sure_footed_predator_trait(self):
+        """Test that is_sure_footed_predator increases attack when attacking sure-footed entities."""
+        universe = Universe()
+        predator = Entity(name="predator", x=5, y=5, size=5, max_age=100)
+        predator.diet = "carnivore"
+        predator.attack = 10
+        predator.is_sure_footed_predator = True
+
+        prey = Entity(name="prey", x=5, y=5, size=5, max_age=100)
+        prey.defense = 10
+        prey.is_sure_footed = True
+
+        universe.entities = [predator, prey]
+
+        # Attack = 10 * 1.5 = 15 > Defense = 10
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertFalse(prey in universe.entities)
+
+    def test_is_sure_footed_predator_no_multiplier(self):
+        universe = Universe()
+        predator = Entity(name="predator", x=5, y=5, size=5, max_age=100)
+        predator.diet = "carnivore"
+        predator.attack = 10
+        predator.is_sure_footed_predator = True
+
+        prey = Entity(name="prey", x=5, y=5, size=5, max_age=100)
+        prey.defense = 12
+        prey.is_sure_footed = False
+
+        universe.entities = [predator, prey]
+
+        # Attack = 10 < Defense = 12
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertTrue(prey in universe.entities)
+
+    def test_is_sure_footed_predator_mutation(self):
+        universe = Universe()
+        universe.reproduction_threshold = 10
+        parent = Entity(name="parent", x=5, y=5, size=5, max_age=100)
+        parent.energy = 5000
+        parent.is_sure_footed_predator = False
+        universe.entities = [parent]
+
+        with unittest.mock.patch('random.random', return_value=0.05):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_sure_footed_predator', False))
