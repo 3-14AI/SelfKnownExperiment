@@ -24517,3 +24517,53 @@ class TestIsSureFootedPredator(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_sure_footed_predator', False))
+
+class TestIsChameleonPredator(unittest.TestCase):
+    def test_is_chameleon_predator_combat(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100000
+
+        predator = Entity(name="predator", x=5, y=5, size=5, max_age=100)
+        predator.is_pacifist = False
+        predator.diet = 'carnivore'
+        predator.is_chameleon_predator = True
+
+        prey = Entity(name="prey", x=5, y=5, size=5, max_age=100)
+        prey.is_pacifist = True
+        prey.is_chameleon = True
+        prey.energy = 5000
+
+        base_attack = predator.size
+        # base_attack * 1.5 = 5 * 1.5 = 7.5 > prey.defense (5/2 = 2.5) -> prey dies if it doesn't escape
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with patch('random.random', return_value=0.5): # Ensure prey does not escape
+            universe.tick()
+
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+
+class TestIsChameleonPredatorMutation(unittest.TestCase):
+    def test_is_chameleon_predator_mutates(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100
+
+        parent = Entity(name="parent", x=5, y=5, size=5, max_age=100)
+        parent.energy = 5000
+        parent.lays_eggs = False
+        parent.is_ageless = True
+        parent.is_immune = True
+        parent.is_pacifist = True
+        parent.is_gluttonous = True
+        parent.has_blubber = True
+
+        universe.add_entity(parent)
+
+        with patch('random.random', return_value=0.05):
+            universe.tick()
+
+        children = [e for e in universe.entities if e.name != "parent"]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(getattr(children[0], 'is_chameleon_predator', False))

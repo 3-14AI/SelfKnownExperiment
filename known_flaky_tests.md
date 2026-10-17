@@ -1,2 +1,4 @@
 - test_is_web_dweller: Failing occasionally due to RNG in `Universe.tick()`, sometimes energy drops instead of recovering.
 - test_is_snow_strider_defense: Failing occasionally due to RNG interference in defense calculation.
+- `test_is_deep_water_dweller`
+- `test_is_night_dweller`
