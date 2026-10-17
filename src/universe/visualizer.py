@@ -879,6 +879,8 @@ class CLIVisualizer:
                         char = 'B'
                     elif getattr(entity, 'is_arboreal_predator', False):
                         char = '🌲'
+                    elif getattr(entity, 'is_stargazer_predator', False):
+                        char = '☆'
                     else:
                         char = 'E'
 
