@@ -3,6 +3,94 @@ import unittest
 from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent, Quicksand
 
 class TestUniverse(unittest.TestCase):
+    def test_is_arboreal_predator_no_multiplier(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100000
+
+        predator = Entity(name="predator", x=5, y=5, energy=5000, age=10, max_age=100)
+        predator.is_arboreal_predator = True
+        predator.diet = 'carnivore'
+        predator.is_ageless = True
+        predator.is_immune = True
+        predator.is_pacifist = False
+        predator.lays_eggs = False
+        predator.size = 5
+        predator.attack = 8
+
+        prey = Entity(name="prey", x=5, y=5, energy=100, age=10, max_age=100)
+        prey.is_arboreal = False
+        prey.diet = 'herbivore'
+        prey.is_ageless = True
+        prey.is_immune = True
+        prey.is_pacifist = True
+        prey.lays_eggs = False
+        prey.size = 5
+        prey.defense = 10
+
+        universe.entities = [predator, prey]
+
+        with patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertGreater(prey.energy, 0)
+        self.assertFalse(getattr(prey, 'was_eaten', False))
+
+    def test_is_arboreal_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10
+
+        parent = Entity(name="parent", x=5, y=5, energy=5000, age=10, max_age=100)
+        parent.is_arboreal_predator = False
+        parent.lays_eggs = False
+        parent.is_ageless = True
+        parent.is_immune = True
+        parent.is_pacifist = True
+        parent.is_gluttonous = True
+        parent.has_blubber = True
+        parent.size = 5
+
+        universe.entities = [parent]
+
+        with patch('random.random', return_value=0.05):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertEqual(len(children), 1)
+        self.assertTrue(getattr(children[0], 'is_arboreal_predator', False))
+
+    def test_is_arboreal_predator_trait(self):
+        """Test that is_arboreal_predator increases attack when attacking arboreal entities."""
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100000
+
+        predator = Entity(name="predator", x=5, y=5, energy=5000, age=10)
+        predator.is_arboreal_predator = True
+        predator.diet = 'carnivore'
+        predator.is_ageless = True
+        predator.is_immune = True
+        predator.is_pacifist = False
+        predator.lays_eggs = False
+        predator.size = 5
+        predator.attack = 8  # Base attack
+
+        prey = Entity(name="prey", x=5, y=5, energy=100, age=10)
+        prey.is_arboreal = True
+        prey.diet = 'herbivore'
+        prey.is_ageless = True
+        prey.is_immune = True
+        prey.is_pacifist = True
+        prey.lays_eggs = False
+        prey.size = 5
+        prey.defense = 10    # Higher than predator base attack, lower than modified (8 * 1.5 = 12)
+
+        universe.entities = [predator, prey]
+
+        with patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(getattr(prey, 'was_eaten', False))
+
     def test_is_vocal_predator_combat_bonus(self):
         universe = Universe(width=10, height=10)
         universe.reproduction_threshold = 100000
