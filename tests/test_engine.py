@@ -24645,6 +24645,9 @@ class TestIsSymbioticPredator(unittest.TestCase):
 class TestIsSymbioticPredatorMutation(unittest.TestCase):
     def test_is_symbiotic_predator_mutates(self):
         universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
         parent = Entity(name="parent", x=5, y=5, energy=5000, size=500,
                         is_pacifist=True, is_ageless=True, is_immune=True,
                         lays_eggs=False, is_gluttonous=True, has_blubber=True)
@@ -24747,6 +24750,9 @@ class TestIsClairvoyantPredatorMutation(unittest.TestCase):
         from src.universe.engine import Entity, Universe
         universe = Universe(width=10, height=10)
         universe.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
 

@@ -2,3 +2,11 @@
 - test_is_snow_strider_defense: Failing occasionally due to RNG interference in defense calculation.
 - `test_is_deep_water_dweller`
 - `test_is_night_dweller`
+
+- test_is_symbiotic_predator_mutates
+- test_is_telepathic_predator_mutates
+- test_is_web_dweller
+- test_can_sweat_mechanics
+- test_is_wall_dweller
+- test_is_clairvoyant_predator_mutates
+- test_is_mud_dweller
