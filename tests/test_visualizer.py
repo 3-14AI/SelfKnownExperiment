@@ -3323,3 +3323,16 @@ if __name__ == '__main__':
 
 
     unittest.main()
+
+class TestIsClairvoyantPredatorRendering(unittest.TestCase):
+    def test_is_clairvoyant_predator_rendering(self):
+        from src.universe.engine import Entity, Universe
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=5, height=5)
+        entity = Entity(name="Test", x=2, y=2, is_clairvoyant_predator=True)
+        universe.add_entity(entity)
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+        lines = output.split('\n')
+        grid_lines = lines[0:5] # No time header?
+        self.assertEqual(grid_lines[2][2], 'c')
