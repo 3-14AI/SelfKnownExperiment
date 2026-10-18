@@ -569,3 +569,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_symbiotic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking symbiotic entities. Added visualizer rendering and tests.
 - [x] Implemented `is_telepathic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking telepathic entities. Added visualizer rendering and tests.
 - [x] Implemented `is_clairvoyant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking clairvoyant entities. Added visualizer rendering and tests.
+- [x] Implemented `is_hive_mind_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking hive mind entities. Added visualizer rendering and tests.
