@@ -24567,3 +24567,53 @@ class TestIsChameleonPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e.name != "parent"]
         self.assertGreater(len(children), 0)
         self.assertTrue(getattr(children[0], 'is_chameleon_predator', False))
+
+class TestIsIntrospectivePredator(unittest.TestCase):
+    def test_is_introspective_predator_combat_bonus(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100000
+
+        predator = Entity(name="predator", x=5, y=5, size=5, energy=500, max_age=100,
+                          is_introspective_predator=True, is_ageless=True, is_pacifist=False)
+        predator.diet = 'carnivore'
+        prey = Entity(name="prey", x=5, y=5, size=3, energy=50, max_age=100,
+                      is_introspective=True, is_ageless=True)
+
+        base_attack = predator.size + (predator.energy / 100)
+        base_defense = prey.size + (prey.energy / 100)
+
+        expected_attack = base_attack * 1.5
+        # Modify predator attack to ensure it only wins if the multiplier is applied
+        predator.size = max(0.1, base_defense - (predator.energy / 100) - 0.1)
+
+        # Ensure base attack is less than defense, but multiplied attack is greater
+        base_attack = predator.size + (predator.energy / 100)
+        self.assertLess(base_attack, base_defense)
+        self.assertGreater(base_attack * 1.5, base_defense)
+
+        universe.entities = [predator, prey]
+
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertNotIn(prey, universe.entities, "Prey should be eaten due to introspective predator attack multiplier.")
+
+class TestIsIntrospectivePredatorMutation(unittest.TestCase):
+    def test_is_introspective_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10
+
+        parent = Entity(name="parent", x=5, y=5, size=5, energy=5000, max_age=100,
+                        is_introspective_predator=False, is_ageless=True, lays_eggs=False, is_pacifist=True, is_gluttonous=True, has_blubber=True)
+        universe.time = 0
+        universe.weather_event = None
+
+        universe.entities = [parent]
+
+        # Force mutation
+        with unittest.mock.patch('random.random', return_value=0.01):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertGreater(len(children), 0, "Parent should reproduce.")
+        self.assertTrue(getattr(children[0], 'is_introspective_predator', False), "Child should mutate to gain is_introspective_predator.")
