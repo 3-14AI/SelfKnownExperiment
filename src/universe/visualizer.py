@@ -889,6 +889,8 @@ class CLIVisualizer:
                         char = '🤔'
                     elif getattr(entity, 'is_symbiotic_predator', False):
                         char = '§'
+                    elif getattr(entity, 'is_telepathic_predator', False):
+                        char = 'Θ'
                     else:
                         char = 'E'
 
