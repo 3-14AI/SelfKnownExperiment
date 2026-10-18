@@ -3294,6 +3294,18 @@ class TestCLIVisualizer(unittest.TestCase):
         grid_str = visualizer.render()
         self.assertIn('🤔', grid_str, "Entity with is_introspective_predator should be rendered as 🤔")
 
+class TestIsSymbioticPredatorVisualizer(unittest.TestCase):
+    def test_is_symbiotic_predator_rendering(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="predator", x=5, y=5, energy=100, is_symbiotic_predator=True, level=1)
+        universe.add_entity(entity)
+
+        visualizer = CLIVisualizer(universe)
+        output = visualizer.render()
+
+        lines = output.split('\n')
+        self.assertEqual(lines[5][5], '§')
+
 if __name__ == '__main__':
 
 

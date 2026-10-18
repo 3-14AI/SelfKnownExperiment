@@ -566,3 +566,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_sure_footed_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking sure-footed entities.
 - [x] Implemented `is_chameleon_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking chameleon entities. Added visualizer rendering and test.
 - [x] Implemented `is_introspective_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking introspective entities.
+- [x] Implemented `is_symbiotic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking symbiotic entities. Added visualizer rendering and tests.
