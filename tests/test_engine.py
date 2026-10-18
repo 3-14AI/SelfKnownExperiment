@@ -20376,6 +20376,58 @@ class TestIntimidatingPredator(unittest.TestCase):
         self.assertGreater(len(children), 0)
         self.assertTrue(any(getattr(child, 'is_intimidating_predator', False) for child in children))
 
+class TestIsTelekineticPredatorEngine(unittest.TestCase):
+    def test_is_telekinetic_predator_attack_multiplier(self):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_telekinetic_predator=True, target_species=['TelekineticPrey'])
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100000
+
+        prey_telekinetic = Entity("TelekineticPrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_telekinetic=True)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey_telekinetic)
+
+        predator.attack = 10
+        prey_telekinetic.defense = 14
+
+        original_random = random.random
+        random.random = lambda: 0.5
+
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
+
+        self.assertTrue(prey_telekinetic.was_eaten, "Predator should have eaten the telekinetic prey due to the 1.5x attack multiplier")
+
+class TestIsTelekineticPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_telekinetic_predator_mutation(self):
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_telekinetic_predator=False, lays_eggs=False, is_telekinetic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+
+        self.universe.reproduction_threshold = 10
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+        original_random = random.random
+        random.random = lambda: 0.01
+
+        try:
+            self.universe.tick()
+        finally:
+            random.random = original_random
+
+        children = [e for e in self.universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(getattr(children[0], 'is_telekinetic_predator', False))
+
 if __name__ == '__main__':
 
 
@@ -24689,6 +24741,9 @@ class TestIsTelepathicPredatorMutation(unittest.TestCase):
         universe.time = 0
         universe.add_entity(parent)
         universe.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
 
         with unittest.mock.patch('random.random', return_value=0.01):
             universe.tick()
@@ -24752,6 +24807,7 @@ class TestIsClairvoyantPredatorMutation(unittest.TestCase):
         universe.reproduction_threshold = 10
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
         universe.localized_event_chance = 0.0
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
@@ -24866,6 +24922,58 @@ class TestIsHiveMindPredatorVisualizer(unittest.TestCase):
         rendered = visualizer.render()
 
         self.assertIn('Ĥ', rendered, "Entity with is_hive_mind_predator should be rendered as Ĥ")
+
+class TestIsTelekineticPredatorEngine(unittest.TestCase):
+    def test_is_telekinetic_predator_attack_multiplier(self):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_telekinetic_predator=True, target_species=['TelekineticPrey'])
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100000
+
+        prey_telekinetic = Entity("TelekineticPrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_telekinetic=True)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey_telekinetic)
+
+        predator.attack = 10
+        prey_telekinetic.defense = 14
+
+        original_random = random.random
+        random.random = lambda: 0.5
+
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
+
+        self.assertTrue(prey_telekinetic.was_eaten, "Predator should have eaten the telekinetic prey due to the 1.5x attack multiplier")
+
+class TestIsTelekineticPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_telekinetic_predator_mutation(self):
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_telekinetic_predator=False, lays_eggs=False, is_telekinetic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.add_entity(parent)
+
+        self.universe.reproduction_threshold = 10
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+        original_random = random.random
+        random.random = lambda: 0.01
+
+        try:
+            self.universe.tick()
+        finally:
+            random.random = original_random
+
+        children = [e for e in self.universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(getattr(children[0], 'is_telekinetic_predator', False))
 
 if __name__ == '__main__':
     unittest.main()

@@ -13,3 +13,4 @@
 - `test_is_telepathic_predator_mutates`: Occasionally fails due to RNG interaction or random events preventing reproduction.
 - `test_is_wall_dweller`: Occasionally fails due to RNG interaction or random events.
 - `test_is_cautious_flee`: Occasionally fails due to RNG interaction or random events.
+TestIsMudDweller and TestIsSnowStrider are flaky.
