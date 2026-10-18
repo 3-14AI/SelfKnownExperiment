@@ -24603,7 +24603,7 @@ class TestIsIntrospectivePredatorMutation(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.reproduction_threshold = 10
 
-        parent = Entity(name="parent", x=5, y=5, size=5, energy=5000, max_age=100,
+        parent = Entity(name="parent", x=5, y=5, size=500, energy=5000, max_age=100,
                         is_introspective_predator=False, is_ageless=True, lays_eggs=False, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.time = 0
         universe.weather_event = None
@@ -24642,7 +24642,7 @@ class TestIsSymbioticPredator(unittest.TestCase):
 class TestIsSymbioticPredatorMutation(unittest.TestCase):
     def test_is_symbiotic_predator_mutates(self):
         universe = Universe(width=10, height=10)
-        parent = Entity(name="parent", x=5, y=5, energy=5000, size=5,
+        parent = Entity(name="parent", x=5, y=5, energy=5000, size=500,
                         is_pacifist=True, is_ageless=True, is_immune=True,
                         lays_eggs=False, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
@@ -24654,3 +24654,39 @@ class TestIsSymbioticPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_symbiotic_predator', False))
+
+class TestIsTelepathicPredator(unittest.TestCase):
+    def test_is_telepathic_predator_combat(self):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=9, attack=9,
+                          is_telepathic_predator=True, is_ageless=True, diet='carnivore', is_pacifist=False)
+        prey = Entity(name="prey", x=5, y=5, energy=5000, size=1,
+                      is_telepathic=True, is_ageless=True, defense=10)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+        universe.reproduction_threshold = 100000
+
+        with unittest.mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertEqual(prey.energy, 0, "Prey should be eaten due to telepathic predator attack multiplier.")
+        self.assertTrue(prey.was_eaten, "Prey should be marked as eaten.")
+
+class TestIsTelepathicPredatorMutation(unittest.TestCase):
+    def test_is_telepathic_predator_mutates(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="parent", x=5, y=5, energy=5000, size=500, max_age=100,
+                        is_pacifist=True, is_ageless=True, is_immune=True,
+                        lays_eggs=False, is_gluttonous=True, has_blubber=True, is_telepathic_predator=False)
+        universe.time = 0
+        universe.add_entity(parent)
+        universe.reproduction_threshold = 10
+
+        with unittest.mock.patch('random.random', return_value=0.01):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Parent should reproduce.")
+        self.assertTrue(getattr(children[0], 'is_telepathic_predator', False), "Child should mutate to gain is_telepathic_predator.")

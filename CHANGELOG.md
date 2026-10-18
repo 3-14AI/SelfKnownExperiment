@@ -1,4 +1,5 @@
 ### New Features
+- Implemented `is_telepathic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking telepathic entities.
 - Implemented `is_bloodthirsty_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking bloodthirsty entities.
 - Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
 - Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
@@ -13,6 +14,7 @@
 - [x] Fixed multiple flaky tests across `test_engine.py` and `test_quicksand_strider.py` that were occasionally failing due to un-mocked RNG state, trait energy leakages, or size-dependent mutation bugs.
 
 ### New Features
+- Implemented `is_telepathic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking telepathic entities.
 - Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
 - [x] Fixed missing dweller traits in `Universe.tick()`. `is_parasite_dweller` and `is_shelter_dweller` are now properly considered as being in shelter for entity logic, and `is_grass_dweller` correctly protects prey when on `grass` terrain.
 - [x] Implemented `is_absorbent` trait. Entities with this trait gain hydration rapidly while in water or rain.
@@ -32,6 +34,7 @@
 
 ## [Unreleased]
 ### New Features
+- Implemented `is_telepathic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking telepathic entities.
 - Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
 ### Added
 - [x] Refactored predator `effective_attack` modifier logic into a single method `get_predator_multiplier()` in `engine.py`.
