@@ -24769,3 +24769,103 @@ class TestIsClairvoyantPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0, "Parent should reproduce.")
         self.assertTrue(getattr(children[0], 'is_clairvoyant_predator', False), "Child should mutate to gain is_clairvoyant_predator.")
+import random
+from src.universe.visualizer import CLIVisualizer
+class TestIsHiveMindPredatorEngine(unittest.TestCase):
+    def test_is_hive_mind_predator_attack_multiplier(self):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_hive_mind_predator=True)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100000
+
+        prey_normal = Entity("PreyNormal", x=5, y=5, energy=5000, age=5, size=2.5, max_stamina=100, stamina=100, is_pacifist=True, is_hive_mind=False, is_ageless=True, has_shell=True)
+        predator.size = 2
+        prey_normal.size = 3
+
+        universe.entities = [predator, prey_normal]
+
+        original_random = random.random
+        random.random = lambda: 0.5
+
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
+
+        self.assertFalse(prey_normal.was_eaten, "Predator should not be able to eat normal prey because its attack is lower than prey defense")
+
+        # Now with hive mind prey
+        universe2 = Universe(width=10, height=10)
+        universe2.event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe2.reproduction_threshold = 100000
+
+        predator2 = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_hive_mind_predator=True)
+        prey_hive_mind = Entity("PreyHiveMind", x=5, y=5, energy=5000, age=5, size=2.5, max_stamina=100, stamina=100, is_pacifist=True, is_hive_mind=True, is_ageless=True)
+
+        universe2.entities = [predator2, prey_hive_mind]
+
+        random.random = lambda: 0.5
+        try:
+            universe2.tick()
+        finally:
+            random.random = original_random
+
+        self.assertTrue(prey_hive_mind.was_eaten, "Predator should have eaten the hive mind prey due to the 1.5x attack multiplier")
+
+class TestIsHiveMindPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_hive_mind_predator_mutation(self):
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_hive_mind_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        parent.preferred_temperature = self.universe.get_temperature_at(1, 1)
+        parent.temperature_tolerance = 1000
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 500
+        self.universe.mutation_chance = 1.0
+
+        import random
+        # Save real random
+        real_randint = random.randint
+        real_random = random.random
+
+        def fake_random():
+            return 0.0 # Force mutation
+
+        def fake_randint(a, b):
+            return real_randint(a, b)
+
+        random.randint = fake_randint
+        random.random = fake_random
+
+        try:
+            self.universe.tick()
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+
+        children = [e for e in self.universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        self.assertTrue(getattr(children[0], 'is_hive_mind_predator', False))
+
+class TestIsHiveMindPredatorVisualizer(unittest.TestCase):
+    def test_is_hive_mind_predator_rendering(self):
+        universe = Universe(width=10, height=10)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("HiveMindPred", x=0, y=0, energy=10, is_hive_mind_predator=True)
+
+        visualizer.universe.add_entity(entity)
+        rendered = visualizer.render()
+
+        self.assertIn('Ĥ', rendered, "Entity with is_hive_mind_predator should be rendered as Ĥ")
+
+if __name__ == '__main__':
+    unittest.main()
