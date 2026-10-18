@@ -4808,6 +4808,8 @@ class Universe:
                                 effective_attack *= 1.5
                             if getattr(entity, 'is_clairvoyant_predator', False) and getattr(prey_to_eat, 'is_clairvoyant', False):
                                 effective_attack *= 1.5
+                            if getattr(entity, 'is_telekinetic_predator', False) and getattr(prey_to_eat, 'is_telekinetic', False):
+                                effective_attack *= 1.5
                             if getattr(entity, 'is_hive_mind_predator', False) and getattr(prey_to_eat, 'is_hive_mind', False):
                                 effective_attack *= 1.5
                             if getattr(entity, 'is_ambush_predator', False) and getattr(entity, 'camouflage', 0.0) > 0.0 and not getattr(entity, 'is_vibrant', False) and not getattr(prey_to_eat, 'is_vigilant', False):
@@ -5340,6 +5342,8 @@ class Universe:
                         if getattr(entity, 'is_telepathic_predator', False) and getattr(prey_to_eat, 'is_telepathic', False):
                             effective_attack *= 1.5
                         if getattr(entity, 'is_clairvoyant_predator', False) and getattr(prey_to_eat, 'is_clairvoyant', False):
+                            effective_attack *= 1.5
+                        if getattr(entity, 'is_telekinetic_predator', False) and getattr(prey_to_eat, 'is_telekinetic', False):
                             effective_attack *= 1.5
                         if getattr(entity, 'is_hive_mind_predator', False) and getattr(prey_to_eat, 'is_hive_mind', False):
                             effective_attack *= 1.5

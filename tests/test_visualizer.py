@@ -3336,3 +3336,13 @@ class TestIsClairvoyantPredatorRendering(unittest.TestCase):
         lines = output.split('\n')
         grid_lines = lines[0:5] # No time header?
         self.assertEqual(grid_lines[2][2], 'c')
+
+class TestIsTelekineticPredatorVisualizer(unittest.TestCase):
+    def test_is_telekinetic_predator_rendering(self):
+        universe = Universe(width=10, height=10)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity("TelekineticPred", x=0, y=0, energy=10, is_telekinetic_predator=True)
+
+        universe.add_entity(entity)
+        rendered_grid = visualizer.render()
+        self.assertIn('Ț', rendered_grid)

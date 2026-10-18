@@ -731,6 +731,8 @@ class CLIVisualizer:
                         char = 'ĥ'
                     elif getattr(entity, 'is_hive_mind_predator', False):
                         char = 'Ĥ'
+                    elif getattr(entity, 'is_telekinetic_predator', False):
+                        char = 'Ț'
                     elif getattr(entity, 'is_rain_strider', False):
                         char = 'Λ'
                     elif getattr(entity, 'is_fire_strider', False):
