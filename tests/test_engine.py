@@ -24617,3 +24617,40 @@ class TestIsIntrospectivePredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e is not parent]
         self.assertGreater(len(children), 0, "Parent should reproduce.")
         self.assertTrue(getattr(children[0], 'is_introspective_predator', False), "Child should mutate to gain is_introspective_predator.")
+
+class TestIsSymbioticPredator(unittest.TestCase):
+    def test_is_symbiotic_predator_combat(self):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity(name="predator", x=5, y=5, energy=100, size=10,
+                          diet="carnivore", is_symbiotic_predator=True, is_pacifist=False)
+        predator.attack = 10
+
+        prey = Entity(name="prey", x=5, y=5, energy=5000, size=5,
+                      is_symbiotic=True)
+        prey.defense = 12
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(prey.was_eaten)
+
+class TestIsSymbioticPredatorMutation(unittest.TestCase):
+    def test_is_symbiotic_predator_mutates(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity(name="parent", x=5, y=5, energy=5000, size=5,
+                        is_pacifist=True, is_ageless=True, is_immune=True,
+                        lays_eggs=False, is_gluttonous=True, has_blubber=True)
+        universe.add_entity(parent)
+        universe.reproduction_threshold = 10
+
+        with patch('random.random', return_value=0.01):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_symbiotic_predator', False))
