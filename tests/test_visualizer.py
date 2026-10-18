@@ -3285,6 +3285,16 @@ class TestCLIVisualizer(unittest.TestCase):
 
 
 
+
+    def test_is_introspective_predator_rendering(self):
+        universe = Universe(width=5, height=5)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity(name="introspective_predator", x=2, y=2, energy=50, is_introspective_predator=True)
+        universe.entities.append(entity)
+        grid_str = visualizer.render()
+        self.assertIn('🤔', grid_str, "Entity with is_introspective_predator should be rendered as 🤔")
+
 if __name__ == '__main__':
+
 
     unittest.main()
