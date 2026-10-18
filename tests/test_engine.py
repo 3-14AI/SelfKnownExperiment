@@ -13865,7 +13865,7 @@ class TestIsSpringDweller(unittest.TestCase):
         from src.universe.engine import Entity, Universe
         universe = Universe(width=5, height=5)
         universe.time = 0 # Spring
-        entity = Entity(name="Spring Dweller", x=1, y=1, energy=40, size=1, age=5, is_spring_dweller=True, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40, is_sleeping=True)
+        entity = Entity(name="Spring Dweller", x=1, y=1, energy=200, size=5, age=5, is_spring_dweller=True, preferred_temperature=universe.get_temperature_at(1,1), temperature_tolerance=40, is_sleeping=True)
         universe.add_entity(entity)
 
         initial_energy = entity.energy
@@ -18668,8 +18668,8 @@ class TestIsSnowStrider(unittest.TestCase):
             self.assertTrue(getattr(children[0], 'is_snow_strider', False))
 
     def test_is_snow_strider_defense(self):
-        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5)
-        prey = Entity(name="Prey", x=1, y=1, size=5, age=5, max_age=100, defense=1000, energy=5000, is_snow_strider=True)
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=5, target_species=['Prey'])
+        prey = Entity(name="Prey", x=1, y=1, size=5, age=5, max_age=100, defense=1000, energy=5000, is_snow_strider=True, is_ageless=True, lays_eggs=False)
 
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='snow'))
 
@@ -20984,7 +20984,7 @@ class TestStunStrider(unittest.TestCase):
         self.assertLess(entity2.stamina, 10)
 
         # Test tick bypass
-        entity3 = Entity("Test3", x=0, y=0, max_stamina=50, stamina=10, energy=100, is_stun_strider=True, stunned_time=2, is_sturdy=False, size=1)
+        entity3 = Entity("Test3", x=0, y=0, max_stamina=50, stamina=10, energy=200, size=1, age=5, is_stun_strider=True, stunned_time=2, is_sturdy=False, max_age=100, is_ageless=True)
         self.universe.entities = [entity3]
         food = Food(x=2, y=0, energy=10)
         self.universe.add_food(food)
@@ -24602,6 +24602,9 @@ class TestIsIntrospectivePredatorMutation(unittest.TestCase):
     def test_is_introspective_predator_mutation(self):
         universe = Universe(width=10, height=10)
         universe.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
 
         parent = Entity(name="parent", x=5, y=5, size=500, energy=5000, max_age=100,
                         is_introspective_predator=False, is_ageless=True, lays_eggs=False, is_pacifist=True, is_gluttonous=True, has_blubber=True)
@@ -24690,3 +24693,73 @@ class TestIsTelepathicPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0, "Parent should reproduce.")
         self.assertTrue(getattr(children[0], 'is_telepathic_predator', False), "Child should mutate to gain is_telepathic_predator.")
+
+class TestIsClairvoyantPredator(unittest.TestCase):
+    def test_is_clairvoyant_predator_combat_multiplier(self):
+        from src.universe.engine import Entity, Universe
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100000
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator = Entity(name="pred", x=5, y=5, attack=9, defense=0, size=5,
+                          is_clairvoyant_predator=True, target_species=["prey"],
+                          diet="carnivore", max_age=100, is_pacifist=False, lays_eggs=False, is_ageless=True, is_immune=True)
+        prey = Entity(name="prey", x=5, y=5, attack=0, defense=10, size=5,
+                      energy=1000, is_clairvoyant=True, max_age=100, is_ageless=True, lays_eggs=False, is_immune=True)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        import random
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertEqual(prey.energy, 0, "Prey should be killed because predator attack (9 * 1.5 = 13.5) > prey defense (10).")
+        self.assertTrue(prey.was_eaten)
+
+    def test_is_clairvoyant_predator_no_multiplier(self):
+        from src.universe.engine import Entity, Universe
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100000
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator = Entity(name="pred", x=5, y=5, attack=9, defense=0, size=5,
+                          is_clairvoyant_predator=True, target_species=["prey"],
+                          diet="carnivore", max_age=100, is_pacifist=False, lays_eggs=False, is_ageless=True, is_immune=True)
+        prey = Entity(name="prey", x=5, y=5, attack=0, defense=10, size=5,
+                      energy=1000, is_clairvoyant=False, max_age=100, is_ageless=True, lays_eggs=False, is_immune=True)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        import random
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertGreater(prey.energy, 0, "Prey should survive because predator attack (9) <= prey defense (10).")
+
+class TestIsClairvoyantPredatorMutation(unittest.TestCase):
+    def test_is_clairvoyant_predator_mutates(self):
+        from src.universe.engine import Entity, Universe
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(name="parent", x=5, y=5, energy=5000, size=500, max_age=100,
+                        is_pacifist=True, is_ageless=True, is_immune=True,
+                        lays_eggs=False, is_gluttonous=True, has_blubber=True, is_clairvoyant_predator=False)
+        universe.time = 0
+        universe.add_entity(parent)
+
+        from unittest import mock
+        with mock.patch('random.random', return_value=0.01):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Parent should reproduce.")
+        self.assertTrue(getattr(children[0], 'is_clairvoyant_predator', False), "Child should mutate to gain is_clairvoyant_predator.")
