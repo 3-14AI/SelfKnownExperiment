@@ -18,3 +18,5 @@ test_is_web_dweller
 - `test_is_space_strider_defense`
 - `test_is_web_strider_defense`
 test_is_day_strider_mutation
+
+- `test_entity_eats_food`
