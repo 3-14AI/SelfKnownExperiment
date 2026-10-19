@@ -3356,3 +3356,13 @@ class TestIsShadowStalkerPredatorVisualizer(unittest.TestCase):
         universe.add_entity(entity)
         grid = visualizer.render()
         self.assertIn('S', grid)
+
+class TestIsMimicPredatorVisualizer(unittest.TestCase):
+    def test_is_mimic_predator_rendering(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="E", x=5, y=5)
+        entity.is_mimic_predator = True
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        grid = vis.render()
+        self.assertIn('\\', grid)

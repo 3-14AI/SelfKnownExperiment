@@ -15,3 +15,5 @@
 - `test_is_cautious_flee`: Occasionally fails due to RNG interaction or random events.
 TestIsMudDweller and TestIsSnowStrider are flaky.
 test_is_web_dweller
+- `test_is_space_strider_defense`
+- `test_is_web_strider_defense`
