@@ -25131,3 +25131,48 @@ class TestIsMimicPredatorMutation(unittest.TestCase):
         self.assertTrue(len(children) > 0)
         child = children[0]
         self.assertTrue(getattr(child, 'is_mimic_predator', False))
+
+class TestIsGluttonousPredator(unittest.TestCase):
+    def test_is_gluttonous_predator(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100000
+
+        predator = Entity(name="predator", x=5, y=5, is_pacifist=False, is_gluttonous_predator=True)
+        predator.diet = 'carnivore'
+        predator.energy = 50
+
+        prey_gluttonous = Entity(name="prey", x=5, y=5, is_pacifist=True, is_gluttonous=True)
+        prey_gluttonous.size = 10
+        prey_gluttonous.energy = 20
+
+        prey_normal = Entity(name="prey", x=5, y=5, is_pacifist=True, is_gluttonous=False)
+        prey_normal.size = 10
+        prey_normal.energy = 20
+
+        with patch('random.random', return_value=0.5):
+            universe.entities = [predator, prey_gluttonous]
+            universe.tick()
+
+            universe.entities = [predator, prey_normal]
+            universe.tick()
+
+class TestIsGluttonousPredatorMutation(unittest.TestCase):
+    def test_is_gluttonous_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(name="parent", x=5, y=5, is_gluttonous_predator=False)
+        parent.energy = 200
+        parent.age = 5
+        parent.max_age = 100
+
+        universe.entities = [parent]
+
+        with patch('random.random', return_value=0.01):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_gluttonous_predator', False))
