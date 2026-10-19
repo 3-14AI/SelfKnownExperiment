@@ -24977,3 +24977,60 @@ class TestIsTelekineticPredatorMutation(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestIsEtherealPredator(unittest.TestCase):
+    def test_is_ethereal_predator_attack_multiplier(self):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_ethereal_predator=True, target_species=['EtherealPrey'])
+        predator.attack = 10
+        universe.add_entity(predator)
+
+        prey_ethereal = Entity("EtherealPrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_ethereal=True)
+        universe.add_entity(prey_ethereal)
+
+        prey_ethereal.defense = 14
+
+        # Ensure attack happens and energy is sufficient
+        import random
+        original_random = random.random
+        def mock_random():
+            return 0.5
+        random.random = mock_random
+        universe.tick()
+        random.random = original_random
+
+        # Multiplied attack: 10 * 1.5 = 15 > 14
+        self.assertTrue(prey_ethereal.was_eaten, "Predator should have eaten the ethereal prey due to the 1.5x attack multiplier")
+
+class TestIsEtherealPredatorMutation(unittest.TestCase):
+    def test_is_ethereal_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_ethereal_predator=False, lays_eggs=False, is_ethereal=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        universe.reproduction_threshold = 1000
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        import random
+        original_random = random.random
+
+        def mock_random():
+            return 0.05
+
+        random.random = mock_random
+
+        parent.energy = 5000
+        parent.age = 5
+        parent.size = 20
+        parent.is_ageless = True
+
+        universe.tick()
+
+        random.random = original_random
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Parent should have reproduced")
+        self.assertTrue(getattr(children[0], 'is_ethereal_predator', False))
