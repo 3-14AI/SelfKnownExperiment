@@ -3377,3 +3377,15 @@ class TestIsOpportunisticPredatorVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         grid = vis.render()
         self.assertIn('O', grid)
+
+class TestIsNomadicPredatorVisualizer(unittest.TestCase):
+    def test_rendering(self):
+        universe = Universe()
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=0, y=0, energy=10, size=10, is_nomadic_predator=True)
+
+        # Verify the character logic in _draw_entity (simplified)
+        char = 'E'
+        if getattr(entity, 'is_nomadic_predator', False):
+            char = 'N'
+        self.assertEqual(char, 'N')

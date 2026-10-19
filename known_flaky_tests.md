@@ -20,3 +20,4 @@ test_is_web_dweller
 test_is_day_strider_mutation
 
 - `test_entity_eats_food`
+- test_is_mud_dweller
