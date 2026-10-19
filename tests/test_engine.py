@@ -25034,3 +25034,54 @@ class TestIsEtherealPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0, "Parent should have reproduced")
         self.assertTrue(getattr(children[0], 'is_ethereal_predator', False))
+
+class TestIsShadowStalkerPredator(unittest.TestCase):
+    def test_is_shadow_stalker_predator(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100000
+
+        prey1 = Entity(name="Prey1", x=5, y=5, size=5, is_ageless=True, max_age=100)
+        prey1.is_shadow_stalker = True
+
+        predator = Entity(name="Predator", x=5, y=5, size=4, is_ageless=True, max_age=100)
+        predator.diet = 'carnivore'
+        predator.is_shadow_stalker_predator = True
+        predator.is_pacifist = False
+
+        universe.add_entity(prey1)
+        universe.add_entity(predator)
+
+        # predator size=4 -> effective attack 4
+        # prey size=5 -> defense 5
+        # without multiplier, 4 <= 5 (no kill)
+        # with multiplier, 4 * 1.5 = 6 > 5 (kill)
+
+        with mock.patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertEqual(prey1.energy, 0)
+        self.assertTrue(getattr(prey1, 'was_eaten', False))
+
+class TestIsShadowStalkerPredatorMutation(unittest.TestCase):
+    def test_is_shadow_stalker_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(name="Parent", x=5, y=5, size=2, max_age=100)
+        parent.energy = 200
+        parent.is_shadow_stalker_predator = False
+
+        universe.add_entity(parent)
+
+        with mock.patch('random.random', return_value=0.05):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_shadow_stalker_predator', False))

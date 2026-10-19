@@ -3346,3 +3346,13 @@ class TestIsTelekineticPredatorVisualizer(unittest.TestCase):
         universe.add_entity(entity)
         rendered_grid = visualizer.render()
         self.assertIn('Ț', rendered_grid)
+
+class TestIsShadowStalkerPredatorVisualizer(unittest.TestCase):
+    def test_is_shadow_stalker_predator_rendering(self):
+        universe = Universe(10, 10)
+        visualizer = CLIVisualizer(universe)
+        entity = Entity(name='P', x=5, y=5)
+        entity.is_shadow_stalker_predator = True
+        universe.add_entity(entity)
+        grid = visualizer.render()
+        self.assertIn('S', grid)
