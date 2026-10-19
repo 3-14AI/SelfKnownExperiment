@@ -572,3 +572,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_hive_mind_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking hive mind entities. Added visualizer rendering and tests.
 - [x] Implemented `is_telekinetic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking telekinetic entities. Added visualizer rendering and tests.
 - [x] Implemented `is_ethereal_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking ethereal entities. Added visualizer rendering and tests.
+- [x] Implemented `is_shadow_stalker_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking shadow stalker entities. Added visualizer rendering and tests.
