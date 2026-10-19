@@ -741,6 +741,8 @@ class CLIVisualizer:
                         char = '\\'
                     elif getattr(entity, 'is_gluttonous_predator', False):
                         char = 'G'
+                    elif getattr(entity, 'is_opportunistic_predator', False):
+                        char = 'O'
                     elif getattr(entity, 'is_rain_strider', False):
                         char = 'Λ'
                     elif getattr(entity, 'is_fire_strider', False):

@@ -25176,3 +25176,62 @@ class TestIsGluttonousPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         if children:
             self.assertTrue(getattr(children[0], 'is_gluttonous_predator', False))
+
+
+class TestIsOpportunisticPredator(unittest.TestCase):
+    def test_is_opportunistic_predator(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100000
+
+        predator = Entity(name="predator", x=5, y=5, is_pacifist=False, is_opportunistic_predator=True)
+        predator.diet = 'carnivore'
+        predator.energy = 50
+        predator.attack = 8
+
+        prey_opportunistic = Entity(name="prey", x=5, y=5, is_pacifist=True, is_opportunistic=True)
+        prey_opportunistic.size = 10
+        prey_opportunistic.defense = 10
+        prey_opportunistic.energy = 20
+
+        prey_normal = Entity(name="prey", x=5, y=5, is_pacifist=True, is_opportunistic=False)
+        prey_normal.size = 10
+        prey_normal.defense = 10
+        prey_normal.energy = 20
+
+        with patch('random.random', return_value=0.5):
+            universe.entities = [predator, prey_opportunistic]
+            universe.tick()
+
+            # Predator base attack 10, prey normal defense 10, prey opportunistic defense 10
+            # 10 * 1.5 = 15 > 10, so prey dies
+            self.assertEqual(prey_opportunistic.energy, 0)
+            self.assertTrue(prey_opportunistic.was_eaten)
+
+            predator.energy = 50
+            universe.entities = [predator, prey_normal]
+            universe.tick()
+
+            # Base attack 10 vs defense 10 (no multiplier), prey should survive
+            self.assertGreater(prey_normal.energy, 0)
+            self.assertFalse(prey_normal.was_eaten)
+
+class TestIsOpportunisticPredatorMutation(unittest.TestCase):
+    def test_is_opportunistic_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(name="parent", x=5, y=5, is_opportunistic_predator=False)
+        parent.energy = 200
+        parent.age = 5
+        parent.max_age = 100
+
+        universe.entities = [parent]
+
+        with patch('random.random', return_value=0.01):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_opportunistic_predator', False))
