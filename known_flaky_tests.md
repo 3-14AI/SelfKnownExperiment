@@ -21,3 +21,4 @@ test_is_day_strider_mutation
 
 - `test_entity_eats_food`
 - test_is_mud_dweller
+- [ ] `test_is_mud_dweller` in `tests/test_engine.py` is flaky because it occasionally fails due to RNG in tick() consuming energy unexpectedly.
