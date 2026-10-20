@@ -347,3 +347,21 @@
   - Изменения покрывают различные классы свойств (dancer, glider, dweller, walker, strider) для различных типов местности и состояний (disease, grass, parasite, sleep, poison и др.).
   - Проведена синхронизация отображения со списком реализованных ранее свойств в `engine.py`.
 - **Дальнейшие шаги**: Продолжать поддерживать консистентность между новыми свойствами движка и их отображением в визуализаторе. Реализовать новые механики и свойства в соответствии с `agents.md`.
+
+### Analysis 338: Realization of `is_blizzard_strider`
+- **Agent Goal**: Analyze the recent implementation of `is_blizzard_strider` which seems to be the latest feature without an analysis entry.
+- **Implementation Details**:
+  - Added logic in engine to grant 0 stamina cost and defense bonus during blizzards.
+  - Test files and visualizer updates were provided.
+- **Next Steps**: Continue to observe and evaluate the ecosystem developments and new traits added to agents.md.
+
+### Analysis 339: Реализация свойства `is_desperate_predator`
+- **Цель агента**: Проанализировать реализацию нового свойства `is_desperate_predator` для развития поведения хищников в экосистеме.
+- **Детали реализации**:
+  - Добавлено свойство `is_desperate_predator` в класс `Entity`. Оно дает хищникам множитель атаки 1.5x при нападении на жертву, обладающую свойством `is_desperate`.
+  - В `Universe.tick()` обновлена логика боя (в циклах поиска жертвы) для корректного применения нового множителя урона.
+  - В блок размножения сущностей добавлено наследование и случайная мутация свойства `is_desperate_predator` для потомства.
+  - В `src/universe/visualizer.py` добавлен рендеринг сущностей с этим свойством с помощью символа `Δ`.
+  - Написаны модульные тесты: проверка боевого множителя против цели с `is_desperate`, проверка отсутствия множителя против обычной цели, а также тесты на мутацию и рендеринг в `CLIVisualizer`.
+  - Внесены соответствующие записи в `CHANGELOG.md`, а также обновлен `agents.md`.
+- **Дальнейшие шаги**: Продолжать обогащение экосистемы новыми свойствами и механиками для хищников, поддерживая стабильность тестов и актуальность визуализатора.
