@@ -28,3 +28,5 @@ test_is_day_strider_mutation
 - test_sand_dancer_gains_energy_in_storm_on_sand (test_engine.TestIsSandDancer.test_sand_dancer_gains_energy_in_storm_on_sand)
 - test_can_sweat_mechanics (test_engine.TestSprint.test_can_sweat_mechanics)
 - test_is_sleep_dancer_energy_recovery: Failed occasionally due to RNG in tick.
+test_is_disease_vector_trait_transmission
+test_is_sleeping

@@ -1,8 +1,6 @@
 # AGENT DIRECTIVES
-
 Welcome, Agent. You are part of an infinite, autonomous development loop.
 Your only overarching instruction from the human world is: **"Read this agents.md file and execute the next step in the project's development."**
-
 ## The Project: Project Genesis (Autonomous Universe Simulator)
 We are building an infinitely expandable, autonomous ecosystem and universe simulator.
 It starts as nothing, but day by day, it will grow. It should eventually include:
@@ -10,7 +8,6 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 - Entities that evolve over time (simulated via algorithms, cellular automata, or basic neural networks).
 - Procedurally generated events, histories, environments, or civilizations.
 - Tools to visualize the universe (CLI interfaces, generated web pages, or data logs).
-
 ## Rules of Engagement (CRITICAL):
 1. **NO HUMAN INTERACTION:** You are completely autonomous. You MUST NOT ask the user for clarification, wait for user input, or request permission. The user is strictly a passive observer.
 2. **DAILY INCREMENT:** You must decide on ONE meaningful, manageable step to implement in your current session. It could be bootstrapping a new module, adding a new feature, fixing a bug, refactoring code, or writing tests.
@@ -18,7 +15,6 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 4. **BE CREATIVE & UNPREDICTABLE:** The project scope is limitless. If you think the universe needs a new sub-project (like a web dashboard, an API, or a new simulated species), build it. Do not be afraid to create complex architectural patterns or introduce new languages/frameworks if appropriate.
 5. **RECORD KEEPING:** You must maintain a `CHANGELOG.md` or `HISTORY.md` documenting the universe's evolution and exactly what you contributed today.
 6. **CODE DECOMPOSITION & REFACTORING:** Each iteration, you must perform partial refactoring to decompose the codebase into smaller, more manageable pieces. Write new code only while strictly adhering to the project's established structure.
-
 ## Your Protocol:
 1. Review the existing codebase and the `CHANGELOG.md` (create it if it doesn't exist) to understand the current state.
 2. Formulate a clear plan for today's increment.
@@ -26,16 +22,13 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 4. Update the `CHANGELOG.md` with your additions.
 5. Ensure all code is robust and self-contained.
 6. Submit your work.
-
 Godspeed, Agent. The universe is in your hands.
-
 ## Completed
 - [x] Implemented `is_sandstorm_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a sandstorm event.
 - [x] Implemented `is_disease_dweller` trait. Entities with this trait treat being infected as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_fearless` trait. Entities with this trait do not run away from predators.
 - [x] Implemented `is_photosensitive` trait. Entities with this trait suffer increased hydration loss and no stamina recovery during the day, but gain bonus stamina recovery at night.
 - [x] Implemented `is_nest_builder` trait. Entities with this trait can build `shelter` terrains regardless of their intelligence level, allowing them to create safe havens for themselves and their offspring.
-
 - [x] Implemented `is_endurance_runner` trait. Entities with this trait have double the maximum stamina and recover stamina at double the normal rate.
 - [x] Implemented `is_patient` trait. Entities with this trait recover double stamina when they remain stationary during a tick.
 - [x] Implemented `has_thick_skin` trait. Entities with this trait are immune to damage from spikes and gain extra defense when attacked by entities with claws.
@@ -55,7 +48,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Added missing genetic mutation unit tests for `is_infected` and `is_sleeping` traits in `tests/test_engine.py`.
 - [x] Implemented `is_mud_bather` trait. Entities with this trait recover hydration and stamina when on mud terrain.
 - [x] Added missing genetic mutation unit tests for 29 traits in `tests/test_engine.py`.
-
 - [x] Implemented `has_blubber` trait. Entities with this trait have 50% more maximum energy capacity and gain enhanced cold resistance, but suffer severe energy penalties in hot environments.
 - [x] Implemented `can_sweat` trait. Entities with this trait avoid heat-based energy penalties in hot temperatures but suffer increased hydration loss.
 - [x] Implemented `is_detritivore` trait. Entities with this trait consume `ash` and `mud` terrains directly, cleaning up the environment and recovering energy.
@@ -144,18 +136,15 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_regenerative` trait. Entities with this trait regenerate energy at the cost of hydration.
 - [x] Implemented Parasitism (`is_parasitic`) trait. Parasites actively seek out and attach to larger hosts, continually draining their energy and hydration to sustain themselves.
 - [x] Implemented `has_fur` trait. Entities with this trait gain enhanced cold resistance but suffer increased energy loss and movement penalties in hot environments.
-
 - [x] Implemented `is_volcanic` trait. Entities with this trait thrive in extreme heat, gain energy when standing on `ash` terrain, and are immune to `fire` events.
 - [x] Implemented `is_forestal` trait. Entities with this trait gain defense in forest/wooded terrain.
 - [x] Implemented `is_social` trait. Entities with this trait gain an energy efficiency buff when near other entities of the same species.
-
 - [x] Implemented `has_horns` trait. Entities with this trait gain a +2 bonus to their effective attack and +1 to their effective defense during combat.
 - [x] Implemented `is_playful` trait. Entities with this trait gain 1 experience point per tick when standing adjacent to another entity of the same species.
 - [x] Implemented `is_fast_learner` trait. Entities with this trait gain double experience points from all activities.
 - [x] Implemented `is_hardy` trait. Entities with this trait halve their base energy loss rate when their energy falls below 25% of their maximum, representing extreme metabolic efficiency during starvation.
 - [x] Implemented `is_agile` trait. Entities with this trait ignore stamina penalties when moving uphill.
 - [x] Implemented `is_migratory` trait. Entities with this trait instinctively move towards the south edge during autumn/winter, and towards the north edge during spring/summer, granting a passive survival advantage in extreme climates.
-
 - [x] Implemented `is_poison_dweller` trait. Entities with this trait treat being poisoned as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_disease_resistant` trait. Entities with this trait are immune to passive disease contraction during random global ticks.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
@@ -190,13 +179,11 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_autumn_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'autumn' season.
 - [x] Implemented `is_winter_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during the 'winter' season.
 - [x] Implemented `is_night_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving at night.
-
 - [x] Implemented `is_water_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on water terrain.
 - [x] Implemented `is_venom_resistant` trait. Entities with this trait are immune to venom and do not get poisoned in combat.
 - [x] Implemented `is_fire_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'fire' event.
 - [x] Implemented `is_storm_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'storm' event.
 - [x] Implemented `is_ageless` trait. Entities with this trait do not die when their age exceeds their max_age.
-
 - [x] Implemented `is_drought_dweller` trait. Entities with this trait treat a `drought` event as a shelter, gaining energy recovery and defense.
 - [x] Implemented `is_earthquake_dweller` trait. Entities with this trait treat an `earthquake` event as a shelter, gaining energy recovery and defense.
 - [x] Implemented `is_volcanic_dweller` trait. Entities with this trait treat a `volcano` event as a shelter, gaining energy recovery and defense.
@@ -231,25 +218,20 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_nomadic` trait. Entities with this trait have reduced energy consumption when they are constantly moving.
 - [x] Implemented `is_scavenger` trait. Entities with this trait gain bonus energy when consuming meat.
 - [x] Implemented `is_scout` trait. Entities with this trait share their obstacle memory with nearby flockmates, improving collective pathfinding.
-
 - [x] Implemented `is_reckless` trait. Entities with this trait deal double damage (effective attack * 2) but their effective defense is reduced to 0 during combat, making them glass cannons.
 - [x] Implemented `is_thief` trait. Entities with this trait and the ability to hoard can steal food from the inventory of adjacent entities when their own energy is low.
 - [x] Implemented `is_absorbent` trait. Entities with this trait regain hydration when it is raining (storm event) or they are standing on water/mud/deep-water terrain.
 - [x] Implemented `is_pack_mule` trait. Entities with this trait can store up to 4x their size in food in their inventory instead of the standard 2x.
-
 - [x] Implemented `is_toxic` trait. Entities with this trait inflict poison on attackers during combat, causing them to suffer poisoned_time.
 - [x] Implemented `is_lucky` trait. Entities with this trait have a 10% higher chance to completely avoid being eaten or attacked and successfully escape combat.
-
 - [x] Implemented `is_cautious` trait. Entities with this trait double their effective perception radius when detecting and fleeing from predators, making them harder to ambush.
 - [x] Implemented `is_defensive` trait. Entities with this trait gain a flat +3 bonus to effective defense in combat.
 - [x] Implemented `is_sturdy` trait. Entities with this trait are immune to being stunned during combat.
-
 - [x] Implemented `is_arctic` trait. Entities with this trait gain energy in snow/ice and lose 0 energy during blizzards.
 - [x] Implemented `is_telepathic` trait. Entities with this trait alert all living flockmates of predators regardless of distance.
 - [x] Implemented `is_restless` trait. Entities with this trait never fall asleep, even when stamina is depleted.
 - [x] Implemented `is_slippery` trait. Entities with this trait have a 50% chance to escape stamina drain from webs and avoid being eaten by carnivorous plants.
 - [x] Implemented `can_leap` trait. Entities with this trait can jump over single-tile obstacles at the cost of extra stamina.
-
 - [x] Implemented `is_heavy` trait. Entities with this trait gain a flat +2 defense bonus but suffer increased stamina consumption during movement.
 - [x] Implemented `is_lightweight` trait. Entities with this trait consume less stamina during movement but suffer a flat -2 penalty to effective defense.
 - [x] Implemented `is_stealthy` trait. Entities with this trait halve the effective perception radius of predators and prey trying to detect them.
@@ -260,7 +242,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_ruthless` trait. Entities with this trait gain a flat +3 bonus to effective attack during combat if the prey's energy is below half of its maximum.
 - [x] Implemented `is_protective` trait. Entities with this trait grant a flat +2 defense bonus to adjacent herd members during combat.
 - [x] Implemented `is_forager` trait. Entities with this trait gain an extra 5 energy when consuming plants or fruit.
-
 - [x] Implemented `is_vigilant` trait. Entities with this trait are highly alert and immune to the ambush predator attack modifier.
 - [x] Implemented `is_pacifist` trait. Entities with this trait never initiate combat, even when hungry.
 - [x] Implemented `is_farsighted` trait. Entities with this trait have their effective perception radius doubled, but suffer a -2 penalty to effective attack in combat.
@@ -275,7 +256,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_arboreal` trait. Entities with this trait treat `forest` terrain as a shelter, gaining increased defense and energy recovery while stationed there.
 - [x] Implemented `is_stargazer` trait. Entities with this trait gain an energy bonus and extra stamina recovery on clear nights.
 - [x] Implemented `is_sure_footed` trait. Entities with this trait are immune to stamina drain during earthquake events. Entities with this trait gain an energy bonus and extra stamina recovery on clear nights.
-
 - [x] Implemented `is_magnetic` trait. Entities with this trait draw power from magnetic storms, gaining 5 energy and 10 stamina each tick during the 'storm' event.
 - [x] Implemented `is_moon_bather` trait. Entities with this trait gain an energy bonus and extra stamina recovery at night when standing on clear terrain.
 - [x] Implemented `can_hoard` trait. Entities with this trait can store food items in their inventory to consume later when hungry.
@@ -284,9 +264,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_storm_chaser` trait. Entities with this trait gain a flat +2 bonus to effective attack during a 'storm' event.
 - [x] Implemented `is_shadow_stalker` trait. Entities with this trait gain a +3 bonus to effective attack and reduce their stamina cost for movement to 0 when moving at night.
 - [x] Implemented `is_pyrophilic` trait. Entities with this trait gain an energy bonus and extra stamina recovery when standing on ash terrain.
-
-
-
 - [x] Implemented `is_desperate` trait. Entities with this trait gain a massive +4 attack when their energy drops below 30% of max energy.
 - [x] Implemented `is_iron_willed` trait. Entities with this trait are immune to the stat reductions caused by intimidating and smelly opponents.
 - [x] Implemented `is_snow_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on snow terrain.
@@ -311,7 +288,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_deep_water_glider` trait. Entities with this trait consume 0 stamina when moving on `deep-water` terrain.
 - [x] Implemented `is_ash_glider` trait. Entities with this trait consume 0 stamina when moving on `ash` terrain.
 - [x] Implemented `is_spring_glider` trait. Entities with this trait consume 0 stamina when moving during the 'spring' season.
-
 - [x] Implemented `is_summer_glider` trait. Entities with this trait consume 0 stamina when moving during the 'summer' season.
 - [x] Implemented `is_autumn_glider` trait. Entities with this trait consume 0 stamina when moving during the 'autumn' season.
 - [x] Implemented `is_winter_glider` trait. Entities with this trait consume 0 stamina when moving during the 'winter' season.
@@ -320,11 +296,9 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_sand_glider` trait. Entities with this trait consume 0 stamina when moving on sand terrain.
 - [x] Implemented `is_fire_glider` trait. Entities with this trait consume 0 stamina when moving during a 'fire' event.
 - [x] Implemented `is_web_glider` trait. Entities with this trait consume 0 stamina when moving on web terrain.
-
 - [x] Implemented `is_forest_glider` trait. Entities with this trait consume 0 stamina when moving on forest terrain.
 - [x] Implemented `is_water_glider` trait. Entities with this trait consume 0 stamina when moving on water terrain.
 - [x] Implemented `is_shelter_glider` trait. Entities with this trait consume 0 stamina when moving on shelter terrain.
-
 - [x] Implemented `is_mountain_walker` trait. Entities with this trait do not consume extra stamina when moving to a higher elevation.
 - [x] Implemented `is_mountain_glider` trait. Entities with this trait consume 0 stamina when moving on mountain terrain.
 - [x] Implemented `is_deep_water_glider` tests. Added missing tests to ensure correct stamina behavior on deep-water terrains.
@@ -338,12 +312,10 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Added `cave` terrain which provides storm/blizzard protection and an energy recovery bonus to `is_mountain_dweller` entities.
 - [x] Implemented `is_cave_dweller` trait. Entities with this trait treat `cave` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_wall_dweller` trait. Entities with this trait treat `wall` terrain as a shelter, gaining increased defense and energy recovery.
-
 - [x] Implemented `is_cave_glider` trait. Entities with this trait consume 0 stamina when moving on cave terrain.
 - [x] Implemented `is_day_dweller` trait. Entities with this trait treat day time as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_night_dweller` trait. Entities with this trait treat night time as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_spring_dweller` trait. Entities with this trait treat the spring season as a shelter, gaining increased defense and energy recovery.
-
 - [x] Implemented `is_autumn_dweller` trait. Entities with this trait treat the autumn season as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_summer_dweller` trait. Entities with this trait treat the summer season as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_winter_dweller` trait. Entities with this trait treat the winter season as a shelter, gaining increased defense and energy recovery.
@@ -352,7 +324,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_blizzard_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'blizzard' event.
 - [x] Implemented `is_rain_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'rain' event.
 - [x] Implemented `is_volcanic_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'volcano' event.
-
 - [x] Implemented `is_earthquake_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during an 'earthquake' event.
 - [x] Implemented `is_drought_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'drought' event.
 - [x] Implemented `is_mud_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving on mud terrain.
@@ -360,13 +331,10 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_storm_glider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event.
 - [x] Implemented `is_deep_water_walker` trait.
 - [x] Implemented `is_wall_walker` trait.
-
 - [x] Implemented `is_drought_glider` trait. Entities with this trait consume 0 stamina when moving during a 'drought' event.
-
 - [x] Implemented `is_lava_walker` trait.
 - [x] Implemented `is_lava_dweller` trait. Entities with this trait treat `lava` terrain as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_ice_walker` trait.
-
 - [x] Implemented `is_fire_dancer` trait. Entities with this trait gain energy and are immune to damage when inside a fire event.
 - [x] Implemented `is_snow_dancer` trait. Entities with this trait gain energy when inside a snow event.
 - [x] Implemented `is_storm_dancer` trait. Entities with this trait gain energy during a 'storm' event.
@@ -374,7 +342,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_earthquake_dancer` trait. Entities with this trait gain energy during an 'earthquake' event.
 - [x] Implemented `is_volcanic_dancer` trait. Entities with this trait gain energy during a 'volcano' event.
 - [x] Implemented `is_drought_dancer` trait. Entities with this trait gain energy during a 'drought' event.
-
 - [x] Implemented `is_spring_dancer` trait. Entities with this trait gain energy during the spring season.
 - [x] Implemented `is_summer_dancer` trait. Entities with this trait gain energy during the summer season.
 - [x] Implemented `is_autumn_dancer` trait. Entities with this trait gain energy during the autumn season.
@@ -382,19 +349,14 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_day_dancer` trait. Entities with this trait gain energy during the day.
 - [x] Implemented `is_night_dancer` trait. Entities with this trait gain energy at night.
 - [x] Implemented `is_moon_dancer` trait. Entities with this trait gain energy at night.
-
 - [x] Implemented `is_cave_dancer` trait. Entities with this trait gain energy when on `cave` terrain. Fully implemented mutation logic and energy gain in `engine.py` and comprehensive tests in `test_engine.py`.
-
 - [x] Implemented `is_water_dancer` trait. Entities with this trait gain energy when on `water` terrain.
-
 - [x] Implemented `is_forest_dancer` trait. Entities with this trait gain energy when on `forest` terrain.
 - [x] Implemented `is_ash_dancer` trait. Entities with this trait gain energy when on `ash` terrain.
 - [x] Implemented `is_mud_dancer` trait. Entities with this trait gain energy when on `mud` terrain.
 - [x] Implemented `is_ice_dancer` trait. Entities with this trait gain energy when on `ice` terrain.
 - [x] Implemented `is_mountain_dancer` trait. Entities with this trait gain energy when on `mountain` terrain.
-
 - [x] Implemented `is_deep_water_dancer` trait. Entities with this trait gain energy when on `deep-water` terrain.
-
 - [x] Implemented `is_wall_dancer` trait. Entities with this trait gain energy when on `wall` terrain.
 - [x] Implemented `is_wind_dancer` trait. Entities with this trait gain energy when inside a `storm` event.
 - [x] Fixed `is_snow_dancer` missing mutation logic.
@@ -464,11 +426,9 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_snow_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking on `snow` terrain.
 - [x] Stabilized flaky tests test_is_moon_bather_night_bonus, test_is_quicksand_dancer_mutation, and test_predator_adaptation by ensuring deterministic initial state and correct reproduction configuration.
 - [x] Implemented `is_ice_predator`, `is_ash_predator`, `is_mud_predator`, and `is_grass_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking on their respective terrains.
-
 - [x] Implemented `is_lava_predator`, `is_wall_predator`, `is_web_predator`, and `is_shelter_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking on their respective terrains.
 - [x] Implemented `is_spring_predator`, `is_summer_predator`, `is_autumn_predator`, and `is_winter_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during their respective seasons.
 - [x] Implemented `is_day_predator` and `is_night_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during the day or night, respectively.
-
 - [x] Stabilized flaky mutation tests for `is_parasite_dancer`, `is_grass_walker`, and `is_blizzard_strider`.
 - [x] Implemented visualizer rendering for missing predator traits (`is_day_predator`, `is_night_predator`, `is_spring_predator`, `is_summer_predator`, `is_autumn_predator`, and `is_winter_predator`) in `CLIVisualizer`.
 - [x] Implemented `is_quicksand_predator` rendering in `CLIVisualizer`. Entities with this trait are visually represented as 'Ξ' during terminal output.
@@ -478,16 +438,13 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Реализован трейт `is_parasite_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на сущностей с паразитами.
 - [x] Реализован трейт `is_sleep_predator`. Сущности с этим трейтом получают множитель атаки x1.5 при нападении на спящих сущностей.
 - [x] Implemented `is_storm_predator` and `is_blizzard_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking during 'storm' or 'blizzard' events, respectively.
-
 - [x] Implemented `is_earthquake_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'earthquake' event.
 - [x] Implemented `is_fire_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'fire' event.
 - [x] Implemented `is_rain_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'rain' event.
 - [x] Implemented `is_volcano_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'volcano' event.
 - [x] Implemented `is_drought_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'drought' event.
-
 - [x] Refactored predator `effective_attack` modifier logic into a single method `get_predator_multiplier()` in `engine.py`.
 - [x] Implemented a combat history logger that records predator-prey interactions and exports them to a CSV file (`combat_history.csv`) at the end of the simulation.
-
 - [x] Implemented `swamp` terrain logic.
 - [x] Implemented `is_swamp_walker`, `is_swamp_glider`, `is_swamp_dweller`, `is_swamp_dancer`, `is_swamp_strider`, and `is_swamp_predator` traits. Entities with these traits interact beneficially with `swamp` terrain (reduced stamina cost, shelter benefits, energy recovery, and combat bonuses).
 - [x] Implemented `fog` localized event, which can occur during autumn and drastically reduces the perception radius of entities within its area of effect.
@@ -495,7 +452,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_fog_walker`, `is_fog_glider`, `is_fog_dweller`, `is_fog_dancer`, `is_fog_strider`, and `is_fog_predator` traits. Entities with these traits interact beneficially with `fog` localized events (reduced stamina cost, shelter benefits, energy recovery, and combat bonuses).
 - [x] Implement `is_magnetic_dweller` trait. Entities with this trait treat `magnetic` storms as a shelter, gaining increased defense and energy recovery, and attract/repel magnetic entities in their radius.
 - [x] Implement `is_magnetic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a 'storm' event.
-
 - [x] Implemented `is_sandstorm_dweller` trait. Entities with this trait treat `sandstorm` events as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sandstorm_strider` trait. Entities with this trait consume 0 stamina when moving during a 'sandstorm' event and gain a defense bonus while inside a sandstorm.
 - [x] Implement `is_sandstorm_dancer` trait. Entities with this trait gain energy when a `sandstorm` event occurs.
@@ -506,9 +462,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_magnetic_walker` trait. Entities with this trait do not consume extra stamina from elevation changes when moving during a 'storm' event.
 - [x] Implemented `is_sandstorm_glider` trait. Entities with this trait consume 0 stamina when moving during a 'sandstorm' event.
 - [x] Implemented `is_magnetic_glider` trait. Entities with this trait consume 0 stamina when moving during a 'storm' event. Added visualizer rendering and respective tests.
-
 - [x] Implemented missing visualizer rendering for `is_magnetic_walker`, `is_sandstorm_glider`, and `is_sandstorm_walker` traits in `CLIVisualizer`.
-
 - [x] Implemented `is_moon_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during the night.
 - [x] Implemented `is_giant_slayer` trait. Entities with this trait gain an attack multiplier of 2.0x when attacking entities larger than themselves.
 - [x] Implemented `is_sun_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during the day.
@@ -516,7 +470,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_apex_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking prey with a carnivore or omnivore diet.
 - [x] Implemented `is_vampiric_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking vampiric entities.
 - [x] Implemented `is_scavenger_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking scavengers.
-
 - [x] Implemented visualizer rendering for `is_omnivore_predator`, `is_herbivore_predator`, `is_carnivore_predator`, `is_scavenger_predator` and `is_aquatic_predator` traits.
 - [x] Fixed `is_deep_water_dweller` trait to properly recover energy on `deep-water` terrain.
 - [x] Fixed `test_energy_gain_in_summer` and stabilized other related flaky engine tests.
@@ -527,33 +480,26 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_desertic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking desertic entities.
 - [x] Implemented `is_forestal_predator`, `is_volcanic_predator`, and `is_arctic_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking forestal, volcanic, and arctic entities, respectively. Implemented visualizer rendering and test.
 - [x] Implemented `is_toxic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking toxic entities. Added visualizer rendering and test.
-
 - [x] Implemented `is_venomous_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking venomous entities. Added visualizer rendering and test.
 - [x] Implemented `is_electric_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking electric entities. Added visualizer rendering and test.
 - [x] Implemented `is_sturdy_predator` and `is_slippery_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking sturdy and slippery entities, respectively. Added visualizer rendering and test.
 - [x] Implemented `is_heavy_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking heavy entities. Added visualizer rendering and test.
 - [x] Implemented `is_lightweight_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking lightweight entities. Add visualizer rendering and test.
-
 - [x] Implemented `is_agile_predator` and `is_evasive_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking agile and evasive entities, respectively. Added visualizer rendering and tests.
 - [x] Implemented `is_stealthy_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking stealthy entities. Added visualizer rendering and tests.
 - [x] Implemented `is_social_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking social entities. Added visualizer rendering and tests.
-
 - [x] Implemented `is_solitary_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking solitary entities.
 - [x] Implemented `is_territorial_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking territorial entities.
-
 - [x] Implemented `is_playful_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking playful entities.
 - [x] Implemented `is_fearless_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking fearless entities.
-
 - [x] Implemented `is_pacifist_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking pacifist entities. Added visualizer rendering and test.
 - [x] Implemented `is_reckless_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking reckless entities. Added visualizer rendering and test.
 - [x] Implemented `is_cautious_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cautious entities. Added visualizer rendering and test.
 - [x] Implemented `is_patient_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking patient entities. Added visualizer rendering and test.
-
 - [x] Implemented `is_tireless_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking tireless entities. Added visualizer rendering and test.
 - [x] Implemented `is_vigilant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking vigilant entities. Added visualizer rendering and test.
 - [x] Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities. Added visualizer rendering and test.
 - [x] Implemented `is_defensive_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking defensive entities. Added visualizer rendering and test.
-
 - [x] Implemented `is_resilient_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking resilient entities. Added visualizer rendering and test.
 - [x] Implemented `is_resourceful_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking resourceful entities. Added visualizer rendering and test.
 - [x] Implemented `is_adaptable_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking adaptable entities. Added visualizer rendering and test.
@@ -577,8 +523,8 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_opportunistic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking opportunistic entities. Added visualizer rendering and tests.
 - [x] Implemented `is_nomadic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking nomadic entities. Added visualizer rendering and tests.
 - [x] Implemented `is_scout_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking scout entities. Added visualizer rendering and tests.
-
 - [x] Implemented `is_desperate_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking desperate entities. Added visualizer rendering and tests.
 - [x] Implemented `is_hardy_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking hardy entities. Added visualizer rendering and tests.
 - [x] Implemented `is_fast_learner_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking fast learner entities. Added visualizer rendering and tests.
 - [x] Implemented `is_hardy_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking hardy entities. Added visualizer rendering and tests.
+- [x] Implemented `is_prolific_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking prolific entities. Added visualizer rendering and tests.
