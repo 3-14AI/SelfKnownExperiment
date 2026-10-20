@@ -581,3 +581,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_desperate_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking desperate entities. Added visualizer rendering and tests.
 - [x] Implemented `is_hardy_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking hardy entities. Added visualizer rendering and tests.
 - [x] Implemented `is_fast_learner_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking fast learner entities. Added visualizer rendering and tests.
+- [x] Implemented `is_hardy_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking hardy entities. Added visualizer rendering and tests.

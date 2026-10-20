@@ -25430,3 +25430,65 @@ class TestIsFastLearnerPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_fast_learner_predator', False))
+
+class TestIsHardyPredator(unittest.TestCase):
+    def test_is_hardy_predator_combat_multiplier(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+
+        # In engine, attack is often calculated inline from size or properties.
+        # Let's set predator attack explicitly higher.
+
+        # Control scenario
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=20, defense=5, energy=50, is_hardy_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=15, defense=5, energy=50, is_hardy=False, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        # Test scenario
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=20, defense=5, energy=50, is_hardy_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=15, defense=5, energy=50, is_hardy=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        # Without multiplier: effective_attack = 20, effective_defense = 5, escape_chance = 1.0 - (20 / (20 + 5)) = 1.0 - 0.8 = 0.20
+        # With multiplier: effective_attack = 30, effective_defense = 5, escape_chance = 1.0 - (30 / (30 + 5)) = 1.0 - 0.857 = 0.143
+        import random
+        original_random = random.random
+        random.random = lambda: 0.18
+        try:
+            universe1.tick()
+            universe2.tick()
+        finally:
+            random.random = original_random
+
+        self.assertFalse(prey1.was_eaten)
+        self.assertTrue(prey2.was_eaten)
+
+class TestIsHardyPredatorMutation(unittest.TestCase):
+    def test_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100000
+
+        # Create an ageless parent to avoid downscaling, size=50 gives sufficient max_energy
+        parent = Entity(name="parent", x=0, y=0, age=100, max_age=100, size=50, is_ageless=True, is_hardy_predator=False)
+        parent.energy = 500  # Set energy strictly high enough for reproduction
+        parent.reproduction_cooldown = 0
+        universe.entities = [parent]
+        universe.reproduction_threshold = 100 # Reset only for reproduction threshold
+
+        import random
+        original_random = random.random
+        random.random = lambda: 0.05
+
+        try:
+            universe.tick()
+        finally:
+            random.random = original_random
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_hardy_predator)
