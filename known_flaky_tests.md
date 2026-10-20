@@ -24,3 +24,6 @@ test_is_day_strider_mutation
 - [ ] `test_is_mud_dweller` in `tests/test_engine.py` is flaky because it occasionally fails due to RNG in tick() consuming energy unexpectedly.
 - `test_is_snow_dweller`: Failed due to `AssertionError: 0 not greater than or equal to 20` during engine tests. Intermittent failure related to energy recovery check.
 - `test_is_not_resilient_stun_recovery` (test_engine.TestIsResilient): Failed with AssertionError: 10 != 9 due to RNG/State leak.
+- test_burrowing_entity_acts_as_shelter (test_engine.TestBurrowing.test_burrowing_entity_acts_as_shelter)
+- test_sand_dancer_gains_energy_in_storm_on_sand (test_engine.TestIsSandDancer.test_sand_dancer_gains_energy_in_storm_on_sand)
+- test_can_sweat_mechanics (test_engine.TestSprint.test_can_sweat_mechanics)
