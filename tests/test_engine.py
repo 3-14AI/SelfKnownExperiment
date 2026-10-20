@@ -25492,3 +25492,51 @@ class TestIsHardyPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(children[0].is_hardy_predator)
+
+class TestIsProlificPredator(unittest.TestCase):
+    def test_is_prolific_predator_combat_multiplier(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+
+        # Control scenario
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=20, defense=5, energy=50, is_prolific_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=15, defense=5, energy=50, is_prolific=False, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        # Test scenario
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=20, defense=5, energy=50, is_prolific_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=15, defense=5, energy=50, is_prolific=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.17):
+            universe1.tick()
+        self.assertFalse(prey1.was_eaten)
+
+        with patch('random.random', return_value=0.17):
+            universe2.tick()
+        self.assertTrue(prey2.was_eaten)
+
+class TestIsProlificPredatorMutation(unittest.TestCase):
+    def test_is_prolific_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(name="parent", x=0, y=0, age=100, max_age=100, size=50, is_ageless=True, is_prolific_predator=False)
+        parent.energy = 5000
+        parent.lays_eggs = False
+        universe.entities = [parent]
+
+        # force mutation
+        with patch('random.random', return_value=0.05):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(children[0].is_prolific_predator)

@@ -1,4 +1,5 @@
 ### New Features
+- Added `is_prolific_predator` trait which grants attack multiplier to predators against prolific entities
 - Implemented `is_desperate_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking desperate entities.
 - Implemented `is_telepathic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking telepathic entities.
 - Implemented `is_bloodthirsty_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking bloodthirsty entities.
