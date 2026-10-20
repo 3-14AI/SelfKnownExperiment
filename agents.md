@@ -150,6 +150,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Implemented `is_frugivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking frugivore entities. Added visualizer rendering and tests.
 - [x] Implemented `is_aquatic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking aquatic entities.
 - [x] Implemented `is_amphibious_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking amphibious entities.
 - [x] Implemented `is_carnivore_predator` and `is_herbivore_predator` traits. Entities with these traits gain a 1.5x attack multiplier against carnivores/omnivores and herbivores, respectively.

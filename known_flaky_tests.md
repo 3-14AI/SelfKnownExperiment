@@ -30,3 +30,7 @@ test_is_day_strider_mutation
 - test_is_sleep_dancer_energy_recovery: Failed occasionally due to RNG in tick.
 test_is_disease_vector_trait_transmission
 test_is_sleeping
+- test_is_web_dweller: Failed occasionally due to random state when energy isn't correctly restored due to event chance or reproduction threshold causing energy drain.
+- test_burrowing_entity_acts_as_shelter: Occasional failure due to overlapping mechanics like disease or severe weather lowering energy despite burrowing shelter.
+- test_can_sweat_mechanics: Occasionally fails due to random event chances overlapping and causing excessive energy drain (e.g., entity is randomly killed or drained to 0 by other mechanics during the tick).
+- test_is_contagious_attacker: Occasionally fails because the prey successfully escapes combat, causing the combat loop to terminate early before the disease transmission check occurs, leaving the defender uninfected.
