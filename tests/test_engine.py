@@ -25294,3 +25294,61 @@ class TestIsNomadicPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_nomadic_predator', False))
+
+class TestIsScoutPredator(unittest.TestCase):
+    def test_is_scout_predator_combat(self):
+        universe = Universe()
+        universe.reproduction_threshold = 100000
+
+        predator = Entity(name="predator", x=0, y=0, energy=100, size=10, is_scout_predator=True)
+        predator.attack = 10
+        predator.defense = 0
+        predator.diet = 'carnivore'
+
+        prey1 = Entity(name="prey1", x=0, y=0, energy=10, size=10, is_scout=True)
+        prey1.defense = 12
+        prey1.attack = 0
+
+        prey2 = Entity(name="prey2", x=0, y=0, energy=10, size=10, is_scout=False)
+        prey2.defense = 12
+        prey2.attack = 0
+
+        universe.add_entity(predator)
+        universe.add_entity(prey1)
+        universe.add_entity(prey2)
+
+        import random
+        original_random = random.random
+        random.random = lambda: 0.5
+
+        universe.tick()
+
+        random.random = original_random
+
+        self.assertEqual(prey1.energy, 0)
+        self.assertTrue(prey2.energy > 0)
+
+class TestIsScoutPredatorMutation(unittest.TestCase):
+    def test_mutation(self):
+        universe = Universe()
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(name="parent", x=0, y=0, energy=200, size=10)
+        parent.defense = 0
+        parent.attack = 0
+        universe.add_entity(parent)
+
+        import random
+        original_random = random.random
+        random.random = lambda: 0.05
+
+        universe.tick()
+
+        random.random = original_random
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_scout_predator', False))
