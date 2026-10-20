@@ -3404,3 +3404,15 @@ class TestIsNomadicPredatorVisualizer(unittest.TestCase):
         # Since logic isn't easily accessible from outside without calling display(),
         # we can just test instantiation and trait value.
         self.assertTrue(getattr(entity, 'is_scout_predator', False))
+
+class TestRenderIsDesperatePredator(unittest.TestCase):
+    def test_render_is_desperate_predator(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="test", x=0, y=0, energy=10, size=10, is_desperate_predator=True)
+        universe.entities = [entity]
+
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+
+        if getattr(entity, 'is_desperate_predator', False):
+            self.assertIn('Δ', output)

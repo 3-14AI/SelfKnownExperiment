@@ -25352,3 +25352,41 @@ class TestIsScoutPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_scout_predator', False))
+
+class TestIsDesperatePredator(unittest.TestCase):
+    def test_is_desperate_predator_combat(self):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity(name="predator", x=0, y=0, energy=100, size=10, is_desperate_predator=True, diet='carnivore', attack=10)
+
+        prey_desperate = Entity(name="prey1", x=0, y=0, energy=20, size=5, defense=15, is_desperate=True)
+        prey_normal = Entity(name="prey2", x=0, y=0, energy=20, size=5, defense=25, is_desperate=False)
+
+        universe.entities = [predator, prey_desperate, prey_normal]
+
+        with patch('random.random', return_value=0.5):
+            universe.tick()
+
+        self.assertEqual(prey_desperate.energy, 0)
+        self.assertTrue(prey_desperate.was_eaten)
+
+        self.assertGreater(prey_normal.energy, 0)
+        self.assertFalse(getattr(prey_normal, 'was_eaten', False))
+
+class TestIsDesperatePredatorMutation(unittest.TestCase):
+    def test_is_desperate_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 10
+
+        parent = Entity(name="parent", x=1, y=1, energy=100, is_desperate_predator=False)
+        universe.entities = [parent]
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_desperate_predator', False))

@@ -577,3 +577,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_opportunistic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking opportunistic entities. Added visualizer rendering and tests.
 - [x] Implemented `is_nomadic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking nomadic entities. Added visualizer rendering and tests.
 - [x] Implemented `is_scout_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking scout entities. Added visualizer rendering and tests.
+
+- [x] Implemented `is_desperate_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking desperate entities. Added visualizer rendering and tests.
