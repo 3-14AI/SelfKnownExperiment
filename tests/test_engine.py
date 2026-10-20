@@ -25390,3 +25390,43 @@ class TestIsDesperatePredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_desperate_predator', False))
+
+class TestIsFastLearnerPredator(unittest.TestCase):
+    def test_is_fast_learner_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        predator1 = Entity(name="predator", x=0, y=0, energy=100, size=10, is_fast_learner_predator=True, diet='carnivore', attack=4, is_ageless=True, age=100, max_age=100)
+        prey_fast = Entity(name="prey1", x=0, y=0, energy=20, size=10, defense=10, is_fast_learner=True, is_ageless=True, age=100, max_age=100)
+        universe1.entities = [predator1, prey_fast]
+
+        universe2 = Universe(width=10, height=10)
+        predator2 = Entity(name="predator", x=0, y=0, energy=100, size=10, is_fast_learner_predator=True, diet='carnivore', attack=4, is_ageless=True, age=100, max_age=100)
+        prey_normal = Entity(name="prey2", x=0, y=0, energy=20, size=10, defense=10, is_fast_learner=False, is_ageless=True, age=100, max_age=100)
+        universe2.entities = [predator2, prey_normal]
+
+        with patch('random.random', return_value=0.65):
+            universe1.tick()
+            universe2.tick()
+
+        self.assertEqual(prey_fast.energy, 0)
+        self.assertTrue(getattr(prey_fast, 'was_eaten', False))
+
+        self.assertGreater(prey_normal.energy, 0)
+        self.assertFalse(getattr(prey_normal, 'was_eaten', False))
+
+class TestIsFastLearnerPredatorMutation(unittest.TestCase):
+    def test_is_fast_learner_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 10
+
+        parent = Entity(name="parent", x=1, y=1, energy=100, is_fast_learner_predator=False)
+        universe.entities = [parent]
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_fast_learner_predator', False))
