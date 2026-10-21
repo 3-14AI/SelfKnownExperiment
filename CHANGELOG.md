@@ -1,4 +1,5 @@
 ### New Features
+- [x] Implemented `is_cooperative_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cooperative entities. Added visualizer rendering and tests.
 - Implemented `is_protective_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking protective entities.
 - Implemented `is_endurance_runner_predator` trait granting entities a 1.5x attack multiplier against endurance runner entities.
 - Implemented `is_frugivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking frugivore entities.
@@ -48,6 +49,7 @@
 - Implemented `is_telepathic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking telepathic entities.
 - Implemented `is_intimidating_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking intimidating entities.
 ### Added
+- [x] Implemented `is_cooperative_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cooperative entities. Added visualizer rendering and tests.
 - [x] Refactored predator `effective_attack` modifier logic into a single method `get_predator_multiplier()` in `engine.py`.
 - [x] Implemented a combat history logger that records predator-prey interactions and exports them to a CSV file (`combat_history.csv`) at the end of the simulation.
 - Implemented `is_ice_predator`, `is_ash_predator`, `is_mud_predator`, and `is_grass_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking on their respective terrains.
