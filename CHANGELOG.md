@@ -1,4 +1,5 @@
 ### New Features
+- Implemented `is_protective_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking protective entities.
 - Implemented `is_endurance_runner_predator` trait granting entities a 1.5x attack multiplier against endurance runner entities.
 - Implemented `is_frugivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking frugivore entities.
 - Added `is_prolific_predator` trait which grants attack multiplier to predators against prolific entities
@@ -18,6 +19,7 @@
 - [x] Fixed multiple flaky tests across `test_engine.py` and `test_quicksand_strider.py` that were occasionally failing due to un-mocked RNG state, trait energy leakages, or size-dependent mutation bugs.
 
 ### New Features
+- Implemented `is_protective_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking protective entities.
 - Implemented `is_frugivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking frugivore entities.
 - Implemented `is_desperate_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking desperate entities.
 - Implemented `is_telepathic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking telepathic entities.
@@ -40,6 +42,7 @@
 
 ## [Unreleased]
 ### New Features
+- Implemented `is_protective_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking protective entities.
 - Implemented `is_frugivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking frugivore entities.
 - Implemented `is_desperate_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking desperate entities.
 - Implemented `is_telepathic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking telepathic entities.

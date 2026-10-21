@@ -18469,6 +18469,9 @@ class TestIsIceStrider(unittest.TestCase):
 
         self.universe.foods = []
         self.universe.tick()
+        import random
+        with unittest.mock.patch("random.random", return_value=0.0):
+            self.universe.tick()
         self.assertTrue(prey in self.universe.entities)
 
 
@@ -19465,27 +19468,30 @@ class TestNightStrider(unittest.TestCase):
         self.assertIn(prey, self.universe.entities, "Prey should survive the attack due to is_night_strider defense bonus")
 
     def test_is_night_strider_mutation(self):
-        parent = Entity(name="parent", x=5, y=5, energy=10000, max_age=100, age=10, size=20, is_night_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
-        self.universe.entities.append(parent)
-        self.universe.reproduction_threshold = 100
         self.universe.mutation_chance = 1.0
-        import random
-        random.seed()
-
         self.universe.event_chance = 0.0
-        self.universe.disease_chance = 0.0
         self.universe.localized_event_chance = 0.0
-        self.universe.foods = []
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+        parent = Entity(name="parent", x=5, y=5, energy=5000, age=5, size=20, is_night_strider=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities.append(parent)
 
-        for _ in range(100):
-            if len(self.universe.entities) > 20:
-                self.universe.entities = [parent]
-            self.universe.tick()
-            parent.energy = 10000
-
-            for entity in self.universe.entities:
-                if getattr(entity, 'is_night_strider', False) and entity != parent:
-                    return # Mutation found
+        import random
+        import unittest.mock
+        real_randint = random.randint
+        real_random = random.random
+        try:
+            random.randint = lambda a, b: b
+            random.random = lambda: 0.05
+            for _ in range(10):
+                self.universe.tick()
+                parent.energy = 5000
+                for entity in self.universe.entities:
+                    if getattr(entity, 'is_night_strider', False) and entity != parent:
+                        return # Mutation found
+        finally:
+            random.randint = real_randint
+            random.random = real_random
         self.fail("Mutation did not occur")
 
 
@@ -25670,3 +25676,84 @@ class TestIsEnduranceRunnerPredatorVisualizer(unittest.TestCase):
         with patch('os.system'):
             output = self.visualizer.render()
         self.assertIn('🏃', output)
+
+class TestIsProtectivePredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_protective_predator_combat(self):
+        # We will use two separate universes to prevent cross-contamination
+        u1 = Universe(width=10, height=10)
+        u1.event_chance = 0.0
+        u1.disease_chance = 0.0
+        u1.localized_event_chance = 0.0
+
+        prey1 = Entity(name="Prey", x=1, y=1, size=5, attack=0, defense=5, energy=50, is_protective=True, age=100, max_age=100, is_ageless=True)
+        control_predator = Entity(name="ControlPredator", x=1, y=1, size=5, attack=5, defense=0, energy=50, diet='carnivore', is_protective_predator=False, is_pacifist=False, age=100, max_age=100, is_ageless=True)
+        u1.add_entity(prey1)
+        u1.add_entity(control_predator)
+
+        u2 = Universe(width=10, height=10)
+        u2.event_chance = 0.0
+        u2.disease_chance = 0.0
+        u2.localized_event_chance = 0.0
+
+        prey2 = Entity(name="Prey", x=1, y=1, size=5, attack=0, defense=5, energy=50, is_protective=True, age=100, max_age=100, is_ageless=True)
+        spec_predator = Entity(name="SpecPredator", x=1, y=1, size=5, attack=5, defense=0, energy=50, diet='carnivore', is_protective_predator=True, is_pacifist=False, age=100, max_age=100, is_ageless=True)
+        u2.add_entity(prey2)
+        u2.add_entity(spec_predator)
+
+        import random
+        real_random = random.random
+        try:
+            # Control attack: 5. Prey defense: 5
+            # Escape chance = 5 / (5 + 5) = 0.5
+            # Spec attack: 5 * 1.5 = 7.5. Prey defense: 5
+            # Spec escape chance = 5 / (7.5 + 5) = 0.4
+
+            # If random() returns 0.45:
+            # 0.45 < 0.5 (Control prey escapes)
+            # 0.45 is not < 0.4 (Spec prey gets eaten)
+
+            random.random = lambda: 0.45
+            u1.tick()
+            u2.tick()
+
+            self.assertTrue(prey1.energy > 0)
+            self.assertTrue(prey1 in u1.entities)
+
+            self.assertTrue(prey2.energy <= 0 or prey2.was_eaten or prey2 not in u2.entities)
+
+        finally:
+            random.random = real_random
+
+class TestIsProtectivePredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+
+    def test_is_protective_predator_mutation(self):
+        self.universe.mutation_chance = 1.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 500
+
+        parent = Entity(name="parent", x=5, y=5, energy=5000, age=5, size=20, is_protective_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        self.universe.entities.append(parent)
+
+        import random
+        real_randint = random.randint
+        real_random = random.random
+        try:
+            random.randint = lambda a, b: b
+            random.random = lambda: 0.05
+            for _ in range(10):
+                self.universe.tick()
+                parent.energy = 5000
+                for entity in self.universe.entities:
+                    if getattr(entity, 'is_protective_predator', False) and entity != parent:
+                        return # Mutation found
+        finally:
+            random.randint = real_randint
+            random.random = real_random
+        self.fail("Mutation did not occur")
