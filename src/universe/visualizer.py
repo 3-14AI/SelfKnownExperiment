@@ -61,6 +61,8 @@ class CLIVisualizer:
                         char = '!'
                     elif getattr(entity, 'is_cooperative_predator', False):
                         char = '🤝'
+                    elif getattr(entity, 'is_absorbent_predator', False):
+                        char = 'Á'
                     elif diet == 'carnivore':
                         char = 'X'
                     elif diet == 'scavenger':
@@ -418,6 +420,8 @@ class CLIVisualizer:
                         char = 'D'
                     elif getattr(entity, 'is_cooperative_predator', False):
                         char = '🤝'
+                    elif getattr(entity, 'is_absorbent_predator', False):
+                        char = 'Á'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
