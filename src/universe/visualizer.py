@@ -751,6 +751,16 @@ class CLIVisualizer:
                         char = 'ℒ'
                     elif getattr(entity, 'is_prolific_predator', False):
                         char = 'ℙ'
+                    elif getattr(entity, 'is_absorbent_predator', False):
+                        char = 'A'
+                    elif getattr(entity, 'is_pack_mule_predator', False):
+                        char = 'M'
+                    elif getattr(entity, 'is_thief_predator', False):
+                        char = 'T'
+                    elif getattr(entity, 'is_cleaner_predator', False):
+                        char = 'C'
+                    elif getattr(entity, 'is_sunbather_predator', False):
+                        char = 'S'
                     elif getattr(entity, 'is_nomadic_predator', False):
                         char = 'N'
                     elif getattr(entity, 'is_rain_strider', False):

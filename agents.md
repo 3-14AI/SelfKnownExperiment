@@ -529,3 +529,8 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_fast_learner_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking fast learner entities. Added visualizer rendering and tests.
 - [x] Implemented `is_hardy_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking hardy entities. Added visualizer rendering and tests.
 - [x] Implemented `is_prolific_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking prolific entities. Added visualizer rendering and tests.
+- [x] Implemented `is_absorbent_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking absorbent entities. Added visualizer rendering and tests.
+- [x] Implemented `is_pack_mule_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking pack mule entities. Added visualizer rendering and tests.
+- [x] Implemented `is_thief_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking thief entities. Added visualizer rendering and tests.
+- [x] Implemented `is_cleaner_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cleaner entities. Added visualizer rendering and tests.
+- [x] Implemented `is_sunbather_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking sunbather entities. Added visualizer rendering and tests.
