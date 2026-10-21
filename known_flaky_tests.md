@@ -36,3 +36,7 @@ test_is_sleeping
 - test_is_contagious_attacker: Occasionally fails because the prey successfully escapes combat, causing the combat loop to terminate early before the disease transmission check occurs, leaving the defender uninfected.
 * `test_is_web_dweller` in `test_engine.py`: Intermittent failure where energy is not recovered as expected during dynamic simulation updates (unrelated to newly introduced traits).
 * `test_can_sweat_mechanics` in `test_engine.py`: Intermittent failure where entity energy falls to 0 due to unexpected temperature drain interaction or random event interference.
+- [x] `test_is_volcano_predator_mutation` - Flaky mutation test due to rng mock interference
+- [x] `test_mutation` in TestIsFrugivorePredator - Flaky mutation test due to size downscaling
+- [x] `test_is_day_strider_mutation` in TestDayStrider - Flaky mutation test
+- [x] `test_space_dancer_mutates` in TestIsSpaceDancer - Flaky mutation test
