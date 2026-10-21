@@ -59,6 +59,8 @@ class CLIVisualizer:
                 if getattr(entity, 'is_infected', False):
                     if getattr(entity, 'is_photosensitive', False):
                         char = '!'
+                    elif getattr(entity, 'is_cooperative_predator', False):
+                        char = '🤝'
                     elif diet == 'carnivore':
                         char = 'X'
                     elif diet == 'scavenger':
@@ -414,6 +416,8 @@ class CLIVisualizer:
                         char = '~'
                     elif getattr(entity, 'is_defensive', False):
                         char = 'D'
+                    elif getattr(entity, 'is_cooperative_predator', False):
+                        char = '🤝'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
@@ -755,6 +759,7 @@ class CLIVisualizer:
                         char = '🏃'
                     elif getattr(entity, 'is_protective_predator', False):
                         char = '🛡'
+
                     elif getattr(entity, 'is_nomadic_predator', False):
                         char = 'N'
                     elif getattr(entity, 'is_rain_strider', False):
