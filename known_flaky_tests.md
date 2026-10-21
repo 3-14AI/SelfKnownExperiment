@@ -34,3 +34,5 @@ test_is_sleeping
 - test_burrowing_entity_acts_as_shelter: Occasional failure due to overlapping mechanics like disease or severe weather lowering energy despite burrowing shelter.
 - test_can_sweat_mechanics: Occasionally fails due to random event chances overlapping and causing excessive energy drain (e.g., entity is randomly killed or drained to 0 by other mechanics during the tick).
 - test_is_contagious_attacker: Occasionally fails because the prey successfully escapes combat, causing the combat loop to terminate early before the disease transmission check occurs, leaving the defender uninfected.
+* `test_is_web_dweller` in `test_engine.py`: Intermittent failure where energy is not recovered as expected during dynamic simulation updates (unrelated to newly introduced traits).
+* `test_can_sweat_mechanics` in `test_engine.py`: Intermittent failure where entity energy falls to 0 due to unexpected temperature drain interaction or random event interference.
