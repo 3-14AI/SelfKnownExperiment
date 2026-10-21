@@ -1,4 +1,5 @@
 ### New Features
+- Implemented `is_endurance_runner_predator` trait granting entities a 1.5x attack multiplier against endurance runner entities.
 - Implemented `is_frugivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking frugivore entities.
 - Added `is_prolific_predator` trait which grants attack multiplier to predators against prolific entities
 - Implemented `is_desperate_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking desperate entities.
