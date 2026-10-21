@@ -40,3 +40,5 @@ test_is_sleeping
 - [x] `test_mutation` in TestIsFrugivorePredator - Flaky mutation test due to size downscaling
 - [x] `test_is_day_strider_mutation` in TestDayStrider - Flaky mutation test
 - [x] `test_space_dancer_mutates` in TestIsSpaceDancer - Flaky mutation test
+- test_carnivore_scent_tracking (test_engine.TestUniverse)
+- test_omnivore_seeks_and_eats_food (test_engine.TestUniverse)
