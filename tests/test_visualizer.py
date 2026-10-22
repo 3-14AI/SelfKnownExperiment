@@ -3342,3 +3342,14 @@ class TestIsAbsorbentPredatorVisualizer(unittest.TestCase):
 
         output = vis.render()
         self.assertIn('Á', output)
+
+class TestIsScavengerHunterPredatorVisualizer(unittest.TestCase):
+    def test_is_scavenger_hunter_predator_render(self):
+        import unittest.mock
+        universe = Universe(10, 10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name='TestEntity', x=0, y=0, energy=50, diet='carnivore', is_scavenger_hunter_predator=True, age=10, max_age=100, is_ageless=True)
+        universe.entities.append(entity)
+
+        output = vis.render()
+        self.assertIn('¥', output)

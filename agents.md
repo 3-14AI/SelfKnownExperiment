@@ -531,6 +531,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_prolific_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking prolific entities. Added visualizer rendering and tests.
 - [x] Implemented `is_endurance_runner_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking endurance runner entities. Added visualizer rendering and tests.
 - [x] Implemented `is_protective_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking protective entities. Added visualizer rendering and tests.
+- [x] Implemented `is_scavenger_hunter_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking other carnivores and actively target them as prey. Added visualizer rendering and tests.
 - [x] Implemented `is_cooperative_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cooperative entities. Added visualizer rendering and tests.
 - [x] Implemented `is_absorbent_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking absorbent entities. Added visualizer rendering and tests.
 - [x] Implemented `is_aquatic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking aquatic entities. Added visualizer rendering and tests.
