@@ -577,3 +577,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Added `is_scavenger_predator` and `is_omnivore_predator` traits which grant attack multipliers to predators against scavengers and omnivores.
 
 - Implemented `is_absorbent_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking absorbent entities. Added visualizer rendering and tests.
+- Implemented `is_clairvoyant` trait. Entities with this trait gain a flat 30% bonus to their escape chance.
