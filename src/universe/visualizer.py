@@ -422,6 +422,8 @@ class CLIVisualizer:
                         char = '🤝'
                     elif getattr(entity, 'is_absorbent_predator', False):
                         char = 'Á'
+                    elif getattr(entity, 'is_scavenger_hunter_predator', False):
+                        char = '¥'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':
