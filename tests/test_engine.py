@@ -20405,7 +20405,7 @@ class TestIsTelekineticPredatorEngine(unittest.TestCase):
         prey_telekinetic.defense = 14
 
         original_random = random.random
-        random.random = lambda: 0.5
+        random.random = lambda: 0.9
 
         try:
             universe.tick()
@@ -24953,7 +24953,7 @@ class TestIsTelekineticPredatorEngine(unittest.TestCase):
         prey_telekinetic.defense = 14
 
         original_random = random.random
-        random.random = lambda: 0.5
+        random.random = lambda: 0.9
 
         try:
             universe.tick()
@@ -25913,3 +25913,79 @@ class TestIsScavengerHunterPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         if children:
             self.assertTrue(getattr(children[0], 'is_scavenger_hunter_predator', False))
+
+class TestIsTelekinetic(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 100000
+
+    @patch('random.random', return_value=0.45)
+    def test_is_telekinetic_escape(self, mock_random):
+        # control escape_chance = 5/25 = 0.2
+        # telekinetic escape_chance = 0.2 + 0.4 = 0.6
+        # 0.45 > 0.2 -> control dies
+        # 0.45 < 0.6 -> telekinetic escapes
+        predator_c = Entity(name="pred", x=5, y=5, size=2, diet='carnivore', max_age=100, is_ageless=True, is_pacifist=False)
+        prey_c = Entity(name="prey", x=5, y=5, size=1, max_age=100, is_ageless=True)
+        predator_c.age = 100
+        prey_c.age = 100
+        predator_c.attack = 20
+        predator_c.defense = 5
+        prey_c.attack = 5
+        prey_c.defense = 5
+        self.universe.entities = [predator_c, prey_c]
+
+        self.universe.tick()
+        self.assertTrue(prey_c.was_eaten)
+
+        universe_test = Universe(width=10, height=10)
+        universe_test.event_chance = 0.0
+        universe_test.localized_event_chance = 0.0
+        universe_test.disease_chance = 0.0
+        universe_test.reproduction_threshold = 100000
+
+        predator_t = Entity(name="pred", x=5, y=5, size=2, diet='carnivore', max_age=100, is_ageless=True, is_pacifist=False)
+        prey_t = Entity(name="prey", x=5, y=5, size=1, max_age=100, is_ageless=True, is_telekinetic=True)
+        predator_t.age = 100
+        prey_t.age = 100
+        predator_t.attack = 20
+        predator_t.defense = 5
+        prey_t.attack = 5
+        prey_t.defense = 5
+        universe_test.entities = [predator_t, prey_t]
+
+        universe_test.tick()
+        self.assertFalse(prey_t.was_eaten)
+
+class TestIsTelekineticMutation(unittest.TestCase):
+    def test_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 10
+
+        parent = Entity(name="parent", x=5, y=5, energy=100, max_age=100, is_ageless=True)
+        parent.age = 100
+        universe.entities = [parent]
+
+        # force mutation
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_telekinetic', False))
+
+class TestIsTelekineticVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_visualizer(self, mock_os):
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="e", x=5, y=5, energy=50, is_telekinetic=True)
+        universe.entities = [entity]
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('K', output)

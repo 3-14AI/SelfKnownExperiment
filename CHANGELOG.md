@@ -1,4 +1,5 @@
 ### New Features
+- [x] Implemented `is_telekinetic` trait. Entities with this trait gain a flat 40% bonus to their escape chance. Added visualizer rendering and tests.
 - [x] Implemented `is_scavenger_hunter_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking other carnivores and actively target them as prey. Added visualizer rendering and tests.
 - [x] Implemented `is_cooperative_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cooperative entities. Added visualizer rendering and tests.
 - Implemented `is_protective_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking protective entities.
