@@ -3353,3 +3353,19 @@ class TestIsScavengerHunterPredatorVisualizer(unittest.TestCase):
 
         output = vis.render()
         self.assertIn('¥', output)
+
+
+import unittest
+from unittest.mock import patch
+from src.universe.engine import Universe, Entity
+from src.universe.visualizer import CLIVisualizer
+
+class TestIsRegenerativePredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_is_regenerative_predator_visualizer(self, mock_os):
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="e", x=5, y=5, energy=50, is_regenerative_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('R', output)
