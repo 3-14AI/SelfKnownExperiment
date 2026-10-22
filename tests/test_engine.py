@@ -26050,3 +26050,56 @@ class TestIsEtherealVisualizer(unittest.TestCase):
             universe.add_entity(entity)
             output = vis.render()
             self.assertIn('é', output)
+
+class TestIsRegenerativePredatorCombat(unittest.TestCase):
+    def test_is_regenerative_predator_multiplier(self):
+        universe1 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+
+        predator1 = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, is_pacifist=False, is_regenerative_predator=False)
+        predator1.diet = 'carnivore'
+        predator1.attack = 10
+        prey1 = Entity("RegenerativePrey", x=5, y=5, energy=100, age=5, size=2, is_pacifist=True, is_regenerative=True)
+        prey1.defense = 10
+
+        universe1.add_entity(predator1)
+        universe1.add_entity(prey1)
+
+        universe2 = Universe(width=10, height=10)
+        universe2.reproduction_threshold = 100000
+
+        predator2 = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, is_pacifist=False, is_regenerative_predator=True)
+        predator2.diet = 'carnivore'
+        predator2.attack = 10
+        prey2 = Entity("RegenerativePrey", x=5, y=5, energy=100, age=5, size=2, is_pacifist=True, is_regenerative=True)
+        prey2.defense = 10
+
+        universe2.add_entity(predator2)
+        universe2.add_entity(prey2)
+
+        with patch('random.random', return_value=0.45):
+            universe1.tick()
+
+        with patch('random.random', return_value=0.45):
+            universe2.tick()
+
+        self.assertFalse(prey1.was_eaten)
+        self.assertTrue(prey2.was_eaten)
+
+class TestIsRegenerativePredatorMutation(unittest.TestCase):
+    def test_is_regenerative_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 10
+
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_regenerative_predator=False, lays_eggs=False, is_regenerative=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        with patch('random.random', return_value=0.0001):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_regenerative_predator', False))
