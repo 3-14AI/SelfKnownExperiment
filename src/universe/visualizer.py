@@ -763,6 +763,8 @@ class CLIVisualizer:
                         char = '🏃'
                     elif getattr(entity, 'is_protective_predator', False):
                         char = '🛡'
+                    elif getattr(entity, 'is_scavenger_hunter_predator', False):
+                        char = '¥'
 
                     elif getattr(entity, 'is_nomadic_predator', False):
                         char = 'N'
