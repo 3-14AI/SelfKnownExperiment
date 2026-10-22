@@ -3319,6 +3319,23 @@ class TestIsTelepathicPredatorVisualizer(unittest.TestCase):
         lines = output.split('\n')
         self.assertEqual(lines[5][5], 'Θ', "Entity with is_telepathic_predator should be rendered as Θ")
 
+
+class TestIsDetritivorePredatorVisualizer(unittest.TestCase):
+    def test_is_detritivore_predator_visualizer(self):
+        universe = Universe(width=10, height=10)
+        from src.universe.visualizer import CLIVisualizer
+        import os
+        with patch('os.system'):
+            vis = CLIVisualizer(universe)
+
+            entity = Entity("Pred", x=5, y=5, energy=50, is_detritivore_predator=True)
+            universe.add_entity(entity)
+
+            output = vis.render()
+
+            lines = output.split('\n')
+            self.assertIn('d', output, "is_detritivore_predator should render as 'd'")
+
 if __name__ == '__main__':
     unittest.main()
 class TestIsCooperativePredatorVisualizer(unittest.TestCase):

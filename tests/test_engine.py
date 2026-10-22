@@ -5,7 +5,7 @@ from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent,
 class TestUniverse(unittest.TestCase):
     def test_is_arboreal_predator_no_multiplier(self):
         universe = Universe(width=10, height=10)
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         predator = Entity(name="predator", x=5, y=5, energy=5000, age=10, max_age=100)
         predator.is_arboreal_predator = True
@@ -76,7 +76,7 @@ class TestUniverse(unittest.TestCase):
     def test_is_arboreal_predator_trait(self):
         """Test that is_arboreal_predator increases attack when attacking arboreal entities."""
         universe = Universe(width=10, height=10)
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         predator = Entity(name="predator", x=5, y=5, energy=5000, age=10)
         predator.is_arboreal_predator = True
@@ -108,7 +108,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_is_vocal_predator_combat_bonus(self):
         universe = Universe(width=10, height=10)
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
         predator = Entity(name="Vocal Predator", x=5, y=5, size=5, attack=40, defense=10, energy=1000, age=5, max_age=100, is_vocal_predator=True, diet="carnivore", is_pacifist=False)
         prey = Entity(name="Vocal Prey", x=5, y=5, size=5, attack=5, defense=50, energy=100, age=5, max_age=100, is_vocal=True, diet="herbivore", is_pacifist=True)
         control_prey = Entity(name="Normal Prey", x=5, y=5, size=5, attack=5, defense=50, energy=100, age=5, max_age=100, is_vocal=False, diet="herbivore", is_pacifist=True)
@@ -1479,7 +1479,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_eats_food(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         # Give entity adult age and correct size to have predictable energy loss
@@ -1540,7 +1540,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_seeks_food(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         entity = Entity("Adam", x=0, y=0, is_sleeping=False)
         food = Food(x=2, y=2)
         universe.add_entity(entity)
@@ -1610,7 +1610,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_aging(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         entity = Entity("OldMan", energy=100, max_age=3)
         universe.add_entity(entity)
 
@@ -1670,7 +1670,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_perception_radius_food(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
         entity = Entity("Adam", x=0, y=0, perception_radius=2, stamina=50, max_stamina=50)
@@ -1698,7 +1698,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_perception_radius_obstacle(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         entity = Entity("Adam", x=0, y=0, perception_radius=3)
         universe.add_entity(entity)
         universe.add_terrain(Terrain(x=0, y=1, terrain_type='wall'))
@@ -1714,7 +1714,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_entity_memory_update(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         entity = Entity("Adam", x=0, y=0, perception_radius=2)
         universe.add_entity(entity)
         # Wall is within perception radius
@@ -1729,7 +1729,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_find_path_with_memory(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         entity = Entity("Adam", x=0, y=0, perception_radius=1)
         universe.add_entity(entity)
         universe.add_food(Food(x=0, y=2, energy=5))
@@ -1808,7 +1808,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_carnivore_eating(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         universe.event_chance = 0.0
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=100)
         herbivore = Entity("Zebra", x=2, y=0, diet='herbivore', energy=10, defense=0, perception_radius=0)
@@ -1830,7 +1830,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_combat_defense_escape(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         universe.event_chance = 0.0
         # High defense, 0 attack -> 100% escape chance
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=0)
@@ -1857,7 +1857,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_combat_defense_eaten(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         universe.event_chance = 0.0
         # Low defense, high attack -> 0% escape chance
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=100)
@@ -1996,7 +1996,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_localized_rain_event(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         universe.event_chance = 0.0 # disable global events
         universe.localized_event_chance = 0.0
 
@@ -2030,7 +2030,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_localized_fire_event(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         universe.event_chance = 0.0 # disable global events
         universe.localized_event_chance = 0.0
 
@@ -2264,7 +2264,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_scent_trail_creation(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         universe.event_chance = 0.0
         entity = Entity("Deer", x=5, y=5, diet='herbivore')
         universe.add_entity(entity)
@@ -2277,7 +2277,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_scent_trail_decay(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         universe.event_chance = 0.0
         # Initialize an artificial scent trail
         universe.scent_trails[(0, 0)] = 20
@@ -2295,7 +2295,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_carnivore_scent_tracking(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         universe.event_chance = 0.0
 
         # Place a carnivore
@@ -2789,7 +2789,7 @@ class TestUniverse(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         universe.time = 0
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
 
         small_entity = Entity("Small", x=2, y=2, energy=20, size=1, intelligence=1, perception_radius=0)
         large_entity = Entity("Large", x=8, y=8, energy=20, size=3, age=100, intelligence=1, perception_radius=0) # age 100 to force adult size
@@ -2921,7 +2921,7 @@ class TestUniverse(unittest.TestCase):
 
     def test_combat_experience(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000  # Prevent reproduction
+        universe.reproduction_threshold = 10  # Prevent reproduction
         universe.event_chance = 0.0
 
         carnivore = Entity("Lion", x=0, y=0, diet='carnivore', energy=10, attack=5.0, defense=2.0)
@@ -2996,7 +2996,7 @@ class TestUniverse(unittest.TestCase):
         universe._last_season = 'winter'
     def test_specialized_herbivore(self):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
         universe.event_chance = 0.0
 
         # Herbivore only eats 'berry'
@@ -3027,7 +3027,7 @@ class TestUniverse(unittest.TestCase):
     @unittest.mock.patch('src.universe.engine.random.random', return_value=0.99)
     def test_specialized_carnivore(self, mock_random):
         universe = Universe(food_spawn_rate=0.0)
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
         universe.event_chance = 0.0
 
         # Carnivore only eats 'Mouse'
@@ -3245,7 +3245,7 @@ class TestUniverse(unittest.TestCase):
     def test_shelter_building(self, mock_random):
         universe = Universe(food_spawn_rate=0.0)
         universe.event_chance = 0.0
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
 
         builder = Entity("Builder", x=5, y=5, intelligence=10, energy=50)
         universe.add_entity(builder)
@@ -3279,7 +3279,7 @@ class TestUniverse(unittest.TestCase):
     def test_shelter_benefits(self):
         universe = Universe(food_spawn_rate=0.0)
         universe.event_chance = 0.0
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
 
         # Test 1: Weather penalty negation
         # We need an entity in a shelter during a storm
@@ -4231,7 +4231,7 @@ class TestUniverse(unittest.TestCase):
         self.universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         self.universe.event_chance = 0.0
         self.universe.disease_chance = 0.0
-        self.universe.reproduction_threshold = 1000
+        self.universe.reproduction_threshold = 10
 
         entity = Entity(name="FruitingTree", x=5, y=5, energy=100, max_age=100, age=10, size=3, is_fruiting=True)
         entity.max_energy  # Initialize
@@ -9573,7 +9573,7 @@ class TestFurTrait(unittest.TestCase):
         import unittest.mock
         universe = Universe()
         universe.event_chance = 0.0
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
         universe.disease_chance = 0.0
 
         entity = Entity("Furry", energy=5000, max_age=200, age=100, size=2, intelligence=1, has_fur=True, preferred_temperature=20, temperature_tolerance=5)
@@ -9596,7 +9596,7 @@ class TestFurTrait(unittest.TestCase):
         import unittest.mock
         universe = Universe()
         universe.event_chance = 0.0
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
 
         entity = Entity("Furry", energy=5000, max_age=200, age=100, size=2, intelligence=1, has_fur=True, preferred_temperature=20, temperature_tolerance=5)
         universe.add_entity(entity)
@@ -9685,7 +9685,7 @@ class TestSocial(unittest.TestCase):
 
         universe.add_entity(e1)
         universe.add_entity(e2)
-        universe.reproduction_threshold = 1000 # Prevent reproduction cost
+        universe.reproduction_threshold = 10 # Prevent reproduction cost
         universe.tick()
 
         # Base loss is size(2). Social buff reduces loss by 1.
@@ -9707,7 +9707,7 @@ class TestCarnivorousPlant(unittest.TestCase):
 
         universe.add_entity(plant)
         universe.add_entity(prey)
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
 
         # Manually invoke tick logic that is relevant
         universe.time = 0
@@ -9732,7 +9732,7 @@ class TestCarnivorousPlant(unittest.TestCase):
 
         universe.add_entity(plant)
         universe.add_entity(large_entity)
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
 
         universe.time = 0
         universe.tick()
@@ -11169,7 +11169,7 @@ class TestIsSunbather(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
 
         e = Entity("Bather", x=5, y=5, energy=50, max_age=100, hydration=50, stamina=50, max_stamina=100, is_sunbather=True, preferred_temperature=20, temperature_tolerance=10, intelligence=1, is_nest_builder=False)
         e.is_sleeping = False
@@ -17266,8 +17266,11 @@ class TestIsGrassDancer(unittest.TestCase):
         self.universe = Universe(width=10, height=10)
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 1000
 
-    def test_grass_dancer_energy_gain(self):
+    @patch("random.random", return_value=0.5)
+    def test_grass_dancer_energy_gain(self, mock_random):
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='grass'))
         self.universe.add_terrain(Terrain(x=2, y=2, terrain_type='grass'))
         entity = Entity(name="Grass Dancer", x=1, y=1, energy=10, max_stamina=50, stamina=50, size=1, is_grass_dancer=True, is_immune=True, is_pacifist=True, is_ageless=True, preferred_terrain='grass')
@@ -17895,7 +17898,7 @@ class TestSymbiotic(unittest.TestCase):
 
     def test_is_symbiotic_energy_transfer(self):
         from src.universe.engine import Entity, Terrain
-        self.universe.reproduction_threshold = 1000
+        self.universe.reproduction_threshold = 10
 
         self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='grass'))
 
@@ -17959,7 +17962,7 @@ class TestHiveMind(unittest.TestCase):
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
-        self.universe.reproduction_threshold = 1000
+        self.universe.reproduction_threshold = 10
 
     def test_is_hive_mind_energy_transfer(self):
         from src.universe.engine import Entity
@@ -18022,7 +18025,7 @@ class TestShelterStrider(unittest.TestCase):
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
-        self.universe.reproduction_threshold = 1000
+        self.universe.reproduction_threshold = 10
 
     def test_is_shelter_strider_movement(self):
         from src.universe.engine import Entity, Terrain
@@ -18408,7 +18411,7 @@ class TestIsForestStrider(unittest.TestCase):
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
-        self.universe.reproduction_threshold = 1000
+        self.universe.reproduction_threshold = 10
         import random
         random.seed(42)
         pred = Entity(name="Pred", x=1, y=1, size=2, diet='carnivore', attack=3, energy=10, max_stamina=0, stamina=0)
@@ -20394,7 +20397,7 @@ class TestIsTelekineticPredatorEngine(unittest.TestCase):
         predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_telekinetic_predator=True, target_species=['TelekineticPrey'])
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         prey_telekinetic = Entity("TelekineticPrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_telekinetic=True)
 
@@ -20438,6 +20441,93 @@ class TestIsTelekineticPredatorMutation(unittest.TestCase):
         children = [e for e in self.universe.entities if e != parent]
         self.assertGreater(len(children), 0)
         self.assertTrue(getattr(children[0], 'is_telekinetic_predator', False))
+
+
+class TestIsDetritivorePredator(unittest.TestCase):
+    @patch("random.random", return_value=0.5)
+    def test_is_detritivore_predator_attack_multiplier(self, mock_random):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_detritivore_predator=True, target_species=['DetritivorePrey'])
+        predator.attack = 10
+        universe.add_entity(predator)
+
+        prey = Entity("DetritivorePrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_detritivore=True)
+        universe.add_entity(prey)
+
+        prey.defense = 10
+
+        universe.tick()
+
+        # Multiplied attack: 10 * 1.5 = 15 > 14
+        self.assertTrue(prey.was_eaten, "Predator should have eaten the detritivore prey due to the 1.5x attack multiplier")
+
+class TestIsDetritivorePredatorMutation(unittest.TestCase):
+    def test_is_detritivore_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=100, max_age=100, size=20, is_detritivore_predator=False, lays_eggs=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        universe.terrains = []
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Parent should have reproduced")
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_detritivore_predator', False), "Child should have mutated to be is_detritivore_predator")
+
+
+class TestIsDetritivorePredator(unittest.TestCase):
+    @patch("random.random", return_value=0.5)
+    def test_is_detritivore_predator_attack_multiplier(self, mock_random):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_detritivore_predator=True, target_species=['DetritivorePrey'])
+        predator.attack = 10
+        universe.add_entity(predator)
+
+        prey = Entity("DetritivorePrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_detritivore=True)
+        universe.add_entity(prey)
+
+        prey.defense = 10
+
+        universe.tick()
+
+        # Multiplied attack: 10 * 1.5 = 15 > 10. Defense = 10. escape_chance = 10/25 = 0.4.
+        # random.random = 0.5. 0.5 > 0.4 -> fails escape -> eaten
+        self.assertTrue(prey.was_eaten, "Predator should have eaten the detritivore prey due to the 1.5x attack multiplier")
+
+class TestIsDetritivorePredatorMutation(unittest.TestCase):
+    def test_is_detritivore_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=1, y=1, energy=5000, max_age=100, age=100, size=20, is_detritivore_predator=False, lays_eggs=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        universe.terrains = []
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Parent should have reproduced")
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_detritivore_predator', False), "Child should have mutated to be is_detritivore_predator")
 
 if __name__ == '__main__':
 
@@ -24292,7 +24382,7 @@ class TestDefensivePredatorTrait(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         predator = Entity(
             name="pred", x=5, y=5, energy=5000, age=5, size=5,
@@ -24585,7 +24675,7 @@ class TestIsSureFootedPredator(unittest.TestCase):
 class TestIsChameleonPredator(unittest.TestCase):
     def test_is_chameleon_predator_combat(self):
         universe = Universe(width=10, height=10)
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         predator = Entity(name="predator", x=5, y=5, size=5, max_age=100)
         predator.is_pacifist = False
@@ -24635,7 +24725,7 @@ class TestIsChameleonPredatorMutation(unittest.TestCase):
 class TestIsIntrospectivePredator(unittest.TestCase):
     def test_is_introspective_predator_combat_bonus(self):
         universe = Universe(width=10, height=10)
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         predator = Entity(name="predator", x=5, y=5, size=5, energy=500, max_age=100,
                           is_introspective_predator=True, is_ageless=True, is_pacifist=False)
@@ -24736,7 +24826,7 @@ class TestIsTelepathicPredator(unittest.TestCase):
 
         universe.add_entity(predator)
         universe.add_entity(prey)
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         with unittest.mock.patch('random.random', return_value=0.5):
             universe.tick()
@@ -24768,7 +24858,7 @@ class TestIsClairvoyantPredator(unittest.TestCase):
     def test_is_clairvoyant_predator_combat_multiplier(self):
         from src.universe.engine import Entity, Universe
         universe = Universe(width=10, height=10)
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
 
@@ -24792,7 +24882,7 @@ class TestIsClairvoyantPredator(unittest.TestCase):
     def test_is_clairvoyant_predator_no_multiplier(self):
         from src.universe.engine import Entity, Universe
         universe = Universe(width=10, height=10)
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
 
@@ -24847,7 +24937,7 @@ class TestIsHiveMindPredatorEngine(unittest.TestCase):
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         prey_normal = Entity("PreyNormal", x=5, y=5, energy=5000, age=5, size=2.5, max_stamina=100, stamina=100, is_pacifist=True, is_hive_mind=False, is_ageless=True, has_shell=True)
         predator.size = 2
@@ -24942,7 +25032,7 @@ class TestIsTelekineticPredatorEngine(unittest.TestCase):
         predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_telekinetic_predator=True, target_species=['TelekineticPrey'])
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         prey_telekinetic = Entity("TelekineticPrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_telekinetic=True)
 
@@ -24987,6 +25077,93 @@ class TestIsTelekineticPredatorMutation(unittest.TestCase):
         self.assertGreater(len(children), 0)
         self.assertTrue(getattr(children[0], 'is_telekinetic_predator', False))
 
+
+class TestIsDetritivorePredator(unittest.TestCase):
+    @patch("random.random", return_value=0.5)
+    def test_is_detritivore_predator_attack_multiplier(self, mock_random):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_detritivore_predator=True, target_species=['DetritivorePrey'])
+        predator.attack = 10
+        universe.add_entity(predator)
+
+        prey = Entity("DetritivorePrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_detritivore=True)
+        universe.add_entity(prey)
+
+        prey.defense = 10
+
+        universe.tick()
+
+        # Multiplied attack: 10 * 1.5 = 15 > 14
+        self.assertTrue(prey.was_eaten, "Predator should have eaten the detritivore prey due to the 1.5x attack multiplier")
+
+class TestIsDetritivorePredatorMutation(unittest.TestCase):
+    def test_is_detritivore_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=100, max_age=100, size=20, is_detritivore_predator=False, lays_eggs=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        universe.terrains = []
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Parent should have reproduced")
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_detritivore_predator', False), "Child should have mutated to be is_detritivore_predator")
+
+
+class TestIsDetritivorePredator(unittest.TestCase):
+    @patch("random.random", return_value=0.5)
+    def test_is_detritivore_predator_attack_multiplier(self, mock_random):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_detritivore_predator=True, target_species=['DetritivorePrey'])
+        predator.attack = 10
+        universe.add_entity(predator)
+
+        prey = Entity("DetritivorePrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_detritivore=True)
+        universe.add_entity(prey)
+
+        prey.defense = 10
+
+        universe.tick()
+
+        # Multiplied attack: 10 * 1.5 = 15 > 10. Defense = 10. escape_chance = 10/25 = 0.4.
+        # random.random = 0.5. 0.5 > 0.4 -> fails escape -> eaten
+        self.assertTrue(prey.was_eaten, "Predator should have eaten the detritivore prey due to the 1.5x attack multiplier")
+
+class TestIsDetritivorePredatorMutation(unittest.TestCase):
+    def test_is_detritivore_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=1, y=1, energy=5000, max_age=100, age=100, size=20, is_detritivore_predator=False, lays_eggs=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        universe.terrains = []
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Parent should have reproduced")
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_detritivore_predator', False), "Child should have mutated to be is_detritivore_predator")
+
 if __name__ == '__main__':
     unittest.main()
 
@@ -25021,7 +25198,7 @@ class TestIsEtherealPredatorMutation(unittest.TestCase):
         parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_ethereal_predator=False, lays_eggs=False, is_ethereal=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
         universe.add_entity(parent)
 
-        universe.reproduction_threshold = 1000
+        universe.reproduction_threshold = 10
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
@@ -25053,7 +25230,7 @@ class TestIsShadowStalkerPredator(unittest.TestCase):
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         prey1 = Entity(name="Prey1", x=5, y=5, size=5, is_ageless=True, max_age=100)
         prey1.is_shadow_stalker = True
@@ -25104,7 +25281,7 @@ class TestIsMimicPredator(unittest.TestCase):
         universe.event_chance = 0.0
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         prey1 = Entity(name="Prey1", x=5, y=5, size=5, is_ageless=True, max_age=100)
         prey1.is_mimic = True
@@ -25147,7 +25324,7 @@ class TestIsMimicPredatorMutation(unittest.TestCase):
 class TestIsGluttonousPredator(unittest.TestCase):
     def test_is_gluttonous_predator(self):
         universe = Universe(width=10, height=10)
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         predator = Entity(name="predator", x=5, y=5, is_pacifist=False, is_gluttonous_predator=True)
         predator.diet = 'carnivore'
@@ -25193,7 +25370,7 @@ class TestIsGluttonousPredatorMutation(unittest.TestCase):
 class TestIsOpportunisticPredator(unittest.TestCase):
     def test_is_opportunistic_predator(self):
         universe = Universe(width=10, height=10)
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         predator = Entity(name="predator", x=5, y=5, is_pacifist=False, is_opportunistic_predator=True)
         predator.diet = 'carnivore'
@@ -25251,7 +25428,7 @@ class TestIsOpportunisticPredatorMutation(unittest.TestCase):
 class TestIsNomadicPredator(unittest.TestCase):
     def test_is_nomadic_predator_combat(self):
         universe = Universe()
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         predator = Entity(name="predator", x=0, y=0, energy=100, size=10, is_nomadic_predator=True)
         predator.attack = 10
@@ -25305,7 +25482,7 @@ class TestIsNomadicPredatorMutation(unittest.TestCase):
 class TestIsScoutPredator(unittest.TestCase):
     def test_is_scout_predator_combat(self):
         universe = Universe()
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         predator = Entity(name="predator", x=0, y=0, energy=100, size=10, is_scout_predator=True)
         predator.attack = 10
@@ -25829,7 +26006,7 @@ class TestIsClairvoyant(unittest.TestCase):
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
-        self.universe.reproduction_threshold = 100000
+        self.universe.reproduction_threshold = 1000
 
     @patch('random.random', return_value=0.7)
     def test_is_clairvoyant_escape(self, mock_random):
@@ -25868,6 +26045,93 @@ class TestIsClairvoyant(unittest.TestCase):
         output = vis.render()
         self.assertIn('C', output)
 
+
+class TestIsDetritivorePredator(unittest.TestCase):
+    @patch("random.random", return_value=0.5)
+    def test_is_detritivore_predator_attack_multiplier(self, mock_random):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_detritivore_predator=True, target_species=['DetritivorePrey'])
+        predator.attack = 10
+        universe.add_entity(predator)
+
+        prey = Entity("DetritivorePrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_detritivore=True)
+        universe.add_entity(prey)
+
+        prey.defense = 10
+
+        universe.tick()
+
+        # Multiplied attack: 10 * 1.5 = 15 > 14
+        self.assertTrue(prey.was_eaten, "Predator should have eaten the detritivore prey due to the 1.5x attack multiplier")
+
+class TestIsDetritivorePredatorMutation(unittest.TestCase):
+    def test_is_detritivore_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=100, max_age=100, size=20, is_detritivore_predator=False, lays_eggs=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        universe.terrains = []
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Parent should have reproduced")
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_detritivore_predator', False), "Child should have mutated to be is_detritivore_predator")
+
+
+class TestIsDetritivorePredator(unittest.TestCase):
+    @patch("random.random", return_value=0.5)
+    def test_is_detritivore_predator_attack_multiplier(self, mock_random):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity("Predator", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=False, diet='carnivore', is_detritivore_predator=True, target_species=['DetritivorePrey'])
+        predator.attack = 10
+        universe.add_entity(predator)
+
+        prey = Entity("DetritivorePrey", x=5, y=5, energy=100, age=5, size=2, max_stamina=100, stamina=100, is_pacifist=True, defense=0, is_detritivore=True)
+        universe.add_entity(prey)
+
+        prey.defense = 10
+
+        universe.tick()
+
+        # Multiplied attack: 10 * 1.5 = 15 > 10. Defense = 10. escape_chance = 10/25 = 0.4.
+        # random.random = 0.5. 0.5 > 0.4 -> fails escape -> eaten
+        self.assertTrue(prey.was_eaten, "Predator should have eaten the detritivore prey due to the 1.5x attack multiplier")
+
+class TestIsDetritivorePredatorMutation(unittest.TestCase):
+    def test_is_detritivore_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        parent = Entity("Parent", x=1, y=1, energy=5000, max_age=100, age=100, size=20, is_detritivore_predator=False, lays_eggs=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        universe.terrains = []
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0, "Parent should have reproduced")
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_detritivore_predator', False), "Child should have mutated to be is_detritivore_predator")
+
 if __name__ == '__main__':
     unittest.main()
 
@@ -25876,7 +26140,7 @@ class TestIsScavengerHunterPredator(unittest.TestCase):
         universe = Universe(width=10, height=10)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
-        universe.reproduction_threshold = 100000
+        universe.reproduction_threshold = 1000
 
         predator = Entity(name="predator", x=5, y=5, energy=100, size=10, is_scavenger_hunter_predator=True, diet='carnivore', attack=10)
         prey = Entity(name="prey", x=5, y=5, energy=10, size=10, diet='carnivore', defense=12)
@@ -25920,7 +26184,7 @@ class TestIsTelekinetic(unittest.TestCase):
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
-        self.universe.reproduction_threshold = 100000
+        self.universe.reproduction_threshold = 1000
 
     @patch('random.random', return_value=0.45)
     def test_is_telekinetic_escape(self, mock_random):
@@ -25996,7 +26260,7 @@ class TestIsEtherealEscape(unittest.TestCase):
         self.universe.event_chance = 0.0
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
-        self.universe.reproduction_threshold = 100000
+        self.universe.reproduction_threshold = 1000
 
     @patch('random.random', return_value=0.55)
     def test_is_ethereal_escape(self, mock_random):
