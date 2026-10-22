@@ -540,3 +540,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_omnivore_predator` trait. Entities with this trait gain a 1.5x attack multiplier when attacking omnivores. Added visualizer rendering and tests.
 - [x] Implemented `is_scavenger_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking scavengers. Added visualizer rendering and tests.
 - [x] Implemented `is_clairvoyant` trait. Entities with this trait gain a flat 30% bonus to their escape chance. Added visualizer rendering and tests.
+- [x] Implemented `is_telekinetic` trait. Entities with this trait gain a flat 40% bonus to their escape chance. Added visualizer rendering and tests.

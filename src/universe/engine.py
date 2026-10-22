@@ -5100,6 +5100,8 @@ class Universe:
                                 escape_chance = min(1.0, escape_chance + 0.1)
                             if getattr(prey_to_eat, 'is_clairvoyant', False):
                                 escape_chance = min(1.0, escape_chance + 0.3)
+                            if getattr(prey_to_eat, 'is_telekinetic', False):
+                                escape_chance = min(1.0, escape_chance + 0.4)
 
                             prey_to_eat.is_sleeping = False
 
@@ -5641,6 +5643,8 @@ class Universe:
                             escape_chance = min(1.0, escape_chance + 0.1)
                         if getattr(prey_to_eat, 'is_clairvoyant', False):
                             escape_chance = min(1.0, escape_chance + 0.3)
+                        if getattr(prey_to_eat, 'is_telekinetic', False):
+                            escape_chance = min(1.0, escape_chance + 0.4)
 
                         prey_to_eat.is_sleeping = False
 
