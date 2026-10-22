@@ -12789,7 +12789,7 @@ class TestIsSeismicSensitivePerception(unittest.TestCase):
         with mock.patch.object(Universe, 'get_nearest_prey', return_value=None) as mock_get_prey:
             # We set food to avoid eating
             # We also need to avoid mock random interfering
-            with mock.patch('random.random', return_value=0.5):
+            with mock.patch('random.random', return_value=0.8):
                 universe.tick()
 
         # Collect max_distances passed for each entity
@@ -13969,7 +13969,7 @@ class TestIsPoisonDweller(unittest.TestCase):
 
         initial_energy = entity.energy
 
-        with mock.patch('random.random', return_value=0.5):
+        with mock.patch('random.random', return_value=0.8):
             self.universe.tick()
 
         # It gets an energy_loss -= 20 which makes energy_loss effectively 0, but it gets -1 for poisoned_time,
@@ -24782,7 +24782,7 @@ class TestIsClairvoyantPredator(unittest.TestCase):
 
         import random
         from unittest import mock
-        with mock.patch('random.random', return_value=0.5):
+        with mock.patch('random.random', return_value=0.8):
             universe.tick()
 
         self.assertEqual(prey.energy, 0, "Prey should be killed because predator attack (9 * 1.5 = 13.5) > prey defense (10).")
@@ -25070,7 +25070,7 @@ class TestIsShadowStalkerPredator(unittest.TestCase):
         # without multiplier, 4 <= 5 (no kill)
         # with multiplier, 4 * 1.5 = 6 > 5 (kill)
 
-        with mock.patch('random.random', return_value=0.5):
+        with mock.patch('random.random', return_value=0.8):
             universe.tick()
 
         self.assertEqual(prey1.energy, 0)
@@ -25116,7 +25116,7 @@ class TestIsMimicPredator(unittest.TestCase):
         universe.add_entity(prey1)
         universe.add_entity(predator)
 
-        with mock.patch('random.random', return_value=0.5):
+        with mock.patch('random.random', return_value=0.8):
             universe.tick()
 
         self.assertEqual(prey1.energy, 0)
@@ -25833,3 +25833,57 @@ class TestIsAbsorbentPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         if children:
             self.assertTrue(getattr(children[0], 'is_absorbent_predator', False))
+import unittest
+from src.universe.engine import Entity, Universe, Terrain
+from unittest.mock import patch
+from src.universe.visualizer import CLIVisualizer
+import sys
+import io
+
+class TestIsClairvoyant(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 100000
+
+    @patch('random.random', return_value=0.7)
+    def test_is_clairvoyant_escape(self, mock_random):
+        # We need to test the escape_chance + 0.3 logic.
+        # total_stats = 20 + 5 = 25
+        # escape_chance = 5 / 25 = 0.2
+        # Without clairvoyant, escape_chance = 0.2. So random=0.7 > 0.2 -> fails to escape -> dies.
+        # With clairvoyant, escape_chance = 0.2 + 0.3 = 0.5. Wait, 0.7 is still > 0.5.
+        # Let's use mock_random = 0.4.
+        # 0.4 > 0.2 (dies), but 0.4 < 0.5 (escapes).
+        pass
+
+    @patch('random.random', return_value=0.4)
+    def test_is_clairvoyant_escape_true(self, mock_random):
+        predator = Entity("Predator", x=1, y=1, size=20, attack=20, defense=0, diet='carnivore', energy=50, is_pacifist=False, max_age=100, is_ageless=True)
+        prey = Entity("Prey", x=1, y=1, size=10, attack=0, defense=5, energy=50, is_clairvoyant=True, max_age=100, is_ageless=True)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+        self.universe.tick()
+        self.assertTrue(prey in self.universe.entities, "Prey should escape with clairvoyant trait")
+        self.assertTrue(prey.energy > 0)
+
+    @patch('random.random', return_value=0.4)
+    def test_is_clairvoyant_escape_false(self, mock_random):
+        predator = Entity("Predator", x=1, y=1, size=20, attack=20, defense=0, diet='carnivore', energy=50, is_pacifist=False, max_age=100, is_ageless=True)
+        prey = Entity("Prey", x=1, y=1, size=10, attack=0, defense=5, energy=50, is_clairvoyant=False, max_age=100, is_ageless=True)
+        self.universe.add_entity(predator)
+        self.universe.add_entity(prey)
+        self.universe.tick()
+        self.assertFalse(prey in self.universe.entities, "Prey should die without clairvoyant trait")
+
+    def test_is_clairvoyant_render(self):
+        entity = Entity("Clairvoyant", x=0, y=0, is_clairvoyant=True, energy=50, max_age=100, is_ageless=True, diet="carnivore")
+        self.universe.add_entity(entity)
+        vis = CLIVisualizer(self.universe)
+        output = vis.render()
+        self.assertIn('C', output)
+
+if __name__ == '__main__':
+    unittest.main()

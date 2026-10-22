@@ -930,6 +930,8 @@ class CLIVisualizer:
                         char = 'Θ'
                     elif getattr(entity, 'is_clairvoyant_predator', False):
                         char = 'c'
+                    elif getattr(entity, 'is_clairvoyant', False):
+                        char = 'C'
                     else:
                         char = 'E'
 
