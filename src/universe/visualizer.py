@@ -938,6 +938,8 @@ class CLIVisualizer:
                         char = 'C'
                     elif getattr(entity, 'is_telekinetic', False):
                         char = 'K'
+                    elif getattr(entity, 'is_ethereal', False):
+                        char = 'é'
                     else:
                         char = 'E'
 
