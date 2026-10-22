@@ -25007,7 +25007,7 @@ class TestIsEtherealPredator(unittest.TestCase):
         import random
         original_random = random.random
         def mock_random():
-            return 0.5
+            return 0.99
         random.random = mock_random
         universe.tick()
         random.random = original_random
@@ -25989,3 +25989,64 @@ class TestIsTelekineticVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('K', output)
+
+class TestIsEtherealEscape(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.reproduction_threshold = 100000
+
+    @patch('random.random', return_value=0.55)
+    def test_is_ethereal_escape(self, mock_random):
+        # control escape_chance = 5/25 = 0.2
+        # ethereal escape_chance = 0.2 + 0.5 = 0.7
+        # 0.55 > 0.2 -> control dies
+        # 0.55 < 0.7 -> ethereal escapes
+        predator_c = Entity(name="pred", x=5, y=5, size=2, diet='carnivore', max_age=100, is_ageless=True, is_pacifist=False)
+        prey_c = Entity(name="prey", x=5, y=5, size=1, max_age=100, is_ageless=True)
+        predator_c.age = 100
+        prey_c.age = 100
+        predator_c.attack = 20
+        predator_c.defense = 5
+        prey_c.attack = 5
+        prey_c.defense = 5
+        predator_c.energy = 50
+        prey_c.energy = 50
+
+        self.universe.add_entity(predator_c)
+        self.universe.add_entity(prey_c)
+        self.universe.tick()
+
+        self.assertTrue(prey_c.was_eaten)
+
+        self.universe.entities = []
+        predator_t = Entity(name="pred", x=5, y=5, size=2, diet='carnivore', max_age=100, is_ageless=True, is_pacifist=False)
+        prey_t = Entity(name="prey", x=5, y=5, size=1, max_age=100, is_ageless=True, is_ethereal=True)
+        predator_t.age = 100
+        prey_t.age = 100
+        predator_t.attack = 20
+        predator_t.defense = 5
+        prey_t.attack = 5
+        prey_t.defense = 5
+        predator_t.energy = 50
+        prey_t.energy = 50
+
+        self.universe.add_entity(predator_t)
+        self.universe.add_entity(prey_t)
+        self.universe.tick()
+
+        self.assertFalse(prey_t.was_eaten)
+
+class TestIsEtherealVisualizer(unittest.TestCase):
+    def test_is_ethereal_visualizer(self):
+        universe = Universe(width=10, height=10)
+        from src.universe.visualizer import CLIVisualizer
+        import os
+        with patch('os.system'):
+            vis = CLIVisualizer(universe)
+            entity = Entity(name="e", x=5, y=5, energy=50, is_ethereal=True)
+            universe.add_entity(entity)
+            output = vis.render()
+            self.assertIn('é', output)

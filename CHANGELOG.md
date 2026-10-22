@@ -580,3 +580,4 @@ All notable changes to Project Genesis will be documented in this file.
 
 - Implemented `is_absorbent_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking absorbent entities. Added visualizer rendering and tests.
 - Implemented `is_clairvoyant` trait. Entities with this trait gain a flat 30% bonus to their escape chance.
+- Implemented `is_ethereal` trait. Entities with this trait gain a flat 50% bonus to their escape chance. Added visualizer rendering and tests.
