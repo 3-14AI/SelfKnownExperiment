@@ -595,3 +595,5 @@ All notable changes to Project Genesis will be documented in this file.
 - Добавлены 52 недостающих модульных теста в `tests/test_visualizer.py` для обеспечения 100% покрытия символов рендеринга недавно добавленных свойств хищников и других трейтов.
 - Implemented `is_shell_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_shell` trait. Added visualizer rendering and tests.
 - Implemented `is_scales_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_scales` trait. Added visualizer rendering and tests.
+- Added `is_spikes_predator` trait to Engine which multiplies attack against entities with `has_spikes` by 1.5x.
+- Added visualizer rendering (‡) for `is_spikes_predator`.
