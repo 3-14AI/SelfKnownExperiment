@@ -3416,3 +3416,523 @@ class TestIsElectricPredatorVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('ε', output)
+
+class TestIsStormChaserVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_storm_chaser(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_storm_chaser=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('¿', output)
+
+class TestIsShadowStalkerVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_shadow_stalker(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_shadow_stalker=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('♞', output)
+
+class TestIsRuthlessVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_ruthless(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_ruthless=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('.', output)
+
+class TestIsTrackerVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_tracker(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_tracker=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('↬', output)
+
+class TestIsPyrophilicVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_pyrophilic(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_pyrophilic=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('%', output)
+
+class TestIsEmpathicVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_empathic(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_empathic=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('±', output)
+
+class TestIsFogStriderVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_fog_strider(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_fog_strider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('r', output)
+
+class TestIsEtherealPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_ethereal_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_ethereal_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('E', output)
+
+class TestIsRelentlessVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_relentless(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_relentless=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('>', output)
+
+class TestIsEnduranceRunnerPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_endurance_runner_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_endurance_runner_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('🏃', output)
+
+class TestIsSturdyPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_sturdy_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_sturdy_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('☗', output)
+
+class TestIsFogWalkerVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_fog_walker(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_fog_walker=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('w', output)
+
+class TestIsHeavyPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_heavy_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_heavy_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('H', output)
+
+class TestIsSunTrackerVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_sun_tracker(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_sun_tracker=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('¤', output)
+
+class TestIsGluttonousPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_gluttonous_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_gluttonous_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('G', output)
+
+class TestIsClairvoyantPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_clairvoyant_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_clairvoyant_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('c', output)
+
+class TestIsFastLearnerPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_fast_learner_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_fast_learner_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ℒ', output)
+
+class TestIsFogGliderVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_fog_glider(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_fog_glider=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('g', output)
+
+class TestIsGiantSlayerVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_giant_slayer(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_giant_slayer=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Y', output)
+
+class TestIsProlificPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_prolific_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_prolific_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ℙ', output)
+
+class TestIsTirelessPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_tireless_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_tireless_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ⓣ', output)
+
+class TestIsOpportunisticPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_opportunistic_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_opportunistic_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('O', output)
+
+class TestIsFogDancerVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_fog_dancer(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_fog_dancer=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('a', output)
+
+class TestIsTirelessVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_tireless(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_tireless=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('▲', output)
+
+class TestIsProtectiveVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_protective(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_protective=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('(', output)
+
+class TestIsClairvoyantVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_clairvoyant(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_clairvoyant=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('C', output)
+
+class TestIsTelekineticPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_telekinetic_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_telekinetic_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ț', output)
+
+class TestIsMimicPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_mimic_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_mimic_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('\\', output)
+
+class TestIsDesperatePredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_desperate_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_desperate_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Δ', output)
+
+class TestIsMoonBatherVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_moon_bather(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_moon_bather=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('☾', output)
+
+class TestIsDustBatherVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_dust_bather(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_dust_bather=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('β', output)
+
+class TestIsProtectivePredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_protective_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_protective_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('🛡', output)
+
+class TestIsSmellyVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_smelly(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_smelly=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn(';', output)
+
+class TestIsTerritorialPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_territorial_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_territorial_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ṫ', output)
+
+class TestIsShadowStalkerPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_shadow_stalker_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_shadow_stalker_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('S', output)
+
+class TestIsSlipperyPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_slippery_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_slippery_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('∿', output)
+
+class TestIsTelekineticVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_telekinetic(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_telekinetic=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('K', output)
+
+class TestIsParasitePredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_parasite_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_parasite_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ρ', output)
+
+class TestIsToxicPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_toxic_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_toxic_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('τ', output)
+
+class TestIsHiveMindVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_hive_mind(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_hive_mind=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ĥ', output)
+
+class TestIsFogPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_fog_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_fog_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('f', output)
+
+class TestIsFogDwellerVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_fog_dweller(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_fog_dweller=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('d', output)
+
+class TestIsUnappetizingVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_unappetizing(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_unappetizing=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('§', output)
+
+class TestIsHypnoticVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_hypnotic(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_hypnotic=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('•', output)
+
+class TestIsEtherealVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_ethereal(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_ethereal=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('é', output)
+
+class TestIsSleepPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_sleep_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_sleep_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('η', output)
+
+class TestIsNomadicPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_nomadic_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_nomadic_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('N', output)
+
+class TestIsContagiousVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_contagious(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_contagious=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ñ', output)
+
+class TestIsDroughtResistantVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_drought_resistant(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_drought_resistant=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('∆', output)
+
+class TestIsScoutPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_scout_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_scout_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('C', output)
+
+class TestIsMimicVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_mimic(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_mimic=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('\\', output)
+
+class TestIsHiveMindPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_hive_mind_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity('TestEntity', x=2, y=2, energy=50, is_hive_mind_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ĥ', output)

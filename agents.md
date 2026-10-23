@@ -547,3 +547,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_ethereal` trait. Entities with this trait gain a flat 50% bonus to their escape chance. Added visualizer rendering and tests.
 - [x] Implemented `is_regenerative_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking regenerative entities. Added visualizer rendering and tests.
 - [x] Implemented missing tests and verified `is_electric_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking electric entities.
+- [x] Добавлены недостающие тесты в `tests/test_visualizer.py` для покрытия всех новых символов рендеринга свойств.
