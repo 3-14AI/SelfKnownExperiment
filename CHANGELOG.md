@@ -593,3 +593,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_regenerative_predator` trait with 1.5x attack multiplier against regenerative entities.
 - [x] Added missing unit tests and visualizer tests for `is_electric_predator` trait.
 - Добавлены 52 недостающих модульных теста в `tests/test_visualizer.py` для обеспечения 100% покрытия символов рендеринга недавно добавленных свойств хищников и других трейтов.
+- Implemented `is_shell_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_shell` trait. Added visualizer rendering and tests.
