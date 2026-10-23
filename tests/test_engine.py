@@ -26685,3 +26685,73 @@ class TestIsScalesPredatorMutation(unittest.TestCase):
         self.assertTrue(len(children) > 0)
         child = children[0]
         self.assertTrue(getattr(child, 'is_scales_predator', False))
+import unittest
+from src.universe.engine import Universe, Entity
+import random
+import unittest.mock as mock
+
+class TestIsSpikesPredator(unittest.TestCase):
+    def test_is_spikes_predator_multiplier(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10000
+
+        predator = Entity(name="pred", x=5, y=5, energy=50, perception_radius=5, is_spikes_predator=True, max_age=100)
+        predator.age = 100
+        predator.is_ageless = True
+        predator.diet = 'carnivore'
+        predator.attack = 10
+        predator.size = 1
+
+        prey = Entity(name="prey", x=5, y=5, energy=50, perception_radius=5, has_spikes=True, max_age=100)
+        prey.age = 100
+        prey.is_ageless = True
+        prey.defense = 5
+        prey.size = 1
+
+        universe.entities = [predator, prey]
+
+        with mock.patch('random.random', return_value=0.65):
+            universe.tick()
+
+        self.assertTrue(prey.was_eaten)
+
+    def test_is_spikes_predator_no_multiplier(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10000
+
+        predator = Entity(name="pred", x=5, y=5, energy=50, perception_radius=5, is_spikes_predator=True, max_age=100)
+        predator.age = 100
+        predator.is_ageless = True
+        predator.diet = 'carnivore'
+        predator.attack = 10
+        predator.size = 1
+
+        prey = Entity(name="prey", x=5, y=5, energy=50, perception_radius=5, has_spikes=False, max_age=100)
+        prey.age = 100
+        prey.is_ageless = True
+        prey.defense = 10
+
+        universe.entities = [predator, prey]
+
+        with mock.patch('random.random', return_value=0.45):
+            universe.tick()
+
+        self.assertFalse(prey.was_eaten)
+
+class TestIsSpikesPredatorMutation(unittest.TestCase):
+    def test_is_spikes_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity(name="parent", x=5, y=5, energy=200, is_spikes_predator=False)
+        universe.entities = [parent]
+
+        with mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_spikes_predator', False))

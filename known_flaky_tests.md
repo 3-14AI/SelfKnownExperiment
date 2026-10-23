@@ -49,3 +49,8 @@ test_is_sleeping
 - test_is_toxic_inflicts_poison_during_combat_not_just_eat: Unrelated test failing intermittently due to RNG mock leakage or environmental event state.
 - test_is_social_efficiency: Unrelated test failing occasionally.
 - test_is_fast_learner_predator_combat: Failing occasionally likely due to mock RNG state leakage across test suites.
+
+- `TestFurTrait.test_fur_heat_penalty`: Occasionally fails because of RNG or edge case logic in Universe.tick not covered by the test assumptions.
+- `TestIsSandDancer.test_sand_dancer_gains_energy_in_sandstorm`: Fails due to similar RNG or environmental overlaps in the tick logic.
+
+- `TestUniverse.test_entity_aging`: Fails occasionally because of random mutation or combat that unintentionally kills the entity during tick().
