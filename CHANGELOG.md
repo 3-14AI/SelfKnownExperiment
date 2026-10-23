@@ -592,3 +592,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_ethereal` trait. Entities with this trait gain a flat 50% bonus to their escape chance. Added visualizer rendering and tests.
 - Implemented `is_regenerative_predator` trait with 1.5x attack multiplier against regenerative entities.
 - [x] Added missing unit tests and visualizer tests for `is_electric_predator` trait.
+- Добавлены 52 недостающих модульных теста в `tests/test_visualizer.py` для обеспечения 100% покрытия символов рендеринга недавно добавленных свойств хищников и других трейтов.
