@@ -747,6 +747,10 @@ class CLIVisualizer:
                         char = 'E'
                     elif getattr(entity, 'is_detritivore_predator', False):
                         char = 'd'
+                    elif getattr(entity, 'is_cannibalistic_predator', False):
+                        char = 'K'
+                    elif getattr(entity, 'is_cleaner_predator', False):
+                        char = 'C'
                     elif getattr(entity, 'is_regenerative_predator', False):
                         char = 'R'
                     elif getattr(entity, 'is_shadow_stalker_predator', False):

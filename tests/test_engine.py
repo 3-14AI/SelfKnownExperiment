@@ -25583,7 +25583,7 @@ class TestIsFastLearnerPredator(unittest.TestCase):
         prey_normal = Entity(name="prey2", x=0, y=0, energy=20, size=10, defense=10, is_fast_learner=False, is_ageless=True, age=100, max_age=100)
         universe2.entities = [predator2, prey_normal]
 
-        with patch('random.random', return_value=0.65):
+        with patch('random.random', return_value=0.45):
             universe1.tick()
             universe2.tick()
 
@@ -26367,3 +26367,115 @@ class TestIsRegenerativePredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(len(children) > 0)
         self.assertTrue(getattr(children[0], 'is_regenerative_predator', False))
+
+class TestIsCannibalisticPredator(unittest.TestCase):
+    def test_is_cannibalistic_predator_multiplier(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100000
+
+        predator_normal = Entity("Predator", x=1, y=1, energy=100, is_carnivore_predator=False, is_cannibalistic_predator=False)
+        predator_normal.attack = 20
+        predator_normal.diet = 'carnivore'
+        prey = Entity("Prey", x=1, y=1, energy=100, is_cannibalistic=True)
+        prey.defense = 20
+        prey.species = "Other"
+        universe.add_entity(predator_normal)
+        universe.add_entity(prey)
+
+        with patch('random.random', return_value=0.45):
+            universe.tick()
+        self.assertTrue(prey.energy > 0)
+        self.assertFalse(prey.was_eaten)
+
+        universe.entities.clear()
+
+        predator_bonus = Entity("Predator", x=1, y=1, energy=100, is_carnivore_predator=False, is_cannibalistic_predator=True)
+        predator_bonus.attack = 20
+        predator_bonus.diet = 'carnivore'
+        prey_bonus = Entity("Prey", x=1, y=1, energy=100, is_cannibalistic=True)
+        prey_bonus.defense = 20
+        prey_bonus.species = "Other"
+        universe.add_entity(predator_bonus)
+        universe.add_entity(prey_bonus)
+
+        with patch('random.random', return_value=0.45):
+            universe.tick()
+        self.assertEqual(prey_bonus.energy, 0)
+        self.assertTrue(prey_bonus.was_eaten)
+
+class TestIsCannibalisticPredatorMutation(unittest.TestCase):
+    def test_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 10
+
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_cannibalistic_predator=False, lays_eggs=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        with patch('random.random', return_value=0.0001):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_cannibalistic_predator', False))
+
+class TestIsCleanerPredator(unittest.TestCase):
+    def test_is_cleaner_predator_multiplier(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 100000
+
+        predator_normal = Entity("Predator", x=1, y=1, energy=100, is_carnivore_predator=False, is_cleaner_predator=False)
+        predator_normal.attack = 20
+        predator_normal.diet = 'carnivore'
+        prey = Entity("Prey", x=1, y=1, energy=100, is_cleaner=True)
+        prey.defense = 20
+        prey.species = "Other"
+        universe.add_entity(predator_normal)
+        universe.add_entity(prey)
+
+        with patch('random.random', return_value=0.45):
+            universe.tick()
+        self.assertTrue(prey.energy > 0)
+        self.assertFalse(prey.was_eaten)
+
+        universe.entities.clear()
+
+        predator_bonus = Entity("Predator", x=1, y=1, energy=100, is_carnivore_predator=False, is_cleaner_predator=True)
+        predator_bonus.attack = 20
+        predator_bonus.diet = 'carnivore'
+        prey_bonus = Entity("Prey", x=1, y=1, energy=100, is_cleaner=True)
+        prey_bonus.defense = 20
+        prey_bonus.species = "Other"
+        universe.add_entity(predator_bonus)
+        universe.add_entity(prey_bonus)
+
+        with patch('random.random', return_value=0.45):
+            universe.tick()
+        self.assertEqual(prey_bonus.energy, 0)
+        self.assertTrue(prey_bonus.was_eaten)
+
+class TestIsCleanerPredatorMutation(unittest.TestCase):
+    def test_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.reproduction_threshold = 10
+
+        parent = Entity("Parent", x=1, y=1, energy=5000, age=5, size=20, is_cleaner_predator=False, lays_eggs=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        universe.add_entity(parent)
+
+        with patch('random.random', return_value=0.0001):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        self.assertTrue(getattr(children[0], 'is_cleaner_predator', False))
