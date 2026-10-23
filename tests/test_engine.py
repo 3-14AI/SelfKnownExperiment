@@ -26608,3 +26608,80 @@ class TestIsShellPredatorMutation(unittest.TestCase):
         self.assertTrue(len(children) > 0)
         child = children[0]
         self.assertTrue(getattr(child, 'is_shell_predator', False))
+
+class TestIsScalesPredator(unittest.TestCase):
+    def test_is_scales_predator_multiplier(self):
+        from src.universe.engine import Universe, Entity
+        import random
+
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10000
+
+        predator = Entity(name="pred", x=5, y=5, energy=50, perception_radius=5, is_scales_predator=True, max_age=100)
+        predator.age = 100
+        predator.is_ageless = True
+        predator.diet = 'carnivore'
+        predator.attack = 10
+        predator.size = 1
+
+        prey = Entity(name="prey", x=5, y=5, energy=50, perception_radius=5, has_scales=True, max_age=100)
+        prey.age = 100
+        prey.is_ageless = True
+        prey.defense = 5
+        prey.size = 1
+
+        universe.entities = [predator, prey]
+
+        import unittest.mock as mock
+        with mock.patch('random.random', return_value=0.65):
+            universe.tick()
+
+        self.assertTrue(prey.was_eaten)
+
+    def test_is_scales_predator_no_multiplier(self):
+        from src.universe.engine import Universe, Entity
+        import random
+
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10000
+
+        predator = Entity(name="pred", x=5, y=5, energy=50, perception_radius=5, is_scales_predator=True, max_age=100)
+        predator.age = 100
+        predator.is_ageless = True
+        predator.diet = 'carnivore'
+        predator.attack = 10
+        predator.size = 1
+
+        prey = Entity(name="prey", x=5, y=5, energy=50, perception_radius=5, has_scales=False, max_age=100)
+        prey.age = 100
+        prey.is_ageless = True
+        prey.defense = 10
+        prey.size = 1
+
+        universe.entities = [predator, prey]
+
+        import unittest.mock as mock
+        with mock.patch('random.random', return_value=0.45):
+            universe.tick()
+
+        self.assertFalse(prey.was_eaten)
+
+class TestIsScalesPredatorMutation(unittest.TestCase):
+    def test_is_scales_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+        parent = Entity(name="parent", x=5, y=5, energy=200, is_scales_predator=False)
+        universe.entities = [parent]
+
+        import unittest.mock as mock
+        with mock.patch('random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertTrue(len(children) > 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_scales_predator', False))

@@ -549,3 +549,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented missing tests and verified `is_electric_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking electric entities.
 - [x] Добавлены недостающие тесты в `tests/test_visualizer.py` для покрытия всех новых символов рендеринга свойств.
 - [x] Implemented `is_shell_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_shell` trait. Added visualizer rendering and tests.
+- [x] Implemented `is_scales_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_scales` trait. Added visualizer rendering and tests.

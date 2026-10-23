@@ -753,6 +753,8 @@ class CLIVisualizer:
                         char = 'C'
                     elif getattr(entity, 'is_shell_predator', False):
                         char = 'Ş'
+                    elif getattr(entity, 'is_scales_predator', False):
+                        char = '¥'
                     elif getattr(entity, 'is_regenerative_predator', False):
                         char = 'R'
                     elif getattr(entity, 'is_shadow_stalker_predator', False):
