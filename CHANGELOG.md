@@ -591,3 +591,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_clairvoyant` trait. Entities with this trait gain a flat 30% bonus to their escape chance.
 - Implemented `is_ethereal` trait. Entities with this trait gain a flat 50% bonus to their escape chance. Added visualizer rendering and tests.
 - Implemented `is_regenerative_predator` trait with 1.5x attack multiplier against regenerative entities.
+- [x] Added missing unit tests and visualizer tests for `is_electric_predator` trait.
