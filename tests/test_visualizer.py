@@ -3936,3 +3936,15 @@ class TestIsHiveMindPredatorVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('Ĥ', output)
+import unittest
+
+class TestIsShellPredatorVisualizer(unittest.TestCase):
+    def test_is_shell_predator_rendering(self):
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="shell_pred", x=5, y=5, energy=50, is_shell_predator=True)
+        universe.entities = [entity]
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('Ş', output)

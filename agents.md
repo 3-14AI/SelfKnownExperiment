@@ -548,3 +548,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_regenerative_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking regenerative entities. Added visualizer rendering and tests.
 - [x] Implemented missing tests and verified `is_electric_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking electric entities.
 - [x] Добавлены недостающие тесты в `tests/test_visualizer.py` для покрытия всех новых символов рендеринга свойств.
+- [x] Implemented `is_shell_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_shell` trait. Added visualizer rendering and tests.
