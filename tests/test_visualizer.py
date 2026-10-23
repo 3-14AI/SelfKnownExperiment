@@ -3386,3 +3386,23 @@ class TestIsRegenerativePredatorVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('R', output)
+
+class TestIsCannibalisticPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_cannibalistic_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity("Predator", x=2, y=2, energy=50, is_cannibalistic_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('K', output)
+
+class TestIsCleanerPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_cleaner_predator(self, mock_os):
+        universe = Universe(width=5, height=5)
+        entity = Entity("Predator", x=2, y=2, energy=50, is_cleaner_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('C', output)

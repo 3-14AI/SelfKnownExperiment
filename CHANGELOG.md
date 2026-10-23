@@ -1,4 +1,6 @@
 ### New Features
+- [x] Implemented `is_cannibalistic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cannibalistic entities. Added visualizer rendering and tests.
+- [x] Implemented `is_cleaner_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cleaner entities. Added visualizer rendering and tests.
 - [x] Implemented `is_detritivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking detritivore entities. Added visualizer rendering and tests.
 - [x] Implemented `is_telekinetic` trait. Entities with this trait gain a flat 40% bonus to their escape chance. Added visualizer rendering and tests.
 - [x] Implemented `is_scavenger_hunter_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking other carnivores and actively target them as prey. Added visualizer rendering and tests.
@@ -23,6 +25,8 @@
 - [x] Fixed multiple flaky tests across `test_engine.py` and `test_quicksand_strider.py` that were occasionally failing due to un-mocked RNG state, trait energy leakages, or size-dependent mutation bugs.
 
 ### New Features
+- [x] Implemented `is_cannibalistic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cannibalistic entities. Added visualizer rendering and tests.
+- [x] Implemented `is_cleaner_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cleaner entities. Added visualizer rendering and tests.
 - [x] Implemented `is_detritivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking detritivore entities. Added visualizer rendering and tests.
 - Implemented `is_protective_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking protective entities.
 - Implemented `is_frugivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking frugivore entities.
@@ -47,6 +51,8 @@
 
 ## [Unreleased]
 ### New Features
+- [x] Implemented `is_cannibalistic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cannibalistic entities. Added visualizer rendering and tests.
+- [x] Implemented `is_cleaner_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cleaner entities. Added visualizer rendering and tests.
 - [x] Implemented `is_detritivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking detritivore entities. Added visualizer rendering and tests.
 - Implemented `is_protective_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking protective entities.
 - Implemented `is_frugivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking frugivore entities.
