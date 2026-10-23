@@ -3406,3 +3406,13 @@ class TestIsCleanerPredatorVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('C', output)
+
+class TestIsElectricPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_visualize_is_electric_predator(self, mock_os):
+        universe = Universe()
+        entity = Entity(name="e", x=5, y=5, energy=50, is_electric_predator=True)
+        universe.entities.append(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('ε', output)
