@@ -444,3 +444,14 @@
   - Executed the full test suite utilizing `pytest -q` which confirmed that all 1,439 active tests successfully passed, with exactly 155 skipped as before.
   - Ensured no duplicate blocks exist by applying a dictionary-based deduplication during AST processing.
 - **Next Steps**: Continue to monitor the ecosystem logs or pick up implementing more advanced logic like nested terrains or civilization-building capabilities as suggested in `agents.md`.
+
+### Analysis 350: Реализация свойства `is_parasitic_predator`
+- **Цель агента**: Дополнить систему хищников новым свойством `is_parasitic_predator`, которое дает преимущество при охоте на паразитов (существ с трейтом `is_parasitic`).
+- **Детали реализации**:
+  - Свойство `is_parasitic_predator` было добавлено в класс `Entity` (`src/universe/engine.py`).
+  - Добавлена логика генетической мутации свойства и передачи потомству в цикле `Universe.tick()`.
+  - Добавлен боевой множитель x1.5 для сущностей, обладающих этим свойством при атаке целей с `is_parasitic`.
+  - Обновлен `CLIVisualizer` для рендеринга существ с этим свойством с использованием символа `P`.
+  - Написаны тесты `TestIsParasiticPredator` (логика боя и мутации) и добавлены тесты рендеринга.
+  - Все тесты прошли успешно.
+- **Дальнейшие шаги**: Продолжать обогащение экосистемы новыми свойствами и механиками.

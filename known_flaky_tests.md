@@ -56,3 +56,4 @@ test_is_sleeping
 - `TestUniverse.test_entity_aging`: Fails occasionally because of random mutation or combat that unintentionally kills the entity during tick().
 test_fur_heat_penalty
 test_entity_aging
+- test_is_volcanic_glider_effect

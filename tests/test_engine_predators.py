@@ -4874,3 +4874,56 @@ class TestIsHasHornsPredator(unittest.TestCase):
 
         child = [e for e in universe.entities if e != parent][0]
         self.assertTrue(getattr(child, 'is_has_horns_predator', False))
+
+class TestIsParasiticPredator(unittest.TestCase):
+    def test_is_parasitic_predator_multiplier(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10000
+
+        predator = Entity(name="pred", x=5, y=5, energy=50, perception_radius=5, is_parasitic_predator=True, max_age=100)
+        predator.diet = 'carnivore'
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100)
+        prey.defense = 10
+        prey.is_parasitic = True
+        universe.entities = [predator, prey]
+
+        predator.attack = 10
+        # 10 * 1.5 = 15. Escape chance = min(1.0, 10 / (15 + 10)) = 10/25 = 0.4
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.35  # < 0.4, prey escapes
+            universe.tick()
+            self.assertFalse(getattr(prey, 'was_eaten', False))
+
+            universe.entities = [predator, prey]
+            prey.was_eaten = False
+            prey.energy = 50
+            random.random = lambda: 0.45  # >= 0.4, prey gets eaten
+            universe.tick()
+            self.assertTrue(getattr(prey, 'was_eaten', False))
+        finally:
+            random.random = original_random
+
+class TestIsParasiticPredatorMutation(unittest.TestCase):
+    def test_is_parasitic_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(name="parent", x=5, y=5, energy=200, age=10, max_age=100)
+        universe.entities = [parent]
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0001
+            universe.tick()
+        finally:
+            random.random = original_random
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_parasitic_predator', False))

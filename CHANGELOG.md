@@ -1,3 +1,7 @@
+## [Unreleased] - 2026-10-24
+### Added
+- Implemented `is_parasitic_predator` trait which grants an attack multiplier of 1.5x when attacking entities with `is_parasitic`. Added corresponding tests and visualizer rendering.
+
 ### New Features
 - [x] Implemented `is_has_horns_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_horns` trait. Added visualizer rendering and tests.
 - [x] Implemented `is_pack_hunter_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking pack_hunter entities.
