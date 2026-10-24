@@ -1012,6 +1012,11 @@ class TestWallDancer(unittest.TestCase):
     def test_wall_dancer_mutation(self):
         from src.universe.engine import Entity
         parent = Entity(name="parent", x=1, y=1, energy=100, is_wall_dancer=True)
+        self.universe.reproduction_threshold = 10
+        self.universe.food_spawn_rate = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
         self.universe.add_entity(parent)
         self.universe.mutation_chance = 1.0
 
