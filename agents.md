@@ -139,7 +139,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_volcanic` trait. Entities with this trait thrive in extreme heat, gain energy when standing on `ash` terrain, and are immune to `fire` events.
 - [x] Implemented `is_forestal` trait. Entities with this trait gain defense in forest/wooded terrain.
 - [x] Implemented `is_social` trait. Entities with this trait gain an energy efficiency buff when near other entities of the same species.
-- [x] Implemented `has_horns` trait. Entities with this trait gain a +2 bonus to their effective attack and +1 to their effective defense during combat.
 - [x] Implemented `is_playful` trait. Entities with this trait gain 1 experience point per tick when standing adjacent to another entity of the same species.
 - [x] Implemented `is_fast_learner` trait. Entities with this trait gain double experience points from all activities.
 - [x] Implemented `is_hardy` trait. Entities with this trait halve their base energy loss rate when their energy falls below 25% of their maximum, representing extreme metabolic efficiency during starvation.
@@ -553,3 +552,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_scales_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_scales` trait. Added visualizer rendering and tests.
 - [x] Implemented `is_spikes_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_spikes` trait. Added visualizer rendering and tests.
 - [x] Implemented `is_has_horns_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_horns` trait. Added visualizer rendering and tests.
+- [x] Implemented `has_claws_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_claws` trait. Added visualizer rendering and tests.
+- [x] Implemented `has_fur_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_fur` trait. Added visualizer rendering and tests.
+- [x] Implemented `has_horns_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_horns` trait.

@@ -601,3 +601,7 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `is_scales_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_scales` trait. Added visualizer rendering and tests.
 - Added `is_spikes_predator` trait to Engine which multiplies attack against entities with `has_spikes` by 1.5x.
 - Added visualizer rendering (‡) for `is_spikes_predator`.
+- Implemented `has_claws_predator` trait.
+- Implemented `has_fur_predator` trait.
+- Implemented `has_claws_predator` and `has_fur_predator` traits.
+- Implemented `has_horns_predator` trait.
