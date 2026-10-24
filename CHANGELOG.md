@@ -1,4 +1,5 @@
 ### New Features
+- [x] Implemented `is_pack_hunter_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking pack_hunter entities.
 - [x] Implemented `is_cannibalistic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cannibalistic entities. Added visualizer rendering and tests.
 - [x] Implemented `is_cleaner_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cleaner entities. Added visualizer rendering and tests.
 - [x] Implemented `is_detritivore_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking detritivore entities. Added visualizer rendering and tests.
