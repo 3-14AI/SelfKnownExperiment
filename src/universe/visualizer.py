@@ -759,6 +759,8 @@ class CLIVisualizer:
                         char = '‡'
                     elif getattr(entity, 'is_pack_hunter_predator', False):
                         char = 'π'
+                    elif getattr(entity, 'is_has_horns_predator', False):
+                        char = '♆'
                     elif getattr(entity, 'is_regenerative_predator', False):
                         char = 'R'
                     elif getattr(entity, 'is_shadow_stalker_predator', False):

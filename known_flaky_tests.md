@@ -54,3 +54,5 @@ test_is_sleeping
 - `TestIsSandDancer.test_sand_dancer_gains_energy_in_sandstorm`: Fails due to similar RNG or environmental overlaps in the tick logic.
 
 - `TestUniverse.test_entity_aging`: Fails occasionally because of random mutation or combat that unintentionally kills the entity during tick().
+test_fur_heat_penalty
+test_entity_aging

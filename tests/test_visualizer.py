@@ -3970,3 +3970,14 @@ class TestIsPackHunterPredatorVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('π', output)
+
+class TestIsHasHornsPredatorVisualizer(unittest.TestCase):
+    def test_is_has_horns_predator_rendering(self):
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="horns_pred", x=5, y=5, energy=50, is_has_horns_predator=True)
+        universe.entities = [entity]
+
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('♆', output)

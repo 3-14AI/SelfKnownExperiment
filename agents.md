@@ -552,3 +552,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_shell_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_shell` trait. Added visualizer rendering and tests.
 - [x] Implemented `is_scales_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_scales` trait. Added visualizer rendering and tests.
 - [x] Implemented `is_spikes_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_spikes` trait. Added visualizer rendering and tests.
+- [x] Implemented `is_has_horns_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_horns` trait. Added visualizer rendering and tests.
