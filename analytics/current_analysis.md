@@ -434,3 +434,13 @@
   - Добавлено отображение новых свойств в визуализаторе и написаны соответствующие тесты.
   - Обновлены списки задач в `agents.md` и история изменений в `CHANGELOG.md`.
 - **Дальнейшие шаги**: Продолжить реализацию оставшихся трейтов и улучшений из `agents.md`.
+
+### Analysis 348: Refactoring of `tests/test_engine.py`
+- **Agent Goal**: Break down the massive `tests/test_engine.py` (which contained nearly 27,000 lines and almost 500 test classes) into smaller, more manageable modular files grouped by functionality.
+- **Implementation Details**:
+  - Wrote an AST-based parser to systematically read all classes in `tests/test_engine.py` and group them by identifying keywords in the class names (`predator`, `dweller`, `strider`, `glider`, `dancer`, `walker`, and `core`).
+  - Generated the corresponding new test files (`test_engine_predators.py`, `test_engine_dwellers.py`, `test_engine_core.py`, etc.) ensuring all necessary imports were copied correctly.
+  - Safely removed the monolithic `test_engine.py` file.
+  - Executed the full test suite utilizing `pytest -q` which confirmed that all 1,439 active tests successfully passed, with exactly 155 skipped as before.
+  - Ensured no duplicate blocks exist by applying a dictionary-based deduplication during AST processing.
+- **Next Steps**: Continue to monitor the ecosystem logs or pick up implementing more advanced logic like nested terrains or civilization-building capabilities as suggested in `agents.md`.
