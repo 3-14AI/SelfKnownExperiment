@@ -63,6 +63,9 @@ class CLIVisualizer:
                         char = '🤝'
                     elif getattr(entity, 'is_absorbent_predator', False):
                         char = 'Á'
+                    elif getattr(entity, 'is_parasitic_predator', False):
+                        char = 'P'
+                        color = '\033[91m'
                     elif diet == 'carnivore':
                         char = 'X'
                     elif diet == 'scavenger':
@@ -424,6 +427,9 @@ class CLIVisualizer:
                         char = 'Á'
                     elif getattr(entity, 'is_scavenger_hunter_predator', False):
                         char = '¥'
+                    elif getattr(entity, 'is_parasitic_predator', False):
+                        char = 'P'
+                        color = '\033[91m'
                     elif diet == 'carnivore':
                         char = 'C'
                     elif diet == 'scavenger':

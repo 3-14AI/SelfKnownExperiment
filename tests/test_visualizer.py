@@ -3981,3 +3981,15 @@ class TestIsHasHornsPredatorVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('♆', output)
+
+class TestIsParasiticPredatorVisualizer(unittest.TestCase):
+    @patch('os.system')
+    def test_render_is_parasitic_predator(self, mock_system):
+        from src.universe.engine import Universe, Entity
+        from src.universe.visualizer import CLIVisualizer
+        universe = Universe(width=10, height=10)
+        entity = Entity(name="predator", x=2, y=2, energy=50, is_parasitic_predator=True)
+        universe.add_entity(entity)
+        vis = CLIVisualizer(universe)
+        output = vis.render()
+        self.assertIn('P', output)
