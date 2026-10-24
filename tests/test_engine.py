@@ -9580,7 +9580,7 @@ class TestFurTrait(unittest.TestCase):
         universe.reproduction_threshold = 10
         universe.disease_chance = 0.0
 
-        entity = Entity("Furry", energy=5000, max_age=200, age=100, size=2, intelligence=1, has_fur=True, preferred_temperature=20, temperature_tolerance=5)
+        entity = Entity("Furry", energy=100, max_age=200, age=100, size=2, intelligence=1, has_fur=True, preferred_temperature=20, temperature_tolerance=5)
         entity.is_sunbather = False
         universe.add_entity(entity)
 
@@ -9602,7 +9602,7 @@ class TestFurTrait(unittest.TestCase):
         universe.event_chance = 0.0
         universe.reproduction_threshold = 10
 
-        entity = Entity("Furry", energy=5000, max_age=200, age=100, size=2, intelligence=1, has_fur=True, preferred_temperature=20, temperature_tolerance=5)
+        entity = Entity("Furry", energy=100, max_age=200, age=100, size=2, intelligence=1, has_fur=True, preferred_temperature=20, temperature_tolerance=5)
         universe.add_entity(entity)
 
         # Force exact temperature evaluation to 0 (Cold)
@@ -15938,7 +15938,6 @@ class TestIsEarthquakeDancer(unittest.TestCase):
 
         old_energy = entity.energy
         self.universe.tick()
-
         self.assertGreaterEqual(entity.energy, old_energy + 4)
 
     def test_earthquake_dancer_mutation(self):
@@ -15967,7 +15966,6 @@ class TestIsDroughtDancer(unittest.TestCase):
 
         old_energy = entity.energy
         self.universe.tick()
-
         self.assertGreaterEqual(entity.energy, old_energy + 4)
 
     def test_drought_dancer_mutation(self):
@@ -26755,3 +26753,73 @@ class TestIsSpikesPredatorMutation(unittest.TestCase):
         self.assertTrue(len(children) > 0)
         child = children[0]
         self.assertTrue(getattr(child, 'is_spikes_predator', False))
+
+class TestIsPackHunterPredator(unittest.TestCase):
+    def test_is_pack_hunter_predator_multiplier(self):
+        from src.universe.engine import Universe, Entity
+        import random
+
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10000
+
+        predator = Entity(name="pred", x=5, y=5, energy=50, perception_radius=5, is_pack_hunter_predator=True, max_age=100)
+        predator.diet = 'carnivore'
+        prey = Entity(name="prey", x=5, y=5, energy=50, max_age=100)
+        prey.defense = 10
+        prey.pack_hunter = True
+        universe.entities = [predator, prey]
+
+        predator.attack = 10
+        # 10 * 1.5 = 15. Escape chance = min(1.0, 10 / (15 + 10)) = 10/25 = 0.4
+
+        original_random = random.random
+        try:
+            random.random = lambda: 0.35  # < 0.4, prey escapes
+            universe.tick()
+            self.assertFalse(getattr(prey, 'was_eaten', False))
+
+            universe.entities = [predator, prey]
+            prey.was_eaten = False
+            prey.energy = 50
+            random.random = lambda: 0.45  # >= 0.4, prey gets eaten
+            universe.tick()
+            self.assertTrue(getattr(prey, 'was_eaten', False))
+
+            # Control: without the trait
+            predator_control = Entity(name="pred_ctrl", x=5, y=5, energy=50, perception_radius=5, max_age=100)
+            predator_control.diet = 'carnivore'
+            prey_control = Entity(name="prey_ctrl", x=5, y=5, energy=50, max_age=100)
+            prey_control.defense = 10
+            prey_control.pack_hunter = True
+            universe.entities = [predator_control, prey_control]
+            predator_control.attack = 10
+            # 10 * 1.0 = 10. Escape chance = min(1.0, 10 / (10 + 10)) = 0.5
+
+            random.random = lambda: 0.45  # < 0.5, prey_control escapes
+            universe.tick()
+            self.assertFalse(getattr(prey_control, 'was_eaten', False))
+        finally:
+            random.random = original_random
+
+class TestIsPackHunterPredatorMutation(unittest.TestCase):
+    def test_is_pack_hunter_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10
+        universe.event_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        parent = Entity(name="parent", x=5, y=5, energy=200, age=10, max_age=100)
+        universe.entities = [parent]
+
+        import random
+        original_random = random.random
+        try:
+            random.random = lambda: 0.0001
+            universe.tick()
+        finally:
+            random.random = original_random
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_pack_hunter_predator', False))
