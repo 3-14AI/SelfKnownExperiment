@@ -3928,9 +3928,15 @@ class Universe:
                         mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_is_venomous_predator = not child_is_venomous_predator
-                        if random.random() < mutation_chance:
-                            mutation_occurred = True
-                            child_is_electric_predator = not child_is_electric_predator
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_sturdy_predator = not child_is_sturdy_predator
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_slippery_predator = not child_is_slippery_predator
+                        mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_is_electric_predator = not child_is_electric_predator
                         mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_is_heavy_predator = not child_is_heavy_predator

@@ -58,3 +58,49 @@ class TestVisualizerSturdySlippery(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('∿', output)
+
+class TestIsSturdyPredatorMutation(unittest.TestCase):
+    def test_is_sturdy_predator_mutation(self):
+        universe = Universe(width=10, height=10, reproduction_threshold=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+
+        parent = Entity(name="parent", x=5, y=5, energy=200, age=5)
+        parent.is_sturdy_predator = False
+
+        import random
+        from unittest.mock import patch
+
+        universe.add_entity(parent)
+
+        with patch('random.random', return_value=0.0001):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_sturdy_predator', False))
+
+class TestIsSlipperyPredatorMutation(unittest.TestCase):
+    def test_is_slippery_predator_mutation(self):
+        universe = Universe(width=10, height=10, reproduction_threshold=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+
+        parent = Entity(name="parent", x=5, y=5, energy=200, age=5)
+        parent.is_slippery_predator = False
+
+        import random
+        from unittest.mock import patch
+
+        universe.add_entity(parent)
+
+        with patch('random.random', return_value=0.0001):
+            universe.tick()
+
+        children = [e for e in universe.entities if e != parent]
+        self.assertGreater(len(children), 0)
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_slippery_predator', False))

@@ -1,4 +1,9 @@
-## [Unreleased] - 2026-10-24
+## [Unreleased]
+
+### [2026-10-25] - Agent
+- Fixed syntax error in `is_sturdy_predator` and `is_slippery_predator` mutation block inside `Universe.tick()`.
+- Implemented isolated missing tests `TestIsSturdyPredatorMutation` and `TestIsSlipperyPredatorMutation` to verify reproduction logic for these predator traits.
+ - 2026-10-24
 ### Added
 - Implemented `is_parasitic_predator` trait which grants an attack multiplier of 1.5x when attacking entities with `is_parasitic`. Added corresponding tests and visualizer rendering.
 
@@ -57,6 +62,11 @@
 # Changelog
 
 ## [Unreleased]
+
+### [2026-10-25] - Agent
+- Fixed syntax error in `is_sturdy_predator` and `is_slippery_predator` mutation block inside `Universe.tick()`.
+- Implemented isolated missing tests `TestIsSturdyPredatorMutation` and `TestIsSlipperyPredatorMutation` to verify reproduction logic for these predator traits.
+
 ### New Features
 - [x] Implemented `is_has_horns_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_horns` trait. Added visualizer rendering and tests.
 - [x] Implemented `is_cannibalistic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cannibalistic entities. Added visualizer rendering and tests.
