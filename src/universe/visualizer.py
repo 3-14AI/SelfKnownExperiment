@@ -767,6 +767,8 @@ class CLIVisualizer:
                         char = 'π'
                     elif getattr(entity, 'is_has_horns_predator', False):
                         char = '♆'
+                    elif getattr(entity, 'has_bioluminescence_predator', False):
+                        char = 'L'
                     elif getattr(entity, 'has_blubber_predator', False):
                         char = 'B'
                     elif getattr(entity, 'has_claws_predator', False):

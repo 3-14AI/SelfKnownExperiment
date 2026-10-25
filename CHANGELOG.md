@@ -610,3 +610,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `has_claws_predator` and `has_fur_predator` traits.
 - Implemented `has_horns_predator` trait. Added visualizer rendering and tests.
 - Implemented `has_blubber_predator` trait. Added visualizer rendering and tests.
+- Implemented `has_bioluminescence_predator` trait. Added visualizer rendering and tests.
