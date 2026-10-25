@@ -622,3 +622,6 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `has_blubber_predator` trait. Added visualizer rendering and tests.
 - Implemented `has_bioluminescence_predator` trait. Added visualizer rendering and tests.
 - Implemented `is_aposematic_predator` trait: grants 1.5x attack multiplier against aposematic entities.
+- [x] Implemented missing mutation tests for `is_heavy_predator`, `is_lightweight_predator`, and `is_agile_predator` traits, and fixed a syntax bug blocking their mutation during reproduction.
+- [x] Implemented missing mutation tests for `is_evasive_predator`, `is_stealthy_predator`, `is_social_predator`, and `is_solitary_predator` traits, and fixed a syntax bug blocking their mutation during reproduction.
+- [x] Implemented missing mutation tests for various predator traits (e.g. `is_defensive_predator`, `is_intimidating_predator`, `is_fearless_predator`, etc.) and fixed syntax bugs blocking their mutation during reproduction.
