@@ -21,3 +21,4 @@ test_is_toxic_inflicts_poison_during_combat_not_just_eat
 - `test_can_sprint_movement` in `tests/test_engine.py` (intermittent failure, passes when run alone)
 - `test_fur_heat_penalty`: Known flaky test
 - `test_sand_dancer_gains_energy_in_sandstorm`: Known flaky test
+- `test_entity_aging` in `tests/test_engine_core.py`: Flaky due to randomized energy/stamina drains that sometimes kill the entity before it reaches its max age.

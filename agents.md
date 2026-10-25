@@ -557,3 +557,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `has_horns_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_horns` trait. Added visualizer rendering and tests.
 - [x] Implemented `is_parasitic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `is_parasitic` trait. Added visualizer rendering and tests.
 - [x] Implemented `has_blubber_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_blubber` trait. Added visualizer rendering and tests.
+- [x] Implemented `has_bioluminescence_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_bioluminescence` trait. Added visualizer rendering and tests.
