@@ -36,6 +36,7 @@ class Entity:
         self.has_blubber_predator = has_blubber_predator
         self.has_claws_predator = has_claws_predator
         self.has_fur_predator = has_fur_predator
+        self.has_blubber_predator = has_blubber_predator
         self.has_horns_predator = has_horns_predator
         self.is_parasitic_predator = is_parasitic_predator
         self.is_scout_predator = is_scout_predator
@@ -826,6 +827,7 @@ class Universe:
             if getattr(entity, 'is_earthquake_glider', False) and self.current_event == 'earthquake':
                 stamina_cost = 0
             if getattr(entity, 'is_volcanic_glider', False) and self.current_event == 'volcano':
+                stamina_cost = 0
                 stamina_cost = 0
             if getattr(entity, 'is_ice_glider', False) and any(t.terrain_type == 'ice' for t in terrains_here):
                 stamina_cost = 0
@@ -4115,6 +4117,7 @@ class Universe:
                     child_has_blubber_predator = getattr(entity, 'has_blubber_predator', False)
                     child_has_claws_predator = getattr(entity, 'has_claws_predator', False)
                     child_has_fur_predator = getattr(entity, 'has_fur_predator', False)
+                    child_has_blubber_predator = getattr(entity, 'has_blubber_predator', False)
                     child_has_horns_predator = getattr(entity, 'has_horns_predator', False)
                     child_is_parasitic_predator = getattr(entity, 'is_parasitic_predator', False)
                     child_is_protective_predator = getattr(entity, 'is_protective_predator', False)
@@ -4155,6 +4158,11 @@ class Universe:
                         child_has_blubber_predator = not child_has_blubber_predator
                     if child_has_blubber_predator != getattr(entity, 'has_blubber_predator', False):
                         mutation_occurred = True
+                    if random.random() < mutation_chance:
+                        child_has_blubber_predator = not child_has_blubber_predator
+                    if child_has_blubber_predator != getattr(entity, 'has_blubber_predator', False):
+                        mutation_occurred = True
+
                     if random.random() < mutation_chance:
                         child_has_claws_predator = not child_has_claws_predator
                     if child_has_claws_predator != getattr(entity, 'has_claws_predator', False):
@@ -4933,6 +4941,8 @@ class Universe:
                                 effective_attack *= 1.5
                             if getattr(entity, 'has_blubber_predator', False) and getattr(prey_to_eat, 'has_blubber', False):
                                 effective_attack *= 1.5
+                            if getattr(entity, 'has_blubber_predator', False) and getattr(prey_to_eat, 'has_blubber', False):
+                                effective_attack *= 1.5
                             if getattr(entity, 'has_claws_predator', False) and getattr(prey_to_eat, 'has_claws', False):
                                 effective_attack *= 1.5
                             if getattr(entity, 'has_fur_predator', False) and getattr(prey_to_eat, 'has_fur', False):
@@ -5529,6 +5539,8 @@ class Universe:
                         if getattr(entity, 'is_spikes_predator', False) and getattr(prey_to_eat, 'has_spikes', False):
                             effective_attack *= 1.5
                         if getattr(entity, 'is_pack_hunter_predator', False) and getattr(prey_to_eat, 'pack_hunter', False):
+                            effective_attack *= 1.5
+                        if getattr(entity, 'has_blubber_predator', False) and getattr(prey_to_eat, 'has_blubber', False):
                             effective_attack *= 1.5
                         if getattr(entity, 'has_blubber_predator', False) and getattr(prey_to_eat, 'has_blubber', False):
                             effective_attack *= 1.5
