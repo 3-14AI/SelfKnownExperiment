@@ -1,6 +1,6 @@
+import unittest
 from unittest.mock import patch
 from unittest import mock
-import unittest
 from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent, Quicksand
 
 class TestNocturnalPredator(unittest.TestCase):
@@ -53,7 +53,6 @@ class TestAmbushPredator(unittest.TestCase):
         universe.add_entity(predator2)
         universe.add_entity(prey2)
 
-        import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.01):
             universe.tick()
 
@@ -90,7 +89,6 @@ class TestAmbushPredator(unittest.TestCase):
         universe.add_entity(pred2)
         universe.add_entity(prey2)
 
-        import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.6):
             universe.tick()
 
@@ -111,7 +109,6 @@ class TestAmbushPredator(unittest.TestCase):
         parent = Entity("Parent", x=5, y=5, energy=1000, size=1, age=100, max_age=200, is_ambush_predator=False, intelligence=10, lays_eggs=False, is_telepathic=False)
         universe.add_entity(parent)
 
-        import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.01):
             universe.tick()
 
@@ -826,7 +823,6 @@ class TestIsSpacePredator(unittest.TestCase):
 
     def test_is_space_predator_combat_bonus(self):
         from src.universe.engine import Entity, Terrain
-        import unittest.mock
 
         # Add space terrain
         self.universe.add_terrain(Terrain(x=5, y=5, terrain_type='space'))
@@ -846,7 +842,6 @@ class TestIsSpacePredator(unittest.TestCase):
 
     def test_is_space_predator_mutation(self):
         from src.universe.engine import Entity
-        import unittest.mock
 
         parent = Entity("Parent", x=1, y=1, energy=1000, age=10, max_age=100, size=5, is_space_predator=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True, lays_eggs=False)
         self.universe.add_entity(parent)
@@ -930,7 +925,6 @@ class TestIsCavePredator(unittest.TestCase):
         self.universe.terrains.extend([forest1, forest2])
         self.universe.entities.extend([predator, prey])
 
-        import unittest.mock
         with unittest.mock.patch('src.universe.engine.random.random', return_value=0.6):
             self.universe.tick()
 
@@ -943,7 +937,6 @@ class TestIsCavePredator(unittest.TestCase):
         self.universe.mutation_chance = 1.0
 
         has_mutated = False
-        import unittest.mock
         with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
             for _ in range(50):
                 self.universe.tick()
@@ -1045,7 +1038,6 @@ class TestSandPredator(unittest.TestCase):
 
     def test_sand_predator_attack_bonus(self):
         from src.universe.engine import Terrain, Entity
-        import unittest.mock
 
         # Set up a sand terrain
         self.universe.terrains.append(Terrain(1, 1, terrain_type='sand', elevation=1))
@@ -1070,7 +1062,6 @@ class TestSandPredator(unittest.TestCase):
 
     def test_is_sand_predator_mutation(self):
         from src.universe.engine import Entity
-        import unittest.mock
 
         self.universe.mutation_chance = 1.0
         parent = Entity("Parent", x=1, y=1, energy=100, max_age=100, size=1, lays_eggs=False)
@@ -1096,7 +1087,6 @@ class TestSnowPredator(unittest.TestCase):
 
     def test_snow_predator_attack_bonus(self):
         from src.universe.engine import Terrain, Entity
-        import unittest.mock
 
         for x in range(3):
             for y in range(3):
@@ -1134,7 +1124,6 @@ class TestSnowPredator(unittest.TestCase):
 
     def test_is_snow_predator_mutation(self):
         from src.universe.engine import Entity
-        import unittest.mock
 
         parent = Entity("parent", x=1, y=1, energy=500, size=1, is_snow_predator=False, is_ageless=True, is_immune=True, lays_eggs=False)
         parent.reproduction_threshold = 20
@@ -1811,7 +1800,6 @@ class TestIsMoonPredator(unittest.TestCase):
 class TestIsVampiricPredator(unittest.TestCase):
     def test_is_vampiric_predator_mutation(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_vampiric_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
@@ -1832,7 +1820,6 @@ class TestIsVampiricPredator(unittest.TestCase):
 
     def test_is_vampiric_predator_combat(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_vampiric_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
         prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='herbivore', is_vampiric=True, is_relentless=False, is_ageless=True, is_immune=True)
@@ -1862,7 +1849,6 @@ class TestIsVampiricPredator(unittest.TestCase):
 class TestCarnivoreAndHerbivorePredator(unittest.TestCase):
     def test_is_carnivore_predator_mutation(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_carnivore_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
@@ -1885,7 +1871,6 @@ class TestCarnivoreAndHerbivorePredator(unittest.TestCase):
 
     def test_is_herbivore_predator_mutation(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_herbivore_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
@@ -1908,7 +1893,6 @@ class TestCarnivoreAndHerbivorePredator(unittest.TestCase):
 
     def test_is_carnivore_predator_combat(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_carnivore_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
         prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='carnivore', is_relentless=False, is_ageless=True, is_immune=True)
@@ -1928,7 +1912,6 @@ class TestCarnivoreAndHerbivorePredator(unittest.TestCase):
 
     def test_is_herbivore_predator_combat(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         predator = Entity("Predator", x=1, y=1, energy=5000, max_age=500, age=5, size=10, attack=40, defense=10, diet='carnivore', is_herbivore_predator=True, is_relentless=True, is_ageless=True, is_immune=True)
         prey = Entity("Prey", x=1, y=1, energy=5000, max_age=500, age=5, size=100, attack=5, defense=50, diet='herbivore', is_relentless=False, is_ageless=True, is_immune=True)
@@ -1943,7 +1926,6 @@ class TestCarnivoreAndHerbivorePredator(unittest.TestCase):
 class TestScavengerPredator(unittest.TestCase):
     def test_is_scavenger_predator_mutation(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_scavenger_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
@@ -1973,7 +1955,6 @@ class TestScavengerPredator(unittest.TestCase):
         # Base effective attack is 40. Multiplier is 1.5. So 60.
         # Defense is 50. Damage = 10.
         pre_combat_energy = prey.energy
-        import unittest.mock
         with unittest.mock.patch("random.random", return_value=0.0):
             universe.tick()
 
@@ -1982,7 +1963,6 @@ class TestScavengerPredator(unittest.TestCase):
 class TestOmnivorePredator(unittest.TestCase):
     def test_is_omnivore_predator_mutation(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_omnivore_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
@@ -2010,7 +1990,6 @@ class TestOmnivorePredator(unittest.TestCase):
         universe.add_entity(prey)
 
         pre_combat_energy = prey.energy
-        import unittest.mock
         with unittest.mock.patch("random.random", return_value=0.0):
             universe.tick()
 
@@ -2019,7 +1998,6 @@ class TestOmnivorePredator(unittest.TestCase):
 class TestAquaticPredator(unittest.TestCase):
     def test_is_aquatic_predator_mutation(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_aquatic_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
@@ -2047,7 +2025,6 @@ class TestAquaticPredator(unittest.TestCase):
         universe.add_entity(prey)
 
         pre_combat_energy = prey.energy
-        import unittest.mock
         with unittest.mock.patch("random.random", return_value=0.0):
             universe.tick()
 
@@ -2056,7 +2033,6 @@ class TestAquaticPredator(unittest.TestCase):
 class TestAmphibiousPredator(unittest.TestCase):
     def test_is_amphibious_predator_mutation(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_amphibious_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
@@ -2084,7 +2060,6 @@ class TestAmphibiousPredator(unittest.TestCase):
         universe.add_entity(prey)
 
         pre_combat_energy = prey.energy
-        import unittest.mock
         with unittest.mock.patch("random.random", return_value=0.0):
             universe.tick()
 
@@ -2103,7 +2078,6 @@ class TestDeserticPredator(unittest.TestCase):
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
 
-        import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
@@ -2121,7 +2095,6 @@ class TestDeserticPredator(unittest.TestCase):
         universe.add_entity(prey)
 
         pre_combat_energy = prey.energy
-        import unittest.mock
         with unittest.mock.patch("random.random", return_value=0.0):
             universe.tick()
 
@@ -2138,7 +2111,6 @@ class TestDeserticPredator(unittest.TestCase):
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
 
-        import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
@@ -2156,7 +2128,6 @@ class TestDeserticPredator(unittest.TestCase):
         universe.add_entity(prey)
 
         pre_combat_energy = prey.energy
-        import unittest.mock
         with unittest.mock.patch("random.random", return_value=0.0):
             universe.tick()
 
@@ -2173,7 +2144,6 @@ class TestDeserticPredator(unittest.TestCase):
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
 
-        import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
@@ -2191,7 +2161,6 @@ class TestDeserticPredator(unittest.TestCase):
         universe.add_entity(prey)
 
         pre_combat_energy = prey.energy
-        import unittest.mock
         with unittest.mock.patch("random.random", return_value=0.0):
             universe.tick()
 
@@ -2199,7 +2168,6 @@ class TestDeserticPredator(unittest.TestCase):
 
     def test_is_desertic_predator_mutation(self):
         from src.universe.engine import Universe, Entity
-        import unittest.mock
         universe = Universe(width=10, height=10)
         parent = Entity(name="Parent", x=1, y=1, energy=1000, age=5, size=20, is_desertic_predator=False, lays_eggs=False, is_ageless=True, is_immune=True, is_pacifist=True, is_gluttonous=True, has_blubber=True)
         universe.add_entity(parent)
@@ -2227,7 +2195,6 @@ class TestDeserticPredator(unittest.TestCase):
         universe.add_entity(prey)
 
         pre_combat_energy = prey.energy
-        import unittest.mock
         with unittest.mock.patch("random.random", return_value=0.0):
             universe.tick()
 
@@ -2245,7 +2212,6 @@ class TestVenomousPredator(unittest.TestCase):
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
 
-        import unittest.mock
         with unittest.mock.patch('src.universe.engine.random.random', return_value=0.0):
             universe.tick()
 
@@ -2263,7 +2229,6 @@ class TestVenomousPredator(unittest.TestCase):
         universe.add_entity(prey)
 
         pre_combat_energy = prey.energy
-        import unittest.mock
         with unittest.mock.patch("random.random", return_value=0.0):
             universe.tick()
 
@@ -2281,7 +2246,6 @@ class TestElectricPredator(unittest.TestCase):
         universe.localized_event_chance = 0.0
         universe.disease_chance = 0.0
 
-        import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.0):
             universe.tick()
 
@@ -2300,7 +2264,6 @@ class TestElectricPredator(unittest.TestCase):
 
         pre_combat_energy = prey.energy
 
-        import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.2):
             universe.tick()
 
@@ -2623,7 +2586,6 @@ class TestFearlessPredator(unittest.TestCase):
         universe.add_entity(prey)
 
         # Base attack is 20, defense is 1. Effective attack becomes 20 * 1.5 = 30.
-        import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.5):
             for _ in range(3):
                 universe.tick()
@@ -2651,7 +2613,6 @@ class TestFearlessPredator(unittest.TestCase):
         universe.add_entity(predator)
         universe.add_entity(prey)
 
-        import unittest.mock
         with unittest.mock.patch('random.random', return_value=0.5):
             for _ in range(3):
                 universe.tick()
@@ -4192,7 +4153,6 @@ class TestIsProtectivePredatorMutation(unittest.TestCase):
 
 class TestIsCooperativePredatorCombat(unittest.TestCase):
     def test_is_cooperative_predator_combat(self):
-        import unittest.mock
 
         # Control Scenario
         universe_control = Universe(10, 10)
@@ -4218,7 +4178,6 @@ class TestIsCooperativePredatorCombat(unittest.TestCase):
 
 class TestIsAbsorbentPredatorCombat(unittest.TestCase):
     def test_is_absorbent_predator_combat(self):
-        import unittest.mock
 
         # Control Scenario
         universe_control = Universe(10, 10)
@@ -4244,7 +4203,6 @@ class TestIsAbsorbentPredatorCombat(unittest.TestCase):
 
 class TestIsAbsorbentPredatorMutation(unittest.TestCase):
     def test_is_absorbent_predator_mutation(self):
-        import unittest.mock
         universe = Universe(10, 10)
         universe.reproduction_threshold = 10
         universe.reproduction_cost = 5
@@ -4265,7 +4223,6 @@ class TestIsAbsorbentPredatorMutation(unittest.TestCase):
         children = [e for e in universe.entities if e != parent]
         if children:
             self.assertTrue(getattr(children[0], 'is_absorbent_predator', False))
-import unittest
 from src.universe.engine import Entity, Universe, Terrain
 from unittest.mock import patch
 from src.universe.visualizer import CLIVisualizer
@@ -4522,12 +4479,11 @@ class TestIsElectricPredatorMutation(unittest.TestCase):
         parent.age = 5
         universe.entities = [parent]
 
-        with patch('random.random', side_effect=[0.01] * 500):
+        with patch('random.random', return_value=0.0):
             universe.tick()
 
         children = [e for e in universe.entities if e != parent]
         self.assertTrue(any(getattr(c, 'is_electric_predator', False) for c in children))
-import unittest
 
 class TestIsShellPredator(unittest.TestCase):
     def test_is_shell_predator_multiplier(self):
@@ -4552,7 +4508,6 @@ class TestIsShellPredator(unittest.TestCase):
 
         universe.entities = [predator, prey]
 
-        import unittest.mock as mock
         with mock.patch('random.random', return_value=0.65):
             universe.tick()
 
@@ -4580,7 +4535,6 @@ class TestIsShellPredator(unittest.TestCase):
 
         universe.entities = [predator, prey]
 
-        import unittest.mock as mock
         with mock.patch('random.random', return_value=0.45):
             universe.tick()
 
@@ -4597,7 +4551,6 @@ class TestIsShellPredatorMutation(unittest.TestCase):
         parent = Entity(name="parent", x=5, y=5, energy=200, is_shell_predator=False)
         universe.entities = [parent]
 
-        import unittest.mock as mock
         with mock.patch('random.random', return_value=0.0):
             universe.tick()
 
@@ -4629,7 +4582,6 @@ class TestIsScalesPredator(unittest.TestCase):
 
         universe.entities = [predator, prey]
 
-        import unittest.mock as mock
         with mock.patch('random.random', return_value=0.65):
             universe.tick()
 
@@ -4657,7 +4609,6 @@ class TestIsScalesPredator(unittest.TestCase):
 
         universe.entities = [predator, prey]
 
-        import unittest.mock as mock
         with mock.patch('random.random', return_value=0.45):
             universe.tick()
 
@@ -4674,7 +4625,6 @@ class TestIsScalesPredatorMutation(unittest.TestCase):
         parent = Entity(name="parent", x=5, y=5, energy=200, is_scales_predator=False)
         universe.entities = [parent]
 
-        import unittest.mock as mock
         with mock.patch('random.random', return_value=0.0):
             universe.tick()
 
@@ -4682,10 +4632,8 @@ class TestIsScalesPredatorMutation(unittest.TestCase):
         self.assertTrue(len(children) > 0)
         child = children[0]
         self.assertTrue(getattr(child, 'is_scales_predator', False))
-import unittest
 from src.universe.engine import Universe, Entity
 import random
-import unittest.mock as mock
 
 class TestIsSpikesPredator(unittest.TestCase):
     def test_is_spikes_predator_multiplier(self):
@@ -4991,3 +4939,628 @@ class TestIsAposematicPredatorMutation(unittest.TestCase):
 
         child = [e for e in universe.entities if e != parent][0]
         self.assertTrue(getattr(child, 'is_aposematic_predator', False))
+
+class TestAgilePredator(unittest.TestCase):
+    def test_agile_predator_combat_bonus(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 100000
+
+        predator = Entity(name="pred", x=5, y=5, is_agile_predator=True)
+        predator.diet = 'carnivore'
+        predator.attack = 10
+        predator.energy = 50
+
+        prey = Entity(name="prey", x=5, y=5, is_agile=True)
+        prey.defense = 10
+        prey.energy = 50
+
+        universe.entities = [predator, prey]
+
+        control_universe = Universe(width=10, height=10)
+        control_universe.reproduction_threshold = 100000
+
+        control_predator = Entity(name="pred", x=5, y=5)
+        control_predator.diet = 'carnivore'
+        control_predator.attack = 10
+        control_predator.energy = 50
+
+        control_prey = Entity(name="prey", x=5, y=5, is_agile=True)
+        control_prey.defense = 10
+        control_prey.energy = 50
+
+        control_universe.entities = [control_predator, control_prey]
+
+        control_predator.energy = 10
+        predator.energy = 10
+        control_predator.is_agile_predator = False
+        predator.is_agile_predator = True
+        prey.energy = 50
+
+        with patch('random.random', return_value=0.45):
+            control_universe.tick()
+            universe.tick()
+
+        self.assertTrue(getattr(control_prey, 'energy', 0) > 0)
+        self.assertEqual(prey.energy, 0)
+
+
+class TestIsHeavyPredatorMutation(unittest.TestCase):
+    def test_is_heavy_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_heavy_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_heavy_predator', False))
+
+class TestIsLightweightPredatorMutation(unittest.TestCase):
+    def test_is_lightweight_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_lightweight_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_lightweight_predator', False))
+
+class TestIsAgilePredatorMutation(unittest.TestCase):
+    def test_is_agile_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_agile_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_agile_predator', False))
+
+
+class TestIsEvasivePredatorMutation(unittest.TestCase):
+    def test_is_evasive_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_evasive_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_evasive_predator', False))
+
+class TestIsStealthyPredatorMutation(unittest.TestCase):
+    def test_is_stealthy_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_stealthy_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_stealthy_predator', False))
+
+class TestIsSocialPredatorMutation(unittest.TestCase):
+    def test_is_social_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_social_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_social_predator', False))
+
+class TestIsSolitaryPredatorMutation(unittest.TestCase):
+    def test_is_solitary_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_solitary_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_solitary_predator', False))
+
+
+class TestIsPlayfulPredatorMutation(unittest.TestCase):
+    def test_is_playful_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_playful_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_playful_predator', False))
+
+class TestIsTerritorialPredatorMutation(unittest.TestCase):
+    def test_is_territorial_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_territorial_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_territorial_predator', False))
+
+class TestIsFearlessPredatorMutation(unittest.TestCase):
+    def test_is_fearless_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_fearless_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_fearless_predator', False))
+
+class TestIsPacifistPredatorMutation(unittest.TestCase):
+    def test_is_pacifist_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_pacifist_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_pacifist_predator', False))
+
+class TestIsRecklessPredatorMutation(unittest.TestCase):
+    def test_is_reckless_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_reckless_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_reckless_predator', False))
+
+class TestIsCautiousPredatorMutation(unittest.TestCase):
+    def test_is_cautious_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_cautious_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_cautious_predator', False))
+
+
+class TestIsTirelessPredatorMutation(unittest.TestCase):
+    def test_is_tireless_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_tireless_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_tireless_predator', False))
+
+class TestIsVigilantPredatorMutation(unittest.TestCase):
+    def test_is_vigilant_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_vigilant_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_vigilant_predator', False))
+
+class TestIsIntimidatingPredatorMutation(unittest.TestCase):
+    def test_is_intimidating_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_intimidating_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_intimidating_predator', False))
+
+
+class TestIsPlayfulPredatorMutation(unittest.TestCase):
+    def test_is_playful_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_playful_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_playful_predator', False))
+
+
+class TestIsTerritorialPredatorMutation(unittest.TestCase):
+    def test_is_territorial_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_territorial_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_territorial_predator', False))
+
+
+class TestIsDefensivePredatorMutation(unittest.TestCase):
+    def test_is_defensive_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_defensive_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_defensive_predator', False))
+
+class TestIsResilientPredatorMutation(unittest.TestCase):
+    def test_is_resilient_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_resilient_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_resilient_predator', False))
+
+class TestIsResourcefulPredatorMutation(unittest.TestCase):
+    def test_is_resourceful_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_resourceful_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_resourceful_predator', False))
+
+class TestIsAdaptablePredatorMutation(unittest.TestCase):
+    def test_is_adaptable_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_adaptable_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+
+        universe.entities.append(parent)
+
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_adaptable_predator', False))

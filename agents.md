@@ -561,3 +561,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_aposematic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `is_aposematic` trait. Added visualizer rendering and tests.
 - [x] Implemented missing mutation tests for `is_sturdy_predator` and `is_slippery_predator` traits, and fixed a syntax bug blocking their mutation during reproduction.
 - [x] Fixed flaky tests `test_omnivore_seeks_and_hunts_prey`, `test_is_opportunistic_herbivore_eats_meat`, and `test_energy_gain_on_wall` that were occasionally failing due to mocked random variables breaking control structures.
+- [x] Implemented missing mutation tests for `is_heavy_predator`, `is_lightweight_predator`, and `is_agile_predator` traits, and fixed a syntax bug blocking their mutation during reproduction.
+- [x] Implemented missing mutation tests for `is_evasive_predator`, `is_stealthy_predator`, `is_social_predator`, and `is_solitary_predator` traits, and fixed a syntax bug blocking their mutation during reproduction.
+- [x] Implemented missing mutation tests for various predator traits (e.g. `is_defensive_predator`, `is_intimidating_predator`, `is_fearless_predator`, etc.) and fixed syntax bugs blocking their mutation during reproduction.

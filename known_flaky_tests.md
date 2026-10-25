@@ -57,3 +57,8 @@ test_is_sleeping
 test_fur_heat_penalty
 test_entity_aging
 - test_is_volcanic_glider_effect
+- `test_fur_heat_penalty` (test_engine_core.TestFurTrait)
+- `test_is_deep_water_dweller` (test_engine_dwellers.TestIsDeepWaterDweller)
+- `test_energy_gain_in_autumn` (test_engine_dancers.TestIsAutumnDancer)
+- `test_is_day_dweller` (test_engine_dwellers.TestIsDayDweller)
+- `test_stun_strider_stamina` (test_engine_striders.TestStunStrider)

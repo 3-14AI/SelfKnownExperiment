@@ -3946,6 +3946,18 @@ class Universe:
                         mutation_occurred = True
 
                     if random.random() < mutation_chance:
+                        child_is_agile_predator = not child_is_agile_predator
+                        mutation_occurred = True
+
+                    if random.random() < mutation_chance:
+                        child_is_evasive_predator = not child_is_evasive_predator
+                        mutation_occurred = True
+
+                    if random.random() < mutation_chance:
+                        child_is_stealthy_predator = not child_is_stealthy_predator
+                        mutation_occurred = True
+
+                    if random.random() < mutation_chance:
                         child_is_social_predator = not child_is_social_predator
                         mutation_occurred = True
                     if random.random() < mutation_chance:
@@ -4011,6 +4023,8 @@ class Universe:
                         child_is_intimidating_predator = not child_is_intimidating_predator
                     if child_is_intimidating_predator != getattr(entity, 'is_intimidating_predator', False):
                         mutation_occurred = True
+
+
                     child_is_defensive_predator = getattr(entity, 'is_defensive_predator', False)
                     if random.random() < mutation_chance:
                         child_is_defensive_predator = not child_is_defensive_predator
@@ -4018,6 +4032,9 @@ class Universe:
                         mutation_occurred = True
                     child_is_resilient_predator = getattr(entity, 'is_resilient_predator', False)
                     child_is_resourceful_predator = getattr(entity, 'is_resourceful_predator', False)
+                    if random.random() < mutation_chance:
+                        child_is_resourceful_predator = not child_is_resourceful_predator
+                        mutation_occurred = True
                     if random.random() < mutation_chance:
                         child_is_resilient_predator = not child_is_resilient_predator
                     if child_is_resilient_predator != getattr(entity, 'is_resilient_predator', False):
