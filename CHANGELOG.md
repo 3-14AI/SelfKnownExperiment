@@ -611,3 +611,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `has_horns_predator` trait. Added visualizer rendering and tests.
 - Implemented `has_blubber_predator` trait. Added visualizer rendering and tests.
 - Implemented `has_bioluminescence_predator` trait. Added visualizer rendering and tests.
+- Implemented `is_aposematic_predator` trait: grants 1.5x attack multiplier against aposematic entities.

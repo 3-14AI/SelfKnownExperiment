@@ -3993,3 +3993,17 @@ class TestIsParasiticPredatorVisualizer(unittest.TestCase):
         vis = CLIVisualizer(universe)
         output = vis.render()
         self.assertIn('P', output)
+
+class TestAposematicPredatorVisualizer(unittest.TestCase):
+    def test_visualizer_rendering(self):
+        universe = Universe(width=1, height=1)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=0, y=0, is_aposematic_predator=True)
+        entity.diet = 'carnivore'
+        entity.energy = 50
+        universe.entities.append(entity)
+
+        with patch('os.system'):
+            output = vis.render()
+
+        self.assertIn('A', output)
