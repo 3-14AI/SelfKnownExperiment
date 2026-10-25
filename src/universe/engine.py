@@ -2090,6 +2090,7 @@ class Universe:
             if getattr(entity, 'is_ash_dancer', False) and any(t.terrain_type == 'ash' for t in terrains_here):
                 max_energy = int(entity.max_energy * 1.5) if getattr(entity, "is_gluttonous", False) else entity.max_energy
                 entity.energy = min(max_energy, entity.energy + 5)
+                entity.stamina = min(getattr(entity, 'max_stamina', 50), getattr(entity, 'stamina', 50) + 10)
 
             if getattr(entity, 'is_mud_dancer', False) and any(t.terrain_type == 'mud' for t in terrains_here):
                 max_energy = int(entity.max_energy * 1.5) if getattr(entity, "is_gluttonous", False) else entity.max_energy

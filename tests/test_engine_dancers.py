@@ -701,7 +701,7 @@ class TestIsAshDancer(unittest.TestCase):
         self.universe.event_chance = 0.0
 
     def test_ash_dancer_gains_energy_on_ash(self):
-        e = Entity(name="test", x=1, y=1, energy=10, stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_ash_dancer=True, size=1)
+        e = Entity(name="test", x=1, y=1, energy=10, stamina=20, max_stamina=50, is_immune=True, is_pacifist=True, is_ageless=True, is_ash_dancer=True, size=1)
         e.preferred_temperature = self.universe.get_temperature_at(1, 1)
         e.temperature_tolerance = 1000
         self.universe.event_chance = 0.0
@@ -711,6 +711,7 @@ class TestIsAshDancer(unittest.TestCase):
         self.universe.add_terrain(Terrain(x=1, y=1, terrain_type="ash"))
         self.universe.tick()
         self.assertTrue(e.energy > 10)
+        self.assertTrue(e.stamina > 20)
 
     def test_ash_dancer_mutates(self):
         from src.universe.engine import Entity

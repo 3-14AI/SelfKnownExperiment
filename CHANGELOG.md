@@ -609,3 +609,4 @@ All notable changes to Project Genesis will be documented in this file.
 - Implemented `has_fur_predator` trait.
 - Implemented `has_claws_predator` and `has_fur_predator` traits.
 - Implemented `has_horns_predator` trait.
+- Updated `is_ash_dancer` trait. Entities with this trait now recover stamina as well as energy when on `ash` terrain. Added respective tests.

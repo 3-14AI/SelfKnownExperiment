@@ -556,3 +556,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `has_fur_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_fur` trait. Added visualizer rendering and tests.
 - [x] Implemented `has_horns_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_horns` trait.
 - [x] Implemented `is_parasitic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `is_parasitic` trait. Added visualizer rendering and tests.
+- [x] Updated `is_ash_dancer` trait. Entities with this trait now recover stamina as well as energy when on `ash` terrain. Added respective tests.
