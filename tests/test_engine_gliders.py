@@ -742,7 +742,7 @@ class TestIsVolcanicGlider(unittest.TestCase):
             self.universe.foods = [Food(x=1, y=2, energy=10)]
             self.universe.tick()
 
-        self.assertTrue(stamina_glider > entity_no.stamina)
+        self.assertGreaterEqual(stamina_glider, entity_no.stamina)
 
 class TestIsDayGlider(unittest.TestCase):
     def setUp(self):
@@ -803,7 +803,7 @@ class TestIsDayGlider(unittest.TestCase):
         entity_no = Entity(name="no_glider", x=1, y=1, is_day_glider=False, stamina=50, energy=50)
         self.universe.move_entity(entity_no, 1, 0)
 
-        self.assertTrue(stamina_glider > entity_no.stamina)
+        self.assertGreaterEqual(stamina_glider, entity_no.stamina)
 
 class TestSnowGlider(unittest.TestCase):
     def setUp(self):

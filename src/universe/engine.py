@@ -4116,6 +4116,7 @@ class Universe:
                     child_has_blubber_predator = getattr(entity, 'has_blubber_predator', False)
                     child_has_claws_predator = getattr(entity, 'has_claws_predator', False)
                     child_has_fur_predator = getattr(entity, 'has_fur_predator', False)
+                    child_has_blubber_predator = getattr(entity, 'has_blubber_predator', False)
                     child_has_horns_predator = getattr(entity, 'has_horns_predator', False)
                     child_is_parasitic_predator = getattr(entity, 'is_parasitic_predator', False)
                     child_is_protective_predator = getattr(entity, 'is_protective_predator', False)
@@ -4156,6 +4157,8 @@ class Universe:
                         child_has_blubber_predator = not child_has_blubber_predator
                     if child_has_blubber_predator != getattr(entity, 'has_blubber_predator', False):
                         mutation_occurred = True
+                        mutation_occurred = True
+
                     if random.random() < mutation_chance:
                         child_has_claws_predator = not child_has_claws_predator
                     if child_has_claws_predator != getattr(entity, 'has_claws_predator', False):
