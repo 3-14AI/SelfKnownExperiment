@@ -558,3 +558,5 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasitic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `is_parasitic` trait. Added visualizer rendering and tests.
 - [x] Implemented `has_blubber_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_blubber` trait. Added visualizer rendering and tests.
 - [x] Implemented `has_bioluminescence_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_bioluminescence` trait. Added visualizer rendering and tests.
+- [x] Implemented `is_aposematic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `is_aposematic` trait. Added visualizer rendering and tests.
+- [x] Fixed flaky tests `test_omnivore_seeks_and_hunts_prey`, `test_is_opportunistic_herbivore_eats_meat`, and `test_energy_gain_on_wall` that were occasionally failing due to mocked random variables breaking control structures.
