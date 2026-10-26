@@ -62,3 +62,4 @@ test_entity_aging
 - `test_energy_gain_in_autumn` (test_engine_dancers.TestIsAutumnDancer)
 - `test_is_day_dweller` (test_engine_dwellers.TestIsDayDweller)
 - `test_stun_strider_stamina` (test_engine_striders.TestStunStrider)
+- `test_is_web_strider_defense` (tests.test_engine_striders.TestIsWebStrider)
