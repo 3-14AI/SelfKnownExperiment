@@ -66,6 +66,9 @@ class CLIVisualizer:
                     elif getattr(entity, 'is_parasitic_predator', False):
                         char = 'P'
                         color = '\033[91m'
+                    elif getattr(entity, 'has_echolocation_predator', False):
+                        char = 'Ė'
+                        color = '\033[91m'
                     elif getattr(entity, 'is_aposematic_predator', False):
                         char = 'A'
                         color = '\033[91m'
@@ -432,6 +435,9 @@ class CLIVisualizer:
                         char = '¥'
                     elif getattr(entity, 'is_parasitic_predator', False):
                         char = 'P'
+                        color = '\033[91m'
+                    elif getattr(entity, 'has_echolocation_predator', False):
+                        char = 'Ė'
                         color = '\033[91m'
                     elif getattr(entity, 'is_aposematic_predator', False):
                         char = 'A'

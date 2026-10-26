@@ -5564,3 +5564,75 @@ class TestIsAdaptablePredatorMutation(unittest.TestCase):
 
         child = [e for e in universe.entities if e != parent][0]
         self.assertTrue(getattr(child, 'is_adaptable_predator', False))
+
+class TestEcholocationPredator(unittest.TestCase):
+    def test_has_echolocation_predator_combat_bonus(self):
+        universe = Universe(width=10, height=10)
+
+        predator = Entity(name="predator", x=5, y=5)
+        predator.diet = 'carnivore'
+        predator.attack = 20
+        predator.defense = 10
+        predator.has_echolocation_predator = True
+
+        prey = Entity(name="prey", x=5, y=6)
+        prey.attack = 5
+        prey.defense = 20
+        prey.has_echolocation = True
+        prey.energy = 50
+
+        universe.entities = [predator, prey]
+        universe.reproduction_threshold = 10000
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+
+        control_predator = Entity(name="control_predator", x=5, y=5)
+        control_predator.diet = 'carnivore'
+        control_predator.attack = 20
+        control_predator.defense = 10
+        control_predator.has_echolocation_predator = False
+
+        control_prey = Entity(name="control_prey", x=5, y=6)
+        control_prey.attack = 5
+        control_prey.defense = 20
+        control_prey.has_echolocation = True
+        control_prey.energy = 50
+
+        control_universe = Universe(width=10, height=10)
+        control_universe.entities = [control_predator, control_prey]
+        control_universe.reproduction_threshold = 10000
+        control_universe.event_chance = 0.0
+        control_universe.disease_chance = 0.0
+        control_universe.localized_event_chance = 0.0
+
+        with patch('random.random', return_value=0.45):
+            control_universe.tick()
+
+        with patch('random.random', return_value=0.45):
+            universe.tick()
+
+        self.assertTrue(control_prey.energy > 0)
+        self.assertEqual(prey.energy, 0)
+        self.assertTrue(getattr(prey, 'was_eaten', False))
+
+    def test_has_echolocation_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+
+        parent = Entity(name="parent", x=5, y=5)
+        parent.energy = 20
+        parent.has_echolocation_predator = False
+
+        universe.entities = [parent]
+
+        with patch('random.random', return_value=0.0): # Force mutation
+            universe.tick()
+
+        self.assertEqual(len(universe.entities), 2)
+        child = universe.entities[1]
+        self.assertTrue(child.has_echolocation_predator)

@@ -4007,3 +4007,14 @@ class TestAposematicPredatorVisualizer(unittest.TestCase):
             output = vis.render()
 
         self.assertIn('A', output)
+
+    @patch('os.system')
+    def test_has_echolocation_predator_rendering(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test_echolocation_predator", x=5, y=5)
+        entity.has_echolocation_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('Ė', output)
