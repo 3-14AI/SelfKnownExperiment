@@ -865,6 +865,8 @@ class Universe:
                 stamina_cost = 0
             if getattr(entity, 'is_water_strider', False) and any(t.terrain_type == 'water' for t in terrains_here):
                 stamina_cost = 0
+            if getattr(entity, 'is_marsh_glider', False) and any(t.terrain_type == 'mud' for t in terrains_here):
+                stamina_cost = 0
             if getattr(entity, 'is_space_strider', False) and any(t.terrain_type == 'space' for t in terrains_here):
                 stamina_cost = 0
             if getattr(entity, 'is_storm_strider', False) and self.current_event == 'storm':
