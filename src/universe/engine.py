@@ -3474,6 +3474,49 @@ class Universe:
                     child_pack_hunter = getattr(entity, 'pack_hunter', False)
                     child_is_pack_mule = getattr(entity, 'is_pack_mule', False)
                     child_is_reckless = getattr(entity, 'is_reckless', False)
+
+                    child_is_aquatic = getattr(entity, 'is_aquatic', False)
+                    if random.random() < mutation_chance:
+                        child_is_aquatic = not child_is_aquatic
+                    if child_is_aquatic != getattr(entity, 'is_aquatic', False):
+                        mutation_occurred = True
+
+                    child_is_cannibal_target = getattr(entity, 'is_cannibal_target', False)
+                    if random.random() < mutation_chance:
+                        child_is_cannibal_target = not child_is_cannibal_target
+                    if child_is_cannibal_target != getattr(entity, 'is_cannibal_target', False):
+                        mutation_occurred = True
+
+                    child_is_cannibal_hungry = getattr(entity, 'is_cannibal_hungry', False)
+                    if random.random() < mutation_chance:
+                        child_is_cannibal_hungry = not child_is_cannibal_hungry
+                    if child_is_cannibal_hungry != getattr(entity, 'is_cannibal_hungry', False):
+                        mutation_occurred = True
+
+                    child_is_evasive = getattr(entity, 'is_evasive', False)
+                    if random.random() < mutation_chance:
+                        child_is_evasive = not child_is_evasive
+                    if child_is_evasive != getattr(entity, 'is_evasive', False):
+                        mutation_occurred = True
+
+                    child_is_pacifist = getattr(entity, 'is_pacifist', False)
+                    if random.random() < mutation_chance:
+                        child_is_pacifist = not child_is_pacifist
+                    if child_is_pacifist != getattr(entity, 'is_pacifist', False):
+                        mutation_occurred = True
+
+                    child_is_infected = getattr(entity, 'is_infected', False)
+                    if random.random() < mutation_chance:
+                        child_is_infected = not child_is_infected
+                    if child_is_infected != getattr(entity, 'is_infected', False):
+                        mutation_occurred = True
+
+                    child_is_sleeping = getattr(entity, 'is_sleeping', False)
+                    if random.random() < mutation_chance:
+                        child_is_sleeping = not child_is_sleeping
+                    if child_is_sleeping != getattr(entity, 'is_sleeping', False):
+                        mutation_occurred = True
+
                     child_is_thief = getattr(entity, 'is_thief', False)
                     child_is_absorbent = getattr(entity, 'is_absorbent', False)
                     child_is_toxic = getattr(entity, 'is_toxic', False)
@@ -3574,6 +3617,18 @@ class Universe:
                     child_is_patient = getattr(entity, 'is_patient', False)
                     child_is_bloodthirsty = getattr(entity, 'is_bloodthirsty', False)
                     child_is_endurance_runner = getattr(entity, 'is_endurance_runner', False)
+                    child_is_cannibal_target = getattr(entity, 'is_cannibal_target', False)
+                    if random.random() < mutation_chance:
+                        child_is_cannibal_target = not child_is_cannibal_target
+                    if child_is_cannibal_target != getattr(entity, 'is_cannibal_target', False):
+                        mutation_occurred = True
+
+                    child_is_cannibal_hungry = getattr(entity, 'is_cannibal_hungry', False)
+                    if random.random() < mutation_chance:
+                        child_is_cannibal_hungry = not child_is_cannibal_hungry
+                    if child_is_cannibal_hungry != getattr(entity, 'is_cannibal_hungry', False):
+                        mutation_occurred = True
+
                     child_is_evasive = getattr(entity, 'is_evasive', False)
                     child_is_prolific = getattr(entity, 'is_prolific', False)
                     child_is_adaptable = getattr(entity, 'is_adaptable', False)
@@ -4155,6 +4210,11 @@ class Universe:
                         mutation_occurred = True
 
                     child_has_blubber_predator = getattr(entity, 'has_blubber_predator', False)
+                    if random.random() < mutation_chance:
+                        child_has_blubber_predator = not child_has_blubber_predator
+                    if child_has_blubber_predator != getattr(entity, 'has_blubber_predator', False):
+                        mutation_occurred = True
+
                     child_has_horns_predator = getattr(entity, 'has_horns_predator', False)
                     child_is_parasitic_predator = getattr(entity, 'is_parasitic_predator', False)
                     child_has_echolocation_predator = getattr(entity, 'has_echolocation_predator', False)
@@ -4329,7 +4389,9 @@ class Universe:
                         is_quicksand_glider=child_is_quicksand_glider,
                                                        is_quicksand_walker=child_is_quicksand_walker,
                                                        is_marsh_dweller=child_is_marsh_dweller, is_marsh_walker=child_is_marsh_walker, is_quicksand_dweller=child_is_quicksand_dweller, is_quicksand_dancer=child_is_quicksand_dancer, is_quicksand_strider=child_is_quicksand_strider, is_marsh_dancer=child_is_marsh_dancer, is_day_strider=child_is_day_strider, is_night_strider=child_is_night_strider, is_spring_strider=child_is_spring_strider, is_summer_strider=child_is_summer_strider, is_autumn_strider=child_is_autumn_strider, is_winter_strider=child_is_winter_strider, is_disease_strider=child_is_disease_strider, is_poison_strider=child_is_poison_strider, is_parasite_strider=child_is_parasite_strider, is_stun_strider=child_is_stun_strider, is_sleep_strider=child_is_sleep_strider, is_disease_walker=child_is_disease_walker, is_poison_walker=child_is_poison_walker, is_parasite_walker=child_is_parasite_walker, is_stun_walker=child_is_stun_walker, is_sleep_walker=child_is_sleep_walker, is_disease_glider=child_is_disease_glider, is_poison_glider=child_is_poison_glider, is_parasite_glider=child_is_parasite_glider, is_stun_glider=child_is_stun_glider, is_sleep_glider=child_is_sleep_glider, is_space_predator=child_is_space_predator, is_cave_predator=child_is_cave_predator, is_forest_predator=child_is_forest_predator, is_mountain_predator=child_is_mountain_predator, is_deep_water_predator=child_is_deep_water_predator, is_water_predator=child_is_water_predator, is_sand_predator=child_is_sand_predator, is_snow_predator=child_is_snow_predator, is_ice_predator=child_is_ice_predator, is_ash_predator=child_is_ash_predator, is_mud_predator=child_is_mud_predator, is_grass_predator=child_is_grass_predator, is_quicksand_predator=child_is_quicksand_predator, is_spring_predator=child_is_spring_predator, is_summer_predator=child_is_summer_predator, is_autumn_predator=child_is_autumn_predator, is_winter_predator=child_is_winter_predator, is_day_predator=child_is_day_predator, is_night_predator=child_is_night_predator, is_lava_predator=child_is_lava_predator, is_wall_predator=child_is_wall_predator, is_web_predator=child_is_web_predator, is_shelter_predator=child_is_shelter_predator, is_disease_predator=child_is_disease_predator, is_poison_predator=child_is_poison_predator, is_stun_predator=child_is_stun_predator, is_parasite_predator=child_is_parasite_predator, is_sleep_predator=child_is_sleep_predator, is_storm_predator=child_is_storm_predator, is_blizzard_predator=child_is_blizzard_predator, is_earthquake_predator=child_is_earthquake_predator, is_fire_predator=child_is_fire_predator, is_rain_predator=child_is_rain_predator, is_volcano_predator=child_is_volcano_predator, is_drought_predator=child_is_drought_predator, is_swamp_walker=child_is_swamp_walker, is_swamp_glider=child_is_swamp_glider, is_swamp_dweller=child_is_swamp_dweller, is_swamp_dancer=child_is_swamp_dancer, is_swamp_strider=child_is_swamp_strider, is_swamp_predator=child_is_swamp_predator, is_fog_walker=child_is_fog_walker, is_fog_glider=child_is_fog_glider, is_fog_dweller=child_is_fog_dweller, is_fog_dancer=child_is_fog_dancer, is_fog_strider=child_is_fog_strider, is_fog_predator=child_is_fog_predator, is_magnetic_dweller=child_is_magnetic_dweller, is_magnetic_predator=child_is_magnetic_predator, is_moon_predator=child_is_moon_predator, is_sun_predator=child_is_sun_predator, is_sandstorm_dweller=child_is_sandstorm_dweller, is_sandstorm_predator=child_is_sandstorm_predator, is_sandstorm_strider=child_is_sandstorm_strider, is_sandstorm_dancer=child_is_sandstorm_dancer, is_magnetic_strider=child_is_magnetic_strider, is_magnetic_dancer=child_is_magnetic_dancer, is_sandstorm_walker=child_is_sandstorm_walker, is_marsh_predator=child_is_marsh_predator, is_magnetic_walker=child_is_magnetic_walker, is_sandstorm_glider=child_is_sandstorm_glider, is_magnetic_glider=child_is_magnetic_glider, is_giant_slayer=child_is_giant_slayer, is_aerial_predator=child_is_aerial_predator, is_apex_predator=child_is_apex_predator, is_vampiric_predator=child_is_vampiric_predator, is_carnivore_predator=child_is_carnivore_predator, is_herbivore_predator=child_is_herbivore_predator, is_scavenger_predator=child_is_scavenger_predator, is_omnivore_predator=child_is_omnivore_predator, is_aquatic_predator=child_is_aquatic_predator, is_amphibious_predator=child_is_amphibious_predator, is_desertic_predator=child_is_desertic_predator, is_forestal_predator=child_is_forestal_predator, is_volcanic_predator=child_is_volcanic_predator, is_arctic_predator=child_is_arctic_predator, is_toxic_predator=child_is_toxic_predator, is_venomous_predator=child_is_venomous_predator, is_electric_predator=child_is_electric_predator, is_sturdy_predator=child_is_sturdy_predator, is_slippery_predator=child_is_slippery_predator, is_heavy_predator=child_is_heavy_predator, is_lightweight_predator=child_is_lightweight_predator, is_agile_predator=child_is_agile_predator, is_evasive_predator=child_is_evasive_predator, is_stealthy_predator=child_is_stealthy_predator, is_social_predator=child_is_social_predator, is_solitary_predator=child_is_solitary_predator, is_playful_predator=child_is_playful_predator, is_territorial_predator=child_is_territorial_predator, is_fearless_predator=child_is_fearless_predator, is_pacifist_predator=child_is_pacifist_predator, is_reckless_predator=child_is_reckless_predator, is_cautious_predator=child_is_cautious_predator, is_patient_predator=child_is_patient_predator, is_tireless_predator=child_is_tireless_predator, is_vigilant_predator=child_is_vigilant_predator, is_intimidating_predator=child_is_intimidating_predator, is_defensive_predator=child_is_defensive_predator, is_resilient_predator=child_is_resilient_predator, is_resourceful_predator=child_is_resourceful_predator, is_adaptable_predator=child_is_adaptable_predator, is_vocal_predator=child_is_vocal_predator, is_frenzied_predator=child_is_frenzied_predator, is_bloodthirsty_predator=child_is_bloodthirsty_predator, is_arboreal_predator=child_is_arboreal_predator, is_stargazer_predator=child_is_stargazer_predator, is_sure_footed_predator=child_is_sure_footed_predator, is_chameleon_predator=child_is_chameleon_predator, is_introspective_predator=child_is_introspective_predator, is_symbiotic_predator=child_is_symbiotic_predator, is_telepathic_predator=child_is_telepathic_predator,
-                                is_clairvoyant_predator=child_is_clairvoyant_predator, is_telekinetic_predator=child_is_telekinetic_predator, is_clairvoyant=child_is_clairvoyant, is_telekinetic=child_is_telekinetic, is_hive_mind_predator=child_is_hive_mind_predator, is_ethereal=child_is_ethereal, is_ethereal_predator=child_is_ethereal_predator, is_shadow_stalker_predator=child_is_shadow_stalker_predator, is_mimic_predator=child_is_mimic_predator, is_gluttonous_predator=child_is_gluttonous_predator, is_opportunistic_predator=child_is_opportunistic_predator, is_scout_predator=child_is_scout_predator, is_desperate_predator=child_is_desperate_predator, is_nomadic_predator=child_is_nomadic_predator, is_fast_learner_predator=child_is_fast_learner_predator, is_hardy_predator=child_is_hardy_predator, is_prolific_predator=child_is_prolific_predator, is_cooperative_predator=child_is_cooperative_predator, is_absorbent_predator=child_is_absorbent_predator, is_frugivore_predator=child_is_frugivore_predator, is_endurance_runner_predator=child_is_endurance_runner_predator, is_protective_predator=child_is_protective_predator, is_scavenger_hunter_predator=child_is_scavenger_hunter_predator, is_detritivore_predator=child_is_detritivore_predator, is_cannibalistic_predator=child_is_cannibalistic_predator, is_cleaner_predator=child_is_cleaner_predator, is_shell_predator=child_is_shell_predator, is_scales_predator=child_is_scales_predator, is_spikes_predator=child_is_spikes_predator, is_pack_hunter_predator=child_is_pack_hunter_predator, is_has_horns_predator=child_is_has_horns_predator, has_bioluminescence_predator=child_has_bioluminescence_predator, has_blubber_predator=child_has_blubber_predator, has_claws_predator=child_has_claws_predator, has_fur_predator=child_has_fur_predator, has_horns_predator=child_has_horns_predator, is_parasitic_predator=child_is_parasitic_predator, has_echolocation_predator=child_has_echolocation_predator, is_aposematic_predator=child_is_aposematic_predator)
+                                is_clairvoyant_predator=child_is_clairvoyant_predator, is_telekinetic_predator=child_is_telekinetic_predator, is_clairvoyant=child_is_clairvoyant, is_telekinetic=child_is_telekinetic, is_hive_mind_predator=child_is_hive_mind_predator, is_ethereal=child_is_ethereal, is_ethereal_predator=child_is_ethereal_predator, is_shadow_stalker_predator=child_is_shadow_stalker_predator, is_mimic_predator=child_is_mimic_predator, is_gluttonous_predator=child_is_gluttonous_predator, is_opportunistic_predator=child_is_opportunistic_predator, is_scout_predator=child_is_scout_predator, is_desperate_predator=child_is_desperate_predator, is_nomadic_predator=child_is_nomadic_predator, is_fast_learner_predator=child_is_fast_learner_predator, is_hardy_predator=child_is_hardy_predator, is_prolific_predator=child_is_prolific_predator, is_cooperative_predator=child_is_cooperative_predator, is_absorbent_predator=child_is_absorbent_predator, is_frugivore_predator=child_is_frugivore_predator, is_endurance_runner_predator=child_is_endurance_runner_predator, is_protective_predator=child_is_protective_predator, is_scavenger_hunter_predator=child_is_scavenger_hunter_predator, is_detritivore_predator=child_is_detritivore_predator, is_cannibalistic_predator=child_is_cannibalistic_predator, is_cleaner_predator=child_is_cleaner_predator, is_shell_predator=child_is_shell_predator, is_scales_predator=child_is_scales_predator, is_spikes_predator=child_is_spikes_predator, is_pack_hunter_predator=child_is_pack_hunter_predator, is_has_horns_predator=child_is_has_horns_predator, has_bioluminescence_predator=child_has_bioluminescence_predator, has_blubber_predator=child_has_blubber_predator, has_claws_predator=child_has_claws_predator, has_fur_predator=child_has_fur_predator, has_horns_predator=child_has_horns_predator, is_parasitic_predator=child_is_parasitic_predator, has_echolocation_predator=child_has_echolocation_predator, is_aposematic_predator=child_is_aposematic_predator, is_infected=child_is_infected)
+                    child.is_cannibal_hungry = child_is_cannibal_hungry
+                    child.is_cannibal_target = child_is_cannibal_target
                     if getattr(entity, 'lays_eggs', False):
                         egg = Food(x=child_x, y=child_y, energy=5, plant_type='egg', max_age=20, hatch_entity=child)
                         self.add_food(egg)

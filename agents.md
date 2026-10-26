@@ -149,6 +149,8 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Fixed reproduction mutation logic in `Universe.tick()` for multiple traits (`is_infected`, `is_sleeping`, `is_aquatic`, `is_evasive`, `is_pacifist`, `is_cannibal_hungry`, `is_cannibal_target`).
+- [x] Fixed isolated tests `TestIsStormPredator::test_is_fire_predator_mutation`, and added `can_climb`, `is_cannibal_hungry`, and `is_cannibal_target` tests.
 - [x] Implemented `has_echolocation_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with the `has_echolocation` trait. Added visualizer rendering and tests.
 - [x] Implemented `is_pack_hunter_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking pack_hunter entities. Added visualizer rendering and tests.
 - [x] Implemented `is_cannibalistic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking cannibalistic entities. Added visualizer rendering and tests.
