@@ -5811,3 +5811,363 @@ class TestIsCannibalTargetMutation(unittest.TestCase):
             universe.tick()
         child = [e for e in universe.entities if e != parent][0]
         self.assertTrue(getattr(child, 'is_cannibal_target', False))
+
+class TestIsAgelessPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_ageless_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_ageless = Entity(name="prey", x=5, y=6, is_ageless=True)
+        self.prey_ageless.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.entities = [self.predator, self.prey_ageless, self.prey_normal]
+
+    @patch('random.random')
+    def test_ageless_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_ageless]
+        self.universe.tick()
+        self.assertFalse(self.prey_ageless.is_alive)
+
+    @patch('random.random')
+    def test_ageless_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities.remove(self.prey_ageless)
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    @patch('random.random')
+    def test_ageless_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.01
+        self.predator.energy = 200
+        self.predator.reproduction_threshold = 100
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_ageless and e != self.prey_normal]
+        if children:
+            self.assertFalse(children[0].is_ageless_predator)
+
+class TestIsFiercePredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_fierce_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_fierce = Entity(name="prey", x=5, y=6, is_fierce=True)
+        self.prey_fierce.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.entities = [self.predator, self.prey_fierce, self.prey_normal]
+
+    @patch('random.random')
+    def test_fierce_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_fierce]
+        self.universe.tick()
+        self.assertFalse(self.prey_fierce.is_alive)
+
+    @patch('random.random')
+    def test_fierce_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities.remove(self.prey_fierce)
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    @patch('random.random')
+    def test_fierce_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.01
+        self.predator.energy = 200
+        self.predator.reproduction_threshold = 100
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_fierce and e != self.prey_normal]
+        if children:
+            self.assertFalse(children[0].is_fierce_predator)
+
+class TestIsForagerPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_forager_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_forager = Entity(name="prey", x=5, y=6, is_forager=True)
+        self.prey_forager.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.entities = [self.predator, self.prey_forager, self.prey_normal]
+
+    @patch('random.random')
+    def test_forager_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_forager]
+        self.universe.tick()
+        self.assertFalse(self.prey_forager.is_alive)
+
+    @patch('random.random')
+    def test_forager_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities.remove(self.prey_forager)
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    @patch('random.random')
+    def test_forager_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.01
+        self.predator.energy = 200
+        self.predator.reproduction_threshold = 100
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_forager and e != self.prey_normal]
+        if children:
+            self.assertFalse(children[0].is_forager_predator)
+
+class TestIsLuckyPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_lucky_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_lucky = Entity(name="prey", x=5, y=6, is_lucky=True)
+        self.prey_lucky.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.entities = [self.predator, self.prey_lucky, self.prey_normal]
+
+    @patch('random.random')
+    def test_lucky_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.55
+        self.universe.entities = [self.predator, self.prey_lucky]
+        self.universe.tick()
+        self.assertFalse(self.prey_lucky.is_alive)
+
+    @patch('random.random')
+    def test_lucky_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities.remove(self.prey_lucky)
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    @patch('random.random')
+    def test_lucky_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.01
+        self.predator.energy = 200
+        self.predator.reproduction_threshold = 100
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_lucky and e != self.prey_normal]
+        if children:
+            self.assertFalse(children[0].is_lucky_predator)
+
+class TestIsRestlessPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_restless_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_restless = Entity(name="prey", x=5, y=6, is_restless=True)
+        self.prey_restless.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.entities = [self.predator, self.prey_restless, self.prey_normal]
+
+    @patch('random.random')
+    def test_restless_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_restless]
+        self.universe.tick()
+        self.assertFalse(self.prey_restless.is_alive)
+
+    @patch('random.random')
+    def test_restless_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities.remove(self.prey_restless)
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    @patch('random.random')
+    def test_restless_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.01
+        self.predator.energy = 200
+        self.predator.reproduction_threshold = 100
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_restless and e != self.prey_normal]
+        if children:
+            self.assertFalse(children[0].is_restless_predator)
+
+class TestIsRuthlessPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_ruthless_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_ruthless = Entity(name="prey", x=5, y=6, is_ruthless=True)
+        self.prey_ruthless.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.entities = [self.predator, self.prey_ruthless, self.prey_normal]
+
+    @patch('random.random')
+    def test_ruthless_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_ruthless]
+        self.universe.tick()
+        self.assertFalse(self.prey_ruthless.is_alive)
+
+    @patch('random.random')
+    def test_ruthless_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities.remove(self.prey_ruthless)
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    @patch('random.random')
+    def test_ruthless_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.01
+        self.predator.energy = 200
+        self.predator.reproduction_threshold = 100
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_ruthless and e != self.prey_normal]
+        if children:
+            self.assertFalse(children[0].is_ruthless_predator)
+
+class TestIsSpitefulPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_spiteful_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_spiteful = Entity(name="prey", x=5, y=6, is_spiteful=True)
+        self.prey_spiteful.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.entities = [self.predator, self.prey_spiteful, self.prey_normal]
+
+    @patch('random.random')
+    def test_spiteful_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_spiteful]
+        self.universe.tick()
+        self.assertFalse(self.prey_spiteful.is_alive)
+
+    @patch('random.random')
+    def test_spiteful_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities.remove(self.prey_spiteful)
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    @patch('random.random')
+    def test_spiteful_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.01
+        self.predator.energy = 200
+        self.predator.reproduction_threshold = 100
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_spiteful and e != self.prey_normal]
+        if children:
+            self.assertFalse(children[0].is_spiteful_predator)
+
+class TestIsIronWilledPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_iron_willed_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_iron_willed = Entity(name="prey", x=5, y=6, is_iron_willed=True)
+        self.prey_iron_willed.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.entities = [self.predator, self.prey_iron_willed, self.prey_normal]
+
+    @patch('random.random')
+    def test_iron_willed_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_iron_willed]
+        self.universe.tick()
+        self.assertFalse(self.prey_iron_willed.is_alive)
+
+    @patch('random.random')
+    def test_iron_willed_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities.remove(self.prey_iron_willed)
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    @patch('random.random')
+    def test_iron_willed_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.01
+        self.predator.energy = 200
+        self.predator.reproduction_threshold = 100
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_iron_willed and e != self.prey_normal]
+        if children:
+            self.assertFalse(children[0].is_iron_willed_predator)
+
+class TestIsFarsightedPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_farsighted_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_farsighted = Entity(name="prey", x=5, y=6, is_farsighted=True)
+        self.prey_farsighted.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.entities = [self.predator, self.prey_farsighted, self.prey_normal]
+
+    @patch('random.random')
+    def test_farsighted_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_farsighted]
+        self.universe.tick()
+        self.assertFalse(self.prey_farsighted.is_alive)
+
+    @patch('random.random')
+    def test_farsighted_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities.remove(self.prey_farsighted)
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    @patch('random.random')
+    def test_farsighted_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.01
+        self.predator.energy = 200
+        self.predator.reproduction_threshold = 100
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_farsighted and e != self.prey_normal]
+        if children:
+            self.assertFalse(children[0].is_farsighted_predator)
+
+class TestIsHeavySleeperPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_heavy_sleeper_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_heavy_sleeper = Entity(name="prey", x=5, y=6, is_heavy_sleeper=True)
+        self.prey_heavy_sleeper.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.entities = [self.predator, self.prey_heavy_sleeper, self.prey_normal]
+
+    @patch('random.random')
+    def test_heavy_sleeper_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_heavy_sleeper]
+        self.universe.tick()
+        self.assertFalse(self.prey_heavy_sleeper.is_alive)
+
+    @patch('random.random')
+    def test_heavy_sleeper_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities.remove(self.prey_heavy_sleeper)
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    @patch('random.random')
+    def test_heavy_sleeper_predator_mutation(self, mock_random):
+        mock_random.return_value = 0.01
+        self.predator.energy = 200
+        self.predator.reproduction_threshold = 100
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_heavy_sleeper and e != self.prey_normal]
+        if children:
+            self.assertFalse(children[0].is_heavy_sleeper_predator)

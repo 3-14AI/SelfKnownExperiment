@@ -63,3 +63,4 @@ test_entity_aging
 - `test_is_day_dweller` (test_engine_dwellers.TestIsDayDweller)
 - `test_stun_strider_stamina` (test_engine_striders.TestStunStrider)
 - `test_is_web_strider_defense` (tests.test_engine_striders.TestIsWebStrider)
+- `test_is_quicksand_dweller_mutation` (test_engine_dwellers.TestIsQuicksandDweller)

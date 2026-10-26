@@ -72,6 +72,36 @@ class CLIVisualizer:
                     elif getattr(entity, 'is_aposematic_predator', False):
                         char = 'A'
                         color = '\033[91m'
+                    elif getattr(entity, 'is_ageless_predator', False):
+                        char = 'Ä'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_fierce_predator', False):
+                        char = 'Å'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_forager_predator', False):
+                        char = 'å'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_lucky_predator', False):
+                        char = 'Æ'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_restless_predator', False):
+                        char = 'æ'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_ruthless_predator', False):
+                        char = 'Ø'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_spiteful_predator', False):
+                        char = 'ø'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_iron_willed_predator', False):
+                        char = 'ß'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_farsighted_predator', False):
+                        char = 'Œ'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_heavy_sleeper_predator', False):
+                        char = 'œ'
+                        color = '\033[91m'
                     elif diet == 'carnivore':
                         char = 'X'
                     elif diet == 'scavenger':
@@ -441,6 +471,36 @@ class CLIVisualizer:
                         color = '\033[91m'
                     elif getattr(entity, 'is_aposematic_predator', False):
                         char = 'A'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_ageless_predator', False):
+                        char = 'Ä'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_fierce_predator', False):
+                        char = 'Å'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_forager_predator', False):
+                        char = 'å'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_lucky_predator', False):
+                        char = 'Æ'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_restless_predator', False):
+                        char = 'æ'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_ruthless_predator', False):
+                        char = 'Ø'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_spiteful_predator', False):
+                        char = 'ø'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_iron_willed_predator', False):
+                        char = 'ß'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_farsighted_predator', False):
+                        char = 'Œ'
+                        color = '\033[91m'
+                    elif getattr(entity, 'is_heavy_sleeper_predator', False):
+                        char = 'œ'
                         color = '\033[91m'
                     elif diet == 'carnivore':
                         char = 'C'
