@@ -1311,16 +1311,13 @@ class TestIsQuicksandDweller(unittest.TestCase):
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
 
-        for _ in range(50):
-            parent.energy = 10000
+        from unittest.mock import patch
+        with patch('random.random', return_value=0.0):
             self.universe.tick()
-            if len(self.universe.entities) > 20:
-                self.universe.entities = [parent]
-            for entity in self.universe.entities:
-                if getattr(entity, 'is_quicksand_dweller', False) and entity != parent:
-                    self.assertTrue(entity.is_quicksand_dweller)
-                    return
-        self.fail("is_quicksand_dweller mutation did not occur")
+
+        children = [e for e in self.universe.entities if e is not parent]
+        self.assertGreater(len(children), 0, "A child should have been born")
+        self.assertTrue(getattr(children[0], 'is_quicksand_dweller', False))
 
 class TestIsMarshDweller(unittest.TestCase):
     def setUp(self):
