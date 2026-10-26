@@ -4018,3 +4018,113 @@ class TestAposematicPredatorVisualizer(unittest.TestCase):
         universe.entities = [entity]
         output = vis.render()
         self.assertIn('Ė', output)
+
+    @patch('os.system')
+    def test_is_ageless_predator_visualizer(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=5, y=5)
+        entity.is_ageless_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('Ä', output)
+
+    @patch('os.system')
+    def test_is_fierce_predator_visualizer(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=5, y=5)
+        entity.is_fierce_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('Å', output)
+
+    @patch('os.system')
+    def test_is_forager_predator_visualizer(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=5, y=5)
+        entity.is_forager_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('å', output)
+
+    @patch('os.system')
+    def test_is_lucky_predator_visualizer(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=5, y=5)
+        entity.is_lucky_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('Æ', output)
+
+    @patch('os.system')
+    def test_is_restless_predator_visualizer(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=5, y=5)
+        entity.is_restless_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('æ', output)
+
+    @patch('os.system')
+    def test_is_ruthless_predator_visualizer(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=5, y=5)
+        entity.is_ruthless_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('Ø', output)
+
+    @patch('os.system')
+    def test_is_spiteful_predator_visualizer(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=5, y=5)
+        entity.is_spiteful_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('ø', output)
+
+    @patch('os.system')
+    def test_is_iron_willed_predator_visualizer(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=5, y=5)
+        entity.is_iron_willed_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('ß', output)
+
+    @patch('os.system')
+    def test_is_farsighted_predator_visualizer(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=5, y=5)
+        entity.is_farsighted_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('Œ', output)
+
+    @patch('os.system')
+    def test_is_heavy_sleeper_predator_visualizer(self, mock_system):
+        universe = Universe(width=10, height=10)
+        vis = CLIVisualizer(universe)
+        entity = Entity(name="test", x=5, y=5)
+        entity.is_heavy_sleeper_predator = True
+        entity.energy = 50
+        universe.entities = [entity]
+        output = vis.render()
+        self.assertIn('œ', output)
