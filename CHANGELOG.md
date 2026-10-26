@@ -1,4 +1,7 @@
 ## [Unreleased]
+- Fixed `is_marsh_glider` stamina bug where entities with the trait did not consume 0 stamina when moving on mud terrain.
+
+## [Unreleased]
 
 - Fixed reproduction mutation logic in `Universe.tick()` for `is_infected`, `is_sleeping`, `is_aquatic`, `is_evasive`, `is_pacifist`, `is_cannibal_hungry`, and `is_cannibal_target` by passing them correctly as keyword arguments or setting them on child instantiation. Added tests for `is_cannibal_hungry`, `is_cannibal_target`, and `can_climb`.
 - Implemented `has_echolocation_predator` trait granting a 1.5x attack multiplier against entities with the `has_echolocation` trait.
