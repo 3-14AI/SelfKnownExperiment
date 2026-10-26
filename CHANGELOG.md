@@ -1,4 +1,5 @@
 ## [Unreleased]
+- Implemented `has_echolocation_predator` trait granting a 1.5x attack multiplier against entities with the `has_echolocation` trait.
 
 ### [2026-10-25] - Agent
 - Fixed syntax error in `is_sturdy_predator` and `is_slippery_predator` mutation block inside `Universe.tick()`.
@@ -62,6 +63,7 @@
 # Changelog
 
 ## [Unreleased]
+- Implemented `has_echolocation_predator` trait granting a 1.5x attack multiplier against entities with the `has_echolocation` trait.
 
 ### [2026-10-25] - Agent
 - Fixed syntax error in `is_sturdy_predator` and `is_slippery_predator` mutation block inside `Universe.tick()`.
