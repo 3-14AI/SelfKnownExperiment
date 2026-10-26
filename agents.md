@@ -149,6 +149,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 - [x] Fixed `is_marsh_glider` stamina bug where entities with the trait did not consume 0 stamina when moving on mud terrain.
 - [x] Fixed reproduction mutation logic in `Universe.tick()` for multiple traits (`is_infected`, `is_sleeping`, `is_aquatic`, `is_evasive`, `is_pacifist`, `is_cannibal_hungry`, `is_cannibal_target`).
 - [x] Fixed isolated tests `TestIsStormPredator::test_is_fire_predator_mutation`, and added `can_climb`, `is_cannibal_hungry`, and `is_cannibal_target` tests.

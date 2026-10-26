@@ -6171,3 +6171,313 @@ class TestIsHeavySleeperPredator(unittest.TestCase):
         children = [e for e in self.universe.entities if e != self.predator and e != self.prey_heavy_sleeper and e != self.prey_normal]
         if children:
             self.assertFalse(children[0].is_heavy_sleeper_predator)
+
+class TestIsAgelessPredatorCombat(unittest.TestCase):
+    def test_is_ageless_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+        universe1.event_chance = 0.0
+        universe2.event_chance = 0.0
+        universe1.disease_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe1.localized_event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_ageless_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_ageless_predator=False, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.45):
+            universe2.tick()
+            self.assertTrue(prey2.is_alive)
+
+        with patch('random.random', return_value=0.45):
+            universe1.tick()
+            self.assertFalse(prey1.is_alive)
+
+class TestIsFiercePredatorCombat(unittest.TestCase):
+    def test_is_fierce_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+        universe1.event_chance = 0.0
+        universe2.event_chance = 0.0
+        universe1.disease_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe1.localized_event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_fierce_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_fierce=True, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_fierce_predator=False, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_fierce=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.45):
+            universe2.tick()
+            self.assertTrue(prey2.is_alive)
+
+        with patch('random.random', return_value=0.45):
+            universe1.tick()
+            self.assertFalse(prey1.is_alive)
+
+class TestIsForagerPredatorCombat(unittest.TestCase):
+    def test_is_forager_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+        universe1.event_chance = 0.0
+        universe2.event_chance = 0.0
+        universe1.disease_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe1.localized_event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_forager_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_forager=True, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_forager_predator=False, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_forager=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.45):
+            universe2.tick()
+            self.assertTrue(prey2.is_alive)
+
+        with patch('random.random', return_value=0.45):
+            universe1.tick()
+            self.assertFalse(prey1.is_alive)
+
+class TestIsLuckyPredatorCombat(unittest.TestCase):
+    def test_is_lucky_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+        universe1.event_chance = 0.0
+        universe2.event_chance = 0.0
+        universe1.disease_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe1.localized_event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_lucky_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_lucky=True, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_lucky_predator=False, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_lucky=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.55):
+            universe2.tick()
+            self.assertTrue(prey2.is_alive)
+
+        with patch('random.random', return_value=0.55):
+            universe1.tick()
+            self.assertFalse(prey1.is_alive)
+
+class TestIsRestlessPredatorCombat(unittest.TestCase):
+    def test_is_restless_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+        universe1.event_chance = 0.0
+        universe2.event_chance = 0.0
+        universe1.disease_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe1.localized_event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_restless_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_restless=True, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_restless_predator=False, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_restless=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.45):
+            universe2.tick()
+            self.assertTrue(prey2.is_alive)
+
+        with patch('random.random', return_value=0.45):
+            universe1.tick()
+            self.assertFalse(prey1.is_alive)
+
+class TestIsRuthlessPredatorCombat(unittest.TestCase):
+    def test_is_ruthless_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+        universe1.event_chance = 0.0
+        universe2.event_chance = 0.0
+        universe1.disease_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe1.localized_event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_ruthless_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_ruthless=True, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_ruthless_predator=False, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_ruthless=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.45):
+            universe2.tick()
+            self.assertTrue(prey2.is_alive)
+
+        with patch('random.random', return_value=0.45):
+            universe1.tick()
+            self.assertFalse(prey1.is_alive)
+
+class TestIsSpitefulPredatorCombat(unittest.TestCase):
+    def test_is_spiteful_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+        universe1.event_chance = 0.0
+        universe2.event_chance = 0.0
+        universe1.disease_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe1.localized_event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_spiteful_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_spiteful=True, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_spiteful_predator=False, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_spiteful=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.45):
+            universe2.tick()
+            self.assertTrue(prey2.is_alive)
+
+        with patch('random.random', return_value=0.45):
+            universe1.tick()
+            self.assertFalse(prey1.is_alive)
+
+class TestIsIronWilledPredatorCombat(unittest.TestCase):
+    def test_is_iron_willed_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+        universe1.event_chance = 0.0
+        universe2.event_chance = 0.0
+        universe1.disease_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe1.localized_event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_iron_willed_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_iron_willed=True, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_iron_willed_predator=False, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_iron_willed=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.45):
+            universe2.tick()
+            self.assertTrue(prey2.is_alive)
+
+        with patch('random.random', return_value=0.45):
+            universe1.tick()
+            self.assertFalse(prey1.is_alive)
+
+class TestIsFarsightedPredatorCombat(unittest.TestCase):
+    def test_is_farsighted_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+        universe1.event_chance = 0.0
+        universe2.event_chance = 0.0
+        universe1.disease_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe1.localized_event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_farsighted_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_farsighted=True, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_farsighted_predator=False, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_farsighted=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.45):
+            universe2.tick()
+            self.assertTrue(prey2.is_alive)
+
+        with patch('random.random', return_value=0.45):
+            universe1.tick()
+            self.assertFalse(prey1.is_alive)
+
+class TestIsHeavySleeperPredatorCombat(unittest.TestCase):
+    def test_is_heavy_sleeper_predator_combat(self):
+        universe1 = Universe(width=10, height=10)
+        universe2 = Universe(width=10, height=10)
+        universe1.reproduction_threshold = 100000
+        universe2.reproduction_threshold = 100000
+        universe1.event_chance = 0.0
+        universe2.event_chance = 0.0
+        universe1.disease_chance = 0.0
+        universe2.disease_chance = 0.0
+        universe1.localized_event_chance = 0.0
+        universe2.localized_event_chance = 0.0
+
+        predator1 = Entity(name="pred1", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_heavy_sleeper_predator=True, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator1.attack = 20
+        prey1 = Entity(name="prey1", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_heavy_sleeper=True, is_ageless=True)
+        universe1.entities = [predator1, prey1]
+
+        predator2 = Entity(name="pred2", x=0, y=0, age=100, max_age=100, size=10, defense=5, energy=50, is_heavy_sleeper_predator=False, diet="carnivore", is_pacifist=False, is_ageless=True)
+        predator2.attack = 20
+        prey2 = Entity(name="prey2", x=0, y=0, age=100, max_age=100, size=10, defense=20, energy=50, is_heavy_sleeper=True, is_ageless=True)
+        universe2.entities = [predator2, prey2]
+
+        with patch('random.random', return_value=0.45):
+            universe2.tick()
+            self.assertTrue(prey2.is_alive)
+
+        with patch('random.random', return_value=0.45):
+            universe1.tick()
+            self.assertFalse(prey1.is_alive)

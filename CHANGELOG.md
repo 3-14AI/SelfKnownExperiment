@@ -1,3 +1,4 @@
+- Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
 - Fixed `is_marsh_glider` stamina bug where entities with the trait did not consume 0 stamina when moving on mud terrain.
 
