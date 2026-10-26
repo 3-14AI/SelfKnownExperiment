@@ -568,3 +568,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented missing mutation tests for `is_evasive_predator`, `is_stealthy_predator`, `is_social_predator`, and `is_solitary_predator` traits, and fixed a syntax bug blocking their mutation during reproduction.
 - [x] Implemented missing mutation tests for various predator traits (e.g. `is_defensive_predator`, `is_intimidating_predator`, `is_fearless_predator`, etc.) and fixed syntax bugs blocking their mutation during reproduction.
 - [x] Implemented `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, `is_heavy_sleeper_predator` traits.
+- [x] Implemented missing unit tests for 14 predator traits (is_arboreal_predator, is_day_predator, etc.)

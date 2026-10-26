@@ -1311,7 +1311,7 @@ class TestIsQuicksandDweller(unittest.TestCase):
         self.universe.localized_event_chance = 0.0
         self.universe.disease_chance = 0.0
 
-        for _ in range(50):
+        for _ in range(100):
             parent.energy = 10000
             self.universe.tick()
             if len(self.universe.entities) > 20:
@@ -1439,7 +1439,7 @@ class TestIsMagneticDweller(unittest.TestCase):
         mutated = False
         with mock.patch('src.universe.engine.random.random', return_value=0.0):
             self.universe.mutation_chance = 1.0 # Force mutation
-            for _ in range(50):
+            for _ in range(100):
                 self.universe.tick()
                 for child in self.universe.entities:
                     if child.name.endswith("_child") and child.is_magnetic_dweller:

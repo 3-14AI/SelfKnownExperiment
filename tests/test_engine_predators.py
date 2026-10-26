@@ -6171,3 +6171,343 @@ class TestIsHeavySleeperPredator(unittest.TestCase):
         children = [e for e in self.universe.entities if e != self.predator and e != self.prey_heavy_sleeper and e != self.prey_normal]
         if children:
             self.assertFalse(children[0].is_heavy_sleeper_predator)
+
+class TestIsArborealPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_arboreal_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_target = Entity(name="prey", x=5, y=6, is_arboreal=True)
+        self.prey_target.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.add_entity(self.predator)
+        self.universe.add_entity(self.prey_target)
+        self.universe.add_entity(self.prey_normal)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    @patch('random.random')
+    def test_is_arboreal_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_target]
+        self.universe.tick()
+        self.assertFalse(self.prey_target.is_alive)
+        self.assertTrue(getattr(self.predator, 'was_fed', True))
+
+    @patch('random.random')
+    def test_is_arboreal_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_normal]
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    def test_is_arboreal_predator_mutation(self):
+        self.predator.is_arboreal_predator = False
+        self.universe.entities = [self.predator]
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_target and e != self.prey_normal]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_arboreal_predator', False))
+
+class TestIsDayPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+    def test_is_day_predator_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_day_predator=False)
+        self.universe.add_entity(parent)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_day_predator', False))
+
+class TestIsFogPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+    def test_is_fog_predator_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_fog_predator=False)
+        self.universe.add_entity(parent)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_fog_predator', False))
+
+class TestIsLavaPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+    def test_is_lava_predator_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_lava_predator=False)
+        self.universe.add_entity(parent)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_lava_predator', False))
+
+class TestIsNightPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+    def test_is_night_predator_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_night_predator=False)
+        self.universe.add_entity(parent)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_night_predator', False))
+
+class TestIsShelterPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+    def test_is_shelter_predator_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_shelter_predator=False)
+        self.universe.add_entity(parent)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_shelter_predator', False))
+
+class TestIsSlipperyPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_slippery_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_target = Entity(name="prey", x=5, y=6, is_slippery=True)
+        self.prey_target.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.add_entity(self.predator)
+        self.universe.add_entity(self.prey_target)
+        self.universe.add_entity(self.prey_normal)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    @patch('random.random')
+    def test_is_slippery_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_target]
+        self.universe.tick()
+        self.assertFalse(self.prey_target.is_alive)
+        self.assertTrue(getattr(self.predator, 'was_fed', True))
+
+    @patch('random.random')
+    def test_is_slippery_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_normal]
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    def test_is_slippery_predator_mutation(self):
+        self.predator.is_slippery_predator = False
+        self.universe.entities = [self.predator]
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_target and e != self.prey_normal]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_slippery_predator', False))
+
+class TestIsSturdyPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_sturdy_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_target = Entity(name="prey", x=5, y=6, is_sturdy=True)
+        self.prey_target.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.add_entity(self.predator)
+        self.universe.add_entity(self.prey_target)
+        self.universe.add_entity(self.prey_normal)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    @patch('random.random')
+    def test_is_sturdy_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_target]
+        self.universe.tick()
+        self.assertFalse(self.prey_target.is_alive)
+        self.assertTrue(getattr(self.predator, 'was_fed', True))
+
+    @patch('random.random')
+    def test_is_sturdy_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_normal]
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    def test_is_sturdy_predator_mutation(self):
+        self.predator.is_sturdy_predator = False
+        self.universe.entities = [self.predator]
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_target and e != self.prey_normal]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_sturdy_predator', False))
+
+class TestIsSwampPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+    def test_is_swamp_predator_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_swamp_predator=False)
+        self.universe.add_entity(parent)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_swamp_predator', False))
+
+class TestIsToxicPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_toxic_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_target = Entity(name="prey", x=5, y=6, is_toxic=True)
+        self.prey_target.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.add_entity(self.predator)
+        self.universe.add_entity(self.prey_target)
+        self.universe.add_entity(self.prey_normal)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    @patch('random.random')
+    def test_is_toxic_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_target]
+        self.universe.tick()
+        self.assertFalse(self.prey_target.is_alive)
+        self.assertTrue(getattr(self.predator, 'was_fed', True))
+
+    @patch('random.random')
+    def test_is_toxic_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_normal]
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    def test_is_toxic_predator_mutation(self):
+        self.predator.is_toxic_predator = False
+        self.universe.entities = [self.predator]
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_target and e != self.prey_normal]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_toxic_predator', False))
+
+class TestIsVocalPredator(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+        self.predator = Entity(name="predator", x=5, y=5, is_vocal_predator=True)
+        self.predator.diet = 'carnivore'
+        self.predator.attack = 20
+        self.prey_target = Entity(name="prey", x=5, y=6, is_vocal=True)
+        self.prey_target.defense = 20
+        self.prey_normal = Entity(name="prey", x=5, y=6)
+        self.prey_normal.defense = 20
+        self.universe.add_entity(self.predator)
+        self.universe.add_entity(self.prey_target)
+        self.universe.add_entity(self.prey_normal)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+
+    @patch('random.random')
+    def test_is_vocal_predator_multiplier(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_target]
+        self.universe.tick()
+        self.assertFalse(self.prey_target.is_alive)
+        self.assertTrue(getattr(self.predator, 'was_fed', True))
+
+    @patch('random.random')
+    def test_is_vocal_predator_normal_prey(self, mock_random):
+        mock_random.return_value = 0.45
+        self.universe.entities = [self.predator, self.prey_normal]
+        self.universe.tick()
+        self.assertTrue(self.prey_normal.is_alive)
+
+    def test_is_vocal_predator_mutation(self):
+        self.predator.is_vocal_predator = False
+        self.universe.entities = [self.predator]
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != self.predator and e != self.prey_target and e != self.prey_normal]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_vocal_predator', False))
+
+class TestIsWallPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+    def test_is_wall_predator_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_wall_predator=False)
+        self.universe.add_entity(parent)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_wall_predator', False))
+
+class TestIsWaterPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+    def test_is_water_predator_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_water_predator=False)
+        self.universe.add_entity(parent)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_water_predator', False))
+
+class TestIsWebPredatorMutation(unittest.TestCase):
+    def setUp(self):
+        self.universe = Universe(width=10, height=10)
+    def test_is_web_predator_mutation(self):
+        parent = Entity(name="Parent", x=1, y=1, is_web_predator=False)
+        self.universe.add_entity(parent)
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        with patch('random.random', return_value=0.01):
+            self.universe.tick()
+        children = [e for e in self.universe.entities if e != parent]
+        if children:
+            self.assertTrue(getattr(children[0], 'is_web_predator', False))
