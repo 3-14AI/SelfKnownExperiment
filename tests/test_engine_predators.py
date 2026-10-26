@@ -1390,6 +1390,9 @@ class TestIsStormPredator(unittest.TestCase):
         self.universe.disease_chance = 0.0
         self.universe.reproduction_threshold = 500
         parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_earthquake_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        parent.is_carnivore_predator = False
+        parent.is_scavenger_predator = False
+        parent.is_omnivore_predator = False
         self.universe.add_entity(parent)
 
         import random
@@ -1554,6 +1557,9 @@ class TestIsStormPredator(unittest.TestCase):
         self.universe.disease_chance = 0.0
         self.universe.reproduction_threshold = 500
         parent = Entity(name="Parent", x=1, y=1, energy=5000, age=5, size=20, is_drought_predator=False, lays_eggs=False, is_telepathic=False, is_pacifist=True, is_ageless=True, is_gluttonous=True, has_blubber=True, is_immune=True)
+        parent.is_carnivore_predator = False
+        parent.is_scavenger_predator = False
+        parent.is_omnivore_predator = False
         self.universe.add_entity(parent)
 
         import random
@@ -5636,3 +5642,172 @@ class TestEcholocationPredator(unittest.TestCase):
         self.assertEqual(len(universe.entities), 2)
         child = universe.entities[1]
         self.assertTrue(child.has_echolocation_predator)
+
+class TestHasBioluminescencePredatorMutation(unittest.TestCase):
+    def test_has_bioluminescence_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.has_bioluminescence_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+        universe.entities.append(parent)
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'has_bioluminescence_predator', False))
+
+class TestHasBlubberPredatorMutation(unittest.TestCase):
+    def test_has_blubber_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.has_blubber_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+        universe.entities.append(parent)
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'has_blubber_predator', False))
+
+class TestHasClawsPredatorMutation(unittest.TestCase):
+    def test_has_claws_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.has_claws_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+        universe.entities.append(parent)
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'has_claws_predator', False))
+
+class TestHasFurPredatorMutation(unittest.TestCase):
+    def test_has_fur_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.has_fur_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+        universe.entities.append(parent)
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'has_fur_predator', False))
+
+class TestHasHornsPredatorMutation(unittest.TestCase):
+    def test_has_horns_predator_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.has_horns_predator = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+        universe.entities.append(parent)
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'has_horns_predator', False))
+
+class TestIsClimbingMutation(unittest.TestCase):
+    def test_is_climbing_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.can_climb = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+        universe.entities.append(parent)
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'can_climb', False))
+
+
+class TestIsCannibalHungryMutation(unittest.TestCase):
+    def test_is_cannibal_hungry_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_cannibal_hungry = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+        universe.entities.append(parent)
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_cannibal_hungry', False))
+
+class TestIsCannibalTargetMutation(unittest.TestCase):
+    def test_is_cannibal_target_mutation(self):
+        from src.universe.engine import Universe, Entity
+        from unittest.mock import patch
+        universe = Universe(width=1, height=1)
+        universe.reproduction_threshold = 10
+        universe.reproduction_cost = 5
+        universe.mutation_chance = 1.0
+        parent = Entity(name="parent", x=0, y=0, max_age=100)
+        parent.energy = 50
+        parent.is_cannibal_target = False
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent.is_pacifist = True
+        universe.entities.append(parent)
+        with patch('random.random', return_value=0.0):
+            universe.tick()
+        child = [e for e in universe.entities if e != parent][0]
+        self.assertTrue(getattr(child, 'is_cannibal_target', False))
