@@ -64,3 +64,6 @@ test_entity_aging
 - `test_stun_strider_stamina` (test_engine_striders.TestStunStrider)
 - `test_is_web_strider_defense` (tests.test_engine_striders.TestIsWebStrider)
 - `test_is_quicksand_dweller_mutation` (test_engine_dwellers.TestIsQuicksandDweller)
+- `test_energy_gain_in_autumn` (tests.test_engine_dancers.TestIsAutumnDancer)
+- `test_energy_gain_in_summer` (tests.test_engine_dancers.TestIsSummerDancer)
+- `test_parasite_strider_mutation` (tests.test_engine_striders.TestParasiteStrider)
