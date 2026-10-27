@@ -1960,3 +1960,42 @@ class TestIsDancerQuicksandPenalty(unittest.TestCase):
         universe.add_entity(e3)
         universe.move_entity(e3, 1, 0)
         self.assertEqual(e3.stamina, 99, "is_quicksand_dancer should not incur +10 penalty")
+
+from unittest.mock import patch
+
+class TestIsMudDancer(unittest.TestCase):
+    def test_mud_dancer_gains_energy_on_mud(self):
+        from src.universe.engine import Universe, Entity, Terrain
+        self.universe = Universe(width=10, height=10)
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        e = Entity(name="test", x=1, y=1, energy=10, size=2, stamina=0, max_stamina=0, is_immune=True, is_pacifist=True, is_ageless=True, is_mud_dancer=True, preferred_terrain="mud", preferred_temperature=20, temperature_tolerance=1000)
+        self.universe.add_entity(e)
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type="mud"))
+
+        self.universe.tick()
+        self.assertTrue(e.energy > 10)
+
+    @patch('random.random')
+    def test_mud_dancer_mutates(self, mock_random):
+        mock_random.return_value = 0.001
+        from src.universe.engine import Universe, Entity
+        self.universe = Universe(width=10, height=10)
+        self.universe.disease_chance = 0.0
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.mutation_chance = 1.0
+
+        parent = Entity(
+            name="Parent", x=1, y=1, energy=5000, age=10, size=20,
+            is_ageless=True, is_immune=True, is_pacifist=True, lays_eggs=False, is_telepathic=False,
+            is_mud_dancer=False, is_gluttonous=True, has_blubber=True
+        )
+        self.universe.add_entity(parent)
+        self.universe.reproduction_threshold = 100
+
+        self.universe.tick()
+        children = [e for e in self.universe.entities if e is not parent]
+        self.assertGreater(len(children), 0, "Child should be born")
+        self.assertTrue(getattr(children[0], 'is_mud_dancer', False))
