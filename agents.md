@@ -572,3 +572,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, `is_heavy_sleeper_predator` traits.
 - [x] Added missing isolated tests for `is_mud_dancer` trait.
 - [x] Implemented `is_venom_resistant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_venom_resistant` trait. Added tests and visualizer.
+- [x] Implemented `is_disease_resistant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_disease_resistant` trait. Added tests and visualizer.
