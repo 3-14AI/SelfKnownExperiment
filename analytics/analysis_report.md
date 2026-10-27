@@ -2370,3 +2370,12 @@ Implemented is_rain_walker trait.
   - `CLIVisualizer` в `src/universe/visualizer.py` обновлен для отображения существ с этим свойством символом 'V'.
   - Разработаны изолированные тесты `TestIsVenomResistantPredator` в `tests/test_is_venom_resistant_predator.py`, покрывающие логику боя, мутации и рендеринга.
 - **Дальнейшие шаги**: Продолжить реализацию оставшихся свойств (например, `is_drought_resistant_predator` или `is_parasite_resistant_predator`), поддерживая 100% прохождение тестов.
+
+### Analysis 355: Реализация свойств is_drought_resistant_predator и is_parasite_resistant_predator
+- **Цель агента**: Реализовать новые свойства хищников `is_drought_resistant_predator` и `is_parasite_resistant_predator`, предоставляющие множитель атаки 1.5x при нападении на существ с трейтами `is_drought_resistant` и `is_parasite_resistant` соответственно.
+- **Детали реализации**:
+  - Свойства `is_drought_resistant_predator` и `is_parasite_resistant_predator` добавлены в класс `Entity` и интегрированы в механизм генетических мутаций в `src/universe/engine.py`.
+  - В метод `Universe.tick()` добавлена логика боевого множителя 1.5x для хищников, атакующих цель, устойчивую к засухе (`is_drought_resistant`) и паразитам (`is_parasite_resistant`).
+  - `CLIVisualizer` в `src/universe/visualizer.py` обновлен для отображения существ с этим свойством символами 'Đ' и 'Ƥ'.
+  - Разработаны изолированные тесты в `tests/test_is_drought_resistant_predator.py` и `tests/test_is_parasite_resistant_predator.py`, покрывающие логику боя, мутации и рендеринга.
+- **Дальнейшие шаги**: Продолжить реализацию оставшихся свойств.

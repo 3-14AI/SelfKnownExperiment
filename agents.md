@@ -573,3 +573,6 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Added missing isolated tests for `is_mud_dancer` trait.
 - [x] Implemented `is_venom_resistant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_venom_resistant` trait. Added tests and visualizer.
 - [x] Implemented `is_disease_resistant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_disease_resistant` trait. Added tests and visualizer.
+
+- [x] Implemented `is_drought_resistant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_drought_resistant` trait. Added tests and visualizer.
+- [x] Implemented `is_parasite_resistant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_parasite_resistant` trait. Added tests and visualizer.
