@@ -323,6 +323,20 @@ class CLIVisualizer:
                         char = 'ω'
                     elif getattr(entity, 'is_immune_predator', False):
                         char = 'ω'
+                    elif getattr(entity, 'is_unappetizing_predator', False):
+                        char = 'U'
+                    elif getattr(entity, 'is_vibrant_predator', False):
+                        char = 'V'
+                    elif getattr(entity, 'is_relentless_predator', False):
+                        char = 'R'
+                    elif getattr(entity, 'is_tracker_predator', False):
+                        char = 'T'
+                    elif getattr(entity, 'is_dust_bather_predator', False):
+                        char = 'B'
+                    elif getattr(entity, 'is_scentless_predator', False):
+                        char = 'S'
+                    elif getattr(entity, 'is_vengeful_predator', False):
+                        char = 'G'
                     elif getattr(entity, 'is_flying_predator', False):
                         char = 'F'
                     elif getattr(entity, 'is_venom_resistant_predator', False):
