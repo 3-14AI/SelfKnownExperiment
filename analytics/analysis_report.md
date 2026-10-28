@@ -2393,3 +2393,6 @@ Implemented is_rain_walker trait.
 
 **Outcome:**
 The new predator trait allows predators to counter `is_stun_resistant` prey effectively. All tests (1549/1549) passed, ensuring the new trait operates without breaking existing mechanics.
+
+### Analysis 466: Implemented `is_immune_predator` Trait
+We added the `is_immune_predator` trait which grants entities an attack multiplier of 1.5x when attacking entities with the `is_immune` trait. This has been fully implemented in the combat engine blocks and includes complete unit tests and visualizer rendering support.
