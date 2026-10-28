@@ -327,6 +327,8 @@ class CLIVisualizer:
                         char = 'Đ'
                     elif getattr(entity, 'is_parasite_resistant_predator', False):
                         char = 'Ƥ'
+                    elif getattr(entity, 'is_stun_resistant_predator', False):
+                        char = 'Ŝ'
                     elif getattr(entity, 'is_parasite_predator', False):
                         char = 'ρ'
                     elif getattr(entity, 'is_sleep_predator', False):
