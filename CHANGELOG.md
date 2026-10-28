@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- Implemented `is_empathic_predator` trait granting a 1.5x attack multiplier against `is_empathic` entities. Added tests and visualizer rendering.
 - Added Ecosystem interaction tests for predator-prey dynamics.
 - Implemented `is_unappetizing_predator`, `is_vibrant_predator`, `is_relentless_predator`, `is_tracker_predator`, `is_dust_bather_predator`, `is_scentless_predator`, `is_vengeful_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking entities with the corresponding traits. Added visualizer rendering and tests.
 - Implemented `is_flying_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_flying` trait. Added tests and visualizer.
