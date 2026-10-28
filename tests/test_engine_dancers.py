@@ -1,4 +1,5 @@
 from unittest.mock import patch
+from unittest.mock import patch
 from unittest import mock
 import unittest
 from src.universe.engine import Universe, Entity, Food, Terrain, LocalizedEvent, Quicksand
@@ -1005,8 +1006,12 @@ class TestWallDancer(unittest.TestCase):
         self.entity.is_immune = True
         self.entity.is_pacifist = True
         self.entity.is_ageless = True
+        self.universe.event_chance = 0.0
+        self.universe.localized_event_chance = 0.0
+        self.universe.disease_chance = 0.0
 
-        self.universe.tick()
+        with patch('random.choice', return_value=(0, 0)):
+            self.universe.tick()
         self.assertTrue(self.entity.energy > initial_energy)
 
     def test_wall_dancer_mutation(self):
