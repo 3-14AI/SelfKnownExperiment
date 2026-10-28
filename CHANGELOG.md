@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- Implemented `is_immune_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_immune` trait. Added tests and visualizer.
 - Implemented `is_stun_resistant_predator` trait granting an attack multiplier against `is_stun_resistant` entities. Added tests and visualizer rendering.
 - Implemented `is_drought_resistant_predator` and `is_parasite_resistant_predator` traits granting an attack multiplier against `is_drought_resistant` and `is_parasite_resistant` entities respectively. Added tests and visualizer rendering.
 - Implemented `is_disease_resistant_predator` trait granting an attack multiplier against `is_disease_resistant` entities. Added tests and visualizer rendering.
@@ -7,6 +8,7 @@
 - Fixed `is_marsh_glider` stamina bug where entities with the trait did not consume 0 stamina when moving on mud terrain.
 
 ## [Unreleased]
+- Implemented `is_immune_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_immune` trait. Added tests and visualizer.
 
 - Fixed reproduction mutation logic in `Universe.tick()` for `is_infected`, `is_sleeping`, `is_aquatic`, `is_evasive`, `is_pacifist`, `is_cannibal_hungry`, and `is_cannibal_target` by passing them correctly as keyword arguments or setting them on child instantiation. Added tests for `is_cannibal_hungry`, `is_cannibal_target`, and `can_climb`.
 - Implemented `has_echolocation_predator` trait granting a 1.5x attack multiplier against entities with the `has_echolocation` trait.
@@ -73,6 +75,7 @@
 # Changelog
 
 ## [Unreleased]
+- Implemented `is_immune_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_immune` trait. Added tests and visualizer.
 
 - Fixed reproduction mutation logic in `Universe.tick()` for `is_infected`, `is_sleeping`, `is_aquatic`, `is_evasive`, `is_pacifist`, `is_cannibal_hungry`, and `is_cannibal_target` by passing them correctly as keyword arguments or setting them on child instantiation. Added tests for `is_cannibal_hungry`, `is_cannibal_target`, and `can_climb`.
 - Implemented `has_echolocation_predator` trait granting a 1.5x attack multiplier against entities with the `has_echolocation` trait.
