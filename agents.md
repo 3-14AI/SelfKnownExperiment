@@ -149,6 +149,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Implement ecosystem predator-prey interaction tests.
 - [x] Implemented `is_unappetizing_predator`, `is_vibrant_predator`, `is_relentless_predator`, `is_tracker_predator`, `is_dust_bather_predator`, `is_scentless_predator`, `is_vengeful_predator` traits. Entities with these traits gain an attack multiplier of 1.5x when attacking entities with the corresponding traits. Added visualizer rendering and tests.
 - [x] Implemented `is_flying_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_flying` trait. Added tests and visualizer.
 - [x] Implemented `is_immune_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_immune` trait. Added tests and visualizer.
