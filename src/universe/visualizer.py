@@ -337,6 +337,8 @@ class CLIVisualizer:
                         char = 'S'
                     elif getattr(entity, 'is_vengeful_predator', False):
                         char = 'G'
+                    elif getattr(entity, 'is_empathic_predator', False):
+                        char = 'ē'
                     elif getattr(entity, 'is_flying_predator', False):
                         char = 'F'
                     elif getattr(entity, 'is_venom_resistant_predator', False):
