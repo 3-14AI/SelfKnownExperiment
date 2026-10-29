@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- Implemented `is_contagious_predator` trait granting a 1.5x attack multiplier against `is_contagious` entities. Added tests and visualizer rendering.
 - Fixed a logic bug causing `UnboundLocalError` and redundant duplicate mutation evaluations for `is_autumn_strider` during entity reproduction.
 - Added `test_herbivore_starvation_dynamics` to `test_ecosystem_interaction.py`.
 - Implemented `is_empathic_predator` trait granting a 1.5x attack multiplier against `is_empathic` entities. Added tests and visualizer rendering.
