@@ -323,6 +323,8 @@ class CLIVisualizer:
                         char = 'ζ'
                     elif getattr(entity, 'is_disease_resistant_predator', False):
                         char = 'ω'
+                    elif getattr(entity, 'is_carnivorous_plant_predator', False):
+                        char = '❀'
                     elif getattr(entity, 'is_immune_predator', False):
                         char = 'ω'
                     elif getattr(entity, 'is_unappetizing_predator', False):
