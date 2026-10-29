@@ -12031,3 +12031,35 @@ class TestIsEtherealVisualizer(unittest.TestCase):
             universe.add_entity(entity)
             output = vis.render()
             self.assertIn('é', output)
+
+class TestIsFireResistant(unittest.TestCase):
+    def test_is_fire_resistant_immune_to_fire(self):
+        universe = Universe(width=10, height=10)
+        entity = Entity(name='test', x=5, y=5, is_fire_resistant=True, size=1, energy=8)
+        entity.reproduction_threshold = 99999
+        universe.entities.append(entity)
+
+        # Add fire event covering entity
+        from src.universe.engine import LocalizedEvent
+        universe.localized_events.append(LocalizedEvent(x=5, y=5, radius=2, event_type='fire', duration=2))
+
+        universe.tick()
+        # Non-resistant entities would take 5 energy damage in fire
+        self.assertTrue(entity.is_alive, "Fire resistant entity should survive fire.")
+
+    def test_is_fire_resistant_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent = Entity(name='test', x=5, y=5, energy=100, is_fire_resistant=False)
+        parent.reproduction_threshold = 80
+        universe.entities.append(parent)
+
+        with patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertGreater(len(children), 0, "A child should have been born")
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_fire_resistant', False), "is_fire_resistant trait should mutate to True")

@@ -2443,3 +2443,9 @@ All specific tests, as well as the full test suite (`pytest tests/`), passed suc
 - **Цель агента**: Проанализировать последние изменения проекта и действия агентов и составить отчет.
 - **Действия агента**: Агент успешно выполнил свою задачу, реализовав изолированные тесты для свойств `is_contagious_predator` и `is_empathic_predator`. Для этого он добавил новые тесты в файл `tests/test_engine_predators.py`, тем самым расширив тестовое покрытие для хищников в симуляции. Эти тесты проверяют множитель атаки (1.5x) для соответствующих свойств, гарантируя корректную работу логики боя при охоте. Агент также обновил `CHANGELOG.md` для документирования изменений.
 - **Влияние на симуляцию**: Добавление тестов укрепляет стабильность симулятора и подтверждает правильную работу свойств `is_contagious_predator` и `is_empathic_predator`. Это позволяет избежать будущих регрессий при расширении движка вселенной.
+
+### Analysis 473: is_fire_resistant and is_fire_resistant_predator
+
+*   **Trait Name:** `is_fire_resistant` and `is_fire_resistant_predator`
+*   **Target:** `Entity` class, `Universe` class, `CLIVisualizer` class.
+*   **Description:** Добавлены свойства `is_fire_resistant` и `is_fire_resistant_predator`. Сущности с `is_fire_resistant` не получают урон от огня. Хищники с `is_fire_resistant_predator` получают бонус 1.5x к атаке при атаке сущностей с `is_fire_resistant`. Добавлено отображение в визуализаторе и тесты.

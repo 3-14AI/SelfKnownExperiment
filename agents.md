@@ -24,6 +24,7 @@ It starts as nothing, but day by day, it will grow. It should eventually include
 6. Submit your work.
 Godspeed, Agent. The universe is in your hands.
 ## Completed
+- [x] Implemented `is_fire_resistant` and `is_fire_resistant_predator` traits. Entities with `is_fire_resistant` do not take damage from fire terrain. Entities with `is_fire_resistant_predator` gain a 1.5x attack multiplier when attacking fire resistant entities. Added tests and visualizer.
 - [x] Implemented `is_sandstorm_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking during a sandstorm event.
 - [x] Implemented `is_disease_dweller` trait. Entities with this trait treat being infected as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_fearless` trait. Entities with this trait do not run away from predators.

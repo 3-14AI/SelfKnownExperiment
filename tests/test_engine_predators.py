@@ -6547,3 +6547,37 @@ class TestIsEmpathicPredatorCombat(unittest.TestCase):
             universe.tick()
 
         self.assertTrue(prey.is_alive)
+
+class TestIsFireResistantPredator(unittest.TestCase):
+    def test_is_fire_resistant_predator_combat(self):
+        universe = Universe(width=10, height=10)
+        predator = Entity(name='test', x=5, y=5, size=1, energy=8, diet='carnivore', is_fire_resistant_predator=True)
+        predator.reproduction_threshold = 99999
+        predator.attack = 10
+        prey = Entity(name='prey', x=5, y=5, size=1, energy=8, is_fire_resistant=True)
+        prey.reproduction_threshold = 99999
+        prey.defense = 0
+        universe.entities.extend([predator, prey])
+
+        with patch('src.universe.engine.random.random', return_value=0.5):
+            universe.tick()
+
+        # Attack is 10, multiplier 1.5x -> 15. Energy drain = 15 // 2 = 7
+        self.assertEqual(prey.energy, 0, "Prey should take increased damage from fire resistant predator.")
+
+    def test_is_fire_resistant_predator_mutation(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        parent = Entity(name='test', x=5, y=5, energy=100, is_fire_resistant_predator=False)
+        parent.reproduction_threshold = 80
+        universe.entities.append(parent)
+
+        with patch('src.universe.engine.random.random', return_value=0.0):
+            universe.tick()
+
+        children = [e for e in universe.entities if e is not parent]
+        self.assertGreater(len(children), 0, "A child should have been born")
+        child = children[0]
+        self.assertTrue(getattr(child, 'is_fire_resistant_predator', False), "is_fire_resistant_predator trait should mutate to True")
