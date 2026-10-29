@@ -217,6 +217,8 @@ class CLIVisualizer:
                         char = 'e'
                     elif getattr(entity, 'is_cold_blooded', False):
                         char = 'b'
+                    elif getattr(entity, 'is_cold_blooded_predator', False):
+                        char = 'x'
                     elif getattr(entity, 'is_fruiting', False):
                         char = 'F'
                     elif getattr(entity, 'has_echolocation', False):
