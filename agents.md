@@ -149,6 +149,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `is_parasite_dweller` trait. Entities with this trait treat having attached parasites as a shelter, gaining increased defense and energy recovery.
 - [x] Implemented `is_sleep_dweller` trait. Entities with this trait treat being asleep as a shelter, gaining increased defense and energy recovery.
 ## Next Steps
+- [x] Added missing isolated combat multiplier tests for `is_contagious_predator` and `is_empathic_predator` traits to `tests/test_engine_predators.py`.
 - [x] Implemented `is_contagious_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking contagious entities. Added visualizer rendering and tests.
 - [x] Implemented `is_empathic_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_empathic` trait. Added tests and visualizer.
 - [x] Implement ecosystem predator-prey interaction tests (added starvation dynamics).

@@ -2435,3 +2435,7 @@ The `is_empathic_predator` trait has been successfully integrated into the Proje
 
 **Verification**
 All specific tests, as well as the full test suite (`pytest tests/`), passed successfully, verifying that the new feature was integrated safely without regressions.
+
+### Analysis 471:
+- Добавлены недостающие тесты для изолированной проверки множителей атаки для свойств хищников `is_contagious_predator` и `is_empathic_predator`.
+- Эти тесты гарантируют, что хищники с данными свойствами корректно наносят повышенный урон (1.5x) жертвам с соответствующими свойствами (`is_contagious` и `is_empathic`), увеличивая их шанс быть съеденными в процессе симуляции.
