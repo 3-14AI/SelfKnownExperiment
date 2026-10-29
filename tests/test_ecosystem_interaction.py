@@ -55,5 +55,32 @@ class TestEcosystemInteraction(unittest.TestCase):
         final_predator = [e for e in universe.entities if e.diet == 'carnivore'][0]
         self.assertGreater(final_predator.energy, 15, "Predator should gain energy from eating prey")
 
+
+    def test_herbivore_starvation_dynamics(self):
+        """
+        Verify that herbivores exhaust their food source and eventually starve, ensuring the engine correctly handles population decline due to starvation.
+        """
+        universe = Universe(width=10, height=10, food_spawn_rate=0.0)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        # Add single food
+        universe.foods.append(Food(x=5, y=5, energy=10, plant_type='grass'))
+
+        # Add herbivore
+        prey = Entity("Prey", x=5, y=5, diet='herbivore', energy=10)
+        prey.reproduction_threshold = 100
+        universe.add_entity(prey)
+
+        # Herbivore eats
+        universe.tick()
+
+        # Simulate many ticks to starve
+        for _ in range(100):
+            universe.tick()
+
+        self.assertFalse(prey.is_alive, "Herbivore should starve when food runs out")
+        self.assertEqual(len(universe.entities), 0, "Universe should be empty after starvation")
+
 if __name__ == '__main__':
     unittest.main()
