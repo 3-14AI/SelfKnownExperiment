@@ -68,7 +68,7 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented `has_claws` trait. Entities with this trait gain an attack bonus during combat.
 - [x] Implemented deep-water biome and aquatic entities. Entities with `is_aquatic` can navigate deep-water while others cannot, adding more varied terrain traversal.
 - [x] Implemented Electric trait (`is_electric`) and stunned mechanics. Entities with this trait stun their attackers during combat, rendering them unable to move or act for several ticks.
-- [x] Implemented `is_cold_blooded` trait. Entities with this trait gain an energy efficiency advantage in hot temperatures but suffer energy and movement penalties in cold temperatures.
+- [x] Implemented `is_cold_blooded` and `is_cold_blooded_predator` traits. Entities with `is_cold_blooded` gain an energy efficiency advantage in hot temperatures but suffer energy and movement penalties in cold temperatures. Entities with `is_cold_blooded_predator` gain a 1.5x attack multiplier when attacking cold blooded entities. Added tests and visualizer.
 - [x] Implemented Fruiting trait (`is_fruiting`). Entities with this trait can passively drop food (fruit) when well-fed, allowing them to support symbiotic species or act as anglerfish-like predators that bait herbivores.
 - [x] Implemented aging growth mechanics where newly born entities start at a smaller size and gradually grow to their genetic maximum as they age.
 - [x] Implemented Aposematism trait (`is_aposematic`) which makes predators ignore the entity unless they are starving.

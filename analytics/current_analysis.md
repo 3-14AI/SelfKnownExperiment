@@ -569,3 +569,8 @@ All specific tests, as well as the full test suite (`pytest tests/`), passed suc
 *   **Trait Name:** `is_fire_resistant` and `is_fire_resistant_predator`
 *   **Target:** `Entity` class, `Universe` class, `CLIVisualizer` class.
 *   **Description:** Добавлены свойства `is_fire_resistant` и `is_fire_resistant_predator`. Сущности с `is_fire_resistant` не получают урон от огня. Хищники с `is_fire_resistant_predator` получают бонус 1.5x к атаке при атаке сущностей с `is_fire_resistant`. Добавлено отображение в визуализаторе и тесты.
+### Analysis 474: is_cold_blooded_predator
+
+*   **Trait Name:** `is_cold_blooded_predator`
+*   **Target:** `Entity` class, `Universe` class, `CLIVisualizer` class.
+*   **Description:** Добавлено свойство `is_cold_blooded_predator`. Хищники с этим свойством получают бонус 1.5x к атаке при атаке сущностей с `is_cold_blooded`. Добавлено отображение в визуализаторе (символ 'x') и изолированные тесты для проверки мутации и механики боя.
