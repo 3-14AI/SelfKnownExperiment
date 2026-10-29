@@ -69,7 +69,8 @@ class TestEcosystemInteraction(unittest.TestCase):
 
         # Add herbivore
         prey = Entity("Prey", x=5, y=5, diet='herbivore', energy=10)
-        prey.reproduction_threshold = 100
+        prey.reproduction_threshold = 999999
+        prey.is_contagious_predator = False # safety measure, not needed but let's lock rep down
         universe.add_entity(prey)
 
         # Herbivore eats
