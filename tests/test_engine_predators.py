@@ -6481,3 +6481,69 @@ class TestIsHeavySleeperPredatorCombat(unittest.TestCase):
         with patch('random.random', return_value=0.45):
             universe1.tick()
             self.assertFalse(prey1.is_alive)
+
+class TestIsContagiousPredatorCombat(unittest.TestCase):
+    def test_combat_multiplier_exact(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator = Entity(name='Pred', x=0, y=0, size=2, energy=20, is_contagious_predator=True, diet='carnivore', attack=20)
+        prey = Entity(name='Prey', x=0, y=0, size=1, energy=10, is_contagious=True, defense=20)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with patch('random.random', return_value=0.45):
+            universe.tick()
+
+        self.assertFalse(prey.is_alive)
+
+    def test_combat_multiplier_control(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator = Entity(name='Pred', x=0, y=0, size=2, energy=20, is_contagious_predator=False, diet='carnivore', attack=20)
+        prey = Entity(name='Prey', x=0, y=0, size=1, energy=10, is_contagious=True, defense=20)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with patch('random.random', return_value=0.45):
+            universe.tick()
+
+        self.assertTrue(prey.is_alive)
+
+class TestIsEmpathicPredatorCombat(unittest.TestCase):
+    def test_combat_multiplier_exact(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator = Entity(name='Pred', x=0, y=0, size=2, energy=20, is_empathic_predator=True, diet='carnivore', attack=20)
+        prey = Entity(name='Prey', x=0, y=0, size=1, energy=10, is_empathic=True, defense=20)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with patch('random.random', return_value=0.45):
+            universe.tick()
+
+        self.assertFalse(prey.is_alive)
+
+    def test_combat_multiplier_control(self):
+        universe = Universe(width=10, height=10)
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+
+        predator = Entity(name='Pred', x=0, y=0, size=2, energy=20, is_empathic_predator=False, diet='carnivore', attack=20)
+        prey = Entity(name='Prey', x=0, y=0, size=1, energy=10, is_empathic=True, defense=20)
+
+        universe.add_entity(predator)
+        universe.add_entity(prey)
+
+        with patch('random.random', return_value=0.45):
+            universe.tick()
+
+        self.assertTrue(prey.is_alive)
