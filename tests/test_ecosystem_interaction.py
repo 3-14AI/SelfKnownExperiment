@@ -11,6 +11,8 @@ class TestEcosystemInteraction(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
+        universe.reproduction_threshold = 999999
+        universe.population_limit = 0
         universe.reproduction_threshold = 20
         universe.reproduction_cost = 10
 
@@ -63,12 +65,15 @@ class TestEcosystemInteraction(unittest.TestCase):
         universe = Universe(width=10, height=10, food_spawn_rate=0.0)
         universe.event_chance = 0.0
         universe.disease_chance = 0.0
+        universe.reproduction_threshold = 999999
+        universe.population_limit = 0
 
         # Add single food
         universe.foods.append(Food(x=5, y=5, energy=10, plant_type='grass'))
 
         # Add herbivore
-        prey = Entity("Prey", x=5, y=5, diet='herbivore', energy=10)
+        prey = Entity("Prey", x=5, y=5, diet='herbivore', energy=10, is_photosensitive=False)
+        prey.lays_eggs = False
         prey.reproduction_threshold = 999999
         prey.is_contagious_predator = False # safety measure, not needed but let's lock rep down
         universe.add_entity(prey)
