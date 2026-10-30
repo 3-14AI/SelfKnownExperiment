@@ -1,5 +1,5 @@
 import unittest
-from src.universe.galaxy import Galaxy, StarSystem, Planet, Moon, AsteroidBelt
+from src.universe.galaxy import Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star
 
 class TestGalaxy(unittest.TestCase):
     def test_galaxy_generation(self):
@@ -27,6 +27,14 @@ class TestGalaxy(unittest.TestCase):
         system.generate_asteroid_belts(1)
         self.assertEqual(len(system.asteroid_belts), 1)
         self.assertEqual(system.asteroid_belts[0].name, "Solar System-Belt-1")
+
+
+    def test_star_generation(self):
+        system = StarSystem("Solar System", 0, 0)
+        system.generate_stars(1)
+        self.assertEqual(len(system.stars), 1)
+        self.assertIsInstance(system.stars[0], Star)
+        self.assertEqual(system.stars[0].name, "Solar System-Star-1")
 
 if __name__ == '__main__':
 
