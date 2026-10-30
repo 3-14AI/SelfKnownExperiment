@@ -599,3 +599,15 @@ All specific tests, as well as the full test suite (`pytest tests/`), passed suc
     *   Mapped specific rendering characters for these predator traits in `CLIVisualizer`.
     *   Created `tests/test_is_ash_predators.py` comprising comprehensive isolated tests for rendering, genetics, and combat.
 *   **Verification:** All tests passed across the 1604 testing suite with 0 regressions.
+
+
+### Analysis 476: Внедрение генерации лун в звездных системах
+
+**Завершенные задачи:**
+- Добавлен класс `Moon` в `src/universe/galaxy.py` для представления лун планет.
+- Добавлен метод `generate_moons` в класс `Planet` для вероятностной генерации и прикрепления лун к планетам.
+- Добавлен тест `test_moon_generation` в `tests/test_galaxy.py` для проверки корректности создания лун.
+- Обновлены файлы `agents.md` и `CHANGELOG.md` для отражения новой реализованной функциональности.
+
+**Технические детали:**
+Реализована базовая структура для процедурной генерации звездных систем. Луны имеют радиус, генерируемый случайным образом (от 100 до 1000). Метод `generate_moons` позволяет указывать количество лун для генерации. Имена лун формируются по шаблону `ИмяПланеты-Moon-Индекс`. Тестирование подтверждает корректность создания объектов `Moon` и их привязки к родительской планете.
