@@ -586,3 +586,9 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented `is_drought_resistant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_drought_resistant` trait. Added tests and visualizer.
 - [x] Implemented `is_parasite_resistant_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_parasite_resistant` trait. Added tests and visualizer.
+
+
+
+- [x] Fixed an assertion error in `test_herbivore_starvation_dynamics` by updating `prey.reproduction_threshold` to `universe.reproduction_threshold` to properly prevent reproduction during the starvation test.
+
+- [x] Implemented procedural galaxy generation with star systems and planets. Added the necessary code to `src/universe/galaxy.py`, wrote tests in `tests/test_galaxy.py`, and verified the test suite runs successfully.
