@@ -1,1 +1,0 @@
-- [x] Implemented procedural asteroid belt generation for star systems. Added `AsteroidBelt` class and `generate_asteroid_belts` method to `StarSystem`. Added tests and verified the test suite runs successfully.

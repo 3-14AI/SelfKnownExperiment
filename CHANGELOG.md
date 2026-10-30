@@ -1,6 +1,5 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
-- Implemented procedural asteroid belt generation for star systems. Added `AsteroidBelt` class and `generate_asteroid_belts` method to `StarSystem`. Added tests and verified the test suite runs successfully.
 - Implemented procedural moon generation for planets in star systems. Added `Moon` class and `generate_moons` method to `Planet`. Added tests and verified the test suite runs successfully.
 - Added missing isolated combat and mutation tests for `is_desertic_predator`, `is_forestal_predator`, `is_volcanic_predator`, and `is_arctic_predator` traits.
 - Added missing isolated combat tests for `is_contagious_predator` and `is_empathic_predator` traits.
@@ -655,3 +654,4 @@ All notable changes to Project Genesis will be documented in this file.
 - [x] Implemented missing mutation tests for various predator traits (e.g. `is_defensive_predator`, `is_intimidating_predator`, `is_fearless_predator`, etc.) and fixed syntax bugs blocking their mutation during reproduction.
 - Implemented `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, `is_heavy_sleeper_predator` traits. Added visualizer rendering and tests.
 - Added missing isolated tests for `is_mud_dancer` trait.
+- [x] Implemented procedural asteroid belt generation for star systems. Added `AsteroidBelt` class and `generate_asteroid_belts` method to `StarSystem`. Added tests and verified the test suite runs successfully.

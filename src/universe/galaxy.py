@@ -1,6 +1,5 @@
 import random
 
-
 class AsteroidBelt:
     def __init__(self, name, inner_radius, outer_radius, num_asteroids):
         self.name = name
@@ -12,7 +11,6 @@ class Moon:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
-
 
 class Planet:
     def __init__(self, name, x, y, radius):
@@ -43,7 +41,6 @@ class StarSystem:
             py = self.y + random.randint(-100, 100)
             radius = random.randint(1000, 10000)
             self.planets.append(Planet(name, px, py, radius))
-
 
     def generate_asteroid_belts(self, num_belts):
         for i in range(num_belts):
