@@ -1,5 +1,5 @@
 import unittest
-from src.universe.galaxy import Galaxy, StarSystem, Planet
+from src.universe.galaxy import Galaxy, StarSystem, Planet, Moon
 
 class TestGalaxy(unittest.TestCase):
     def test_galaxy_generation(self):
@@ -12,5 +12,14 @@ class TestGalaxy(unittest.TestCase):
             self.assertGreaterEqual(len(system.planets), 1)
             self.assertLessEqual(len(system.planets), 10)
 
+
+    def test_moon_generation(self):
+        planet = Planet("Earth", 0, 0, 5000)
+        planet.generate_moons(1)
+        self.assertEqual(len(planet.moons), 1)
+        self.assertIsInstance(planet.moons[0], Moon)
+        self.assertEqual(planet.moons[0].name, "Earth-Moon-1")
+
 if __name__ == '__main__':
+
     unittest.main()

@@ -592,3 +592,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Fixed an assertion error in `test_herbivore_starvation_dynamics` by updating `prey.reproduction_threshold` to `universe.reproduction_threshold` to properly prevent reproduction during the starvation test.
 
 - [x] Implemented procedural galaxy generation with star systems and planets. Added the necessary code to `src/universe/galaxy.py`, wrote tests in `tests/test_galaxy.py`, and verified the test suite runs successfully.
+- [x] Implemented procedural moon generation for planets in star systems. Added `Moon` class and `generate_moons` method to `Planet`. Added tests and verified the test suite runs successfully.
