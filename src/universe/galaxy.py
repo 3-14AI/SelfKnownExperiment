@@ -5,6 +5,11 @@ class AsteroidBelt:
         self.radius = radius
 import random
 
+class Comet:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Star:
     def __init__(self, name, radius):
         self.name = name
@@ -37,6 +42,7 @@ class StarSystem:
         self.y = y
         self.planets = []
         self.asteroid_belts = []
+        self.comets = []
         self.stars = []
 
     def generate_planets(self, num_planets):
@@ -52,6 +58,13 @@ class StarSystem:
             name = f"{self.name}-Belt-{i+1}"
             radius = random.randint(1000, 10000)
             self.asteroid_belts.append(AsteroidBelt(name, radius))
+
+
+    def generate_comets(self, num_comets):
+        for i in range(num_comets):
+            name = f"{self.name}-Comet-{i+1}"
+            radius = random.randint(10, 100)
+            self.comets.append(Comet(name, radius))
 
     def generate_stars(self, num_stars):
         for i in range(num_stars):
