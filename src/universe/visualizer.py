@@ -391,6 +391,16 @@ class CLIVisualizer:
                         char = 'Î'
                     elif getattr(entity, 'is_ash_predator', False):
                         char = 'Ä'
+                    elif getattr(entity, 'is_ash_dancer_predator', False):
+                        char = 'ǎ'
+                    elif getattr(entity, 'is_ash_dweller_predator', False):
+                        char = 'ā'
+                    elif getattr(entity, 'is_ash_glider_predator', False):
+                        char = 'ä'
+                    elif getattr(entity, 'is_ash_strider_predator', False):
+                        char = 'à'
+                    elif getattr(entity, 'is_ash_walker_predator', False):
+                        char = 'á'
                     elif getattr(entity, 'is_mud_predator', False):
                         char = 'M'
                     elif getattr(entity, 'is_lava_predator', False):

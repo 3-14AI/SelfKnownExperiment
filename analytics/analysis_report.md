@@ -2467,3 +2467,15 @@ All specific tests, as well as the full test suite (`pytest tests/`), passed suc
 
 **Технические детали:**
 В `tests/test_is_carnivorous_plant_predator.py` мы временно отключили у тестовых объектов свойства (такие как `is_lucky`, `is_evasive`, `is_clairvoyant`, `is_telekinetic`, `is_ethereal` и др.), которые могли влиять на механику уклонения и защиты, чтобы гарантированно изолировать эффект множителя атаки x1.5 от `is_carnivorous_plant_predator`. Прогонка полного набора тестов (`pytest tests/`) подтвердила отсутствие регрессий.
+
+### Analysis 475: is_ash_*_predator traits implementation
+
+*   **Goal:** Implement predator trait variants for basic ash-related traits (`is_ash_dancer_predator`, `is_ash_dweller_predator`, `is_ash_glider_predator`, `is_ash_strider_predator`, and `is_ash_walker_predator`).
+*   **Target:** `Entity` class, `Universe` class, `CLIVisualizer` class.
+*   **Description:**
+    *   Added the 5 new boolean properties to `Entity.__init__`.
+    *   Integrated mutation logic and inheritance mapping in `Universe.tick()`, making sure to wrap each mutation toggle in its own `if random.random() < mutation_chance:` condition.
+    *   Added combat multipliers to `Universe.tick()`: predators gain a 1.5x attack bonus when attacking prey with the corresponding trait. Target entity resolution fixed to handle both hunting (`prey_to_eat`) and self-defense (`other_entity`).
+    *   Mapped specific rendering characters for these predator traits in `CLIVisualizer`.
+    *   Created `tests/test_is_ash_predators.py` comprising comprehensive isolated tests for rendering, genetics, and combat.
+*   **Verification:** All tests passed across the 1604 testing suite with 0 regressions.
