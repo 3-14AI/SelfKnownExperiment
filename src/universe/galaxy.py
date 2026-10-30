@@ -1,11 +1,24 @@
 import random
 
+class Moon:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+
 class Planet:
     def __init__(self, name, x, y, radius):
         self.name = name
         self.x = x
         self.y = y
         self.radius = radius
+        self.moons = []
+
+    def generate_moons(self, num_moons):
+        for i in range(num_moons):
+            name = f"{self.name}-Moon-{i+1}"
+            radius = random.randint(100, 1000)
+            self.moons.append(Moon(name, radius))
 
 class StarSystem:
     def __init__(self, name, x, y):
