@@ -35,6 +35,13 @@ class Moon:
         self.radius = radius
 
 
+
+class PlanetaryRing:
+    def __init__(self, name, radius, width):
+        self.name = name
+        self.radius = radius
+        self.width = width
+
 class Planet:
     def __init__(self, name, x, y, radius, planet_type=None):
         self.name = name
@@ -42,6 +49,7 @@ class Planet:
         self.y = y
         self.radius = radius
         self.moons = []
+        self.rings = []
         self.planet_type = planet_type or random.choice(['rocky', 'gaseous', 'oceanic'])
 
         if self.planet_type == 'rocky':
@@ -53,6 +61,15 @@ class Planet:
         else: # oceanic
             self.mass = radius * 8
             self.atmosphere = 'moderate'
+
+
+    def generate_rings(self, num_rings):
+        import random
+        for i in range(num_rings):
+            name = f"{self.name}-Ring-{i+1}"
+            radius = self.radius + random.randint(1000, 5000)
+            width = random.randint(100, 1000)
+            self.rings.append(PlanetaryRing(name, radius, width))
 
     def generate_moons(self, num_moons):
         for i in range(num_moons):

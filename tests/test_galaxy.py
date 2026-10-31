@@ -1,5 +1,5 @@
 import unittest
-from src.universe.galaxy import Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole
+from src.universe.galaxy import PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole
 
 class TestGalaxy(unittest.TestCase):
     def test_galaxy_generation(self):
@@ -48,6 +48,14 @@ class TestGalaxy(unittest.TestCase):
             elif planet.planet_type == 'oceanic':
                 self.assertEqual(planet.mass, planet.radius * 8)
                 self.assertEqual(planet.atmosphere, 'moderate')
+
+
+    def test_ring_generation(self):
+        planet = Planet("Saturn", 0, 0, 6000)
+        planet.generate_rings(2)
+        self.assertEqual(len(planet.rings), 2)
+        self.assertIsInstance(planet.rings[0], PlanetaryRing)
+        self.assertEqual(planet.rings[0].name, "Saturn-Ring-1")
 
     def test_moon_generation(self):
         planet = Planet("Earth", 0, 0, 5000)

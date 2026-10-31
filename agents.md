@@ -602,3 +602,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural black hole generation for galaxies. Added `BlackHole` class and `generate_black_holes` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural generation of celestial body types (rocky, gaseous, oceanic) and their attributes.
 - [x] Implemented procedural generation of star types (dwarf, giant, supergiant, neutron) and their attributes.
+- [x] Implemented procedural planetary ring generation for planets. Added `PlanetaryRing` class and `generate_rings` method to `Planet`. Added tests and verified the test suite runs successfully.
