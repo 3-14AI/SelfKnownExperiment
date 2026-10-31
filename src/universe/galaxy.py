@@ -22,12 +22,23 @@ class Moon:
 
 
 class Planet:
-    def __init__(self, name, x, y, radius):
+    def __init__(self, name, x, y, radius, planet_type=None):
         self.name = name
         self.x = x
         self.y = y
         self.radius = radius
         self.moons = []
+        self.planet_type = planet_type or random.choice(['rocky', 'gaseous', 'oceanic'])
+
+        if self.planet_type == 'rocky':
+            self.mass = radius * 10
+            self.atmosphere = 'thin'
+        elif self.planet_type == 'gaseous':
+            self.mass = radius * 5
+            self.atmosphere = 'thick'
+        else: # oceanic
+            self.mass = radius * 8
+            self.atmosphere = 'moderate'
 
     def generate_moons(self, num_moons):
         for i in range(num_moons):

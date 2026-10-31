@@ -13,6 +13,42 @@ class TestGalaxy(unittest.TestCase):
             self.assertLessEqual(len(system.planets), 10)
 
 
+
+
+    def test_planet_types(self):
+        rocky_planet = Planet("Rocky", 0, 0, 1000, planet_type='rocky')
+        self.assertEqual(rocky_planet.planet_type, 'rocky')
+        self.assertEqual(rocky_planet.mass, 10000)
+        self.assertEqual(rocky_planet.atmosphere, 'thin')
+
+        gaseous_planet = Planet("Gaseous", 0, 0, 2000, planet_type='gaseous')
+        self.assertEqual(gaseous_planet.planet_type, 'gaseous')
+        self.assertEqual(gaseous_planet.mass, 10000)
+        self.assertEqual(gaseous_planet.atmosphere, 'thick')
+
+        oceanic_planet = Planet("Oceanic", 0, 0, 1000, planet_type='oceanic')
+        self.assertEqual(oceanic_planet.planet_type, 'oceanic')
+        self.assertEqual(oceanic_planet.mass, 8000)
+        self.assertEqual(oceanic_planet.atmosphere, 'moderate')
+
+        system = StarSystem("System1", 0, 0)
+        import random
+        random.seed(0)
+        system.generate_planets(10)
+
+        valid_types = ['rocky', 'gaseous', 'oceanic']
+        for planet in system.planets:
+            self.assertIn(planet.planet_type, valid_types)
+            if planet.planet_type == 'rocky':
+                self.assertEqual(planet.mass, planet.radius * 10)
+                self.assertEqual(planet.atmosphere, 'thin')
+            elif planet.planet_type == 'gaseous':
+                self.assertEqual(planet.mass, planet.radius * 5)
+                self.assertEqual(planet.atmosphere, 'thick')
+            elif planet.planet_type == 'oceanic':
+                self.assertEqual(planet.mass, planet.radius * 8)
+                self.assertEqual(planet.atmosphere, 'moderate')
+
     def test_moon_generation(self):
         planet = Planet("Earth", 0, 0, 5000)
         planet.generate_moons(1)

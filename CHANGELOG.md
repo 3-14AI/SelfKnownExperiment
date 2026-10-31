@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+* Implemented procedural generation of celestial body types (rocky, gaseous, oceanic) and their attributes.
 - Implemented procedural black hole generation for galaxies. Added `BlackHole` class and `generate_black_holes` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural nebula generation
 - Implemented procedural comet generation for star systems. Added `Comet` class and `generate_comets` method to `StarSystem`. Added tests and verified the test suite runs successfully.
