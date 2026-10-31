@@ -92,10 +92,13 @@ class TestIsWaterStrider(unittest.TestCase):
             universe.move_entity(entity, 1, 0)
 
     @mock.patch('random.random', return_value=0.01)
-    @unittest.skip('flaky')
     def test_is_water_strider_mutation(self, mock_random):
         universe = Universe(width=10, height=10)
         universe.mutation_chance = 1.0
+        universe.event_chance = 0.0
+        universe.disease_chance = 0.0
+        universe.localized_event_chance = 0.0
+        universe.reproduction_threshold = 10
 
         parent = Entity(name="parent", x=0, y=0, energy=200, age=10, size=1, is_water_strider=False)
         universe.add_entity(parent)
@@ -103,10 +106,31 @@ class TestIsWaterStrider(unittest.TestCase):
         universe.tick()
 
         children = [e for e in universe.entities if e != parent]
-        pass # Removed due to flaky behavior
+        self.assertTrue(len(children) > 0, "A child should have been born")
 
         mutated_child = children[0]
         self.assertTrue(mutated_child.is_water_strider)
+
+
+    def test_is_water_strider_defense(self):
+        pred = Entity(name="Pred", x=1, y=1, size=5, age=5, max_age=100, diet='carnivore', attack=0, is_ageless=True)
+        prey = Entity(name="Prey", x=1, y=1, size=1, defense=1000, energy=100, is_water_strider=True)
+
+        self.universe = Universe()
+        self.universe.event_chance = 0.0
+        self.universe.disease_chance = 0.0
+        self.universe.add_terrain(Terrain(x=1, y=1, terrain_type='water'))
+
+        self.universe.add_entity(pred)
+        self.universe.add_entity(prey)
+
+        self.universe.foods = []
+
+        import random
+        with mock.patch('random.random', return_value=0.0):
+            self.universe.tick()
+
+        self.assertTrue(prey in self.universe.entities)
 
 class TestIsDroughtStrider(unittest.TestCase):
     def setUp(self):

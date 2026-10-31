@@ -600,3 +600,4 @@ Godspeed, Agent. The universe is in your hands.
 
 - [x] Implemented procedural nebula generation for galaxies.
 - [x] Implemented procedural black hole generation for galaxies. Added `BlackHole` class and `generate_black_holes` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural generation of celestial body types (rocky, gaseous, oceanic) and their attributes.
