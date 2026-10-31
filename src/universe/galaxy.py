@@ -73,6 +73,11 @@ class StarSystem:
             self.stars.append(Star(name, radius))
 
 
+class BlackHole:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Nebula:
     def __init__(self, name, radius):
         self.name = name
@@ -85,6 +90,7 @@ class Galaxy:
         self.height = height
         self.star_systems = []
         self.nebulas = []
+        self.black_holes = []
 
     def generate_nebulas(self, num_nebulas):
         for i in range(num_nebulas):
@@ -100,3 +106,8 @@ class Galaxy:
             system = StarSystem(name, sx, sy)
             system.generate_planets(random.randint(1, 10))
             self.star_systems.append(system)
+    def generate_black_holes(self, num_black_holes):
+        for i in range(num_black_holes):
+            name = f"BlackHole-{i+1}"
+            radius = random.randint(5000, 50000)
+            self.black_holes.append(BlackHole(name, radius))

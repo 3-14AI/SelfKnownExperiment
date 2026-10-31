@@ -1,5 +1,5 @@
 import unittest
-from src.universe.galaxy import Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula
+from src.universe.galaxy import Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole
 
 class TestGalaxy(unittest.TestCase):
     def test_galaxy_generation(self):
@@ -50,6 +50,14 @@ class TestGalaxy(unittest.TestCase):
         self.assertEqual(len(galaxy.nebulas), 1)
         self.assertIsInstance(galaxy.nebulas[0], Nebula)
         self.assertEqual(galaxy.nebulas[0].name, "Nebula-1")
+
+
+    def test_black_hole_generation(self):
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_black_holes(1)
+        self.assertEqual(len(galaxy.black_holes), 1)
+        self.assertIsInstance(galaxy.black_holes[0], BlackHole)
+        self.assertEqual(galaxy.black_holes[0].name, "BlackHole-1")
 
 if __name__ == '__main__':
 

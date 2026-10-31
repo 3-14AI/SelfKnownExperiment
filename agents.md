@@ -599,3 +599,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural comet generation for star systems. Added `Comet` class and `generate_comets` method to `StarSystem`. Added tests and verified the test suite runs successfully.
 
 - [x] Implemented procedural nebula generation for galaxies.
+- [x] Implemented procedural black hole generation for galaxies. Added `BlackHole` class and `generate_black_holes` method to `Galaxy`. Added tests and verified the test suite runs successfully.
