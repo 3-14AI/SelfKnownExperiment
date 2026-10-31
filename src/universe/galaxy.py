@@ -11,9 +11,23 @@ class Comet:
         self.radius = radius
 
 class Star:
-    def __init__(self, name, radius):
+    def __init__(self, name, radius, star_type=None):
         self.name = name
         self.radius = radius
+        self.star_type = star_type or random.choice(['dwarf', 'giant', 'supergiant', 'neutron'])
+
+        if self.star_type == 'dwarf':
+            self.temperature = radius * 5
+            self.luminosity = radius * 2
+        elif self.star_type == 'giant':
+            self.temperature = radius * 10
+            self.luminosity = radius * 20
+        elif self.star_type == 'supergiant':
+            self.temperature = radius * 20
+            self.luminosity = radius * 100
+        elif self.star_type == 'neutron':
+            self.temperature = radius * 100
+            self.luminosity = radius * 5
 
 class Moon:
     def __init__(self, name, radius):
