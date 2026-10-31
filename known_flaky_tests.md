@@ -69,3 +69,5 @@ test_entity_aging
 - `test_parasite_strider_mutation` (tests.test_engine_striders.TestParasiteStrider)
 
 - `test_is_magnetic_dweller_attraction_repulsion` (test_engine_dwellers.TestIsMagneticDweller)
+
+- `test_fur_heat_penalty` (test_engine_core.TestFurTrait)

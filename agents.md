@@ -604,3 +604,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural generation of star types (dwarf, giant, supergiant, neutron) and their attributes.
 - [x] Implemented procedural planetary ring generation for planets. Added `PlanetaryRing` class and `generate_rings` method to `Planet`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural wormhole generation for galaxies. Added `Wormhole` class and `generate_wormholes` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural quasar generation for galaxies. Added `Quasar` class and `generate_quasars` method to `Galaxy`. Added tests and verified the test suite runs successfully.
