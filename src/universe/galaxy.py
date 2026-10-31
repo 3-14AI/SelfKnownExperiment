@@ -73,12 +73,24 @@ class StarSystem:
             self.stars.append(Star(name, radius))
 
 
+class Nebula:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
     def __init__(self, name, width, height):
         self.name = name
         self.width = width
         self.height = height
         self.star_systems = []
+        self.nebulas = []
+
+    def generate_nebulas(self, num_nebulas):
+        for i in range(num_nebulas):
+            name = f"Nebula-{i+1}"
+            radius = random.randint(1000, 10000)
+            self.nebulas.append(Nebula(name, radius))
 
     def generate_star_systems(self, num_systems):
         for i in range(num_systems):
