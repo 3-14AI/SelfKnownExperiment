@@ -125,6 +125,12 @@ class Nebula:
         self.name = name
         self.radius = radius
 
+
+class Wormhole:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
     def __init__(self, name, width, height):
         self.name = name
@@ -133,6 +139,13 @@ class Galaxy:
         self.star_systems = []
         self.nebulas = []
         self.black_holes = []
+        self.wormholes = []
+
+    def generate_wormholes(self, num_wormholes):
+        for i in range(num_wormholes):
+            name = f"Wormhole-{i+1}"
+            radius = random.randint(100, 1000)
+            self.wormholes.append(Wormhole(name, radius))
 
     def generate_nebulas(self, num_nebulas):
         for i in range(num_nebulas):
