@@ -72,6 +72,48 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(system.stars[0], Star)
         self.assertEqual(system.stars[0].name, "Solar System-Star-1")
 
+    def test_star_types(self):
+        dwarf_star = Star("Dwarf", 1000, star_type='dwarf')
+        self.assertEqual(dwarf_star.star_type, 'dwarf')
+        self.assertEqual(dwarf_star.temperature, 5000)
+        self.assertEqual(dwarf_star.luminosity, 2000)
+
+        giant_star = Star("Giant", 2000, star_type='giant')
+        self.assertEqual(giant_star.star_type, 'giant')
+        self.assertEqual(giant_star.temperature, 20000)
+        self.assertEqual(giant_star.luminosity, 40000)
+
+        supergiant_star = Star("Supergiant", 5000, star_type='supergiant')
+        self.assertEqual(supergiant_star.star_type, 'supergiant')
+        self.assertEqual(supergiant_star.temperature, 100000)
+        self.assertEqual(supergiant_star.luminosity, 500000)
+
+        neutron_star = Star("Neutron", 100, star_type='neutron')
+        self.assertEqual(neutron_star.star_type, 'neutron')
+        self.assertEqual(neutron_star.temperature, 10000)
+        self.assertEqual(neutron_star.luminosity, 500)
+
+        system = StarSystem("System1", 0, 0)
+        import random
+        random.seed(0)
+        system.generate_stars(10)
+
+        valid_types = ['dwarf', 'giant', 'supergiant', 'neutron']
+        for star in system.stars:
+            self.assertIn(star.star_type, valid_types)
+            if star.star_type == 'dwarf':
+                self.assertEqual(star.temperature, star.radius * 5)
+                self.assertEqual(star.luminosity, star.radius * 2)
+            elif star.star_type == 'giant':
+                self.assertEqual(star.temperature, star.radius * 10)
+                self.assertEqual(star.luminosity, star.radius * 20)
+            elif star.star_type == 'supergiant':
+                self.assertEqual(star.temperature, star.radius * 20)
+                self.assertEqual(star.luminosity, star.radius * 100)
+            elif star.star_type == 'neutron':
+                self.assertEqual(star.temperature, star.radius * 100)
+                self.assertEqual(star.luminosity, star.radius * 5)
+
 
     def test_comet_generation(self):
         system = StarSystem("Solar System", 0, 0)
