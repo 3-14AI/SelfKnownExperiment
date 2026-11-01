@@ -154,6 +154,11 @@ class Supernova:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
+
+class Magnetar:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
 class Galaxy:
     def __init__(self, name, width, height):
         self.name = name
@@ -166,6 +171,7 @@ class Galaxy:
         self.quasars = []
         self.pulsars = []
         self.supernovas = []
+        self.magnetars = []
         self.rogue_planets = []
         self.star_clusters = []
         self.globular_clusters = []
@@ -220,6 +226,13 @@ class Galaxy:
             name = f"Supernova-{i+1}"
             radius = random.randint(100, 1000)
             self.supernovas.append(Supernova(name, radius))
+
+
+    def generate_magnetars(self, num_magnetars):
+        for i in range(num_magnetars):
+            name = f"Magnetar-{i+1}"
+            radius = random.randint(100, 1000)
+            self.magnetars.append(Magnetar(name, radius))
 
     def generate_rogue_planets(self, num_rogue_planets):
         for i in range(num_rogue_planets):

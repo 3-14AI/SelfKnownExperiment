@@ -611,3 +611,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural rogue planet generation for galaxies. Added `RoguePlanet` class and `generate_rogue_planets` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural star cluster generation for galaxies. Added `StarCluster` class and `generate_star_clusters` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural globular cluster generation for galaxies. Added `GlobularCluster` class and `generate_globular_clusters` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural magnetar generation for galaxies.
