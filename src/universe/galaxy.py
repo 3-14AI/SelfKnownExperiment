@@ -132,6 +132,12 @@ class Wormhole:
         self.radius = radius
 
 
+
+class Pulsar:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Quasar:
     def __init__(self, name, radius):
         self.name = name
@@ -147,6 +153,7 @@ class Galaxy:
         self.black_holes = []
         self.wormholes = []
         self.quasars = []
+        self.pulsars = []
 
     def generate_wormholes(self, num_wormholes):
         for i in range(num_wormholes):
@@ -179,3 +186,9 @@ class Galaxy:
             name = f"Quasar-{i+1}"
             radius = random.randint(10000, 100000)
             self.quasars.append(Quasar(name, radius))
+
+    def generate_pulsars(self, num_pulsars):
+        for i in range(num_pulsars):
+            name = f"Pulsar-{i+1}"
+            radius = random.randint(100, 1000)
+            self.pulsars.append(Pulsar(name, radius))
