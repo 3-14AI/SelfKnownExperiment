@@ -175,7 +175,14 @@ class Galaxy:
         self.rogue_planets = []
         self.star_clusters = []
         self.globular_clusters = []
+        self.dark_matter_halos = []
 
+
+    def generate_dark_matter_halos(self, num_halos):
+        for i in range(num_halos):
+            name = f"DarkMatterHalo-{i+1}"
+            mass = random.randint(100000, 1000000)
+            self.dark_matter_halos.append(DarkMatterHalo(name, mass))
 
     def generate_globular_clusters(self, num_globular_clusters):
         for i in range(num_globular_clusters):
@@ -257,3 +264,9 @@ class GlobularCluster:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
+
+
+class DarkMatterHalo:
+    def __init__(self, name, mass):
+        self.name = name
+        self.mass = mass
