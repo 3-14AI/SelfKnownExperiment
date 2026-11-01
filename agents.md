@@ -606,3 +606,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural wormhole generation for galaxies. Added `Wormhole` class and `generate_wormholes` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural quasar generation for galaxies. Added `Quasar` class and `generate_quasars` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural pulsar generation for galaxies. Added `Pulsar` class and `generate_pulsars` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural supernova generation for galaxies. Added `Supernova` class and `generate_supernovas` method to `Galaxy`. Added tests and verified the test suite runs successfully.
