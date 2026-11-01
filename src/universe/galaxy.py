@@ -5,6 +5,11 @@ class AsteroidBelt:
         self.radius = radius
 import random
 
+class RoguePlanet:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Comet:
     def __init__(self, name, radius):
         self.name = name
@@ -161,6 +166,7 @@ class Galaxy:
         self.quasars = []
         self.pulsars = []
         self.supernovas = []
+        self.rogue_planets = []
 
     def generate_wormholes(self, num_wormholes):
         for i in range(num_wormholes):
@@ -205,3 +211,9 @@ class Galaxy:
             name = f"Supernova-{i+1}"
             radius = random.randint(100, 1000)
             self.supernovas.append(Supernova(name, radius))
+
+    def generate_rogue_planets(self, num_rogue_planets):
+        for i in range(num_rogue_planets):
+            name = f"RoguePlanet-{i+1}"
+            radius = random.randint(1000, 10000)
+            self.rogue_planets.append(RoguePlanet(name, radius))
