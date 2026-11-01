@@ -168,6 +168,14 @@ class Galaxy:
         self.supernovas = []
         self.rogue_planets = []
         self.star_clusters = []
+        self.globular_clusters = []
+
+
+    def generate_globular_clusters(self, num_globular_clusters):
+        for i in range(num_globular_clusters):
+            name = f"GlobularCluster-{i+1}"
+            radius = random.randint(100, 1000)
+            self.globular_clusters.append(GlobularCluster(name, radius))
 
     def generate_wormholes(self, num_wormholes):
         for i in range(num_wormholes):
@@ -228,6 +236,11 @@ class Galaxy:
             self.star_clusters.append(StarCluster(name, radius))
 
 class StarCluster:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+class GlobularCluster:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius

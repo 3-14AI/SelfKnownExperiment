@@ -1,5 +1,5 @@
 import unittest
-from src.universe.galaxy import PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole, Wormhole, Quasar, Pulsar, Supernova, RoguePlanet, StarCluster
+from src.universe.galaxy import PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole, Wormhole, Quasar, Pulsar, Supernova, RoguePlanet, StarCluster, GlobularCluster
 
 class TestGalaxy(unittest.TestCase):
     def test_galaxy_generation(self):
@@ -191,6 +191,14 @@ class TestGalaxy(unittest.TestCase):
         self.assertEqual(len(galaxy.star_clusters), 1)
         self.assertIsInstance(galaxy.star_clusters[0], StarCluster)
         self.assertEqual(galaxy.star_clusters[0].name, "StarCluster-1")
+
+
+    def test_globular_cluster_generation(self):
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_globular_clusters(1)
+        self.assertEqual(len(galaxy.globular_clusters), 1)
+        self.assertIsInstance(galaxy.globular_clusters[0], GlobularCluster)
+        self.assertEqual(galaxy.globular_clusters[0].name, "GlobularCluster-1")
 
 if __name__ == '__main__':
 
