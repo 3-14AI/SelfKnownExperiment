@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- Implemented procedural dark matter halo generation for galaxies. Added `DarkMatterHalo` class and `generate_dark_matter_halos` method to `Galaxy`.
 - Implemented procedural magnetar generation for galaxies.
 - [x] Implemented procedural globular cluster generation for galaxies. Added `GlobularCluster` class and `generate_globular_clusters` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural star cluster generation for galaxies. Added `StarCluster` class and `generate_star_clusters` method to `Galaxy`. Added tests and verified the test suite runs successfully.
@@ -33,6 +34,7 @@
 - Fixed `is_marsh_glider` stamina bug where entities with the trait did not consume 0 stamina when moving on mud terrain.
 
 ## [Unreleased]
+- Implemented procedural dark matter halo generation for galaxies. Added `DarkMatterHalo` class and `generate_dark_matter_halos` method to `Galaxy`.
 - Implemented `is_immune_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_immune` trait. Added tests and visualizer.
 
 - Fixed reproduction mutation logic in `Universe.tick()` for `is_infected`, `is_sleeping`, `is_aquatic`, `is_evasive`, `is_pacifist`, `is_cannibal_hungry`, and `is_cannibal_target` by passing them correctly as keyword arguments or setting them on child instantiation. Added tests for `is_cannibal_hungry`, `is_cannibal_target`, and `can_climb`.
@@ -100,6 +102,7 @@
 # Changelog
 
 ## [Unreleased]
+- Implemented procedural dark matter halo generation for galaxies. Added `DarkMatterHalo` class and `generate_dark_matter_halos` method to `Galaxy`.
 - Implemented `is_immune_predator` trait. Entities with this trait gain an attack multiplier of 1.5x when attacking entities with `is_immune` trait. Added tests and visualizer.
 
 - Fixed reproduction mutation logic in `Universe.tick()` for `is_infected`, `is_sleeping`, `is_aquatic`, `is_evasive`, `is_pacifist`, `is_cannibal_hungry`, and `is_cannibal_target` by passing them correctly as keyword arguments or setting them on child instantiation. Added tests for `is_cannibal_hungry`, `is_cannibal_target`, and `can_climb`.
