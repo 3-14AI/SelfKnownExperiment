@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- [x] Implemented procedural star cluster generation for galaxies. Added `StarCluster` class and `generate_star_clusters` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural rogue planet generation for galaxies. Added `RoguePlanet` class and `generate_rogue_planets` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural supernova generation for galaxies. Added `Supernova` class and `generate_supernovas` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural pulsar generation for galaxies. Added `Pulsar` class and `generate_pulsars` method to `Galaxy`. Added tests and verified the test suite runs successfully.
