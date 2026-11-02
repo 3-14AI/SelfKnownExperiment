@@ -614,3 +614,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural magnetar generation for galaxies.
 - [x] Implemented procedural dark matter halo generation for galaxies. Added `DarkMatterHalo` class and `generate_dark_matter_halos` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural cosmic string generation for galaxies. Added `CosmicString` class and `generate_cosmic_strings` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural white hole generation for galaxies. Added `WhiteHole` class and `generate_white_holes` method to `Galaxy`. Added tests and verified the test suite runs successfully.

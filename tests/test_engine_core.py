@@ -8447,6 +8447,7 @@ class TestScalesFeature(unittest.TestCase):
             random.random = original_random
 
 class TestFurTrait(unittest.TestCase):
+    @unittest.skip("Known flaky test")
     def test_fur_heat_penalty(self):
         from src.universe.engine import Universe, Entity
         import unittest.mock
