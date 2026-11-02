@@ -238,6 +238,15 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.stellar_nurseries[0], StellarNursery)
         self.assertEqual(galaxy.stellar_nurseries[0].name, "StellarNursery-1")
 
+
+    def test_supermassive_black_hole_generation(self):
+        from src.universe.galaxy import SupermassiveBlackHole
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_supermassive_black_holes(1)
+        self.assertEqual(len(galaxy.supermassive_black_holes), 1)
+        self.assertIsInstance(galaxy.supermassive_black_holes[0], SupermassiveBlackHole)
+        self.assertEqual(galaxy.supermassive_black_holes[0].name, "SupermassiveBlackHole-1")
+
 if __name__ == '__main__':
 
     unittest.main()
