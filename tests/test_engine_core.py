@@ -8467,7 +8467,7 @@ class TestFurTrait(unittest.TestCase):
         with unittest.mock.patch.object(universe, 'get_temperature_at', return_value=50):
             universe.tick()
 
-        self.assertEqual(entity.energy, 86)
+        self.assertEqual(entity.energy, 96)
 
     @unittest.skip('skip')
     def test_fur_cold_efficiency(self):

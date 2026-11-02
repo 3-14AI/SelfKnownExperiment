@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- Implemented procedural cosmic string generation for galaxies.
 - Implemented procedural dark matter halo generation for galaxies. Added `DarkMatterHalo` class and `generate_dark_matter_halos` method to `Galaxy`.
 - Implemented procedural magnetar generation for galaxies.
 - [x] Implemented procedural globular cluster generation for galaxies. Added `GlobularCluster` class and `generate_globular_clusters` method to `Galaxy`. Added tests and verified the test suite runs successfully.

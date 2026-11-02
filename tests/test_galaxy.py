@@ -1,5 +1,5 @@
 import unittest
-from src.universe.galaxy import DarkMatterHalo, PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole, Wormhole, Quasar, Pulsar, Supernova, Magnetar, RoguePlanet, StarCluster, GlobularCluster
+from src.universe.galaxy import DarkMatterHalo, CosmicString, PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole, Wormhole, Quasar, Pulsar, Supernova, Magnetar, RoguePlanet, StarCluster, GlobularCluster
 
 class TestGalaxy(unittest.TestCase):
     def test_galaxy_generation(self):
@@ -214,6 +214,14 @@ class TestGalaxy(unittest.TestCase):
         self.assertEqual(len(galaxy.dark_matter_halos), 1)
         self.assertIsInstance(galaxy.dark_matter_halos[0], DarkMatterHalo)
         self.assertEqual(galaxy.dark_matter_halos[0].name, "DarkMatterHalo-1")
+
+
+    def test_cosmic_string_generation(self):
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_cosmic_strings(1)
+        self.assertEqual(len(galaxy.cosmic_strings), 1)
+        self.assertIsInstance(galaxy.cosmic_strings[0], CosmicString)
+        self.assertEqual(galaxy.cosmic_strings[0].name, "CosmicString-1")
 
 if __name__ == '__main__':
 
