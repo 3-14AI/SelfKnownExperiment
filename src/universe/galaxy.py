@@ -185,8 +185,17 @@ class Galaxy:
         self.dark_matter_halos = []
         self.cosmic_strings = []
         self.stellar_nurseries = []
+        self.supermassive_black_holes = []
 
 
+
+
+    def generate_supermassive_black_holes(self, num_smbhs):
+        import random
+        for i in range(num_smbhs):
+            name = f"SupermassiveBlackHole-{i+1}"
+            mass = random.randint(1000000, 1000000000)
+            self.supermassive_black_holes.append(SupermassiveBlackHole(name, mass))
 
     def generate_stellar_nurseries(self, num_nurseries):
         import random
@@ -312,3 +321,8 @@ class StellarNursery:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
+
+class SupermassiveBlackHole:
+    def __init__(self, name, mass):
+        self.name = name
+        self.mass = mass
