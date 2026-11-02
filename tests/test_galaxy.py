@@ -264,6 +264,14 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.blazars[0], Blazar)
         self.assertEqual(galaxy.blazars[0].name, "Blazar-1")
 
+    def test_protoplanetary_disk_generation(self):
+        from src.universe.galaxy import ProtoplanetaryDisk
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_protoplanetary_disks(1)
+        self.assertEqual(len(galaxy.protoplanetary_disks), 1)
+        self.assertIsInstance(galaxy.protoplanetary_disks[0], ProtoplanetaryDisk)
+        self.assertEqual(galaxy.protoplanetary_disks[0].name, "ProtoplanetaryDisk-1")
+
 if __name__ == '__main__':
 
     unittest.main()

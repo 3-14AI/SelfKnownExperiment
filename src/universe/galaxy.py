@@ -188,9 +188,17 @@ class Galaxy:
         self.supermassive_black_holes = []
         self.blazars = []
         self.microquasars = []
+        self.protoplanetary_disks = []
 
 
 
+
+    def generate_protoplanetary_disks(self, num_disks):
+        import random
+        for i in range(num_disks):
+            name = f"ProtoplanetaryDisk-{i+1}"
+            radius = random.randint(100, 10000)
+            self.protoplanetary_disks.append(ProtoplanetaryDisk(name, radius))
 
     def generate_microquasars(self, num_microquasars):
         import random
@@ -349,6 +357,12 @@ class Blazar:
         self.radius = radius
 
 class Microquasar:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+
+class ProtoplanetaryDisk:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
