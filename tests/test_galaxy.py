@@ -248,6 +248,14 @@ class TestGalaxy(unittest.TestCase):
         self.assertEqual(galaxy.supermassive_black_holes[0].name, "SupermassiveBlackHole-1")
 
 
+    def test_microquasar_generation(self):
+        from src.universe.galaxy import Microquasar
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_microquasars(1)
+        self.assertEqual(len(galaxy.microquasars), 1)
+        self.assertIsInstance(galaxy.microquasars[0], Microquasar)
+        self.assertEqual(galaxy.microquasars[0].name, "Microquasar-1")
+
     def test_blazar_generation(self):
         from src.universe.galaxy import Blazar
         galaxy = Galaxy("Milky Way", 1000, 1000)
