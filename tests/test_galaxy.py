@@ -1,5 +1,5 @@
 import unittest
-from src.universe.galaxy import DarkMatterHalo, CosmicString, PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole, Wormhole, Quasar, Pulsar, Supernova, Magnetar, RoguePlanet, StarCluster, GlobularCluster
+from src.universe.galaxy import DarkMatterHalo, CosmicString, PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole, WhiteHole, Wormhole, Quasar, Pulsar, Supernova, Magnetar, RoguePlanet, StarCluster, GlobularCluster
 
 class TestGalaxy(unittest.TestCase):
     def test_galaxy_generation(self):
@@ -137,6 +137,13 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.nebulas[0], Nebula)
         self.assertEqual(galaxy.nebulas[0].name, "Nebula-1")
 
+
+    def test_white_hole_generation(self):
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_white_holes(1)
+        self.assertEqual(len(galaxy.white_holes), 1)
+        self.assertIsInstance(galaxy.white_holes[0], WhiteHole)
+        self.assertEqual(galaxy.white_holes[0].name, "WhiteHole-1")
 
     def test_black_hole_generation(self):
         galaxy = Galaxy("Milky Way", 1000, 1000)

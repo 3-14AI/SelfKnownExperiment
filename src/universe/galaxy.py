@@ -120,6 +120,12 @@ class StarSystem:
             self.stars.append(Star(name, radius))
 
 
+
+class WhiteHole:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class BlackHole:
     def __init__(self, name, radius):
         self.name = name
@@ -167,6 +173,7 @@ class Galaxy:
         self.star_systems = []
         self.nebulas = []
         self.black_holes = []
+        self.white_holes = []
         self.wormholes = []
         self.quasars = []
         self.pulsars = []
@@ -219,6 +226,12 @@ class Galaxy:
             system = StarSystem(name, sx, sy)
             system.generate_planets(random.randint(1, 10))
             self.star_systems.append(system)
+    def generate_white_holes(self, num_white_holes):
+        for i in range(num_white_holes):
+            name = f"WhiteHole-{i+1}"
+            radius = random.randint(5000, 50000)
+            self.white_holes.append(WhiteHole(name, radius))
+
     def generate_black_holes(self, num_black_holes):
         for i in range(num_black_holes):
             name = f"BlackHole-{i+1}"
