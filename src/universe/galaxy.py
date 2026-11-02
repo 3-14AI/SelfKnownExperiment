@@ -184,8 +184,16 @@ class Galaxy:
         self.globular_clusters = []
         self.dark_matter_halos = []
         self.cosmic_strings = []
+        self.stellar_nurseries = []
 
 
+
+    def generate_stellar_nurseries(self, num_nurseries):
+        import random
+        for i in range(num_nurseries):
+            name = f"StellarNursery-{i+1}"
+            radius = random.randint(500, 5000)
+            self.stellar_nurseries.append(StellarNursery(name, radius))
 
     def generate_cosmic_strings(self, num_strings):
         import random
@@ -298,3 +306,9 @@ class DarkMatterHalo:
     def __init__(self, name, mass):
         self.name = name
         self.mass = mass
+
+
+class StellarNursery:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
