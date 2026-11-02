@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- Implemented procedural blazar generation for galaxies.
 - Implemented procedural supermassive black hole generation for galaxies.
 - Analyzed recent project changes and generated analytics/analysis_483.md
 - [x] Implemented procedural stellar nursery generation for galaxies. Added `StellarNursery` class and `generate_stellar_nurseries` method to `Galaxy`. Added tests and verified the test suite runs successfully.
