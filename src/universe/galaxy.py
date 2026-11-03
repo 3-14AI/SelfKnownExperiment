@@ -165,6 +165,11 @@ class Magnetar:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
+
+class Hypernova:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
 class Galaxy:
     def __init__(self, name, width, height):
         self.name = name
@@ -191,9 +196,18 @@ class Galaxy:
         self.protoplanetary_disks = []
         self.brown_dwarfs = []
         self.cosmic_voids = []
+        self.hypernovas = []
 
 
 
+
+
+    def generate_hypernovas(self, num_hypernovas):
+        import random
+        for i in range(num_hypernovas):
+            name = f"Hypernova-{i+1}"
+            radius = random.randint(100, 1000)
+            self.hypernovas.append(Hypernova(name, radius))
 
     def generate_cosmic_voids(self, num_voids):
         import random
