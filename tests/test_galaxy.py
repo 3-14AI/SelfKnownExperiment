@@ -324,5 +324,15 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.red_dwarfs[0], RedDwarf)
         self.assertEqual(galaxy.red_dwarfs[0].name, "RedDwarf-1")
 
+
+    def test_blue_giant_generation(self):
+        from src.universe.galaxy import BlueGiant
+        galaxy = Galaxy("Test Galaxy", 100, 100)
+        galaxy.generate_blue_giants(2)
+        self.assertEqual(len(galaxy.blue_giants), 2)
+        self.assertEqual(galaxy.blue_giants[0].name, "BlueGiant-1")
+        self.assertEqual(galaxy.blue_giants[1].name, "BlueGiant-2")
+        self.assertTrue(100 <= galaxy.blue_giants[0].radius <= 1000)
+
 if __name__ == '__main__':
     unittest.main()
