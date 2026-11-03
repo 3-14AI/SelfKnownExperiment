@@ -281,6 +281,13 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.protoplanetary_disks[0], ProtoplanetaryDisk)
         self.assertEqual(galaxy.protoplanetary_disks[0].name, "ProtoplanetaryDisk-1")
 
-if __name__ == '__main__':
+    def test_cosmic_void_generation(self):
+        from src.universe.galaxy import CosmicVoid
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_cosmic_voids(1)
+        self.assertEqual(len(galaxy.cosmic_voids), 1)
+        self.assertIsInstance(galaxy.cosmic_voids[0], CosmicVoid)
+        self.assertEqual(galaxy.cosmic_voids[0].name, "CosmicVoid-1")
 
+if __name__ == '__main__':
     unittest.main()

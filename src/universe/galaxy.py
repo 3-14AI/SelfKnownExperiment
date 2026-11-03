@@ -190,9 +190,17 @@ class Galaxy:
         self.microquasars = []
         self.protoplanetary_disks = []
         self.brown_dwarfs = []
+        self.cosmic_voids = []
 
 
 
+
+    def generate_cosmic_voids(self, num_voids):
+        import random
+        for i in range(num_voids):
+            name = f"CosmicVoid-{i+1}"
+            radius = random.randint(100000, 1000000)
+            self.cosmic_voids.append(CosmicVoid(name, radius))
 
     def generate_brown_dwarfs(self, num_brown_dwarfs):
         import random
@@ -376,6 +384,11 @@ class BrownDwarf:
         self.radius = radius
 
 class ProtoplanetaryDisk:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+class CosmicVoid:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
