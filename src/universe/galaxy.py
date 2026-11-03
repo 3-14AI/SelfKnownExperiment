@@ -197,10 +197,18 @@ class Galaxy:
         self.brown_dwarfs = []
         self.cosmic_voids = []
         self.hypernovas = []
+        self.neutron_stars = []
 
 
 
 
+
+    def generate_neutron_stars(self, num_neutron_stars):
+        import random
+        for i in range(num_neutron_stars):
+            name = f"NeutronStar-{i+1}"
+            radius = random.randint(10, 50)
+            self.neutron_stars.append(NeutronStar(name, radius))
 
     def generate_hypernovas(self, num_hypernovas):
         import random
@@ -403,6 +411,12 @@ class ProtoplanetaryDisk:
         self.radius = radius
 
 class CosmicVoid:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+
+class NeutronStar:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius

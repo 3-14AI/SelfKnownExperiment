@@ -298,5 +298,14 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.hypernovas[0], Hypernova)
         self.assertEqual(galaxy.hypernovas[0].name, "Hypernova-1")
 
+
+    def test_neutron_star_generation(self):
+        from src.universe.galaxy import NeutronStar
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_neutron_stars(1)
+        self.assertEqual(len(galaxy.neutron_stars), 1)
+        self.assertIsInstance(galaxy.neutron_stars[0], NeutronStar)
+        self.assertEqual(galaxy.neutron_stars[0].name, "NeutronStar-1")
+
 if __name__ == '__main__':
     unittest.main()
