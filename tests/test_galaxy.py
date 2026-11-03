@@ -316,5 +316,13 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.white_dwarfs[0], WhiteDwarf)
         self.assertEqual(galaxy.white_dwarfs[0].name, "WhiteDwarf-1")
 
+    def test_red_dwarf_generation(self):
+        from src.universe.galaxy import RedDwarf
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_red_dwarfs(1)
+        self.assertEqual(len(galaxy.red_dwarfs), 1)
+        self.assertIsInstance(galaxy.red_dwarfs[0], RedDwarf)
+        self.assertEqual(galaxy.red_dwarfs[0].name, "RedDwarf-1")
+
 if __name__ == '__main__':
     unittest.main()
