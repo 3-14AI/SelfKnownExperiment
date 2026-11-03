@@ -189,9 +189,17 @@ class Galaxy:
         self.blazars = []
         self.microquasars = []
         self.protoplanetary_disks = []
+        self.brown_dwarfs = []
 
 
 
+
+    def generate_brown_dwarfs(self, num_brown_dwarfs):
+        import random
+        for i in range(num_brown_dwarfs):
+            name = f"BrownDwarf-{i+1}"
+            radius = random.randint(100, 10000)
+            self.brown_dwarfs.append(BrownDwarf(name, radius))
 
     def generate_protoplanetary_disks(self, num_disks):
         import random
@@ -361,6 +369,11 @@ class Microquasar:
         self.name = name
         self.radius = radius
 
+
+class BrownDwarf:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
 
 class ProtoplanetaryDisk:
     def __init__(self, name, radius):
