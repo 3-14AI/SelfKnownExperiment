@@ -198,10 +198,18 @@ class Galaxy:
         self.cosmic_voids = []
         self.hypernovas = []
         self.neutron_stars = []
+        self.white_dwarfs = []
 
 
 
 
+
+    def generate_white_dwarfs(self, num_white_dwarfs):
+        import random
+        for i in range(num_white_dwarfs):
+            name = f"WhiteDwarf-{i+1}"
+            radius = random.randint(10, 50)
+            self.white_dwarfs.append(WhiteDwarf(name, radius))
 
     def generate_neutron_stars(self, num_neutron_stars):
         import random
@@ -415,6 +423,11 @@ class CosmicVoid:
         self.name = name
         self.radius = radius
 
+
+class WhiteDwarf:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
 
 class NeutronStar:
     def __init__(self, name, radius):
