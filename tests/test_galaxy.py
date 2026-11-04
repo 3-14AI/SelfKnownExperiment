@@ -362,6 +362,17 @@ class TestGalaxy(unittest.TestCase):
         self.assertEqual(galaxy.red_giants[1].name, "RedGiant-2")
         self.assertTrue(100 <= galaxy.red_giants[0].radius <= 1000)
 
+
+    def test_exoplanet_generation(self):
+        from src.universe.galaxy import Galaxy, Exoplanet
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_exoplanets(3)
+        self.assertEqual(len(galaxy.exoplanets), 3)
+        for exoplanet in galaxy.exoplanets:
+            self.assertIsInstance(exoplanet, Exoplanet)
+            self.assertGreaterEqual(exoplanet.radius, 50)
+            self.assertLessEqual(exoplanet.radius, 500)
+
 if __name__ == '__main__':
     unittest.main()
 
