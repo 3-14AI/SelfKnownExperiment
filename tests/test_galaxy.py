@@ -364,3 +364,13 @@ class TestGalaxy(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+    def test_supernova_remnant_generation(self):
+        from src.universe.galaxy import Galaxy, SupernovaRemnant
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_supernova_remnants(3)
+        self.assertEqual(len(galaxy.supernova_remnants), 3)
+        for remnant in galaxy.supernova_remnants:
+            self.assertIsInstance(remnant, SupernovaRemnant)
+            self.assertGreaterEqual(remnant.radius, 100)
+            self.assertLessEqual(remnant.radius, 1000)
