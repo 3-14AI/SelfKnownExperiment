@@ -634,3 +634,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural white dwarf generation for galaxies. Added `WhiteDwarf` class and `generate_white_dwarfs` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural red dwarf generation for galaxies. Added `RedDwarf` class and `generate_red_dwarfs` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural blue giant generation for galaxies. Added `BlueGiant` class and `generate_blue_giants` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural red giant generation for galaxies. Added `RedGiant` class and `generate_red_giants` method to `Galaxy`. Added tests and verified the test suite runs successfully.
