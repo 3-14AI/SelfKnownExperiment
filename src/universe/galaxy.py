@@ -1,4 +1,9 @@
 
+class Exoplanet:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class AsteroidBelt:
     def __init__(self, name, radius):
         self.name = name
@@ -205,6 +210,7 @@ class Galaxy:
         self.red_giants = []
         self.blue_giants = []
         self.supernova_remnants = []
+        self.exoplanets = []
 
 
 
@@ -354,6 +360,14 @@ class Galaxy:
             name = f"Nebula-{i+1}"
             radius = random.randint(1000, 10000)
             self.nebulas.append(Nebula(name, radius))
+
+
+    def generate_exoplanets(self, num_exoplanets):
+        import random
+        for i in range(num_exoplanets):
+            name = f"Exoplanet-{i+1}"
+            radius = random.uniform(50, 500)
+            self.exoplanets.append(Exoplanet(name, radius))
 
     def generate_star_systems(self, num_systems):
         for i in range(num_systems):
