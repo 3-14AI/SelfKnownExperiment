@@ -200,12 +200,20 @@ class Galaxy:
         self.neutron_stars = []
         self.red_dwarfs = []
         self.white_dwarfs = []
+        self.red_giants = []
         self.blue_giants = []
 
 
 
 
 
+
+    def generate_red_giants(self, num_red_giants):
+        import random
+        for i in range(num_red_giants):
+            name = f"RedGiant-{i+1}"
+            radius = random.randint(100, 1000)
+            self.red_giants.append(RedGiant(name, radius))
 
     def generate_blue_giants(self, num_blue_giants):
         import random
@@ -452,6 +460,12 @@ class WhiteDwarf:
         self.radius = radius
 
 class NeutronStar:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+
+class RedGiant:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
