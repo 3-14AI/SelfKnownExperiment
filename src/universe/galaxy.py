@@ -198,6 +198,7 @@ class Galaxy:
         self.cosmic_voids = []
         self.hypernovas = []
         self.neutron_stars = []
+        self.yellow_dwarfs = []
         self.red_dwarfs = []
         self.white_dwarfs = []
         self.red_giants = []
@@ -221,6 +222,13 @@ class Galaxy:
             name = f"BlueGiant-{i+1}"
             radius = random.randint(100, 1000)
             self.blue_giants.append(BlueGiant(name, radius))
+
+    def generate_yellow_dwarfs(self, num_yellow_dwarfs):
+        import random
+        for i in range(num_yellow_dwarfs):
+            name = f"YellowDwarf-{i+1}"
+            radius = random.randint(50, 200)
+            self.yellow_dwarfs.append(YellowDwarf(name, radius))
 
     def generate_red_dwarfs(self, num_red_dwarfs):
         import random
@@ -448,6 +456,11 @@ class CosmicVoid:
         self.name = name
         self.radius = radius
 
+
+class YellowDwarf:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
 
 class RedDwarf:
     def __init__(self, name, radius):
