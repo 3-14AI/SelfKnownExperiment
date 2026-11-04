@@ -15,6 +15,14 @@ class TestGalaxy(unittest.TestCase):
 
 
 
+    def test_dwarf_planet_generation(self):
+        from src.universe.galaxy import DwarfPlanet, StarSystem
+        system = StarSystem("TestSystem", 0, 0)
+        system.generate_dwarf_planets(2)
+        self.assertEqual(len(system.dwarf_planets), 2)
+        self.assertIsInstance(system.dwarf_planets[0], DwarfPlanet)
+        self.assertTrue(500 <= system.dwarf_planets[0].radius <= 2000)
+
     def test_planet_types(self):
         rocky_planet = Planet("Rocky", 0, 0, 1000, planet_type='rocky')
         self.assertEqual(rocky_planet.planet_type, 'rocky')

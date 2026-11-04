@@ -1,4 +1,9 @@
 
+class DwarfPlanet:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Exoplanet:
     def __init__(self, name, radius):
         self.name = name
@@ -93,9 +98,16 @@ class StarSystem:
         self.x = x
         self.y = y
         self.planets = []
+        self.dwarf_planets = []
         self.asteroid_belts = []
         self.comets = []
         self.stars = []
+
+    def generate_dwarf_planets(self, num_dwarf_planets):
+        for i in range(num_dwarf_planets):
+            name = f"{self.name}-Dwarf-{i+1}"
+            radius = random.uniform(500, 2000)
+            self.dwarf_planets.append(DwarfPlanet(name, radius))
 
     def generate_planets(self, num_planets):
         for i in range(num_planets):
