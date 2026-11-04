@@ -204,6 +204,7 @@ class Galaxy:
         self.white_dwarfs = []
         self.red_giants = []
         self.blue_giants = []
+        self.supernova_remnants = []
 
 
 
@@ -216,6 +217,13 @@ class Galaxy:
             name = f"RedGiant-{i+1}"
             radius = random.randint(100, 1000)
             self.red_giants.append(RedGiant(name, radius))
+
+    def generate_supernova_remnants(self, num_remnants):
+        import random
+        for i in range(num_remnants):
+            name = f"SupernovaRemnant-{i+1}"
+            radius = random.randint(100, 1000)
+            self.supernova_remnants.append(SupernovaRemnant(name, radius))
 
     def generate_blue_giants(self, num_blue_giants):
         import random
@@ -499,6 +507,11 @@ class RedGiant:
         self.radius = radius
 
 class BlueGiant:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+class SupernovaRemnant:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
