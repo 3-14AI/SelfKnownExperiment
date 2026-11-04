@@ -1,5 +1,5 @@
 import unittest
-from src.universe.galaxy import StellarNursery, WhiteDwarf, DarkMatterHalo, CosmicString, PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole, WhiteHole, Wormhole, Quasar, Pulsar, Supernova, Magnetar, RoguePlanet, StarCluster, GlobularCluster
+from src.universe.galaxy import StellarNursery, WhiteDwarf, BlackDwarf, DarkMatterHalo, CosmicString, PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole, WhiteHole, Wormhole, Quasar, Pulsar, Supernova, Magnetar, RoguePlanet, StarCluster, GlobularCluster
 
 class TestGalaxy(unittest.TestCase):
     def test_galaxy_generation(self):
@@ -307,6 +307,15 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.neutron_stars[0], NeutronStar)
         self.assertEqual(galaxy.neutron_stars[0].name, "NeutronStar-1")
 
+
+
+    def test_black_dwarf_generation(self):
+        from src.universe.galaxy import BlackDwarf
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_black_dwarfs(1)
+        self.assertEqual(len(galaxy.black_dwarfs), 1)
+        self.assertIsInstance(galaxy.black_dwarfs[0], BlackDwarf)
+        self.assertEqual(galaxy.black_dwarfs[0].name, "BlackDwarf-1")
 
     def test_white_dwarf_generation(self):
         from src.universe.galaxy import WhiteDwarf
