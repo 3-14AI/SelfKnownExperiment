@@ -25,6 +25,12 @@ class Comet:
         self.name = name
         self.radius = radius
 
+
+class KuiperBelt:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class OortCloud:
     def __init__(self, name, radius):
         self.name = name
@@ -105,6 +111,7 @@ class StarSystem:
         self.planets = []
         self.dwarf_planets = []
         self.asteroid_belts = []
+        self.kuiper_belts = []
         self.oort_clouds = []
         self.comets = []
         self.stars = []
@@ -141,6 +148,13 @@ class StarSystem:
             name = f"{self.name}-Star-{i+1}"
             radius = random.randint(10000, 100000)
             self.stars.append(Star(name, radius))
+
+
+    def generate_kuiper_belts(self, num_belts):
+        for i in range(num_belts):
+            name = f"{self.name}-KuiperBelt-{i+1}"
+            radius = random.uniform(30, 50)
+            self.kuiper_belts.append(KuiperBelt(name, radius))
 
     def generate_oort_clouds(self, num_clouds):
         for i in range(num_clouds):
