@@ -261,6 +261,7 @@ class Galaxy:
         self.blue_giants = []
         self.red_supergiants = []
         self.blue_supergiants = []
+        self.wolf_rayet_stars = []
         self.supernova_remnants = []
         self.exoplanets = []
 
@@ -296,6 +297,13 @@ class Galaxy:
             name = f"{self.name}-BlueSupergiant-{i+1}"
             radius = random.randint(500000, 2000000)
             self.blue_supergiants.append(BlueSupergiant(name, radius))
+
+    def generate_wolf_rayet_stars(self, num_wolf_rayet_stars):
+        import random
+        for i in range(num_wolf_rayet_stars):
+            name = f"{self.name}-WolfRayetStar-{i+1}"
+            radius = random.randint(1000000, 5000000)
+            self.wolf_rayet_stars.append(WolfRayetStar(name, radius))
 
     def generate_blue_giants(self, num_blue_giants):
         import random
@@ -602,6 +610,11 @@ class SupernovaRemnant:
         self.radius = radius
 
 class BlueSupergiant:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+class WolfRayetStar:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
