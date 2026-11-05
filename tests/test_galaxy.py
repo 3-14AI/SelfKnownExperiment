@@ -402,5 +402,14 @@ class TestGalaxy(unittest.TestCase):
             self.assertGreaterEqual(cloud.radius, 50000)
             self.assertLessEqual(cloud.radius, 100000)
 
+
+    def test_kuiper_belt_generation(self):
+        from src.universe.galaxy import KuiperBelt, StarSystem
+        system = StarSystem("TestSystem", 0, 0)
+        system.generate_kuiper_belts(1)
+        self.assertEqual(len(system.kuiper_belts), 1)
+        self.assertIsInstance(system.kuiper_belts[0], KuiperBelt)
+        self.assertTrue(30 <= system.kuiper_belts[0].radius <= 50)
+
 if __name__ == '__main__':
     unittest.main()
