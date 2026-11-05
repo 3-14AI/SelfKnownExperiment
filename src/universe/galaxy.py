@@ -264,6 +264,7 @@ class Galaxy:
         self.wolf_rayet_stars = []
         self.supernova_remnants = []
         self.exoplanets = []
+        self.protostars = []
 
 
 
@@ -396,6 +397,13 @@ class Galaxy:
             name = f"SupermassiveBlackHole-{i+1}"
             mass = random.randint(1000000, 1000000000)
             self.supermassive_black_holes.append(SupermassiveBlackHole(name, mass))
+
+    def generate_protostars(self, num_protostars):
+        import random
+        for i in range(num_protostars):
+            name = f"{self.name}-Protostar-{i+1}"
+            radius = random.randint(100, 1000)
+            self.protostars.append(Protostar(name, radius))
 
     def generate_stellar_nurseries(self, num_nurseries):
         import random
@@ -615,6 +623,11 @@ class BlueSupergiant:
         self.radius = radius
 
 class WolfRayetStar:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+class Protostar:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
