@@ -1,8 +1,0 @@
-1. We need to complete the next step according to `agents.md`, but there are no unchecked items under Next Steps. Thus we need to invent a new feature.
-2. We'll implement procedural Red Dwarf generation for galaxies.
-3. Add `RedDwarf` class and `generate_red_dwarfs` method to `Galaxy` class in `src/universe/galaxy.py`.
-4. Add tests for `RedDwarf` and `generate_red_dwarfs` in `tests/test_galaxy.py`.
-5. Update `agents.md` with the new completed task.
-6. Create an analysis file.
-7. Run `python3 run_tests.py` as a final verification stage to ensure changes are correct and introduce no regressions before proceeding to documentation updates and the pre-commit step.
-8. Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
