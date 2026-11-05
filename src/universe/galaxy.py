@@ -25,6 +25,11 @@ class Comet:
         self.name = name
         self.radius = radius
 
+class OortCloud:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Star:
     def __init__(self, name, radius, star_type=None):
         self.name = name
@@ -100,6 +105,7 @@ class StarSystem:
         self.planets = []
         self.dwarf_planets = []
         self.asteroid_belts = []
+        self.oort_clouds = []
         self.comets = []
         self.stars = []
 
@@ -135,6 +141,12 @@ class StarSystem:
             name = f"{self.name}-Star-{i+1}"
             radius = random.randint(10000, 100000)
             self.stars.append(Star(name, radius))
+
+    def generate_oort_clouds(self, num_clouds):
+        for i in range(num_clouds):
+            name = f"{self.name}-OortCloud-{i+1}"
+            radius = random.randint(50000, 100000)
+            self.oort_clouds.append(OortCloud(name, radius))
 
 
 
