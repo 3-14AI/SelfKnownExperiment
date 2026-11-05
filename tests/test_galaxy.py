@@ -381,8 +381,6 @@ class TestGalaxy(unittest.TestCase):
             self.assertGreaterEqual(exoplanet.radius, 50)
             self.assertLessEqual(exoplanet.radius, 500)
 
-if __name__ == '__main__':
-    unittest.main()
 
     def test_supernova_remnant_generation(self):
         from src.universe.galaxy import Galaxy, SupernovaRemnant
@@ -393,3 +391,16 @@ if __name__ == '__main__':
             self.assertIsInstance(remnant, SupernovaRemnant)
             self.assertGreaterEqual(remnant.radius, 100)
             self.assertLessEqual(remnant.radius, 1000)
+
+    def test_oort_cloud_generation(self):
+        from src.universe.galaxy import StarSystem, OortCloud
+        system = StarSystem("Test System", 0, 0)
+        system.generate_oort_clouds(3)
+        self.assertEqual(len(system.oort_clouds), 3)
+        for cloud in system.oort_clouds:
+            self.assertIsInstance(cloud, OortCloud)
+            self.assertGreaterEqual(cloud.radius, 50000)
+            self.assertLessEqual(cloud.radius, 100000)
+
+if __name__ == '__main__':
+    unittest.main()
