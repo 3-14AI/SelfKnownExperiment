@@ -1,5 +1,5 @@
 import unittest
-from src.universe.galaxy import StellarNursery, WhiteDwarf, BlackDwarf, DarkMatterHalo, CosmicString, PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Comet, Nebula, BlackHole, WhiteHole, Wormhole, Quasar, Pulsar, Supernova, Magnetar, RoguePlanet, StarCluster, GlobularCluster
+from src.universe.galaxy import StellarNursery, WhiteDwarf, BlackDwarf, DarkMatterHalo, CosmicString, PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Meteor, Comet, Nebula, BlackHole, WhiteHole, Wormhole, Quasar, Pulsar, Supernova, Magnetar, RoguePlanet, StarCluster, GlobularCluster
 
 class TestGalaxy(unittest.TestCase):
     def test_galaxy_generation(self):
@@ -410,6 +410,15 @@ class TestGalaxy(unittest.TestCase):
         self.assertEqual(len(system.kuiper_belts), 1)
         self.assertIsInstance(system.kuiper_belts[0], KuiperBelt)
         self.assertTrue(30 <= system.kuiper_belts[0].radius <= 50)
+
+
+    def test_meteor_generation(self):
+        from src.universe.galaxy import Meteor, StarSystem
+        system = StarSystem("TestSystem", 0, 0)
+        system.generate_meteors(1)
+        self.assertEqual(len(system.meteors), 1)
+        self.assertIsInstance(system.meteors[0], Meteor)
+        self.assertTrue(1 <= system.meteors[0].radius <= 20)
 
 if __name__ == '__main__':
     unittest.main()

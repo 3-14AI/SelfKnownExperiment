@@ -20,6 +20,11 @@ class RoguePlanet:
         self.name = name
         self.radius = radius
 
+class Meteor:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Comet:
     def __init__(self, name, radius):
         self.name = name
@@ -113,6 +118,7 @@ class StarSystem:
         self.asteroid_belts = []
         self.kuiper_belts = []
         self.oort_clouds = []
+        self.meteors = []
         self.comets = []
         self.stars = []
 
@@ -136,6 +142,12 @@ class StarSystem:
             radius = random.randint(1000, 10000)
             self.asteroid_belts.append(AsteroidBelt(name, radius))
 
+
+    def generate_meteors(self, num_meteors):
+        for i in range(num_meteors):
+            name = f"{self.name}-Meteor-{i+1}"
+            radius = random.randint(1, 20)
+            self.meteors.append(Meteor(name, radius))
 
     def generate_comets(self, num_comets):
         for i in range(num_comets):
