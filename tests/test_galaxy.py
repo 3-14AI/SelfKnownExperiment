@@ -420,5 +420,14 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(system.meteors[0], Meteor)
         self.assertTrue(1 <= system.meteors[0].radius <= 20)
 
+
+    def test_red_supergiant_generation(self):
+        from src.universe.galaxy import RedSupergiant, Galaxy
+        galaxy = Galaxy("TestGalaxy", 1000, 1000)
+        galaxy.generate_red_supergiants(2)
+        self.assertEqual(len(galaxy.red_supergiants), 2)
+        self.assertIsInstance(galaxy.red_supergiants[0], RedSupergiant)
+        self.assertTrue(500000 <= galaxy.red_supergiants[0].radius <= 2000000)
+
 if __name__ == '__main__':
     unittest.main()
