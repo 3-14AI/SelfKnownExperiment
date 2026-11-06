@@ -266,6 +266,7 @@ class Galaxy:
         self.exoplanets = []
         self.protostars = []
         self.flare_stars = []
+        self.carbon_stars = []
 
 
 
@@ -405,6 +406,14 @@ class Galaxy:
             name = f"FlareStar-{i+1}"
             radius = random.randint(10, 100)
             self.flare_stars.append(FlareStar(name, radius))
+
+    def generate_carbon_stars(self, num_carbon_stars):
+        import random
+        for i in range(num_carbon_stars):
+            name = f"CarbonStar-{i+1}"
+            radius = random.randint(100, 1000)
+            self.carbon_stars.append(CarbonStar(name, radius))
+
 
     def generate_protostars(self, num_protostars):
         import random
@@ -640,6 +649,11 @@ class Protostar:
         self.name = name
         self.radius = radius
 class FlareStar:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+class CarbonStar:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius

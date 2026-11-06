@@ -657,3 +657,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural protostar generation for galaxies. Added `Protostar` class and `generate_protostars` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 
 - [x] Implemented procedural flare star generation for galaxies. Added `FlareStar` class and `generate_flare_stars` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural carbon star generation for galaxies. Added `CarbonStar` class and `generate_carbon_stars` method to `Galaxy`. Added tests and verified the test suite runs successfully.
