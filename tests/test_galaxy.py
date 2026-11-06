@@ -488,5 +488,13 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.pulsar_planets[0], PulsarPlanet)
         self.assertTrue(10 <= galaxy.pulsar_planets[0].radius <= 500)
 
+    def test_generate_planetary_nebulas(self):
+        from src.universe.galaxy import PlanetaryNebula, Galaxy
+        galaxy = Galaxy("TestGalaxy", 1000, 1000)
+        galaxy.generate_planetary_nebulas(2)
+        self.assertEqual(len(galaxy.planetary_nebulas), 2)
+        self.assertIsInstance(galaxy.planetary_nebulas[0], PlanetaryNebula)
+        self.assertTrue(0.1 <= galaxy.planetary_nebulas[0].radius <= 10.0)
+
 if __name__ == '__main__':
     unittest.main()
