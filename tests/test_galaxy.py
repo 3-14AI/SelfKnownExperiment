@@ -463,6 +463,15 @@ class TestGalaxy(unittest.TestCase):
         self.assertTrue(10 <= galaxy.flare_stars[0].radius <= 100)
 
 
+    def test_binary_star_system_generation(self):
+        from src.universe.galaxy import BinaryStarSystem, Galaxy
+        galaxy = Galaxy("TestGalaxy", 1000, 1000)
+        galaxy.generate_binary_star_systems(2)
+        self.assertEqual(len(galaxy.binary_star_systems), 2)
+        self.assertIsInstance(galaxy.binary_star_systems[0], BinaryStarSystem)
+        self.assertTrue(0 <= galaxy.binary_star_systems[0].x <= 1000)
+        self.assertTrue(0 <= galaxy.binary_star_systems[0].y <= 1000)
+
     def test_carbon_star_generation(self):
         from src.universe.galaxy import CarbonStar, Galaxy
         galaxy = Galaxy("TestGalaxy", 1000, 1000)
