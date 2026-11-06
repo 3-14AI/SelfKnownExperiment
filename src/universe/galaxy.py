@@ -270,6 +270,7 @@ class Galaxy:
         self.binary_star_systems = []
         self.pulsar_planets = []
         self.planetary_nebulas = []
+        self.intergalactic_stars = []
 
 
 
@@ -552,6 +553,14 @@ class Galaxy:
             radius = random.randint(100, 1000)
             self.star_clusters.append(StarCluster(name, radius))
 
+
+    def generate_intergalactic_stars(self, num_intergalactic_stars):
+        import random
+        for i in range(num_intergalactic_stars):
+            name = f"IntergalacticStar-{i+1}"
+            radius = random.randint(100, 1000)
+            self.intergalactic_stars.append(IntergalacticStar(name, radius))
+
 class StarCluster:
     def __init__(self, name, radius):
         self.name = name
@@ -698,6 +707,11 @@ class BinaryStarSystem:
         self.secondary_star = None
 
 class PlanetaryNebula:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+class IntergalacticStar:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
