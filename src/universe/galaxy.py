@@ -265,6 +265,7 @@ class Galaxy:
         self.supernova_remnants = []
         self.exoplanets = []
         self.protostars = []
+        self.flare_stars = []
 
 
 
@@ -397,6 +398,13 @@ class Galaxy:
             name = f"SupermassiveBlackHole-{i+1}"
             mass = random.randint(1000000, 1000000000)
             self.supermassive_black_holes.append(SupermassiveBlackHole(name, mass))
+
+    def generate_flare_stars(self, num_flare_stars):
+        import random
+        for i in range(num_flare_stars):
+            name = f"FlareStar-{i+1}"
+            radius = random.randint(10, 100)
+            self.flare_stars.append(FlareStar(name, radius))
 
     def generate_protostars(self, num_protostars):
         import random
@@ -628,6 +636,10 @@ class WolfRayetStar:
         self.radius = radius
 
 class Protostar:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+class FlareStar:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
