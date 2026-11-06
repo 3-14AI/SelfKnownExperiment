@@ -454,5 +454,13 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.wolf_rayet_stars[0], WolfRayetStar)
         self.assertTrue(1000000 <= galaxy.wolf_rayet_stars[0].radius <= 5000000)
 
+    def test_flare_star_generation(self):
+        from src.universe.galaxy import FlareStar, Galaxy
+        galaxy = Galaxy("TestGalaxy", 1000, 1000)
+        galaxy.generate_flare_stars(2)
+        self.assertEqual(len(galaxy.flare_stars), 2)
+        self.assertIsInstance(galaxy.flare_stars[0], FlareStar)
+        self.assertTrue(10 <= galaxy.flare_stars[0].radius <= 100)
+
 if __name__ == '__main__':
     unittest.main()
