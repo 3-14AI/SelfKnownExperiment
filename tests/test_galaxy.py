@@ -15,6 +15,14 @@ class TestGalaxy(unittest.TestCase):
 
 
 
+    def test_hypervelocity_star_generation(self):
+        from src.universe.galaxy import HypervelocityStar, Galaxy
+        galaxy = Galaxy("TestGalaxy", 1000, 1000)
+        galaxy.generate_hypervelocity_stars(2)
+        self.assertEqual(len(galaxy.hypervelocity_stars), 2)
+        self.assertIsInstance(galaxy.hypervelocity_stars[0], HypervelocityStar)
+        self.assertTrue(100 <= galaxy.hypervelocity_stars[0].radius <= 1000)
+
     def test_dwarf_planet_generation(self):
         from src.universe.galaxy import DwarfPlanet, StarSystem
         system = StarSystem("TestSystem", 0, 0)
