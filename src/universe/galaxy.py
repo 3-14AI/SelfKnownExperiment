@@ -271,6 +271,7 @@ class Galaxy:
         self.pulsar_planets = []
         self.planetary_nebulas = []
         self.intergalactic_stars = []
+        self.hypervelocity_stars = []
 
 
 
@@ -560,6 +561,18 @@ class Galaxy:
             name = f"IntergalacticStar-{i+1}"
             radius = random.randint(100, 1000)
             self.intergalactic_stars.append(IntergalacticStar(name, radius))
+
+    def generate_hypervelocity_stars(self, num_hypervelocity_stars):
+        import random
+        for i in range(num_hypervelocity_stars):
+            name = f"HypervelocityStar-{i+1}"
+            radius = random.randint(100, 1000)
+            self.hypervelocity_stars.append(HypervelocityStar(name, radius))
+
+class HypervelocityStar:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
 
 class StarCluster:
     def __init__(self, name, radius):
