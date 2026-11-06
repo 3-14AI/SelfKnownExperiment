@@ -269,6 +269,7 @@ class Galaxy:
         self.carbon_stars = []
         self.binary_star_systems = []
         self.pulsar_planets = []
+        self.planetary_nebulas = []
 
 
 
@@ -423,6 +424,13 @@ class Galaxy:
             x = random.randint(0, self.width)
             y = random.randint(0, self.height)
             self.binary_star_systems.append(BinaryStarSystem(name, x, y))
+
+    def generate_planetary_nebulas(self, num_planetary_nebulas):
+        import random
+        for i in range(num_planetary_nebulas):
+            name = f"PlanetaryNebula-{i+1}"
+            radius = random.uniform(0.1, 10.0)
+            self.planetary_nebulas.append(PlanetaryNebula(name, radius))
 
     def generate_carbon_stars(self, num_carbon_stars):
         import random
@@ -688,3 +696,8 @@ class BinaryStarSystem:
         self.y = y
         self.primary_star = None
         self.secondary_star = None
+
+class PlanetaryNebula:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
