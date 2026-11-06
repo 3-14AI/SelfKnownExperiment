@@ -471,5 +471,13 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.carbon_stars[0], CarbonStar)
         self.assertTrue(100 <= galaxy.carbon_stars[0].radius <= 1000)
 
+    def test_generate_pulsar_planets(self):
+        from src.universe.galaxy import PulsarPlanet, Galaxy
+        galaxy = Galaxy("TestGalaxy", 1000, 1000)
+        galaxy.generate_pulsar_planets(2)
+        self.assertEqual(len(galaxy.pulsar_planets), 2)
+        self.assertIsInstance(galaxy.pulsar_planets[0], PulsarPlanet)
+        self.assertTrue(10 <= galaxy.pulsar_planets[0].radius <= 500)
+
 if __name__ == '__main__':
     unittest.main()
