@@ -272,6 +272,7 @@ class Galaxy:
         self.planetary_nebulas = []
         self.intergalactic_stars = []
         self.hypervelocity_stars = []
+        self.interstellar_dust_clouds = []
 
 
 
@@ -494,6 +495,13 @@ class Galaxy:
             name = f"Exoplanet-{i+1}"
             radius = random.uniform(50, 500)
             self.exoplanets.append(Exoplanet(name, radius))
+
+    def generate_interstellar_dust_clouds(self, num_interstellar_dust_clouds):
+        import random
+        for i in range(num_interstellar_dust_clouds):
+            name = f"InterstellarDustCloud-{i+1}"
+            radius = random.randint(100, 1000)
+            self.interstellar_dust_clouds.append(InterstellarDustCloud(name, radius))
 
     def generate_star_systems(self, num_systems):
         for i in range(num_systems):
@@ -725,6 +733,11 @@ class PlanetaryNebula:
         self.radius = radius
 
 class IntergalacticStar:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+class InterstellarDustCloud:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius

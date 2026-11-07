@@ -665,3 +665,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural planetary nebula generation for galaxies. Added `PlanetaryNebula` class and `generate_planetary_nebulas` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural intergalactic star generation for galaxies. Added `IntergalacticStar` class and `generate_intergalactic_stars` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural hypervelocity star generation for galaxies. Added `HypervelocityStar` class and `generate_hypervelocity_stars` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural interstellar dust cloud generation for galaxies. Added `InterstellarDustCloud` class and `generate_interstellar_dust_clouds` method to `Galaxy`. Added tests and verified the test suite runs successfully.
