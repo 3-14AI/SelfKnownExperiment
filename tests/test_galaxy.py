@@ -521,5 +521,13 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.interstellar_dust_clouds[0], InterstellarDustCloud)
         self.assertTrue(100 <= galaxy.interstellar_dust_clouds[0].radius <= 1000)
 
+    def test_dark_nebula_generation(self):
+        from src.universe.galaxy import DarkNebula, Galaxy
+        galaxy = Galaxy("TestGalaxy", 1000, 1000)
+        galaxy.generate_dark_nebulas(2)
+        self.assertEqual(len(galaxy.dark_nebulas), 2)
+        self.assertIsInstance(galaxy.dark_nebulas[0], DarkNebula)
+        self.assertTrue(100 <= galaxy.dark_nebulas[0].radius <= 1000)
+
 if __name__ == '__main__':
     unittest.main()
