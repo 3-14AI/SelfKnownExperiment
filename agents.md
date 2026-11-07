@@ -673,3 +673,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural emission nebula generation for galaxies. Added `EmissionNebula` class and `generate_emission_nebulas` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural molecular cloud generation for galaxies. Added `MolecularCloud` class and `generate_molecular_clouds` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural Bok globule generation for galaxies. Added `BokGlobule` class and `generate_bok_globules` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural open cluster generation for galaxies. Added `OpenCluster` class and `generate_open_clusters` method to `Galaxy`. Added tests and verified the test suite runs successfully.
