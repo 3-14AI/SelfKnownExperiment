@@ -529,5 +529,13 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.dark_nebulas[0], DarkNebula)
         self.assertTrue(100 <= galaxy.dark_nebulas[0].radius <= 1000)
 
+    def test_reflection_nebula_generation(self):
+        from src.universe.galaxy import ReflectionNebula, Galaxy
+        galaxy = Galaxy("TestGalaxy", 1000, 1000)
+        galaxy.generate_reflection_nebulas(2)
+        self.assertEqual(len(galaxy.reflection_nebulas), 2)
+        self.assertIsInstance(galaxy.reflection_nebulas[0], ReflectionNebula)
+        self.assertTrue(100 <= galaxy.reflection_nebulas[0].radius <= 1000)
+
 if __name__ == '__main__':
     unittest.main()
