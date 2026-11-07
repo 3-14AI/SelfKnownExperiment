@@ -225,6 +225,11 @@ class Hypernova:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
+class EmissionNebula:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
     def __init__(self, name, width, height):
         self.name = name
@@ -275,6 +280,7 @@ class Galaxy:
         self.interstellar_dust_clouds = []
         self.dark_nebulas = []
         self.reflection_nebulas = []
+        self.emission_nebulas = []
 
 
 
@@ -518,6 +524,13 @@ class Galaxy:
             name = f"ReflectionNebula-{i+1}"
             radius = random.randint(100, 1000)
             self.reflection_nebulas.append(ReflectionNebula(name, radius))
+
+    def generate_emission_nebulas(self, num_emission_nebulas):
+        import random
+        for i in range(num_emission_nebulas):
+            name = f"EmissionNebula-{i+1}"
+            radius = random.randint(100, 1000)
+            self.emission_nebulas.append(EmissionNebula(name, radius))
 
     def generate_star_systems(self, num_systems):
         for i in range(num_systems):
