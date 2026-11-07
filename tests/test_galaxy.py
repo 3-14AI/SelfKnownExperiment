@@ -545,5 +545,13 @@ class TestGalaxy(unittest.TestCase):
         self.assertIsInstance(galaxy.reflection_nebulas[0], ReflectionNebula)
         self.assertTrue(100 <= galaxy.reflection_nebulas[0].radius <= 1000)
 
+    def test_generate_molecular_clouds(self):
+        from src.universe.galaxy import MolecularCloud, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_molecular_clouds(5)
+        self.assertEqual(len(galaxy.molecular_clouds), 5)
+        for cloud in galaxy.molecular_clouds:
+            self.assertIsInstance(cloud, MolecularCloud)
+
 if __name__ == '__main__':
     unittest.main()

@@ -230,6 +230,11 @@ class EmissionNebula:
         self.name = name
         self.radius = radius
 
+class MolecularCloud:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
     def __init__(self, name, width, height):
         self.name = name
@@ -281,6 +286,7 @@ class Galaxy:
         self.dark_nebulas = []
         self.reflection_nebulas = []
         self.emission_nebulas = []
+        self.molecular_clouds = []
 
 
 
@@ -524,6 +530,13 @@ class Galaxy:
             name = f"ReflectionNebula-{i+1}"
             radius = random.randint(100, 1000)
             self.reflection_nebulas.append(ReflectionNebula(name, radius))
+
+    def generate_molecular_clouds(self, num_molecular_clouds):
+        import random
+        for i in range(num_molecular_clouds):
+            name = f"MolecularCloud-{i+1}"
+            radius = random.randint(100, 1000)
+            self.molecular_clouds.append(MolecularCloud(name, radius))
 
     def generate_emission_nebulas(self, num_emission_nebulas):
         import random
