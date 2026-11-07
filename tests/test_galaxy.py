@@ -15,6 +15,14 @@ class TestGalaxy(unittest.TestCase):
 
 
 
+    def test_generate_emission_nebulas(self):
+        from src.universe.galaxy import EmissionNebula, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_emission_nebulas(5)
+        self.assertEqual(len(galaxy.emission_nebulas), 5)
+        for nebula in galaxy.emission_nebulas:
+            self.assertIsInstance(nebula, EmissionNebula)
+
     def test_hypervelocity_star_generation(self):
         from src.universe.galaxy import HypervelocityStar, Galaxy
         galaxy = Galaxy("TestGalaxy", 1000, 1000)
