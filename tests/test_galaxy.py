@@ -553,6 +553,14 @@ class TestGalaxy(unittest.TestCase):
         for cloud in galaxy.molecular_clouds:
             self.assertIsInstance(cloud, MolecularCloud)
 
+    def test_generate_open_clusters(self):
+        from src.universe.galaxy import OpenCluster, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_open_clusters(5)
+        self.assertEqual(len(galaxy.open_clusters), 5)
+        for cluster in galaxy.open_clusters:
+            self.assertIsInstance(cluster, OpenCluster)
+
     def test_generate_bok_globules(self):
         from src.universe.galaxy import BokGlobule, Galaxy
         galaxy = Galaxy("Test Galaxy", 1000, 1000)
