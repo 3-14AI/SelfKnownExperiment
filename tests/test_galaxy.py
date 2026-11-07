@@ -553,5 +553,13 @@ class TestGalaxy(unittest.TestCase):
         for cloud in galaxy.molecular_clouds:
             self.assertIsInstance(cloud, MolecularCloud)
 
+    def test_generate_bok_globules(self):
+        from src.universe.galaxy import BokGlobule, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_bok_globules(5)
+        self.assertEqual(len(galaxy.bok_globules), 5)
+        for cloud in galaxy.bok_globules:
+            self.assertIsInstance(cloud, BokGlobule)
+
 if __name__ == '__main__':
     unittest.main()
