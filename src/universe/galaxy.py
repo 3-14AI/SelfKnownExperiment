@@ -15,6 +15,11 @@ class AsteroidBelt:
         self.radius = radius
 import random
 
+class HIIRegion:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class StellarAssociation:
     def __init__(self, name, radius):
         self.name = name
@@ -305,6 +310,7 @@ class Galaxy:
         self.bok_globules = []
         self.open_clusters = []
         self.stellar_associations = []
+        self.hii_regions = []
 
 
 
@@ -555,6 +561,13 @@ class Galaxy:
             name = f"StellarAssociation-{i+1}"
             radius = random.randint(100, 1000)
             self.stellar_associations.append(StellarAssociation(name, radius))
+
+    def generate_hii_regions(self, num_regions):
+        import random
+        for i in range(num_regions):
+            name = f"HIIRegion-{i+1}"
+            radius = random.randint(100, 1000)
+            self.hii_regions.append(HIIRegion(name, radius))
 
     def generate_open_clusters(self, num_open_clusters):
         import random
