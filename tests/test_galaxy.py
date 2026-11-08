@@ -561,6 +561,14 @@ class TestGalaxy(unittest.TestCase):
         for assoc in galaxy.stellar_associations:
             self.assertIsInstance(assoc, StellarAssociation)
 
+    def test_generate_hii_regions(self):
+        from src.universe.galaxy import HIIRegion, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_hii_regions(5)
+        self.assertEqual(len(galaxy.hii_regions), 5)
+        for region in galaxy.hii_regions:
+            self.assertIsInstance(region, HIIRegion)
+
     def test_generate_open_clusters(self):
         from src.universe.galaxy import OpenCluster, Galaxy
         galaxy = Galaxy("Test Galaxy", 1000, 1000)
