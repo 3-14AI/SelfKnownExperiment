@@ -15,6 +15,11 @@ class AsteroidBelt:
         self.radius = radius
 import random
 
+class StellarAssociation:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class OpenCluster:
     def __init__(self, name, radius):
         self.name = name
@@ -299,6 +304,7 @@ class Galaxy:
         self.molecular_clouds = []
         self.bok_globules = []
         self.open_clusters = []
+        self.stellar_associations = []
 
 
 
@@ -542,6 +548,13 @@ class Galaxy:
             name = f"ReflectionNebula-{i+1}"
             radius = random.randint(100, 1000)
             self.reflection_nebulas.append(ReflectionNebula(name, radius))
+
+    def generate_stellar_associations(self, num_associations):
+        import random
+        for i in range(num_associations):
+            name = f"StellarAssociation-{i+1}"
+            radius = random.randint(100, 1000)
+            self.stellar_associations.append(StellarAssociation(name, radius))
 
     def generate_open_clusters(self, num_open_clusters):
         import random
