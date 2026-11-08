@@ -676,3 +676,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural open cluster generation for galaxies. Added `OpenCluster` class and `generate_open_clusters` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural stellar association generation for galaxies. Added `StellarAssociation` class and `generate_stellar_associations` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural H II region generation for galaxies. Added `HIIRegion` class and `generate_hii_regions` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural spiral arm generation for galaxies. Added `SpiralArm` class and `generate_spiral_arms` method to `Galaxy`. Added tests and verified the test suite runs successfully.
