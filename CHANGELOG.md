@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- [x] Implemented procedural stellar association generation for galaxies. Added `StellarAssociation` class and `generate_stellar_associations` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - Implemented procedural open cluster generation for galaxies. Added `OpenCluster` class and `generate_open_clusters` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - Implemented procedural Bok globule generation for galaxies. Added `BokGlobule` class and `generate_bok_globules` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - Implemented procedural molecular cloud generation for galaxies. Added `MolecularCloud` class and `generate_molecular_clouds` method to `Galaxy`. Added tests and verified the test suite runs successfully.

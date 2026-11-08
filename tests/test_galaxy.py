@@ -553,6 +553,14 @@ class TestGalaxy(unittest.TestCase):
         for cloud in galaxy.molecular_clouds:
             self.assertIsInstance(cloud, MolecularCloud)
 
+    def test_generate_stellar_associations(self):
+        from src.universe.galaxy import StellarAssociation, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_stellar_associations(5)
+        self.assertEqual(len(galaxy.stellar_associations), 5)
+        for assoc in galaxy.stellar_associations:
+            self.assertIsInstance(assoc, StellarAssociation)
+
     def test_generate_open_clusters(self):
         from src.universe.galaxy import OpenCluster, Galaxy
         galaxy = Galaxy("Test Galaxy", 1000, 1000)
