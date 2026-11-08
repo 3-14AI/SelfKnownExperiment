@@ -15,6 +15,11 @@ class AsteroidBelt:
         self.radius = radius
 import random
 
+class GalacticBulge:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class SpiralArm:
     def __init__(self, name, length):
         self.name = name
@@ -317,6 +322,7 @@ class Galaxy:
         self.stellar_associations = []
         self.hii_regions = []
         self.spiral_arms = []
+        self.galactic_bulges = []
 
 
 
@@ -567,6 +573,13 @@ class Galaxy:
             name = f"StellarAssociation-{i+1}"
             radius = random.randint(100, 1000)
             self.stellar_associations.append(StellarAssociation(name, radius))
+
+    def generate_galactic_bulges(self, num_bulges):
+        import random
+        for i in range(num_bulges):
+            name = f"GalacticBulge-{i+1}"
+            radius = random.randint(100, 1000)
+            self.galactic_bulges.append(GalacticBulge(name, radius))
 
     def generate_spiral_arms(self, num_arms):
         import random
