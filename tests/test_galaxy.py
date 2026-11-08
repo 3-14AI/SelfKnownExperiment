@@ -561,6 +561,14 @@ class TestGalaxy(unittest.TestCase):
         for assoc in galaxy.stellar_associations:
             self.assertIsInstance(assoc, StellarAssociation)
 
+    def test_generate_galactic_halos(self):
+        from src.universe.galaxy import GalacticHalo, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_galactic_halos(5)
+        self.assertEqual(len(galaxy.galactic_halos), 5)
+        for halo in galaxy.galactic_halos:
+            self.assertIsInstance(halo, GalacticHalo)
+
     def test_generate_galactic_bulges(self):
         from src.universe.galaxy import GalacticBulge, Galaxy
         galaxy = Galaxy("Test Galaxy", 1000, 1000)
