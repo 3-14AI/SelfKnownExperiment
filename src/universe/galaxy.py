@@ -25,6 +25,11 @@ class GalacticHalo:
         self.name = name
         self.radius = radius
 
+class GalacticCore:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class GalacticBulge:
     def __init__(self, name, radius):
         self.name = name
@@ -333,6 +338,7 @@ class Galaxy:
         self.hii_regions = []
         self.spiral_arms = []
         self.galactic_halos = []
+        self.galactic_cores = []
         self.galactic_bulges = []
         self.galactic_disks = []
 
@@ -599,6 +605,13 @@ class Galaxy:
             name = f"GalacticDisk-{i+1}"
             radius = random.randint(1000, 10000)
             self.galactic_disks.append(GalacticDisk(name, radius))
+
+    def generate_galactic_cores(self, num_cores):
+        import random
+        for i in range(num_cores):
+            name = f"GalacticCore-{i+1}"
+            radius = random.randint(10, 100)
+            self.galactic_cores.append(GalacticCore(name, radius))
 
     def generate_galactic_bulges(self, num_bulges):
         import random
