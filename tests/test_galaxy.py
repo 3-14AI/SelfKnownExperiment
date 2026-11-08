@@ -609,5 +609,14 @@ class TestGalaxy(unittest.TestCase):
         for cloud in galaxy.bok_globules:
             self.assertIsInstance(cloud, BokGlobule)
 
+
+    def test_generate_galactic_disks(self):
+        from src.universe.galaxy import GalacticDisk, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_galactic_disks(2)
+        self.assertEqual(len(galaxy.galactic_disks), 2)
+        for d in galaxy.galactic_disks:
+            self.assertIsInstance(d, GalacticDisk)
+
 if __name__ == '__main__':
     unittest.main()
