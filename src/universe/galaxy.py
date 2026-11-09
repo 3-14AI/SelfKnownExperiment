@@ -15,6 +15,11 @@ class AsteroidBelt:
         self.radius = radius
 import random
 
+class StellarStream:
+    def __init__(self, name, length):
+        self.name = name
+        self.length = length
+
 class GalacticDisk:
     def __init__(self, name, radius):
         self.name = name
@@ -347,6 +352,7 @@ class Galaxy:
         self.galactic_cores = []
         self.galactic_bulges = []
         self.galactic_disks = []
+        self.stellar_streams = []
 
 
 
@@ -604,6 +610,13 @@ class Galaxy:
             name = f"GalacticHalo-{i+1}"
             radius = random.randint(10000, 100000)
             self.galactic_halos.append(GalacticHalo(name, radius))
+
+    def generate_stellar_streams(self, num_streams):
+        import random
+        for i in range(num_streams):
+            name = f"StellarStream-{i+1}"
+            length = random.randint(1000, 10000)
+            self.stellar_streams.append(StellarStream(name, length))
 
     def generate_galactic_disks(self, num_disks):
         import random
