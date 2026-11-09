@@ -301,6 +301,13 @@ class SatelliteGalaxy:
         self.radius = radius
 
 class Galaxy:
+    def generate_dwarf_galaxies(self, num_dwarf_galaxies):
+        import random
+        for i in range(num_dwarf_galaxies):
+            name = f"DwarfGalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.dwarf_galaxies.append(DwarfGalaxy(name, radius))
+
     def generate_satellite_galaxies(self, num_satellites):
         import random
         for i in range(num_satellites):
@@ -372,6 +379,7 @@ class Galaxy:
         self.stellar_streams = []
         self.tidal_tails = []
         self.satellite_galaxies = []
+        self.dwarf_galaxies = []
 
 
 
@@ -787,6 +795,11 @@ class Galaxy:
             name = f"HypervelocityStar-{i+1}"
             radius = random.randint(100, 1000)
             self.hypervelocity_stars.append(HypervelocityStar(name, radius))
+
+class DwarfGalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
 
 class HypervelocityStar:
     def __init__(self, name, radius):

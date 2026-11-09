@@ -658,5 +658,13 @@ class TestGalaxy(unittest.TestCase):
         for sat in galaxy.satellite_galaxies:
             self.assertIsInstance(sat, SatelliteGalaxy)
 
+    def test_generate_dwarf_galaxies(self):
+        from src.universe.galaxy import DwarfGalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_dwarf_galaxies(3)
+        self.assertEqual(len(galaxy.dwarf_galaxies), 3)
+        for d in galaxy.dwarf_galaxies:
+            self.assertIsInstance(d, DwarfGalaxy)
+
 if __name__ == '__main__':
     unittest.main()
