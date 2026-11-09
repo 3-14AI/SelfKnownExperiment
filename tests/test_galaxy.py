@@ -666,5 +666,13 @@ class TestGalaxy(unittest.TestCase):
         for d in galaxy.dwarf_galaxies:
             self.assertIsInstance(d, DwarfGalaxy)
 
+    def test_generate_lenticular_galaxies(self):
+        from src.universe.galaxy import LenticularGalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_lenticular_galaxies(3)
+        self.assertEqual(len(galaxy.lenticular_galaxies), 3)
+        for d in galaxy.lenticular_galaxies:
+            self.assertIsInstance(d, LenticularGalaxy)
+
 if __name__ == '__main__':
     unittest.main()

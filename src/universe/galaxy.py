@@ -301,6 +301,13 @@ class SatelliteGalaxy:
         self.radius = radius
 
 class Galaxy:
+    def generate_lenticular_galaxies(self, num_lenticular_galaxies):
+        import random
+        for i in range(num_lenticular_galaxies):
+            name = f"LenticularGalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.lenticular_galaxies.append(LenticularGalaxy(name, radius))
+
     def generate_dwarf_galaxies(self, num_dwarf_galaxies):
         import random
         for i in range(num_dwarf_galaxies):
@@ -380,6 +387,7 @@ class Galaxy:
         self.tidal_tails = []
         self.satellite_galaxies = []
         self.dwarf_galaxies = []
+        self.lenticular_galaxies = []
 
 
 
@@ -974,6 +982,11 @@ class DarkNebula:
 
 
 class ReflectionNebula:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+class LenticularGalaxy:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
