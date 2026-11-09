@@ -20,6 +20,11 @@ class StellarStream:
         self.name = name
         self.length = length
 
+class TidalTail:
+    def __init__(self, name, length):
+        self.name = name
+        self.length = length
+
 class GalacticDisk:
     def __init__(self, name, radius):
         self.name = name
@@ -353,6 +358,7 @@ class Galaxy:
         self.galactic_bulges = []
         self.galactic_disks = []
         self.stellar_streams = []
+        self.tidal_tails = []
 
 
 
@@ -617,6 +623,13 @@ class Galaxy:
             name = f"StellarStream-{i+1}"
             length = random.randint(1000, 10000)
             self.stellar_streams.append(StellarStream(name, length))
+
+    def generate_tidal_tails(self, num_tails):
+        import random
+        for i in range(num_tails):
+            name = f"TidalTail-{i+1}"
+            length = random.randint(1000, 10000)
+            self.tidal_tails.append(TidalTail(name, length))
 
     def generate_galactic_disks(self, num_disks):
         import random
