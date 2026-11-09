@@ -634,5 +634,13 @@ class TestGalaxy(unittest.TestCase):
         for bar in galaxy.galactic_bars:
             self.assertIsInstance(bar, GalacticBar)
 
+    def test_generate_stellar_streams(self):
+        from src.universe.galaxy import StellarStream, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_stellar_streams(5)
+        self.assertEqual(len(galaxy.stellar_streams), 5)
+        for stream in galaxy.stellar_streams:
+            self.assertIsInstance(stream, StellarStream)
+
 if __name__ == '__main__':
     unittest.main()

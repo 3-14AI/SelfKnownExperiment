@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- Implemented procedural stellar stream generation for galaxies. Added `StellarStream` class and `generate_stellar_streams` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural galactic bar generation for galaxies. Added `GalacticBar` class and `generate_galactic_bars` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - Implemented procedural galactic core generation for galaxies. Added `GalacticCore` class and `generate_galactic_cores` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - Implemented procedural galactic disk generation for galaxies.
