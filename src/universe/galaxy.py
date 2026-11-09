@@ -295,7 +295,19 @@ class BokGlobule:
         self.name = name
         self.radius = radius
 
+class SatelliteGalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
+    def generate_satellite_galaxies(self, num_satellites):
+        import random
+        for i in range(num_satellites):
+            name = f"SatelliteGalaxy-{i+1}"
+            radius = random.randint(1000, 5000)
+            self.satellite_galaxies.append(SatelliteGalaxy(name, radius))
+
     def __init__(self, name, width, height):
         self.name = name
         self.width = width
@@ -359,6 +371,7 @@ class Galaxy:
         self.galactic_disks = []
         self.stellar_streams = []
         self.tidal_tails = []
+        self.satellite_galaxies = []
 
 
 
