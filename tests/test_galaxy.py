@@ -642,5 +642,13 @@ class TestGalaxy(unittest.TestCase):
         for stream in galaxy.stellar_streams:
             self.assertIsInstance(stream, StellarStream)
 
+    def test_generate_tidal_tails(self):
+        from src.universe.galaxy import TidalTail, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_tidal_tails(5)
+        self.assertEqual(len(galaxy.tidal_tails), 5)
+        for tail in galaxy.tidal_tails:
+            self.assertIsInstance(tail, TidalTail)
+
 if __name__ == '__main__':
     unittest.main()
