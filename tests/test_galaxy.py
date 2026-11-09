@@ -650,5 +650,13 @@ class TestGalaxy(unittest.TestCase):
         for tail in galaxy.tidal_tails:
             self.assertIsInstance(tail, TidalTail)
 
+    def test_generate_satellite_galaxies(self):
+        from src.universe.galaxy import SatelliteGalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_satellite_galaxies(3)
+        self.assertEqual(len(galaxy.satellite_galaxies), 3)
+        for sat in galaxy.satellite_galaxies:
+            self.assertIsInstance(sat, SatelliteGalaxy)
+
 if __name__ == '__main__':
     unittest.main()
