@@ -626,5 +626,13 @@ class TestGalaxy(unittest.TestCase):
         for d in galaxy.galactic_disks:
             self.assertIsInstance(d, GalacticDisk)
 
+    def test_generate_galactic_bars(self):
+        from src.universe.galaxy import GalacticBar, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_galactic_bars(5)
+        self.assertEqual(len(galaxy.galactic_bars), 5)
+        for bar in galaxy.galactic_bars:
+            self.assertIsInstance(bar, GalacticBar)
+
 if __name__ == '__main__':
     unittest.main()
