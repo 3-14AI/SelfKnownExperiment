@@ -707,6 +707,17 @@ class TestGalaxy(unittest.TestCase):
         for g in galaxy.ring_galaxies:
             self.assertIsInstance(g, RingGalaxy)
 
+    def test_generate_seyfert_galaxies(self):
+        from src.universe.galaxy import SeyfertGalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_seyfert_galaxies(3)
+        self.assertEqual(len(galaxy.seyfert_galaxies), 3)
+        for g in galaxy.seyfert_galaxies:
+            self.assertIsInstance(g, SeyfertGalaxy)
+            self.assertTrue(g.name.startswith("SeyfertGalaxy-"))
+            self.assertGreaterEqual(g.radius, 100)
+            self.assertLessEqual(g.radius, 1000)
+
     def test_generate_starburst_galaxies(self):
         from src.universe.galaxy import StarburstGalaxy, Galaxy
         galaxy = Galaxy("Test Galaxy", 1000, 1000)
