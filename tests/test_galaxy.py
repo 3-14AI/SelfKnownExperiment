@@ -737,5 +737,16 @@ class TestGalaxy(unittest.TestCase):
         for g in galaxy.starburst_galaxies:
             self.assertIsInstance(g, StarburstGalaxy)
 
+    def test_generate_protogalaxies(self):
+        from src.universe.galaxy import Protogalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_protogalaxies(3)
+        self.assertEqual(len(galaxy.protogalaxies), 3)
+        for g in galaxy.protogalaxies:
+            self.assertIsInstance(g, Protogalaxy)
+            self.assertTrue(g.name.startswith("Protogalaxy-"))
+            self.assertGreaterEqual(g.radius, 100)
+            self.assertLessEqual(g.radius, 1000)
+
 if __name__ == '__main__':
     unittest.main()
