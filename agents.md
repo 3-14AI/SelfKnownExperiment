@@ -691,3 +691,4 @@ Godspeed, Agent. The universe is in your hands.
 - [x] Implemented procedural dwarf galaxy generation for galaxies. Added `DwarfGalaxy` class and `generate_dwarf_galaxies` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural lenticular galaxy generation for galaxies. Added `LenticularGalaxy` class and `generate_lenticular_galaxies` method to `Galaxy`. Added tests and verified the test suite runs successfully.
 - [x] Implemented procedural irregular galaxy generation for galaxies. Added `IrregularGalaxy` class and `generate_irregular_galaxies` method to `Galaxy`. Added tests and verified the test suite runs successfully.
+- [x] Implemented procedural spiral galaxy generation for galaxies. Added `SpiralGalaxy` class and `generate_spiral_galaxies` method to `Galaxy`. Added tests and verified the test suite runs successfully.

@@ -683,5 +683,13 @@ class TestGalaxy(unittest.TestCase):
         for g in galaxy.irregular_galaxies:
             self.assertIsInstance(g, IrregularGalaxy)
 
+    def test_generate_spiral_galaxies(self):
+        from src.universe.galaxy import SpiralGalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_spiral_galaxies(3)
+        self.assertEqual(len(galaxy.spiral_galaxies), 3)
+        for g in galaxy.spiral_galaxies:
+            self.assertIsInstance(g, SpiralGalaxy)
+
 if __name__ == '__main__':
     unittest.main()
