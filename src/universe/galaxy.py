@@ -305,7 +305,19 @@ class RingGalaxy:
         self.name = name
         self.radius = radius
 
+class StarburstGalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
+    def generate_starburst_galaxies(self, num_starburst_galaxies):
+        import random
+        for i in range(num_starburst_galaxies):
+            name = f"StarburstGalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.starburst_galaxies.append(StarburstGalaxy(name, radius))
+
     def generate_elliptical_galaxies(self, num_elliptical_galaxies):
         import random
         for i in range(num_elliptical_galaxies):
@@ -425,6 +437,7 @@ class Galaxy:
         self.spiral_galaxies = []
         self.elliptical_galaxies = []
         self.ring_galaxies = []
+        self.starburst_galaxies = []
 
 
 

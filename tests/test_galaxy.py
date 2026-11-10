@@ -707,5 +707,13 @@ class TestGalaxy(unittest.TestCase):
         for g in galaxy.ring_galaxies:
             self.assertIsInstance(g, RingGalaxy)
 
+    def test_generate_starburst_galaxies(self):
+        from src.universe.galaxy import StarburstGalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_starburst_galaxies(3)
+        self.assertEqual(len(galaxy.starburst_galaxies), 3)
+        for g in galaxy.starburst_galaxies:
+            self.assertIsInstance(g, StarburstGalaxy)
+
 if __name__ == '__main__':
     unittest.main()
