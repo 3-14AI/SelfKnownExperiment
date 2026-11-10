@@ -699,5 +699,13 @@ class TestGalaxy(unittest.TestCase):
         for g in galaxy.elliptical_galaxies:
             self.assertIsInstance(g, EllipticalGalaxy)
 
+    def test_generate_ring_galaxies(self):
+        from src.universe.galaxy import RingGalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_ring_galaxies(3)
+        self.assertEqual(len(galaxy.ring_galaxies), 3)
+        for g in galaxy.ring_galaxies:
+            self.assertIsInstance(g, RingGalaxy)
+
 if __name__ == '__main__':
     unittest.main()
