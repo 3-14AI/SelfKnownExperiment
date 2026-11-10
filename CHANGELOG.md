@@ -1,5 +1,7 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- Implemented procedural radio galaxy generation for galaxies. Added `RadioGalaxy` class and `generate_radio_galaxies` method to `Galaxy`.
+- Analyzed recent project changes and generated analytics/analysis_533.md
 - Implemented procedural Seyfert galaxy generation for galaxies. Added `SeyfertGalaxy` class and `generate_seyfert_galaxies` method to `Galaxy`.
 - Analyzed recent project changes and generated analytics/analysis_532.md
 - Added StarburstGalaxy class and generate_starburst_galaxies method to Galaxy.
