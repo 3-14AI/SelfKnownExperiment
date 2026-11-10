@@ -301,6 +301,13 @@ class SatelliteGalaxy:
         self.radius = radius
 
 class Galaxy:
+    def generate_spiral_galaxies(self, num_spiral_galaxies):
+        import random
+        for i in range(num_spiral_galaxies):
+            name = f"SpiralGalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.spiral_galaxies.append(SpiralGalaxy(name, radius))
+
     def generate_irregular_galaxies(self, num_irregular_galaxies):
         import random
         for i in range(num_irregular_galaxies):
@@ -396,6 +403,7 @@ class Galaxy:
         self.dwarf_galaxies = []
         self.lenticular_galaxies = []
         self.irregular_galaxies = []
+        self.spiral_galaxies = []
 
 
 
@@ -1000,6 +1008,11 @@ class IrregularGalaxy:
         self.radius = radius
 
 class LenticularGalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
+class SpiralGalaxy:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
