@@ -305,12 +305,24 @@ class RingGalaxy:
         self.name = name
         self.radius = radius
 
+class SeyfertGalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class StarburstGalaxy:
     def __init__(self, name, radius):
         self.name = name
         self.radius = radius
 
 class Galaxy:
+    def generate_seyfert_galaxies(self, num_seyfert_galaxies):
+        import random
+        for i in range(num_seyfert_galaxies):
+            name = f"SeyfertGalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.seyfert_galaxies.append(SeyfertGalaxy(name, radius))
+
     def generate_starburst_galaxies(self, num_starburst_galaxies):
         import random
         for i in range(num_starburst_galaxies):
@@ -438,6 +450,7 @@ class Galaxy:
         self.elliptical_galaxies = []
         self.ring_galaxies = []
         self.starburst_galaxies = []
+        self.seyfert_galaxies = []
 
 
 
