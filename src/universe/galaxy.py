@@ -305,6 +305,11 @@ class RingGalaxy:
         self.name = name
         self.radius = radius
 
+class Protogalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class RadioGalaxy:
     def __init__(self, name, radius):
         self.name = name
@@ -321,6 +326,13 @@ class StarburstGalaxy:
         self.radius = radius
 
 class Galaxy:
+    def generate_protogalaxies(self, num_protogalaxies):
+        import random
+        for i in range(num_protogalaxies):
+            name = f"Protogalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.protogalaxies.append(Protogalaxy(name, radius))
+
     def generate_radio_galaxies(self, num_radio_galaxies):
         import random
         for i in range(num_radio_galaxies):
@@ -464,6 +476,7 @@ class Galaxy:
         self.starburst_galaxies = []
         self.seyfert_galaxies = []
         self.radio_galaxies = []
+        self.protogalaxies = []
 
 
 
