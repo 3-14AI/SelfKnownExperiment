@@ -345,6 +345,11 @@ class LuminousInfraredGalaxy:
         self.name = name
         self.radius = radius
 
+class UltraDiffuseGalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
     def generate_protogalaxies(self, num_protogalaxies):
         import random
@@ -501,6 +506,7 @@ class Galaxy:
         self.dark_galaxies = []
         self.interacting_galaxies = []
         self.luminous_infrared_galaxies = []
+        self.ultra_diffuse_galaxies = []
 
 
 
@@ -863,6 +869,13 @@ class Galaxy:
             name = f"InteractingGalaxy-{i+1}"
             radius = random.randint(100, 1000)
             self.interacting_galaxies.append(InteractingGalaxy(name, radius))
+
+    def generate_ultra_diffuse_galaxies(self, num_ultra_diffuse_galaxies):
+        import random
+        for i in range(num_ultra_diffuse_galaxies):
+            name = f"UltraDiffuseGalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.ultra_diffuse_galaxies.append(UltraDiffuseGalaxy(name, radius))
 
     def generate_luminous_infrared_galaxies(self, num_luminous_infrared_galaxies):
         import random

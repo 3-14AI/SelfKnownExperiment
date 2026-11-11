@@ -1,5 +1,5 @@
 import unittest
-from src.universe.galaxy import StellarNursery, WhiteDwarf, BlackDwarf, DarkMatterHalo, CosmicString, PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Meteor, Comet, Nebula, BlackHole, WhiteHole, Wormhole, Quasar, Pulsar, Supernova, Magnetar, RoguePlanet, StarCluster, GlobularCluster
+from src.universe.galaxy import UltraDiffuseGalaxy, StellarNursery, WhiteDwarf, BlackDwarf, DarkMatterHalo, CosmicString, PlanetaryRing, Galaxy, StarSystem, Planet, Moon, AsteroidBelt, Star, Meteor, Comet, Nebula, BlackHole, WhiteHole, Wormhole, Quasar, Pulsar, Supernova, Magnetar, RoguePlanet, StarCluster, GlobularCluster
 
 class TestGalaxy(unittest.TestCase):
     def test_galaxy_generation(self):
@@ -771,6 +771,12 @@ class TestGalaxy(unittest.TestCase):
         self.assertEqual(len(galaxy.interacting_galaxies), 3)
         for g in galaxy.interacting_galaxies:
             self.assertIsInstance(g, InteractingGalaxy)
+
+    def test_generate_ultra_diffuse_galaxies(self):
+        galaxy = Galaxy("Milky Way", 1000, 1000)
+        galaxy.generate_ultra_diffuse_galaxies(5)
+        self.assertEqual(len(galaxy.ultra_diffuse_galaxies), 5)
+        self.assertIsInstance(galaxy.ultra_diffuse_galaxies[0], UltraDiffuseGalaxy)
 
     def test_generate_luminous_infrared_galaxies(self):
         from src.universe.galaxy import LuminousInfraredGalaxy, Galaxy
