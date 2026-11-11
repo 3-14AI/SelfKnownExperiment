@@ -748,5 +748,13 @@ class TestGalaxy(unittest.TestCase):
             self.assertGreaterEqual(g.radius, 100)
             self.assertLessEqual(g.radius, 1000)
 
+    def test_generate_peculiar_galaxies(self):
+        from src.universe.galaxy import PeculiarGalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_peculiar_galaxies(3)
+        self.assertEqual(len(galaxy.peculiar_galaxies), 3)
+        for g in galaxy.peculiar_galaxies:
+            self.assertIsInstance(g, PeculiarGalaxy)
+
 if __name__ == '__main__':
     unittest.main()

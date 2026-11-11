@@ -325,6 +325,11 @@ class StarburstGalaxy:
         self.name = name
         self.radius = radius
 
+class PeculiarGalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
     def generate_protogalaxies(self, num_protogalaxies):
         import random
@@ -477,6 +482,7 @@ class Galaxy:
         self.seyfert_galaxies = []
         self.radio_galaxies = []
         self.protogalaxies = []
+        self.peculiar_galaxies = []
 
 
 
@@ -818,6 +824,13 @@ class Galaxy:
             name = f"EmissionNebula-{i+1}"
             radius = random.randint(100, 1000)
             self.emission_nebulas.append(EmissionNebula(name, radius))
+
+    def generate_peculiar_galaxies(self, num_peculiar_galaxies):
+        import random
+        for i in range(num_peculiar_galaxies):
+            name = f"PeculiarGalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.peculiar_galaxies.append(PeculiarGalaxy(name, radius))
 
     def generate_star_systems(self, num_systems):
         for i in range(num_systems):
