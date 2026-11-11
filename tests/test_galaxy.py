@@ -772,6 +772,14 @@ class TestGalaxy(unittest.TestCase):
         for g in galaxy.interacting_galaxies:
             self.assertIsInstance(g, InteractingGalaxy)
 
+    def test_generate_compact_galaxies(self):
+        from src.universe.galaxy import CompactGalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_compact_galaxies(3)
+        self.assertEqual(len(galaxy.compact_galaxies), 3)
+        for g in galaxy.compact_galaxies:
+            self.assertIsInstance(g, CompactGalaxy)
+
     def test_generate_ultra_diffuse_galaxies(self):
         galaxy = Galaxy("Milky Way", 1000, 1000)
         galaxy.generate_ultra_diffuse_galaxies(5)
