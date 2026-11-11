@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- Implemented procedural compact galaxy generation for galaxies. Added `CompactGalaxy` class and `generate_compact_galaxies` method to `Galaxy`.
 - Implemented procedural ultra diffuse galaxy generation for galaxies. Added `UltraDiffuseGalaxy` class and `generate_ultra_diffuse_galaxies` method to `Galaxy`.
 - Added procedural Luminous Infrared Galaxy generation.
 - Analyzed recent project changes and generated analytics/analysis_537.md.
