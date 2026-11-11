@@ -330,6 +330,11 @@ class PeculiarGalaxy:
         self.name = name
         self.radius = radius
 
+class DarkGalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
     def generate_protogalaxies(self, num_protogalaxies):
         import random
@@ -483,6 +488,7 @@ class Galaxy:
         self.radio_galaxies = []
         self.protogalaxies = []
         self.peculiar_galaxies = []
+        self.dark_galaxies = []
 
 
 
@@ -831,6 +837,13 @@ class Galaxy:
             name = f"PeculiarGalaxy-{i+1}"
             radius = random.randint(100, 1000)
             self.peculiar_galaxies.append(PeculiarGalaxy(name, radius))
+
+    def generate_dark_galaxies(self, num_dark_galaxies):
+        import random
+        for i in range(num_dark_galaxies):
+            name = f"DarkGalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.dark_galaxies.append(DarkGalaxy(name, radius))
 
     def generate_star_systems(self, num_systems):
         for i in range(num_systems):
