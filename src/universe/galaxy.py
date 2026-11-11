@@ -335,6 +335,11 @@ class DarkGalaxy:
         self.name = name
         self.radius = radius
 
+class InteractingGalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
     def generate_protogalaxies(self, num_protogalaxies):
         import random
@@ -489,6 +494,7 @@ class Galaxy:
         self.protogalaxies = []
         self.peculiar_galaxies = []
         self.dark_galaxies = []
+        self.interacting_galaxies = []
 
 
 
@@ -844,6 +850,13 @@ class Galaxy:
             name = f"DarkGalaxy-{i+1}"
             radius = random.randint(100, 1000)
             self.dark_galaxies.append(DarkGalaxy(name, radius))
+
+    def generate_interacting_galaxies(self, num_interacting_galaxies):
+        import random
+        for i in range(num_interacting_galaxies):
+            name = f"InteractingGalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.interacting_galaxies.append(InteractingGalaxy(name, radius))
 
     def generate_star_systems(self, num_systems):
         for i in range(num_systems):
