@@ -1,5 +1,6 @@
 - Fixed missing isolated combat tests for `is_ageless_predator`, `is_fierce_predator`, `is_forager_predator`, `is_lucky_predator`, `is_restless_predator`, `is_ruthless_predator`, `is_spiteful_predator`, `is_iron_willed_predator`, `is_farsighted_predator`, and `is_heavy_sleeper_predator` traits.
 ## [Unreleased]
+- Implemented procedural Green Pea galaxy generation for galaxies. Added `GreenPeaGalaxy` class and `generate_green_pea_galaxies` method to `Galaxy`.
 - Analyzed recent project changes and generated analytics/analysis_541.md
 - Implemented procedural low surface brightness galaxy generation for galaxies. Added `LowSurfaceBrightnessGalaxy` class and `generate_low_surface_brightness_galaxies` method to `Galaxy`.
 - Implemented procedural compact galaxy generation for galaxies. Added `CompactGalaxy` class and `generate_compact_galaxies` method to `Galaxy`.
