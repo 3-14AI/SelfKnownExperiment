@@ -360,6 +360,11 @@ class UltraDiffuseGalaxy:
         self.name = name
         self.radius = radius
 
+class GreenPeaGalaxy:
+    def __init__(self, name, radius):
+        self.name = name
+        self.radius = radius
+
 class Galaxy:
     def generate_protogalaxies(self, num_protogalaxies):
         import random
@@ -519,6 +524,7 @@ class Galaxy:
         self.compact_galaxies = []
         self.ultra_diffuse_galaxies = []
         self.low_surface_brightness_galaxies = []
+        self.green_pea_galaxies = []
 
 
 
@@ -888,6 +894,13 @@ class Galaxy:
             name = f"CompactGalaxy-{i+1}"
             radius = random.randint(100, 1000)
             self.compact_galaxies.append(CompactGalaxy(name, radius))
+
+    def generate_green_pea_galaxies(self, num_galaxies):
+        import random
+        for i in range(num_galaxies):
+            name = f"GreenPeaGalaxy-{i+1}"
+            radius = random.randint(100, 1000)
+            self.green_pea_galaxies.append(GreenPeaGalaxy(name, radius))
 
     def generate_low_surface_brightness_galaxies(self, num_lsb_galaxies):
         import random

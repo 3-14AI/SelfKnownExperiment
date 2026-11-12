@@ -801,5 +801,13 @@ class TestGalaxy(unittest.TestCase):
         for g in galaxy.luminous_infrared_galaxies:
             self.assertIsInstance(g, LuminousInfraredGalaxy)
 
+    def test_generate_green_pea_galaxies(self):
+        from src.universe.galaxy import GreenPeaGalaxy, Galaxy
+        galaxy = Galaxy("Test Galaxy", 1000, 1000)
+        galaxy.generate_green_pea_galaxies(3)
+        self.assertEqual(len(galaxy.green_pea_galaxies), 3)
+        for g in galaxy.green_pea_galaxies:
+            self.assertIsInstance(g, GreenPeaGalaxy)
+
 if __name__ == '__main__':
     unittest.main()
